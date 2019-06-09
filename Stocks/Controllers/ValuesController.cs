@@ -20,6 +20,7 @@ namespace Stocks.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            //test controller ...
 
             //_logger.LogInfo("Fetching all the Students from the storage");
 
