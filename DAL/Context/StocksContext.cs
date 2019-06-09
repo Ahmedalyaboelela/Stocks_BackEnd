@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +12,11 @@ namespace DAL.Context
         {
 
         }
+
+        public DbSet<Account> Accounts { get; set; }
+
+        public DbSet<Partner> Partners { get; set; }
+
+        public DbSet<Country> Countries { get; set; }
     }
 }
