@@ -66,5 +66,7 @@ namespace DAL.Entities
         public virtual ICollection<Account> SubAccounts { get; set; }
 
         public virtual ICollection<Partner> Partners { get; set; }
+
+        public virtual ICollection<PortfolioAccount> PortfolioAccounts { get; set; }
     }
 }
