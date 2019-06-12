@@ -1,5 +1,6 @@
 ﻿using BAL.Interfaces;
 using DAL.Context;
+using DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +17,57 @@ namespace BAL.Repositories
         {
             Context = dbContext;
         }
+
+        #region Account repository
+        //Account
+        private GenericRepository<Account> accountRepository;
+        public GenericRepository<Account> AccountRepository
+        {
+            get
+            {
+
+                if (this.accountRepository == null)
+                {
+                    this.accountRepository = new GenericRepository<Account>(Context);
+                }
+                return accountRepository;
+            }
+        }
+        #endregion
+
+        #region Partner repository
+       
+        private GenericRepository<Partner> partnerRepository;
+        public GenericRepository<Partner> PartnerRepository
+        {
+            get
+            {
+
+                if (this.partnerRepository == null)
+                {
+                    this.partnerRepository = new GenericRepository<Partner>(Context);
+                }
+                return partnerRepository;
+            }
+        }
+        #endregion
+
+        #region Country repository
+
+        private GenericRepository<Country> countryRepository;
+        public GenericRepository<Country> CountryRepository
+        {
+            get
+            {
+
+                if (this.countryRepository == null)
+                {
+                    this.countryRepository = new GenericRepository<Country>(Context);
+                }
+                return countryRepository;
+            }
+        }
+        #endregion
 
 
         public virtual bool Save()
@@ -61,6 +113,8 @@ namespace BAL.Repositories
         }
 
         private bool disposed = false;
+
+
 
         protected virtual void Dispose(bool disposing)
         {
