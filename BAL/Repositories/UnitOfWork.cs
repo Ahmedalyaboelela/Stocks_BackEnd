@@ -69,6 +69,75 @@ namespace BAL.Repositories
         }
         #endregion
 
+        #region Employee Repository
+        private GenericRepository<Employee> employeeRepository;
+        public GenericRepository<Employee> EmployeeRepository
+        {
+            get
+            {
+                if (this.employeeRepository == null)
+                {
+                    this.employeeRepository = new GenericRepository<Employee>(Context);
+                }
+                return employeeRepository;
+            }
+        }
+
+        private GenericRepository<EmployeeCard> employeeCardRepository;
+        public GenericRepository<EmployeeCard> EmployeeCardRepository
+        {
+            get
+            {
+                if (this.employeeCardRepository == null)
+                {
+                    this.employeeCardRepository = new GenericRepository<EmployeeCard>(Context);
+                }
+                return employeeCardRepository;
+            }
+        }
+        #endregion
+
+        #region Portfolio Repository
+        private GenericRepository<Portfolio> portfolioRepository;
+        public GenericRepository<Portfolio> PortfolioRepository
+        {
+            get
+            {
+                if (this.portfolioRepository == null)
+                {
+                    this.portfolioRepository = new GenericRepository<Portfolio>(Context);
+                }
+                return portfolioRepository;
+            }
+        }
+
+        private GenericRepository<PortfolioAccount> portfolioAccountRepository;
+        public GenericRepository<PortfolioAccount> PortfolioAccountRepository
+        {
+            get
+            {
+                if (this.portfolioAccountRepository == null)
+                {
+                    this.portfolioAccountRepository = new GenericRepository<PortfolioAccount>(Context);
+                }
+                return portfolioAccountRepository;
+            }
+        }
+
+        private GenericRepository<Portfolioshareholder> portfolioShareholderRepository;
+        public GenericRepository<Portfolioshareholder> PortfolioShareholderRepository
+        {
+            get
+            {
+                if (this.portfolioShareholderRepository == null)
+                {
+                    this.portfolioShareholderRepository = new GenericRepository<Portfolioshareholder>(Context);
+                }
+                return portfolioShareholderRepository;
+            }
+        }
+        #endregion
+
 
         public virtual bool Save()
         {
