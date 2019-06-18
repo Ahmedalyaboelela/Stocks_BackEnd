@@ -6,30 +6,26 @@ using System.Text;
 
 namespace DAL.Entities
 {
-    public class PurchaseOrder
+    public class Notice
     {
         [Key]
-        public int PurchaseID { get; set; }
+        public int NoticeID { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(100)")]
         public string Code { get; set; }
-
-        public int PurchaseWay { get; set; }
-
-        public DateTime? Date { get; set; }
-
-        public int EmployeeID { get; set; }
+        public DateTime? NoticeDate { get; set; }
+        public bool Type { get; set; }
 
         public int PortfolioID { get; set; }
-
-        [ForeignKey("EmployeeID")]
-        public virtual Employee Employee { get; set; }
+        public int EmployeeID { get; set; }
 
         [ForeignKey("PortfolioID")]
         public virtual Portfolio Portfolio { get; set; }
 
-        public virtual ICollection<PurchaseOrderStock> PurchaseOrderStocks { get; set; }
-        public virtual ICollection<Entry> Entries { get; set; }
+        [ForeignKey("EmployeeID")]
+        public virtual Employee Employee { get; set; }
+        public virtual ICollection<NoticeCreditorDeptor> NoticeCreditorDeptors { get; set; }
+        public virtual ICollection<Entry> Entry { get; set; }
 
     }
 }

@@ -6,10 +6,11 @@ using System.Text;
 
 namespace DAL.Entities
 {
-    public class PurchaseOrder
+    public class SellOrder
     {
         [Key]
-        public int PurchaseID { get; set; }
+        public int SellID { get; set; }
+
         [Required]
         [Column(TypeName = "nvarchar(100)")]
         public string Code { get; set; }
@@ -28,8 +29,9 @@ namespace DAL.Entities
         [ForeignKey("PortfolioID")]
         public virtual Portfolio Portfolio { get; set; }
 
-        public virtual ICollection<PurchaseOrderStock> PurchaseOrderStocks { get; set; }
+        public virtual ICollection<SellOrderStock> SellOrderStocks { get; set; }
         public virtual ICollection<Entry> Entries { get; set; }
+
 
     }
 }

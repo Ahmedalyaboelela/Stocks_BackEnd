@@ -69,5 +69,10 @@ namespace DAL.Entities
 
         public virtual ICollection<PortfolioAccount> PortfolioAccounts { get; set; }
         public virtual ICollection<SettingAccount> SettingAccounts { get; set; }
+        public virtual ICollection<ReceiptExchange> ReceiptExchanges { get; set; }
+        public virtual ICollection<ReceiptExchangeDetail> ReceiptExchangeDetails { get; set; }
+        public virtual ICollection<EntryDetail> EntryDetails { get; set; }
+
+
     }
 }

@@ -12,6 +12,10 @@ namespace DAL.Entities
         public int CountryID { get; set; }
 
         [Required]
+        [Column(TypeName = "nvarchar(100)")]
+        public string Code { get; set; }
+
+        [Required]
         [Column(TypeName = "nvarchar(150)")]
         public string NameAR { get; set; }
 

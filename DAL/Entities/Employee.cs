@@ -53,6 +53,9 @@ namespace DAL.Entities
         public string BankAccNum { get; set; }
 
         public virtual ICollection<EmployeeCard> EmployeeCards { get; set; }
-
+        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
+        public virtual ICollection<SellOrder> SellOrders { get; set; }
+        public virtual ICollection<Notice> Notices { get; set; }
+      
     }
 }

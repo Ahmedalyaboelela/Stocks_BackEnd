@@ -10,7 +10,9 @@ namespace DAL.Entities
     {
         [Key]
         public int SettingID { get; set; }
-
+        
+        [Column(TypeName = "nvarchar(100)")]
+        public string Code { get; set; }
         public bool DoNotGenerateEntry { get; set; }
 
         public bool GenerateEntry { get; set; }
