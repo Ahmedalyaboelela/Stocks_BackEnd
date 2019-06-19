@@ -26,11 +26,25 @@ namespace DAL.Entities
 
         public int AccountCategory { get; set; }
 
+        public int AccountRefrence { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal Debit { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal Credit { get; set; }
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal DebitLimit { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal CreditLimit { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal DebitOpenningBalance { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal CreditOpenningBalance { get; set; }
 
         [Column(TypeName = "nvarchar(MAX)")]
         public string Address { get; set; }
@@ -58,6 +72,8 @@ namespace DAL.Entities
 
         [Column(TypeName = "nvarchar(250)")]
         public string TaxNum { get; set; }
+
+        public bool IsActive { get; set; }
 
 
         public int? AccoutnParentID { get; set; }

@@ -33,11 +33,11 @@ namespace DAL.Context
         public DbSet<Notice> Notices { get; set; }
         public DbSet<NoticeDetail> NoticeDetails { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
-        public DbSet<PurchaseOrderStock> PurchaseOrderStocks { get; set; }
+        public DbSet<PurchaseOrderDetail> PurchaseOrderStocks { get; set; }
         public DbSet<ReceiptExchange> ReceiptExchanges { get; set; }
         public DbSet<ReceiptExchangeDetail> ReceiptExchangeDetails { get; set; }
-        public DbSet<SellOrder> SellOrders { get; set; }
-        public DbSet<SellOrderStock> SellOrderStocks { get; set; }
+        public DbSet<SellingOrder> SellOrders { get; set; }
+        public DbSet<SellingOrderDetail> SellOrderStocks { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<SettingAccount> SettingAccounts { get; set; }
 
