@@ -67,7 +67,7 @@ namespace DAL.Entities
 
         public virtual ICollection<PurchaseOrderStock> PurchaseOrderStocks { get; set; }
         public virtual ICollection<SellOrderStock> SellOrderStocks { get; set; }
-        public virtual ICollection<NoticeCreditorDeptor> NoticeCreditorDeptors { get; set; }
+        public virtual ICollection<NoticeDetail> NoticeDetails { get; set; }
 
 
     }

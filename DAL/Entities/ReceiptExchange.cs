@@ -27,8 +27,8 @@ namespace DAL.Entities
         public virtual Account Account { get; set; }
         [ForeignKey("CurrencyID")]
         public virtual Currency Currency { get; set; }
-        public virtual ICollection<ReceiptExchangeDetail> ReceiptExchangeDetails { get; set; }
-        public virtual ICollection<Entry> Entry { get; set; }
+      //  public virtual ICollection<ReceiptExchangeDetail> ReceiptExchangeDetails { get; set; }
+    //    public virtual ICollection<Entry> Entry { get; set; }
 
     }
 }

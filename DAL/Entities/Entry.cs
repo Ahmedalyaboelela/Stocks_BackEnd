@@ -14,26 +14,26 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(100)")]
         public string Code { get; set; }
         public DateTime? Date { get; set; }
-        public int SellID { get; set; }
-        public int PurchaseID { get; set; }
-        public int ReceiptExchangeID { get; set; }
-        public int NoticeID { get; set; }
-        public int CurrencyID { get; set; }
+   //     public int SellID { get; set; }
+  //      public int PurchaseID { get; set; }
+    //    public int ReceiptExchangeID { get; set; }
+      //  public int NoticeID { get; set; }
+     //   public int CurrencyID { get; set; }
 
-        [ForeignKey("SellID")]
-        public virtual SellOrder SellOrder { get; set; }
+   //     [ForeignKey("SellID")]
+     //   public virtual SellOrder SellOrder { get; set; }
 
-        [ForeignKey("PurchaseID")]
-        public virtual PurchaseOrder PurchaseOrder { get; set; }
+//        [ForeignKey("PurchaseID")]
+  //      public virtual PurchaseOrder PurchaseOrder { get; set; }
 
-        [ForeignKey("ReceiptExchangeID")]
-        public virtual ReceiptExchange ReceiptExchange { get; set; }
+    //    [ForeignKey("ReceiptExchangeID")]
+      //  public virtual ReceiptExchange ReceiptExchange { get; set; }
 
-        [ForeignKey("NoticeID")]
-        public virtual Notice Notice { get; set; }
+   //     [ForeignKey("NoticeID")]
+     //   public virtual Notice Notice { get; set; }
 
-        [ForeignKey("CurrencyID")]
-        public virtual Currency Currency { get; set; }
+        //[foreignkey("currencyid")]
+        //public virtual currency currency { get; set; }
 
     }
 }

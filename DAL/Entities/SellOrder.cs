@@ -30,7 +30,7 @@ namespace DAL.Entities
         public virtual Portfolio Portfolio { get; set; }
 
         public virtual ICollection<SellOrderStock> SellOrderStocks { get; set; }
-        public virtual ICollection<Entry> Entries { get; set; }
+    //    public virtual ICollection<Entry> Entries { get; set; }
 
 
     }

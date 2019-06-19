@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DAL.Entities
 {
-    public class NoticeCreditorDeptor
+    public class NoticeDetail
     {
         [Key]
         public int NoticeCredDepID { get; set; }

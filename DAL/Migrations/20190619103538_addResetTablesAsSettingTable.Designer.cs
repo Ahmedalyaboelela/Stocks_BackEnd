@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(StocksContext))]
-    [Migration("20190618142849_addResetTablesAsSettingTable")]
+    [Migration("20190619103538_addResetTablesAsSettingTable")]
     partial class addResetTablesAsSettingTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -232,31 +232,11 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("CurrencyID");
-
                     b.Property<DateTime?>("Date");
-
-                    b.Property<int>("NoticeID");
-
-                    b.Property<int>("PurchaseID");
-
-                    b.Property<int>("ReceiptExchangeID");
-
-                    b.Property<int>("SellID");
 
                     b.HasKey("EntryID");
 
-                    b.HasIndex("CurrencyID");
-
-                    b.HasIndex("NoticeID");
-
-                    b.HasIndex("PurchaseID");
-
-                    b.HasIndex("ReceiptExchangeID");
-
-                    b.HasIndex("SellID");
-
-                    b.ToTable("Entry");
+                    b.ToTable("Entries");
                 });
 
             modelBuilder.Entity("DAL.Entities.EntryDetail", b =>
@@ -275,7 +255,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("AccountID");
 
-                    b.ToTable("EntryDetail");
+                    b.ToTable("EntryDetails");
                 });
 
             modelBuilder.Entity("DAL.Entities.Notice", b =>
@@ -302,10 +282,10 @@ namespace DAL.Migrations
 
                     b.HasIndex("PortfolioID");
 
-                    b.ToTable("Notice");
+                    b.ToTable("Notices");
                 });
 
-            modelBuilder.Entity("DAL.Entities.NoticeCreditorDeptor", b =>
+            modelBuilder.Entity("DAL.Entities.NoticeDetail", b =>
                 {
                     b.Property<int>("NoticeCredDepID")
                         .ValueGeneratedOnAdd()
@@ -325,7 +305,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("PartnerID");
 
-                    b.ToTable("NoticeCreditorDeptor");
+                    b.ToTable("NoticeDetails");
                 });
 
             modelBuilder.Entity("DAL.Entities.Partner", b =>
@@ -500,7 +480,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("PortfolioID");
 
-                    b.ToTable("PurchaseOrder");
+                    b.ToTable("PurchaseOrders");
                 });
 
             modelBuilder.Entity("DAL.Entities.PurchaseOrderStock", b =>
@@ -535,7 +515,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("PurchaseID");
 
-                    b.ToTable("PurchaseOrderStock");
+                    b.ToTable("PurchaseOrderStocks");
                 });
 
             modelBuilder.Entity("DAL.Entities.ReceiptExchange", b =>
@@ -569,7 +549,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("CurrencyID");
 
-                    b.ToTable("ReceiptExchange");
+                    b.ToTable("ReceiptExchanges");
                 });
 
             modelBuilder.Entity("DAL.Entities.ReceiptExchangeDetail", b =>
@@ -584,17 +564,13 @@ namespace DAL.Migrations
 
                     b.Property<decimal>("ReceiptExchangeAmount");
 
-                    b.Property<int>("ReceiptID");
-
                     b.Property<bool>("Type");
 
                     b.HasKey("ReceiptExchangeID");
 
                     b.HasIndex("AccountID");
 
-                    b.HasIndex("ReceiptID");
-
-                    b.ToTable("ReceiptExchangeDetail");
+                    b.ToTable("ReceiptExchangeDetails");
                 });
 
             modelBuilder.Entity("DAL.Entities.SellOrder", b =>
@@ -621,7 +597,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("PortfolioID");
 
-                    b.ToTable("SellOrder");
+                    b.ToTable("SellOrders");
                 });
 
             modelBuilder.Entity("DAL.Entities.SellOrderStock", b =>
@@ -656,7 +632,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("SellID");
 
-                    b.ToTable("SellOrderStock");
+                    b.ToTable("SellOrderStocks");
                 });
 
             modelBuilder.Entity("DAL.Entities.Setting", b =>
@@ -678,7 +654,7 @@ namespace DAL.Migrations
 
                     b.HasKey("SettingID");
 
-                    b.ToTable("Setting");
+                    b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("DAL.Entities.SettingAccount", b =>
@@ -699,7 +675,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("SettingID");
 
-                    b.ToTable("SettingAccount");
+                    b.ToTable("SettingAccounts");
                 });
 
             modelBuilder.Entity("DAL.Entities.Account", b =>
@@ -714,34 +690,6 @@ namespace DAL.Migrations
                     b.HasOne("DAL.Entities.Employee", "Employee")
                         .WithMany("EmployeeCards")
                         .HasForeignKey("EmployeeID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("DAL.Entities.Entry", b =>
-                {
-                    b.HasOne("DAL.Entities.Currency", "Currency")
-                        .WithMany("Entries")
-                        .HasForeignKey("CurrencyID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DAL.Entities.Notice", "Notice")
-                        .WithMany("Entry")
-                        .HasForeignKey("NoticeID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DAL.Entities.PurchaseOrder", "PurchaseOrder")
-                        .WithMany("Entries")
-                        .HasForeignKey("PurchaseID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DAL.Entities.ReceiptExchange", "ReceiptExchange")
-                        .WithMany("Entry")
-                        .HasForeignKey("ReceiptExchangeID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DAL.Entities.SellOrder", "SellOrder")
-                        .WithMany("Entries")
-                        .HasForeignKey("SellID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -766,15 +714,15 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("DAL.Entities.NoticeCreditorDeptor", b =>
+            modelBuilder.Entity("DAL.Entities.NoticeDetail", b =>
                 {
                     b.HasOne("DAL.Entities.Notice", "Notice")
-                        .WithMany("NoticeCreditorDeptors")
+                        .WithMany("NoticeDetails")
                         .HasForeignKey("NoticeID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DAL.Entities.Partner", "Partner")
-                        .WithMany("NoticeCreditorDeptors")
+                        .WithMany("NoticeDetails")
                         .HasForeignKey("PartnerID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -861,11 +809,6 @@ namespace DAL.Migrations
                     b.HasOne("DAL.Entities.Account", "Account")
                         .WithMany("ReceiptExchangeDetails")
                         .HasForeignKey("AccountID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DAL.Entities.ReceiptExchange", "ReceiptExchange")
-                        .WithMany("ReceiptExchangeDetails")
-                        .HasForeignKey("ReceiptID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

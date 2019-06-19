@@ -34,7 +34,21 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EntryDetail",
+                name: "Entries",
+                columns: table => new
+                {
+                    EntryID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Code = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Date = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Entries", x => x.EntryID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EntryDetails",
                 columns: table => new
                 {
                     EntryDetailID = table.Column<int>(nullable: false)
@@ -45,9 +59,9 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntryDetail", x => x.EntryDetailID);
+                    table.PrimaryKey("PK_EntryDetails", x => x.EntryDetailID);
                     table.ForeignKey(
-                        name: "FK_EntryDetail_Accounts_AccountID",
+                        name: "FK_EntryDetails_Accounts_AccountID",
                         column: x => x.AccountID,
                         principalTable: "Accounts",
                         principalColumn: "AccountID",
@@ -55,7 +69,7 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notice",
+                name: "Notices",
                 columns: table => new
                 {
                     NoticeID = table.Column<int>(nullable: false)
@@ -68,15 +82,15 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Notice", x => x.NoticeID);
+                    table.PrimaryKey("PK_Notices", x => x.NoticeID);
                     table.ForeignKey(
-                        name: "FK_Notice_Employees_EmployeeID",
+                        name: "FK_Notices_Employees_EmployeeID",
                         column: x => x.EmployeeID,
                         principalTable: "Employees",
                         principalColumn: "EmployeeID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Notice_Portfolios_PortfolioID",
+                        name: "FK_Notices_Portfolios_PortfolioID",
                         column: x => x.PortfolioID,
                         principalTable: "Portfolios",
                         principalColumn: "PortfolioID",
@@ -84,7 +98,7 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PurchaseOrder",
+                name: "PurchaseOrders",
                 columns: table => new
                 {
                     PurchaseID = table.Column<int>(nullable: false)
@@ -97,15 +111,15 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PurchaseOrder", x => x.PurchaseID);
+                    table.PrimaryKey("PK_PurchaseOrders", x => x.PurchaseID);
                     table.ForeignKey(
-                        name: "FK_PurchaseOrder_Employees_EmployeeID",
+                        name: "FK_PurchaseOrders_Employees_EmployeeID",
                         column: x => x.EmployeeID,
                         principalTable: "Employees",
                         principalColumn: "EmployeeID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PurchaseOrder_Portfolios_PortfolioID",
+                        name: "FK_PurchaseOrders_Portfolios_PortfolioID",
                         column: x => x.PortfolioID,
                         principalTable: "Portfolios",
                         principalColumn: "PortfolioID",
@@ -113,7 +127,29 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SellOrder",
+                name: "ReceiptExchangeDetails",
+                columns: table => new
+                {
+                    ReceiptExchangeID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ReceiptExchangeAmount = table.Column<decimal>(nullable: false),
+                    AccountID = table.Column<int>(nullable: false),
+                    ChiqueNumber = table.Column<int>(nullable: false),
+                    Type = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReceiptExchangeDetails", x => x.ReceiptExchangeID);
+                    table.ForeignKey(
+                        name: "FK_ReceiptExchangeDetails_Accounts_AccountID",
+                        column: x => x.AccountID,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SellOrders",
                 columns: table => new
                 {
                     SellID = table.Column<int>(nullable: false)
@@ -126,15 +162,15 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SellOrder", x => x.SellID);
+                    table.PrimaryKey("PK_SellOrders", x => x.SellID);
                     table.ForeignKey(
-                        name: "FK_SellOrder_Employees_EmployeeID",
+                        name: "FK_SellOrders_Employees_EmployeeID",
                         column: x => x.EmployeeID,
                         principalTable: "Employees",
                         principalColumn: "EmployeeID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SellOrder_Portfolios_PortfolioID",
+                        name: "FK_SellOrders_Portfolios_PortfolioID",
                         column: x => x.PortfolioID,
                         principalTable: "Portfolios",
                         principalColumn: "PortfolioID",
@@ -142,7 +178,7 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Setting",
+                name: "Settings",
                 columns: table => new
                 {
                     SettingID = table.Column<int>(nullable: false)
@@ -155,11 +191,11 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Setting", x => x.SettingID);
+                    table.PrimaryKey("PK_Settings", x => x.SettingID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReceiptExchange",
+                name: "ReceiptExchanges",
                 columns: table => new
                 {
                     ReceiptID = table.Column<int>(nullable: false)
@@ -175,15 +211,15 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ReceiptExchange", x => x.ReceiptID);
+                    table.PrimaryKey("PK_ReceiptExchanges", x => x.ReceiptID);
                     table.ForeignKey(
-                        name: "FK_ReceiptExchange_Accounts_AccountID",
+                        name: "FK_ReceiptExchanges_Accounts_AccountID",
                         column: x => x.AccountID,
                         principalTable: "Accounts",
                         principalColumn: "AccountID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ReceiptExchange_Currency_CurrencyID",
+                        name: "FK_ReceiptExchanges_Currency_CurrencyID",
                         column: x => x.CurrencyID,
                         principalTable: "Currency",
                         principalColumn: "CurrencyID",
@@ -191,7 +227,7 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NoticeCreditorDeptor",
+                name: "NoticeDetails",
                 columns: table => new
                 {
                     NoticeCredDepID = table.Column<int>(nullable: false)
@@ -203,15 +239,15 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NoticeCreditorDeptor", x => x.NoticeCredDepID);
+                    table.PrimaryKey("PK_NoticeDetails", x => x.NoticeCredDepID);
                     table.ForeignKey(
-                        name: "FK_NoticeCreditorDeptor_Notice_NoticeID",
+                        name: "FK_NoticeDetails_Notices_NoticeID",
                         column: x => x.NoticeID,
-                        principalTable: "Notice",
+                        principalTable: "Notices",
                         principalColumn: "NoticeID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_NoticeCreditorDeptor_Partners_PartnerID",
+                        name: "FK_NoticeDetails_Partners_PartnerID",
                         column: x => x.PartnerID,
                         principalTable: "Partners",
                         principalColumn: "PartnerID",
@@ -219,7 +255,7 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PurchaseOrderStock",
+                name: "PurchaseOrderStocks",
                 columns: table => new
                 {
                     PurchaseStockID = table.Column<int>(nullable: false)
@@ -237,23 +273,23 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PurchaseOrderStock", x => x.PurchaseStockID);
+                    table.PrimaryKey("PK_PurchaseOrderStocks", x => x.PurchaseStockID);
                     table.ForeignKey(
-                        name: "FK_PurchaseOrderStock_Partners_PartnerID",
+                        name: "FK_PurchaseOrderStocks_Partners_PartnerID",
                         column: x => x.PartnerID,
                         principalTable: "Partners",
                         principalColumn: "PartnerID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PurchaseOrderStock_PurchaseOrder_PurchaseID",
+                        name: "FK_PurchaseOrderStocks_PurchaseOrders_PurchaseID",
                         column: x => x.PurchaseID,
-                        principalTable: "PurchaseOrder",
+                        principalTable: "PurchaseOrders",
                         principalColumn: "PurchaseID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "SellOrderStock",
+                name: "SellOrderStocks",
                 columns: table => new
                 {
                     SellStockID = table.Column<int>(nullable: false)
@@ -271,23 +307,23 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SellOrderStock", x => x.SellStockID);
+                    table.PrimaryKey("PK_SellOrderStocks", x => x.SellStockID);
                     table.ForeignKey(
-                        name: "FK_SellOrderStock_Partners_PartnerID",
+                        name: "FK_SellOrderStocks_Partners_PartnerID",
                         column: x => x.PartnerID,
                         principalTable: "Partners",
                         principalColumn: "PartnerID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SellOrderStock_SellOrder_SellID",
+                        name: "FK_SellOrderStocks_SellOrders_SellID",
                         column: x => x.SellID,
-                        principalTable: "SellOrder",
+                        principalTable: "SellOrders",
                         principalColumn: "SellID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "SettingAccount",
+                name: "SettingAccounts",
                 columns: table => new
                 {
                     SettingAccountID = table.Column<int>(nullable: false)
@@ -298,260 +334,152 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SettingAccount", x => x.SettingAccountID);
+                    table.PrimaryKey("PK_SettingAccounts", x => x.SettingAccountID);
                     table.ForeignKey(
-                        name: "FK_SettingAccount_Accounts_AccountID",
+                        name: "FK_SettingAccounts_Accounts_AccountID",
                         column: x => x.AccountID,
                         principalTable: "Accounts",
                         principalColumn: "AccountID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SettingAccount_Setting_SettingID",
+                        name: "FK_SettingAccounts_Settings_SettingID",
                         column: x => x.SettingID,
-                        principalTable: "Setting",
+                        principalTable: "Settings",
                         principalColumn: "SettingID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Entry",
-                columns: table => new
-                {
-                    EntryID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Code = table.Column<string>(type: "nvarchar(100)", nullable: false),
-                    Date = table.Column<DateTime>(nullable: true),
-                    SellID = table.Column<int>(nullable: false),
-                    PurchaseID = table.Column<int>(nullable: false),
-                    ReceiptExchangeID = table.Column<int>(nullable: false),
-                    NoticeID = table.Column<int>(nullable: false),
-                    CurrencyID = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Entry", x => x.EntryID);
-                    table.ForeignKey(
-                        name: "FK_Entry_Currency_CurrencyID",
-                        column: x => x.CurrencyID,
-                        principalTable: "Currency",
-                        principalColumn: "CurrencyID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Entry_Notice_NoticeID",
-                        column: x => x.NoticeID,
-                        principalTable: "Notice",
-                        principalColumn: "NoticeID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Entry_PurchaseOrder_PurchaseID",
-                        column: x => x.PurchaseID,
-                        principalTable: "PurchaseOrder",
-                        principalColumn: "PurchaseID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Entry_ReceiptExchange_ReceiptExchangeID",
-                        column: x => x.ReceiptExchangeID,
-                        principalTable: "ReceiptExchange",
-                        principalColumn: "ReceiptID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Entry_SellOrder_SellID",
-                        column: x => x.SellID,
-                        principalTable: "SellOrder",
-                        principalColumn: "SellID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ReceiptExchangeDetail",
-                columns: table => new
-                {
-                    ReceiptExchangeID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ReceiptID = table.Column<int>(nullable: false),
-                    ReceiptExchangeAmount = table.Column<decimal>(nullable: false),
-                    AccountID = table.Column<int>(nullable: false),
-                    ChiqueNumber = table.Column<int>(nullable: false),
-                    Type = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReceiptExchangeDetail", x => x.ReceiptExchangeID);
-                    table.ForeignKey(
-                        name: "FK_ReceiptExchangeDetail_Accounts_AccountID",
-                        column: x => x.AccountID,
-                        principalTable: "Accounts",
-                        principalColumn: "AccountID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ReceiptExchangeDetail_ReceiptExchange_ReceiptID",
-                        column: x => x.ReceiptID,
-                        principalTable: "ReceiptExchange",
-                        principalColumn: "ReceiptID",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_EntryDetails_AccountID",
+                table: "EntryDetails",
+                column: "AccountID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Entry_CurrencyID",
-                table: "Entry",
-                column: "CurrencyID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Entry_NoticeID",
-                table: "Entry",
+                name: "IX_NoticeDetails_NoticeID",
+                table: "NoticeDetails",
                 column: "NoticeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Entry_PurchaseID",
-                table: "Entry",
-                column: "PurchaseID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Entry_ReceiptExchangeID",
-                table: "Entry",
-                column: "ReceiptExchangeID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Entry_SellID",
-                table: "Entry",
-                column: "SellID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EntryDetail_AccountID",
-                table: "EntryDetail",
-                column: "AccountID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Notice_EmployeeID",
-                table: "Notice",
-                column: "EmployeeID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Notice_PortfolioID",
-                table: "Notice",
-                column: "PortfolioID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NoticeCreditorDeptor_NoticeID",
-                table: "NoticeCreditorDeptor",
-                column: "NoticeID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NoticeCreditorDeptor_PartnerID",
-                table: "NoticeCreditorDeptor",
+                name: "IX_NoticeDetails_PartnerID",
+                table: "NoticeDetails",
                 column: "PartnerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchaseOrder_EmployeeID",
-                table: "PurchaseOrder",
+                name: "IX_Notices_EmployeeID",
+                table: "Notices",
                 column: "EmployeeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchaseOrder_PortfolioID",
-                table: "PurchaseOrder",
+                name: "IX_Notices_PortfolioID",
+                table: "Notices",
                 column: "PortfolioID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchaseOrderStock_PartnerID",
-                table: "PurchaseOrderStock",
+                name: "IX_PurchaseOrders_EmployeeID",
+                table: "PurchaseOrders",
+                column: "EmployeeID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PurchaseOrders_PortfolioID",
+                table: "PurchaseOrders",
+                column: "PortfolioID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PurchaseOrderStocks_PartnerID",
+                table: "PurchaseOrderStocks",
                 column: "PartnerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchaseOrderStock_PurchaseID",
-                table: "PurchaseOrderStock",
+                name: "IX_PurchaseOrderStocks_PurchaseID",
+                table: "PurchaseOrderStocks",
                 column: "PurchaseID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReceiptExchange_AccountID",
-                table: "ReceiptExchange",
+                name: "IX_ReceiptExchangeDetails_AccountID",
+                table: "ReceiptExchangeDetails",
                 column: "AccountID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReceiptExchange_CurrencyID",
-                table: "ReceiptExchange",
+                name: "IX_ReceiptExchanges_AccountID",
+                table: "ReceiptExchanges",
+                column: "AccountID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReceiptExchanges_CurrencyID",
+                table: "ReceiptExchanges",
                 column: "CurrencyID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReceiptExchangeDetail_AccountID",
-                table: "ReceiptExchangeDetail",
-                column: "AccountID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReceiptExchangeDetail_ReceiptID",
-                table: "ReceiptExchangeDetail",
-                column: "ReceiptID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SellOrder_EmployeeID",
-                table: "SellOrder",
+                name: "IX_SellOrders_EmployeeID",
+                table: "SellOrders",
                 column: "EmployeeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SellOrder_PortfolioID",
-                table: "SellOrder",
+                name: "IX_SellOrders_PortfolioID",
+                table: "SellOrders",
                 column: "PortfolioID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SellOrderStock_PartnerID",
-                table: "SellOrderStock",
+                name: "IX_SellOrderStocks_PartnerID",
+                table: "SellOrderStocks",
                 column: "PartnerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SellOrderStock_SellID",
-                table: "SellOrderStock",
+                name: "IX_SellOrderStocks_SellID",
+                table: "SellOrderStocks",
                 column: "SellID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SettingAccount_AccountID",
-                table: "SettingAccount",
+                name: "IX_SettingAccounts_AccountID",
+                table: "SettingAccounts",
                 column: "AccountID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SettingAccount_SettingID",
-                table: "SettingAccount",
+                name: "IX_SettingAccounts_SettingID",
+                table: "SettingAccounts",
                 column: "SettingID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Entry");
+                name: "Entries");
 
             migrationBuilder.DropTable(
-                name: "EntryDetail");
+                name: "EntryDetails");
 
             migrationBuilder.DropTable(
-                name: "NoticeCreditorDeptor");
+                name: "NoticeDetails");
 
             migrationBuilder.DropTable(
-                name: "PurchaseOrderStock");
+                name: "PurchaseOrderStocks");
 
             migrationBuilder.DropTable(
-                name: "ReceiptExchangeDetail");
+                name: "ReceiptExchangeDetails");
 
             migrationBuilder.DropTable(
-                name: "SellOrderStock");
+                name: "ReceiptExchanges");
 
             migrationBuilder.DropTable(
-                name: "SettingAccount");
+                name: "SellOrderStocks");
 
             migrationBuilder.DropTable(
-                name: "Notice");
+                name: "SettingAccounts");
 
             migrationBuilder.DropTable(
-                name: "PurchaseOrder");
+                name: "Notices");
 
             migrationBuilder.DropTable(
-                name: "ReceiptExchange");
-
-            migrationBuilder.DropTable(
-                name: "SellOrder");
-
-            migrationBuilder.DropTable(
-                name: "Setting");
+                name: "PurchaseOrders");
 
             migrationBuilder.DropTable(
                 name: "Currency");
+
+            migrationBuilder.DropTable(
+                name: "SellOrders");
+
+            migrationBuilder.DropTable(
+                name: "Settings");
 
             migrationBuilder.DropColumn(
                 name: "Code",
