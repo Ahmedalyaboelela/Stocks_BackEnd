@@ -116,9 +116,16 @@ namespace BAL.Repositories
             Context.Set<T>().AddRange(entities);
         }
 
-        public void RemovRange(IEnumerable<T> entities)
+        public void RemovRange(IEnumerable<T> entities,string NoTrack = "")
         {
+            IQueryable<T> query = dbSet;
+            if (NoTrack != "")
+            {
+                query = query.AsNoTracking();
+            }
+
             Context.Set<T>().RemoveRange(entities);
+
         }
     }
 }

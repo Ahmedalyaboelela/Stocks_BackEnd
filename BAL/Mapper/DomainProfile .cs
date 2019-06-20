@@ -69,6 +69,17 @@ namespace BAL.Mapper
 
             #endregion
 
+            #region Map Setting
+            // setting
+            CreateMap<Setting, SettingModel>();
+            CreateMap<SettingModel, Setting>();
+
+            // setting accounts
+            CreateMap<SettingAccount, SettingAccountModel>();
+            CreateMap<SettingAccountModel, SettingAccount>();
+
+            #endregion
+
         }
     }
 }

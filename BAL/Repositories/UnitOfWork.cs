@@ -138,6 +138,36 @@ namespace BAL.Repositories
         }
         #endregion
 
+        #region Setting Repository
+        private GenericRepository<Setting> settingRepository;
+        public GenericRepository<Setting> SettingRepository
+        {
+            get
+            {
+                if (this.settingRepository == null)
+                {
+                    this.settingRepository = new GenericRepository<Setting>(Context);
+                }
+                return settingRepository;
+            }
+        }
+
+        private GenericRepository<SettingAccount> settingAccountRepository;
+        public GenericRepository<SettingAccount> SettingAccountRepository
+        {
+            get
+            {
+                if (this.settingAccountRepository == null)
+                {
+                    this.settingAccountRepository = new GenericRepository<SettingAccount>(Context);
+                }
+                return settingAccountRepository;
+            }
+        }
+
+       
+        #endregion
+
 
         public virtual bool Save()
         {
