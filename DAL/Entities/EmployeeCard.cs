@@ -8,7 +8,6 @@ namespace DAL.Entities
 {
     public class EmployeeCard
     {
-
         [Key]
         public int EmpCardId { get; set; }
 
@@ -31,11 +30,10 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(MAX)")]
         public string Notes { get; set; }
 
-   
+
         public int EmployeeID { get; set; }
 
         [ForeignKey("EmployeeID")]
         public virtual Employee Employee { get; set; }
-
     }
 }

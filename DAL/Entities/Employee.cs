@@ -46,7 +46,7 @@ namespace DAL.Entities
         public string Mobile { get; set; }
 
         public DateTime? BirthDate { get; set; }
-        
+
         public int Age { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
@@ -54,8 +54,7 @@ namespace DAL.Entities
 
         public virtual ICollection<EmployeeCard> EmployeeCards { get; set; }
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
-        public virtual ICollection<SellOrder> SellOrders { get; set; }
+        public virtual ICollection<SellingOrder> SellingOrders { get; set; }
         public virtual ICollection<Notice> Notices { get; set; }
-      
     }
 }

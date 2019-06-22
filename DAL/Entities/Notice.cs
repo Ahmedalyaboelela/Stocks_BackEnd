@@ -25,7 +25,8 @@ namespace DAL.Entities
         [ForeignKey("EmployeeID")]
         public virtual Employee Employee { get; set; }
         public virtual ICollection<NoticeDetail> NoticeDetails { get; set; }
-    //    public virtual ICollection<Entry> Entry { get; set; }
+
+        public virtual Entry Entry { get; set; }
 
     }
 }
