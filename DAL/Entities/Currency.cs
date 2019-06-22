@@ -11,6 +11,7 @@ namespace DAL.Entities
         [Key]
         public int CurrencyID { get; set; }
 
+        [Required]
         [Column(TypeName = "nvarchar(100)")]
         public string Code { get; set; }
 
@@ -26,9 +27,9 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(150)")]
         public string PartName { get; set; }
         public float CurrencyValue { get; set; }
-    //    public virtual ICollection<Entry> Entries { get; set; }
+
         public virtual ICollection<ReceiptExchange> ReceiptExchanges { get; set; }
 
-
+        
     }
 }

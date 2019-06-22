@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DAL.Entities
 {
-    public class Portfolioshareholder
+    public class PortfolioShareHolder
     {
         [Key]
         public int PortShareID { get; set; }

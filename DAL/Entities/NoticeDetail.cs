@@ -9,19 +9,13 @@ namespace DAL.Entities
     public class NoticeDetail
     {
         [Key]
-        public int NoticeCredDepID { get; set; }
-        public int NoticeID { get; set; }
+        public int NoticeDetailID { get; set; }
         public decimal CreditDebitMoney { get; set; }
         public float CreditorDebitStocks { get; set; }
-   
-        [Display(Name ="Company Name")]
-        public int PartnerID { get; set; }
 
-        [ForeignKey("PartnerID")]
-        public virtual Partner Partner { get; set; }
+        public int NoticeID { get; set; }
 
         [ForeignKey("NoticeID")]
         public virtual Notice Notice { get; set; }
-
     }
 }

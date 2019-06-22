@@ -26,12 +26,9 @@ namespace DAL.Entities
         [ForeignKey("EmployeeID")]
         public virtual Employee Employee { get; set; }
 
-        [ForeignKey("PortfolioID")]
-        public virtual Portfolio Portfolio { get; set; }
+        public virtual Entry  Entry { get; set; }
 
-        public virtual ICollection<SellingOrderDetail> SellingOrderDetails { get; set; }
-    //    public virtual ICollection<Entry> Entries { get; set; }
-
+       public virtual ICollection<SellingOrderDetail> SellingOrderDetails { get; set; }
 
     }
 }

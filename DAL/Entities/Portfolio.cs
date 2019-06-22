@@ -18,7 +18,7 @@ namespace DAL.Entities
         [Required]
         [Column(TypeName = "nvarchar(150)")]
         public string NameAR { get; set; }
-        
+
         [Column(TypeName = "nvarchar(150)")]
         public string NameEN { get; set; }
         public DateTime? EstablishDate { get; set; }
@@ -35,13 +35,11 @@ namespace DAL.Entities
 
         public float? StocksCount { get; set; }
 
-        public virtual ICollection<Portfolioshareholder> Portfolioshareholders { get; set; }
+        public virtual ICollection<PortfolioShareHolder> PortfolioShareHolders { get; set; }
         public virtual ICollection<PortfolioAccount> PortfolioAccounts { get; set; }
         public virtual ICollection<SellingOrder> SellOrders { get; set; }
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual ICollection<Notice> Notices { get; set; }
-
-
 
 
     }

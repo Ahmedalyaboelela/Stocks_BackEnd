@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DAL.Entities
 {
-   public class Account
+    public class Account
     {
         [Key]
         public int AccountID { get; set; }
@@ -29,22 +29,22 @@ namespace DAL.Entities
         public int AccountRefrence { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal Debit { get; set; }
+        public decimal? Debit { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal Credit { get; set; }
+        public decimal? Credit { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal DebitLimit { get; set; }
+        public decimal? DebitLimit { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal CreditLimit { get; set; }
+        public decimal? CreditLimit { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal DebitOpenningBalance { get; set; }
+        public decimal? DebitOpenningBalance { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal CreditOpenningBalance { get; set; }
+        public decimal? CreditOpenningBalance { get; set; }
 
         [Column(TypeName = "nvarchar(MAX)")]
         public string Address { get; set; }
@@ -81,13 +81,19 @@ namespace DAL.Entities
         [ForeignKey("AccoutnParentID")]
         public virtual ICollection<Account> SubAccounts { get; set; }
 
+        public virtual ICollection<EntryDetail> EntryDetails { get; set; }
+
         public virtual ICollection<Partner> Partners { get; set; }
 
         public virtual ICollection<PortfolioAccount> PortfolioAccounts { get; set; }
-        public virtual ICollection<SettingAccount> SettingAccounts { get; set; }
-        public virtual ICollection<ReceiptExchange> ReceiptExchanges { get; set; }
+
+        //public virtual ICollection<ReceiptExchange> ReceiptExchanges { get; set; }
+
         public virtual ICollection<ReceiptExchangeDetail> ReceiptExchangeDetails { get; set; }
-        public virtual ICollection<EntryDetail> EntryDetails { get; set; }
+
+        
+
+
 
 
     }

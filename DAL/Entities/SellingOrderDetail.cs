@@ -24,18 +24,15 @@ namespace DAL.Entities
 
         public float TaxRateOnCommission { get; set; }
         [Column(TypeName = "decimal(10,2)")]
-        public int TaxOnCommission { get; set; }
+        public decimal TaxOnCommission { get; set; }
         [Column(TypeName = "decimal(10,2)")]
         public decimal NetAmmount { get; set; }
 
         public int SellingOrderID { get; set; }
 
-        public int PartnerID { get; set; }
+
 
         [ForeignKey("SellingOrderID")]
         public virtual SellingOrder SellOrder { get; set; }
-
-        [ForeignKey("PartnerID")]
-        public virtual Partner Partner { get; set; }
     }
 }
