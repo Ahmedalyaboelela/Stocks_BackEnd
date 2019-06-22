@@ -9,12 +9,12 @@ namespace DAL.Entities
     public class PurchaseOrder
     {
         [Key]
-        public int PurchaseID { get; set; }
+        public int PurchaseOrderID { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(100)")]
         public string Code { get; set; }
 
-        public int PurchaseWay { get; set; }
+        public int PayWay { get; set; }
 
         public DateTime? Date { get; set; }
 
@@ -25,11 +25,8 @@ namespace DAL.Entities
         [ForeignKey("EmployeeID")]
         public virtual Employee Employee { get; set; }
 
-        [ForeignKey("PortfolioID")]
-        public virtual Portfolio Portfolio { get; set; }
+        public virtual Entry Entry { get; set; }
 
-        public virtual ICollection<PurchaseOrderStock> PurchaseOrderStocks { get; set; }
-       // public virtual ICollection<Entry> Entries { get; set; }
-
+        public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
     }
 }

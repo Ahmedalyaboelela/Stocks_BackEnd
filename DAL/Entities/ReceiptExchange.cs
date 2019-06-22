@@ -15,7 +15,7 @@ namespace DAL.Entities
         public string Code { get; set; }
         public DateTime? Date { get; set; }
         public int CurrencyID { get; set; }
-        public int AccountID { get; set; }
+        //public int AccountID { get; set; }
         public bool Type { get; set; }
         public int? ChiqueNumber { get; set; }
         public DateTime? ChiqueDate { get; set; }
@@ -23,12 +23,13 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(MAX)")]
         public string Description { get; set; }
 
-        [ForeignKey("AccountID")]
-        public virtual Account Account { get; set; }
+        //[ForeignKey("AccountID")]
+        //public virtual Account Account { get; set; }
+
+
         [ForeignKey("CurrencyID")]
         public virtual Currency Currency { get; set; }
-      //  public virtual ICollection<ReceiptExchangeDetail> ReceiptExchangeDetails { get; set; }
-    //    public virtual ICollection<Entry> Entry { get; set; }
 
+        public virtual Entry Entry { get; set; }
     }
 }

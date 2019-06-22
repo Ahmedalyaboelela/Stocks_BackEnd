@@ -14,7 +14,12 @@ namespace DAL.Entities
         public decimal Credit { get; set; }
         public int AccountID { get; set; }
 
+        public int EntryID { get; set; }
+
         [ForeignKey("AccountID")]
         public virtual Account Account { get; set; }
+
+        [ForeignKey("EntryID")]
+        public virtual Entry Entry { get; set; }
     }
 }
