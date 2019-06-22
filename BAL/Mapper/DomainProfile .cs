@@ -69,17 +69,6 @@ namespace BAL.Mapper
 
             #endregion
 
-            CreateMap<Entry,EntryModel>();
-            CreateMap<EntryModel, Entry>().ForSourceMember(t => t.Count, opt => opt.DoNotValidate());
-
-            CreateMap<SellingOrder, SellingOrderModel>();
-            CreateMap<SellingOrderModel, SellingOrder>().ForSourceMember(t => t.Count, opt => opt.DoNotValidate());
-
-            CreateMap<SellingOrderDetail, SelingOrderDetailsModel>();
-            CreateMap<SelingOrderDetailsModel, SellingOrderDetail>();
-
-
-
         }
     }
 }

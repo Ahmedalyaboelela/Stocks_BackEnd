@@ -36,7 +36,7 @@ namespace BAL.Interfaces
         void Delete(T EntityToDelete);
 
         void AddRange(IEnumerable<T> entities);
-        void RemovRange(IEnumerable<T> entities);
+        void RemovRange(IEnumerable<T> entities, string NoTrack = "");
 
 
 
