@@ -124,16 +124,68 @@ namespace BAL.Repositories
             }
         }
 
-        private GenericRepository<Portfolioshareholder> portfolioShareholderRepository;
-        public GenericRepository<Portfolioshareholder> PortfolioShareholderRepository
+        private GenericRepository<PortfolioShareHolder> portfolioShareholderRepository;
+        public GenericRepository<PortfolioShareHolder> PortfolioShareholderRepository
         {
             get
             {
                 if (this.portfolioShareholderRepository == null)
                 {
-                    this.portfolioShareholderRepository = new GenericRepository<Portfolioshareholder>(Context);
+                    this.portfolioShareholderRepository = new GenericRepository<PortfolioShareHolder>(Context);
                 }
                 return portfolioShareholderRepository;
+            }
+        }
+
+        private GenericRepository<SellingOrder> sellingOrderRepository;
+        public GenericRepository<SellingOrder> SellingOrderReposetory
+        {
+            get
+            {
+                if (this.sellingOrderRepository == null)
+                {
+                    this.sellingOrderRepository = new GenericRepository<SellingOrder>(Context);
+                }
+                return sellingOrderRepository;
+            }
+        }
+
+        private GenericRepository<SellingOrderDetail> sellingOrderDetailRepository;
+        public GenericRepository<SellingOrderDetail> SellingOrderDetailRepository
+        {
+            get
+            {
+                if (this.sellingOrderDetailRepository == null)
+                {
+                    this.sellingOrderDetailRepository = new GenericRepository<SellingOrderDetail>(Context);
+                }
+                return sellingOrderDetailRepository;
+            }
+        }
+
+        private GenericRepository<Entry> entryRepository;
+        public GenericRepository<Entry> EntryRepository
+        {
+            get
+            {
+                if (this.entryRepository == null)
+                {
+                    this.entryRepository = new GenericRepository<Entry>(Context);
+                }
+                return entryRepository;
+            }
+        }
+
+        private GenericRepository<EntryDetail> entryDetailRepository;
+        public GenericRepository<EntryDetail> EntryDetailRepository
+        {
+            get
+            {
+                if (this.entryDetailRepository == null)
+                {
+                    this.entryDetailRepository = new GenericRepository<EntryDetail>(Context);
+                }
+                return entryDetailRepository;
             }
         }
         #endregion

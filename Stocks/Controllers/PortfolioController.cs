@@ -293,13 +293,13 @@ namespace Stocks.Controllers
                                 if (item.PortShareID == 0)
                                 {
                                     item.PortfolioID = model.PortfolioID;
-                                    var obj = _mapper.Map<Portfolioshareholder>(item);
+                                    var obj = _mapper.Map<PortfolioShareHolder>(item);
 
                                     unitOfWork.PortfolioShareholderRepository.Insert(obj);
                                 }
                                 else
                                 {
-                                    var obj = _mapper.Map<Portfolioshareholder>(item);
+                                    var obj = _mapper.Map<PortfolioShareHolder>(item);
 
                                     unitOfWork.PortfolioShareholderRepository.Update(obj);
                                 }
@@ -473,7 +473,7 @@ namespace Stocks.Controllers
                     foreach (var item in portShareholders)
                     {
                         item.PortfolioID = model.PortfolioID;
-                        var newHolder = _mapper.Map<Portfolioshareholder>(item);
+                        var newHolder = _mapper.Map<PortfolioShareHolder>(item);
 
                         unitOfWork.PortfolioShareholderRepository.Insert(newHolder);
 
@@ -526,7 +526,7 @@ namespace Stocks.Controllers
                         foreach (var item in portShareholders)
                         {
                             item.PortfolioID = model.PortfolioID;
-                            var newHolder = _mapper.Map<Portfolioshareholder>(item);
+                            var newHolder = _mapper.Map<PortfolioShareHolder>(item);
 
                             unitOfWork.PortfolioShareholderRepository.Insert(newHolder);
 
