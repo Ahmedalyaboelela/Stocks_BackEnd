@@ -225,6 +225,8 @@ namespace BAL.Repositories
                     this.purchaseOrderDetailRepository = new GenericRepository<PurchaseOrderDetail>(Context);
                 }
                 return purchaseOrderDetailRepository;
+            }
+        }
 
         #endregion
 
