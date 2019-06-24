@@ -18,6 +18,11 @@ namespace BAL.Repositories
             Context = dbContext;
         }
 
+        public GenericRepository<T> Repository<T>() where T : class, new()
+        {
+            return new GenericRepository<T>(Context);
+        }
+
         #region Account repository
         //Account
         private GenericRepository<Account> accountRepository;
@@ -124,14 +129,14 @@ namespace BAL.Repositories
             }
         }
 
-        private GenericRepository<Portfolioshareholder> portfolioShareholderRepository;
-        public GenericRepository<Portfolioshareholder> PortfolioShareholderRepository
+        private GenericRepository<PortfolioShareHolder> portfolioShareholderRepository;
+        public GenericRepository<PortfolioShareHolder> PortfolioShareholderRepository
         {
             get
             {
                 if (this.portfolioShareholderRepository == null)
                 {
-                    this.portfolioShareholderRepository = new GenericRepository<Portfolioshareholder>(Context);
+                    this.portfolioShareholderRepository = new GenericRepository<PortfolioShareHolder>(Context);
                 }
                 return portfolioShareholderRepository;
             }
@@ -165,7 +170,98 @@ namespace BAL.Repositories
             }
         }
 
-       
+
+        #endregion
+
+        #region ReceiptExchange Repository
+        private GenericRepository<ReceiptExchange> receiptExchangeRepository;
+        public GenericRepository<ReceiptExchange> ReceiptExchangeRepository
+        {
+            get
+            {
+                if (this.receiptExchangeRepository == null)
+                {
+                    this.receiptExchangeRepository = new GenericRepository<ReceiptExchange>(Context);
+                }
+                return receiptExchangeRepository;
+            }
+        }
+
+        private GenericRepository<ReceiptExchangeDetail> receiptExchangeDetailRepository;
+        public GenericRepository<ReceiptExchangeDetail> ReceiptExchangeDetailRepository
+        {
+            get
+            {
+                if (this.receiptExchangeDetailRepository == null)
+                {
+                    this.receiptExchangeDetailRepository = new GenericRepository<ReceiptExchangeDetail>(Context);
+                }
+                return receiptExchangeDetailRepository;
+            }
+        }
+
+
+        #endregion
+
+        #region Notice Repository
+        private GenericRepository<Notice> noticeRepository;
+        public GenericRepository<Notice> NoticeRepository
+        {
+            get
+            {
+                if (this.noticeRepository == null)
+                {
+                    this.noticeRepository = new GenericRepository<Notice>(Context);
+                }
+                return noticeRepository;
+            }
+        }
+
+        private GenericRepository<NoticeDetail> noticeDetailRepository;
+        public GenericRepository<NoticeDetail> NoticeDetailRepository
+        {
+            get
+            {
+                if (this.noticeDetailRepository == null)
+                {
+                    this.noticeDetailRepository = new GenericRepository<NoticeDetail>(Context);
+                }
+                return noticeDetailRepository;
+            }
+        }
+
+
+        #endregion
+
+
+        #region Entry Repository
+        private GenericRepository<Entry> entryRepository;
+        public GenericRepository<Entry> EntryRepository
+        {
+            get
+            {
+                if (this.entryRepository == null)
+                {
+                    this.entryRepository = new GenericRepository<Entry>(Context);
+                }
+                return entryRepository;
+            }
+        }
+
+        private GenericRepository<EntryDetail> entryDetailRepository;
+        public GenericRepository<EntryDetail> EntryDetailRepository
+        {
+            get
+            {
+                if (this.entryDetailRepository == null)
+                {
+                    this.entryDetailRepository = new GenericRepository<EntryDetail>(Context);
+                }
+                return entryDetailRepository;
+            }
+        }
+
+
         #endregion
 
 
