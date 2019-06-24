@@ -217,7 +217,34 @@ namespace BAL.Repositories
             }
         }
 
-       
+
+        private GenericRepository<PurchaseOrder> purchaseOrderRepository;
+        public GenericRepository<PurchaseOrder> PurchaseOrderRepository
+        {
+            get
+            {
+                if (this.purchaseOrderRepository == null)
+                {
+                    this.purchaseOrderRepository = new GenericRepository<PurchaseOrder>(Context);
+                }
+                return purchaseOrderRepository;
+            }
+        }
+
+        private GenericRepository<PurchaseOrderDetail> purchaseOrderDetailRepository;
+        public GenericRepository<PurchaseOrderDetail> PurchaseOrderDetailRepository
+        {
+            get
+            {
+                if (this.purchaseOrderDetailRepository == null)
+                {
+                    this.purchaseOrderDetailRepository = new GenericRepository<PurchaseOrderDetail>(Context);
+                }
+                return purchaseOrderDetailRepository;
+            }
+        }
+
+
         #endregion
 
 

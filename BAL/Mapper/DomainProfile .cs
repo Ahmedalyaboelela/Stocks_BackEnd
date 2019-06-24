@@ -81,6 +81,13 @@ namespace BAL.Mapper
             CreateMap<SellingOrderDetail, SelingOrderDetailsModel>();
             CreateMap<SelingOrderDetailsModel, SellingOrderDetail>();
 
+            CreateMap<PurchaseOrder, PurchaseOrderModel>();
+            CreateMap<PurchaseOrderModel, PurchaseOrder>().ForSourceMember(t => t.Count, opt => opt.DoNotValidate());
+
+            CreateMap<PurchaseOrderDetail, PurchaseOrderDetailModel>();
+            CreateMap<PurchaseOrderDetailModel, PurchaseOrderDetail>();
+
+
 
 
 

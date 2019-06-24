@@ -3,25 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
-using DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using BAL.Model;
+using DAL.Entities;
 namespace Stocks.Controllers
 {
-    public class SellingOrderController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PurchaseOrderController : ControllerBase
     {
-
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
-        public SellingOrderController(StocksContext context, IMapper mapper)
+        public PurchaseOrderController(StocksContext context, IMapper mapper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
         }
-        [Route("~/api/SellingOrder/GetSettingAccounts/{id}")]
+
+
+
+        [Route("~/api/PurchaseOrder/GetSettingAccounts/{id}")]
         public IEnumerable<SettingAccountModel> SettingAccounts(int id)
         {
 
@@ -47,19 +51,16 @@ namespace Stocks.Controllers
 
 
         }
-        
 
-        
-
-        [Route("~/api/SellingOrder/GetSetting")]
+        [Route("~/api/PurchaseOrder/GetSetting")]
         public IEnumerable<SettingModel> GetSetting()
         {
 
-            var setsetting = unitOfWork.SettingRepository.Get(filter: x => x.VoucherType == 1).Select(a => new SettingModel
+            var setsetting = unitOfWork.SettingRepository.Get(filter: x => x.VoucherType == 2).Select(a => new SettingModel
             {
 
                 SettingID = a.SettingID,
-                VoucherType = 1,
+                VoucherType = 2,
                 AutoGenerateEntry = a.AutoGenerateEntry,
                 Code = a.Code,
                 DoNotGenerateEntry = a.DoNotGenerateEntry,
@@ -72,20 +73,18 @@ namespace Stocks.Controllers
 
         }
 
-
-
         [HttpGet]//يولد قيد بشرط
-        [Route("~/api/SellingOrder/Generateconstraint")]
+        [Route("~/api/PurchaseOrder/Generateconstraint")]
         public IActionResult GenerateconstraintWithCon(EntryModel entryModel)
         {
-            if (entryModel.SellingOrderID == null)
+            if (entryModel.PurchaseOrderID == null)
             {
                 return Ok("يلا ياعم من هنا");
             }
             else
             {
-                var selling = unitOfWork.SellingOrderReposetory.GetByID(entryModel.SellingOrderID);
-                if (selling == null)
+                var purchase = unitOfWork.PurchaseOrderRepository.GetByID(entryModel.PurchaseOrderID);
+                if (purchase == null)
                 {
                     return Ok("يلا ياعم من هنا");
                 }
@@ -140,15 +139,14 @@ namespace Stocks.Controllers
 
 
 
-
         [HttpGet]
-        [Route("~/api/SellingOrder/GetLastSellingOrder")]
-        public IActionResult GetLastSellingOrder()
+        [Route("~/api/PurchaseOrder/GetLastPurchaseOrder")]
+        public IActionResult GetLastPurchaseOrder()
         {
-            var selling = unitOfWork.SellingOrderReposetory.Last();
+            var purchase = unitOfWork.PurchaseOrderRepository.Last();
 
 
-            var model = _mapper.Map<SellingOrderModel>(selling);
+            var model = _mapper.Map<PurchaseOrderModel>(purchase);
             if (model == null)
             {
                 return Ok(model);
@@ -156,7 +154,7 @@ namespace Stocks.Controllers
             }
 
 
-            model.Count = unitOfWork.SellingOrderReposetory.Count();
+            model.Count = unitOfWork.PurchaseOrderRepository.Count();
 
             if (model.Count == 0)
             {
@@ -165,17 +163,17 @@ namespace Stocks.Controllers
 
 
 
-            var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrderID == selling.SellingOrderID)
-                            .Select(m => new SelingOrderDetailsModel
+            var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseID == purchase.PurchaseOrderID)
+                            .Select(m => new PurchaseOrderDetailModel
                             {
 
-                                SellingOrderID = m.SellingOrderID,
-                                SellOrderDetailID = m.SellOrderDetailID,
+                                PurchaseID = m.PurchaseID,
                                 BankCommission = m.BankCommission,
-                                BankCommissionRate = m.BankCommissionRate,
                                 NetAmmount = m.NetAmmount,
-                                SelingValue = m.SelingValue,
-                                SellingPrice = m.SellingPrice,
+                                PurchaseOrderDetailID = m.PurchaseOrderDetailID,
+                                BankCommissionRate = m.BankCommissionRate,
+                                PurchasePrice = m.PurchasePrice,
+                                PurchaseValue = m.PurchaseValue,
                                 StockCount = m.StockCount,
                                 TaxOnCommission = m.TaxOnCommission,
                                 TaxRateOnCommission = m.TaxRateOnCommission,
@@ -189,91 +187,7 @@ namespace Stocks.Controllers
 
             model.Settings = GetSetting();
 
-            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault(); 
-            if (Entry !=null)
-            {
-                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailsModel
-                {
-                    AccountID = m.AccountID,
-                    Credit = m.Credit,
-                    Debit = m.Debit,
-                    EntryID = m.EntryID,
-                    EntryDetailID = m.EntryDetailID,
-
-
-                });
-                if (EntryDetails != null)
-                {
-
-                    model.entryModel = _mapper.Map<EntryModel>(Entry);
-                    model.entryModel.DetailsModels = EntryDetails;
-                }
-            }
-          
-
-            
-
-            
-
-
-
-            return Ok(model);
-
-        }
-
-
-
-        [HttpGet]
-        [Route("~/api/SellingOrder/GetLastSellingOrder/{id}")]
-        public IActionResult GetSellingOrderByID(int id)
-        {
-            var selling = unitOfWork.SellingOrderReposetory.GetByID(id);
-
-
-            var model = _mapper.Map<SellingOrderModel>(selling);
-            if (model == null)
-            {
-                return Ok(model);
-
-            }
-
-            
-
-
-            model.Count = unitOfWork.SellingOrderReposetory.Count();
-
-            if (model.Count == 0)
-            {
-                return Ok(model);
-            }
-
-
-
-            var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrderID == selling.SellingOrderID)
-                            .Select(m => new SelingOrderDetailsModel
-                            {
-
-                                SellingOrderID = m.SellingOrderID,
-                                SellOrderDetailID = m.SellOrderDetailID,
-                                BankCommission = m.BankCommission,
-                                BankCommissionRate = m.BankCommissionRate,
-                                NetAmmount = m.NetAmmount,
-                                SelingValue = m.SelingValue,
-                                SellingPrice = m.SellingPrice,
-                                StockCount = m.StockCount,
-                                TaxOnCommission = m.TaxOnCommission,
-                                TaxRateOnCommission = m.TaxRateOnCommission,
-                            });
-            if (Details != null)
-            {
-
-
-                model.DetailsModels = Details;
-            }
-
-            model.Settings = GetSetting();
-
-            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault();
+            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
             if (Entry != null)
             {
                 var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailsModel
@@ -303,19 +217,17 @@ namespace Stocks.Controllers
 
             return Ok(model);
 
-
-
-
         }
 
 
-        [HttpGet]
-        [Route("~/api/Pagination/SellingOrder/{pageNumber}")]
-        public IActionResult PaginationSellingOrder(int pageNumber)
-        {
-            var selling = unitOfWork.SellingOrderReposetory.Get(page: pageNumber).FirstOrDefault();
 
-            var model = _mapper.Map<SellingOrderModel>(selling);
+        [HttpGet]
+        [Route("~/api/PurchaseOrder/GetLastPurchaseOrder/{id}")]
+        public IActionResult GetSPurchaseOrderByID(int id)
+        {
+            var purchase = unitOfWork.PurchaseOrderRepository.GetByID(id);
+
+            var model = _mapper.Map<PurchaseOrderModel>(purchase);
             if (model == null)
             {
                 return Ok(model);
@@ -323,7 +235,7 @@ namespace Stocks.Controllers
             }
 
 
-            model.Count = unitOfWork.SellingOrderReposetory.Count();
+            model.Count = unitOfWork.PurchaseOrderRepository.Count();
 
             if (model.Count == 0)
             {
@@ -332,17 +244,17 @@ namespace Stocks.Controllers
 
 
 
-            var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrderID == selling.SellingOrderID)
-                            .Select(m => new SelingOrderDetailsModel
+            var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseID == purchase.PurchaseOrderID)
+                            .Select(m => new PurchaseOrderDetailModel
                             {
 
-                                SellingOrderID = m.SellingOrderID,
-                                SellOrderDetailID = m.SellOrderDetailID,
+                                PurchaseID = m.PurchaseID,
                                 BankCommission = m.BankCommission,
-                                BankCommissionRate = m.BankCommissionRate,
                                 NetAmmount = m.NetAmmount,
-                                SelingValue = m.SelingValue,
-                                SellingPrice = m.SellingPrice,
+                                PurchaseOrderDetailID = m.PurchaseOrderDetailID,
+                                BankCommissionRate = m.BankCommissionRate,
+                                PurchasePrice = m.PurchasePrice,
+                                PurchaseValue = m.PurchaseValue,
                                 StockCount = m.StockCount,
                                 TaxOnCommission = m.TaxOnCommission,
                                 TaxRateOnCommission = m.TaxRateOnCommission,
@@ -356,7 +268,7 @@ namespace Stocks.Controllers
 
             model.Settings = GetSetting();
 
-            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault();
+            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
             if (Entry != null)
             {
                 var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailsModel
@@ -376,6 +288,92 @@ namespace Stocks.Controllers
                     model.entryModel.DetailsModels = EntryDetails;
                 }
             }
+
+
+
+
+
+
+
+
+            return Ok(model);
+
+        }
+
+
+        [HttpGet]
+        [Route("~/api/Pagination/PurchaseOrder/{pageNumber}")]
+        public IActionResult PaginationPurchaseOrder(int pageNumber)
+        {
+            var purchase = unitOfWork.PurchaseOrderRepository.Get(page: pageNumber).FirstOrDefault();
+            var model = _mapper.Map<PurchaseOrderModel>(purchase);
+            if (model == null)
+            {
+                return Ok(model);
+
+            }
+
+
+            model.Count = unitOfWork.PurchaseOrderRepository.Count();
+
+            if (model.Count == 0)
+            {
+                return Ok(model);
+            }
+
+
+
+            var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseID == purchase.PurchaseOrderID)
+                            .Select(m => new PurchaseOrderDetailModel
+                            {
+
+                                PurchaseID = m.PurchaseID,
+                                BankCommission = m.BankCommission,
+                                NetAmmount = m.NetAmmount,
+                                PurchaseOrderDetailID = m.PurchaseOrderDetailID,
+                                BankCommissionRate = m.BankCommissionRate,
+                                PurchasePrice = m.PurchasePrice,
+                                PurchaseValue = m.PurchaseValue,
+                                StockCount = m.StockCount,
+                                TaxOnCommission = m.TaxOnCommission,
+                                TaxRateOnCommission = m.TaxRateOnCommission,
+                            });
+            if (Details != null)
+            {
+
+
+                model.DetailsModels = Details;
+            }
+
+            model.Settings = GetSetting();
+
+            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
+            if (Entry != null)
+            {
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailsModel
+                {
+                    AccountID = m.AccountID,
+                    Credit = m.Credit,
+                    Debit = m.Debit,
+                    EntryID = m.EntryID,
+                    EntryDetailID = m.EntryDetailID,
+
+
+                });
+                if (EntryDetails != null)
+                {
+
+                    model.entryModel = _mapper.Map<EntryModel>(Entry);
+                    model.entryModel.DetailsModels = EntryDetails;
+                }
+            }
+
+
+
+
+
+
+
 
             return Ok(model);
 
@@ -384,13 +382,13 @@ namespace Stocks.Controllers
 
 
         [HttpPost]
-        [Route("~/api/SellingOrder/PostSellingOrder")]
-        public IActionResult PostSellingOrder([FromBody] SellingOrderModel sellingOrderModel)
+        [Route("~/api/PurchaseOrder/PostPurchaseOrder")]
+        public IActionResult PostPurchaseOrder([FromBody] PurchaseOrderModel purchaseOrderModel)
         {
             if (ModelState.IsValid)
             {
-                var Check = unitOfWork.SellingOrderReposetory.Get();
-                if (Check.Any(m => m.Code == sellingOrderModel.Code))
+                var Check = unitOfWork.PurchaseOrderRepository.Get();
+                if (Check.Any(m => m.Code == purchaseOrderModel.Code))
                 {
 
                     return Ok("كود امر بيع مكرر");
@@ -398,42 +396,43 @@ namespace Stocks.Controllers
                 else
                 {
 
-                    var modelselling = _mapper.Map<SellingOrder>(sellingOrderModel);
+                    var modelPurchase = _mapper.Map<PurchaseOrder>(purchaseOrderModel);
 
 
-                    var Details = sellingOrderModel.DetailsModels;
+                    var Details = purchaseOrderModel.DetailsModels;
                     if (Details == null)
                     {
-                        unitOfWork.SellingOrderReposetory.Insert(modelselling);
+                        unitOfWork.PurchaseOrderRepository.Insert(modelPurchase);
                         unitOfWork.Save();
-                        return Ok(sellingOrderModel);
+                        return Ok(purchaseOrderModel);
 
                     }
                     else
                     {
-                        unitOfWork.SellingOrderReposetory.Insert(modelselling);
+                        unitOfWork.PurchaseOrderRepository.Insert(modelPurchase);
 
                         foreach (var item in Details)
                         {
-                            SelingOrderDetailsModel selingOrderDetailsModel = new SelingOrderDetailsModel();
-                            selingOrderDetailsModel.SellingOrderID = modelselling.SellingOrderID;
-                            selingOrderDetailsModel.NetAmmount = item.NetAmmount;
-                            selingOrderDetailsModel.SelingValue = item.SelingValue;
-                            selingOrderDetailsModel.SellingPrice = item.SellingPrice;
-                            selingOrderDetailsModel.StockCount = item.StockCount;
-                            selingOrderDetailsModel.TaxOnCommission = item.TaxOnCommission;
-                            selingOrderDetailsModel.TaxRateOnCommission = item.TaxRateOnCommission;
-                            selingOrderDetailsModel.BankCommission = item.BankCommission;
-                            selingOrderDetailsModel.BankCommissionRate = item.BankCommissionRate;
-                           
-                            var details = _mapper.Map<SellingOrderDetail>(selingOrderDetailsModel);
-                            unitOfWork.SellingOrderDetailRepository.Insert(details);
-                           
+                            PurchaseOrderDetailModel purchaseOrderDetailModel = new PurchaseOrderDetailModel();
+                            purchaseOrderDetailModel.BankCommission = item.BankCommission;
+                            purchaseOrderDetailModel.BankCommissionRate = item.BankCommissionRate;
+                            purchaseOrderDetailModel.NetAmmount = item.NetAmmount;
+                            purchaseOrderDetailModel.PurchaseID = modelPurchase.PurchaseOrderID;
+                          
+                            purchaseOrderDetailModel.PurchasePrice = item.PurchasePrice;
+                            purchaseOrderDetailModel.PurchaseValue = item.PurchaseValue;
+                            purchaseOrderDetailModel.StockCount = item.StockCount;
+                            purchaseOrderDetailModel.TaxOnCommission = item.TaxOnCommission;
+                            purchaseOrderDetailModel.TaxRateOnCommission = item.TaxRateOnCommission;
+                            
+                            var details = _mapper.Map<PurchaseOrderDetail>(purchaseOrderDetailModel);
+                            unitOfWork.PurchaseOrderDetailRepository.Insert(details);
+
                         }
-                        if (sellingOrderModel.entryModel != null)
+                        if (purchaseOrderModel.entryModel != null)
                         {
                             var CheckEntry = unitOfWork.EntryRepository.Get();
-                            if (CheckEntry.Any(m => m.Code == sellingOrderModel.entryModel.Code))
+                            if (CheckEntry.Any(m => m.Code == purchaseOrderModel.entryModel.Code))
                             {
 
                                 return Ok("كود القيد مكرر");
@@ -441,21 +440,21 @@ namespace Stocks.Controllers
                             else
                             {
                                 EntryModel entryModel = new EntryModel();
-                                entryModel.SellingOrderID = modelselling.SellingOrderID;
-                                entryModel.ReceiptID = sellingOrderModel.entryModel.ReceiptID;
-                                entryModel.PurchaseOrderID = sellingOrderModel.entryModel.PurchaseOrderID;
-                                entryModel.NoticeID = sellingOrderModel.entryModel.NoticeID;
-                                entryModel.Code = sellingOrderModel.entryModel.Code;
-                                entryModel.Count = sellingOrderModel.entryModel.Count;
-                                entryModel.Date = sellingOrderModel.entryModel.Date;
-                                
+                                entryModel.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
+                                entryModel.ReceiptID = purchaseOrderModel.entryModel.ReceiptID;
+                                entryModel.PurchaseOrderID = modelPurchase.PurchaseOrderID;
+                                entryModel.NoticeID = purchaseOrderModel.entryModel.NoticeID;
+                                entryModel.Code = purchaseOrderModel.entryModel.Code;
+                                entryModel.Count = purchaseOrderModel.entryModel.Count;
+                                entryModel.Date = purchaseOrderModel.entryModel.Date;
+
                                 var enry = _mapper.Map<Entry>(entryModel);
-                                var entryDetails = sellingOrderModel.entryModel.DetailsModels;
+                                var entryDetails = purchaseOrderModel.entryModel.DetailsModels;
                                 if (entryDetails == null)
                                 {
                                     unitOfWork.EntryRepository.Insert(enry);
                                     unitOfWork.Save();
-                                    return Ok(sellingOrderModel);
+                                    return Ok(purchaseOrderModel);
                                 }
                                 else
                                 {
@@ -473,7 +472,7 @@ namespace Stocks.Controllers
 
                                     }
                                     unitOfWork.Save();
-                                    return Ok(sellingOrderModel);
+                                    return Ok(purchaseOrderModel);
                                 }
                             }
 
@@ -484,7 +483,7 @@ namespace Stocks.Controllers
 
 
 
-                        return Ok(sellingOrderModel);
+                        return Ok(purchaseOrderModel);
                     }
 
 
@@ -499,11 +498,12 @@ namespace Stocks.Controllers
 
 
 
+
         [HttpPut]
-        [Route("~/api/SellingOrder/PutSellingOrder/{id}")]
-        public IActionResult PutSellingOrder(int id, [FromBody]  SellingOrderModel sellingOrderModel)
+        [Route("~/api/PurchaseOrder/PutPurchaseOrder/{id}")]
+        public IActionResult PutPurchaseOrder(int id, [FromBody]  PurchaseOrderModel purchaseOrderModel )
         {
-            if (id != sellingOrderModel.SellingOrderID)
+            if (id != purchaseOrderModel.PurchaseOrderID)
             {
 
                 return BadRequest();
@@ -512,23 +512,23 @@ namespace Stocks.Controllers
             if (ModelState.IsValid)
             {
 
-                var Check = unitOfWork.SellingOrderReposetory.Get(NoTrack: "NoTrack");
+                var Check = unitOfWork.PurchaseOrderRepository.Get(NoTrack: "NoTrack");
 
-                var selling = _mapper.Map<SellingOrder>(sellingOrderModel);
-                var NewdDetails = sellingOrderModel.DetailsModels;
-                var Newdetails = _mapper.Map<IEnumerable<SellingOrderDetail>>(NewdDetails);
-                var OldDetails = unitOfWork.SellingOrderDetailRepository.Get(filter: m => m.SellingOrderID == selling.SellingOrderID);
+                var purchase = _mapper.Map<PurchaseOrder>(purchaseOrderModel);
+                var NewdDetails = purchaseOrderModel.DetailsModels;
+                var Newdetails = _mapper.Map<IEnumerable<PurchaseOrderDetail>>(NewdDetails);
+                var OldDetails = unitOfWork.PurchaseOrderDetailRepository.Get(filter: m => m.PurchaseID == purchase.PurchaseOrderID);
 
 
 
                 //======================================================================================
 
-                if (Check.Any(m => m.Code != selling.Code))
+                if (Check.Any(m => m.Code != purchase.Code))
                 {
-                    unitOfWork.SellingOrderReposetory.Update(selling);
+                    unitOfWork.PurchaseOrderRepository.Update(purchase);
                     if (OldDetails != null)
                     {
-                        unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
+                        unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
                         unitOfWork.Save();
                     }
 
@@ -537,22 +537,22 @@ namespace Stocks.Controllers
                     {
                         foreach (var item in Newdetails)
                         {
-                            item.SellingOrderID = selling.SellingOrderID;
-                            item.SellOrderDetailID = 0;
-                            var details = _mapper.Map<SellingOrderDetail>(item);
+                            item.PurchaseID = purchase.PurchaseOrderID;
+                            item.PurchaseOrderDetailID = 0;
+                            var details = _mapper.Map<PurchaseOrderDetail>(item);
 
-                            unitOfWork.SellingOrderDetailRepository.Insert(details);
+                            unitOfWork.PurchaseOrderDetailRepository.Insert(details);
 
                         }
                     }
                     //********************************************
 
-                    if (sellingOrderModel.entryModel != null)
+                    if (purchaseOrderModel.entryModel != null)
                     {
                         var Check2 = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack");
 
-                        var Entry = _mapper.Map<Entry>(sellingOrderModel.entryModel);
-                        var NewdDetailsEntry = sellingOrderModel.entryModel.DetailsModels;
+                        var Entry = _mapper.Map<Entry>(purchaseOrderModel.entryModel);
+                        var NewdDetailsEntry = purchaseOrderModel.entryModel.DetailsModels;
                         var NewdetailsEntry = _mapper.Map<IEnumerable<EntryDetail>>(NewdDetailsEntry);
                         var OldDetailsEntry = unitOfWork.EntryDetailRepository.Get(filter: m => m.EntryID == Entry.EntryID);
 
@@ -615,7 +615,7 @@ namespace Stocks.Controllers
                         }
 
                         unitOfWork.Save();
-                        return Ok(sellingOrderModel);
+                        return Ok(purchaseOrderModel);
                     }
                 }
 
@@ -624,12 +624,12 @@ namespace Stocks.Controllers
 
                 else
                 {
-                    if (Check.Any(m => m.Code == selling.Code && m.SellingOrderID == id))
+                    if (Check.Any(m => m.Code == purchase.Code && m.PurchaseOrderID == id))
                     {
-                        unitOfWork.SellingOrderReposetory.Update(selling);
+                        unitOfWork.PurchaseOrderRepository.Update(purchase);
                         if (OldDetails != null)
                         {
-                            unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
+                            unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
                             unitOfWork.Save();
                         }
 
@@ -638,22 +638,22 @@ namespace Stocks.Controllers
                         {
                             foreach (var item in Newdetails)
                             {
-                                item.SellingOrderID = selling.SellingOrderID;
-                                item.SellOrderDetailID = 0;
-                                var details = _mapper.Map<SellingOrderDetail>(item);
+                                item.PurchaseID = purchase.PurchaseOrderID;
+                                item.PurchaseOrderDetailID = 0;
+                                var details = _mapper.Map<PurchaseOrderDetail>(item);
 
-                                unitOfWork.SellingOrderDetailRepository.Insert(details);
+                                unitOfWork.PurchaseOrderDetailRepository.Insert(details);
 
                             }
                         }
                         //********************************************
 
-                        if (sellingOrderModel.entryModel != null)
+                        if (purchaseOrderModel.entryModel != null)
                         {
                             var Check2 = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack");
 
-                            var Entry = _mapper.Map<Entry>(sellingOrderModel.entryModel);
-                            var NewdDetailsEntry = sellingOrderModel.entryModel.DetailsModels;
+                            var Entry = _mapper.Map<Entry>(purchaseOrderModel.entryModel);
+                            var NewdDetailsEntry = purchaseOrderModel.entryModel.DetailsModels;
                             var NewdetailsEntry = _mapper.Map<IEnumerable<EntryDetail>>(NewdDetailsEntry);
                             var OldDetailsEntry = unitOfWork.EntryDetailRepository.Get(filter: m => m.EntryID == Entry.EntryID);
 
@@ -716,7 +716,7 @@ namespace Stocks.Controllers
                             }
 
                             unitOfWork.Save();
-                            return Ok(sellingOrderModel);
+                            return Ok(purchaseOrderModel);
 
                         }
 
@@ -725,7 +725,7 @@ namespace Stocks.Controllers
 
 
                 }
-                return Ok(sellingOrderModel);
+                return Ok(purchaseOrderModel);
             }
             else
             {
@@ -733,15 +733,19 @@ namespace Stocks.Controllers
             }
 
 
-        
+
 
         }
-   
+
+
+
+
+
 
 
         [HttpDelete]
-        [Route("~/api/DeleteSellingOrder/DeleteSelling/{id}")]
-        public IActionResult DeleteSelling(int? id)
+        [Route("~/api/DeletePurchaseOrder/DeletePurchase/{id}")]
+        public IActionResult DeletePurchase(int? id)
         {
 
             if (id == null)
@@ -749,20 +753,20 @@ namespace Stocks.Controllers
 
                 return BadRequest();
             }
-            var modelSelling = unitOfWork.SellingOrderReposetory.GetByID(id);
-            if (modelSelling == null)
+            var modelPurchase = unitOfWork.PurchaseOrderRepository.GetByID(id);
+            if (modelPurchase == null)
             {
                 return BadRequest();
             }
-            var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: m => m.SellingOrderID == id);
-           
-            unitOfWork.SellingOrderDetailRepository.RemovRange(Details);
-            var Entry = unitOfWork.EntryRepository.Get(filter: x=> x.SellingOrderID==id).SingleOrDefault();
-            var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a=> a.EntryID==Entry.EntryID);
+            var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: m => m.PurchaseID == id);
+
+            unitOfWork.PurchaseOrderDetailRepository.RemovRange(Details);
+            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == id).SingleOrDefault();
+            var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
             unitOfWork.EntryDetailRepository.RemovRange(EntryDetails);
             unitOfWork.EntryRepository.Delete(Entry.EntryID);
 
-            unitOfWork.SellingOrderReposetory.Delete(id);
+            unitOfWork.PurchaseOrderRepository.Delete(id);
             var Result = unitOfWork.Save();
             if (Result == true)
             {
@@ -775,6 +779,6 @@ namespace Stocks.Controllers
 
         }
 
+
     }
 }
-
