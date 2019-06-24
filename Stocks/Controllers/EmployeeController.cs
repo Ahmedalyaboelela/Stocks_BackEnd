@@ -253,17 +253,11 @@ namespace Stocks.Controllers
                                 foreach (var item in empolyeeCard)
                                 {
                                     var obj = _mapper.Map<EmployeeCard>(item);
-                                    if (item.EmpCardId == 0)
-                                    {
-                                        obj.EmployeeID = model.EmployeeID;
+                                   
+                                    obj.EmployeeID = model.EmployeeID;
 
-                                        unitOfWork.EmployeeCardRepository.Insert(obj);
-                                    }
-                                    else
-                                    {
-                                        unitOfWork.EmployeeCardRepository.Update(obj);
-                                    }
-
+                                    unitOfWork.EmployeeCardRepository.Insert(obj);
+                                   
 
                                 }
                             }
@@ -279,14 +273,14 @@ namespace Stocks.Controllers
                             }
                             else
                             {
-                                return Ok("تم الفشل بامتياز ركز من فضلك انت بتدخل البيانات.... اتعبنا");
+                                return Ok("يوجد خطا بادخال البيانات ");
                             }
 
                     }
                     catch (Exception ex)
                     {
                         // unitOfWork.Rollback();
-                        return Ok("تم الفشل بامتياز ركز من فضلك انت بتدخل البيانات.... اتعبنا");
+                        return Ok("يوجد خطا بادخال البيانات");
                         //Log, handle or absorbe I don't care ^_^
                     }
 
@@ -298,7 +292,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest();
+                return BadRequest("Bad Request !");
             }
         }
         #endregion
@@ -393,6 +387,45 @@ namespace Stocks.Controllers
         #endregion
 
 
+        #region Delete Methods
+
+        [HttpDelete]
+        [Route("~/api/Employee/Delete/{id}")]
+        public IActionResult DeleteEmployee(int? id)
+        {
+
+            if (id == null)
+            {
+
+                return BadRequest();
+            }
+            var employee = unitOfWork.EmployeeRepository.GetByID(id);
+            if (employee == null)
+            {
+                return BadRequest();
+            }
+            var EmpCard = unitOfWork.EmployeeCardRepository.Get(filter: m => m.EmployeeID == id);
+         
+
+
+            unitOfWork.EmployeeCardRepository.RemovRange(EmpCard);
+            unitOfWork.EmployeeRepository.Delete(employee);
+            var Result = unitOfWork.Save();
+            if (Result == true)
+            {
+                return Ok("item deleted .");
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
+        #endregion
+
+
+
         //#region Update Methods
         //[HttpPut]
         //[Route("~/api/Employee/Update/{id}")]
@@ -428,7 +461,7 @@ namespace Stocks.Controllers
         //        if (Check.Any(m => m.Code != modelEmp.Code))
         //        {
         //            unitOfWork.EmployeeRepository.Update(modelEmp);
-                  
+
         //            if (NewEmpCard != null)
         //            {
         //                foreach (var item in NewEmpCard)
@@ -496,41 +529,5 @@ namespace Stocks.Controllers
         //#endregion
 
 
-        #region Delete Methods
-
-        [HttpDelete]
-        [Route("~/api/Employee/Delete/{id}")]
-        public IActionResult DeleteEmployee(int? id)
-        {
-
-            if (id == null)
-            {
-
-                return BadRequest();
-            }
-            var employee = unitOfWork.EmployeeRepository.GetByID(id);
-            if (employee == null)
-            {
-                return BadRequest();
-            }
-            var EmpCard = unitOfWork.EmployeeCardRepository.Get(filter: m => m.EmployeeID == id);
-         
-
-
-            unitOfWork.EmployeeCardRepository.RemovRange(EmpCard);
-            unitOfWork.EmployeeRepository.Delete(employee);
-            var Result = unitOfWork.Save();
-            if (Result == true)
-            {
-                return Ok("item deleted .");
-            }
-            else
-            {
-                return NotFound();
-            }
-
-        }
-
-        #endregion
     }
 }
