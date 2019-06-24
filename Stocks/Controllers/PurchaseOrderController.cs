@@ -104,7 +104,7 @@ namespace Stocks.Controllers
                             var Entry = _mapper.Map<Entry>(entryModel);
 
 
-                            var Details = entryModel.DetailsModels;
+                            var Details = entryModel.EntryDetailModel;
                             if (Details == null)
                             {
                                 unitOfWork.EntryRepository.Insert(Entry);
@@ -190,7 +190,7 @@ namespace Stocks.Controllers
             var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
             if (Entry != null)
             {
-                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailsModel
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
                 {
                     AccountID = m.AccountID,
                     Credit = m.Credit,
@@ -204,7 +204,7 @@ namespace Stocks.Controllers
                 {
 
                     model.entryModel = _mapper.Map<EntryModel>(Entry);
-                    model.entryModel.DetailsModels = EntryDetails;
+                    model.entryModel.EntryDetailModel = EntryDetails;
                 }
             }
 
@@ -271,7 +271,7 @@ namespace Stocks.Controllers
             var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
             if (Entry != null)
             {
-                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailsModel
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
                 {
                     AccountID = m.AccountID,
                     Credit = m.Credit,
@@ -285,7 +285,7 @@ namespace Stocks.Controllers
                 {
 
                     model.entryModel = _mapper.Map<EntryModel>(Entry);
-                    model.entryModel.DetailsModels = EntryDetails;
+                    model.entryModel.EntryDetailModel = EntryDetails;
                 }
             }
 
@@ -350,7 +350,7 @@ namespace Stocks.Controllers
             var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
             if (Entry != null)
             {
-                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailsModel
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
                 {
                     AccountID = m.AccountID,
                     Credit = m.Credit,
@@ -364,7 +364,7 @@ namespace Stocks.Controllers
                 {
 
                     model.entryModel = _mapper.Map<EntryModel>(Entry);
-                    model.entryModel.DetailsModels = EntryDetails;
+                    model.entryModel.EntryDetailModel = EntryDetails;
                 }
             }
 
@@ -449,7 +449,7 @@ namespace Stocks.Controllers
                                 entryModel.Date = purchaseOrderModel.entryModel.Date;
 
                                 var enry = _mapper.Map<Entry>(entryModel);
-                                var entryDetails = purchaseOrderModel.entryModel.DetailsModels;
+                                var entryDetails = purchaseOrderModel.entryModel.EntryDetailModel;
                                 if (entryDetails == null)
                                 {
                                     unitOfWork.EntryRepository.Insert(enry);
@@ -461,7 +461,7 @@ namespace Stocks.Controllers
                                     unitOfWork.EntryRepository.Insert(enry);
                                     foreach (var item2 in entryDetails)
                                     {
-                                        EntryDetailsModel entryDetailsModel = new EntryDetailsModel();
+                                        EntryDetailModel entryDetailsModel = new EntryDetailModel();
                                         entryDetailsModel.AccountID = item2.AccountID;
                                         entryDetailsModel.Credit = item2.Credit;
                                         entryDetailsModel.Debit = item2.Debit;
@@ -552,7 +552,7 @@ namespace Stocks.Controllers
                         var Check2 = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack");
 
                         var Entry = _mapper.Map<Entry>(purchaseOrderModel.entryModel);
-                        var NewdDetailsEntry = purchaseOrderModel.entryModel.DetailsModels;
+                        var NewdDetailsEntry = purchaseOrderModel.entryModel.EntryDetailModel;
                         var NewdetailsEntry = _mapper.Map<IEnumerable<EntryDetail>>(NewdDetailsEntry);
                         var OldDetailsEntry = unitOfWork.EntryDetailRepository.Get(filter: m => m.EntryID == Entry.EntryID);
 
@@ -653,7 +653,7 @@ namespace Stocks.Controllers
                             var Check2 = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack");
 
                             var Entry = _mapper.Map<Entry>(purchaseOrderModel.entryModel);
-                            var NewdDetailsEntry = purchaseOrderModel.entryModel.DetailsModels;
+                            var NewdDetailsEntry = purchaseOrderModel.entryModel.EntryDetailModel;
                             var NewdetailsEntry = _mapper.Map<IEnumerable<EntryDetail>>(NewdDetailsEntry);
                             var OldDetailsEntry = unitOfWork.EntryDetailRepository.Get(filter: m => m.EntryID == Entry.EntryID);
 
