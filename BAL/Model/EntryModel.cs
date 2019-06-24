@@ -24,5 +24,6 @@ namespace BAL.Model
         public int? NoticeID { get; set; }
 
         public int Count { get; set; }
+        public IEnumerable<EntryDetailModel> EntryDetailModel { get; set; }
     }
 }
