@@ -24,7 +24,7 @@ namespace BAL.Model
 
         public int Count { get; set; }
 
-        public virtual IEnumerable<EntryDetailsModel> DetailsModels { get; set; }
+        public virtual IEnumerable<EntryDetailModel> EntryDetailModel { get; set; }
 
 
     }
