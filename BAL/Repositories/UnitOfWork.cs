@@ -141,6 +141,36 @@ namespace BAL.Repositories
                 return portfolioShareholderRepository;
             }
         }
+
+        private GenericRepository<SellingOrder> sellingOrderRepository;
+        public GenericRepository<SellingOrder> SellingOrderReposetory
+        {
+            get
+            {
+                if (this.sellingOrderRepository == null)
+                {
+                    this.sellingOrderRepository = new GenericRepository<SellingOrder>(Context);
+                }
+                return sellingOrderRepository;
+            }
+        }
+
+        private GenericRepository<SellingOrderDetail> sellingOrderDetailRepository;
+        public GenericRepository<SellingOrderDetail> SellingOrderDetailRepository
+        {
+            get
+            {
+                if (this.sellingOrderDetailRepository == null)
+                {
+                    this.sellingOrderDetailRepository = new GenericRepository<SellingOrderDetail>(Context);
+                }
+                return sellingOrderDetailRepository;
+            }
+        }
+
+
+
+
         #endregion
 
         #region Setting Repository
@@ -170,6 +200,31 @@ namespace BAL.Repositories
             }
         }
 
+
+
+        private GenericRepository<PurchaseOrder> purchaseOrderRepository;
+        public GenericRepository<PurchaseOrder> PurchaseOrderRepository
+        {
+            get
+            {
+                if (this.purchaseOrderRepository == null)
+                {
+                    this.purchaseOrderRepository = new GenericRepository<PurchaseOrder>(Context);
+                }
+                return purchaseOrderRepository;
+            }
+        }
+
+        private GenericRepository<PurchaseOrderDetail> purchaseOrderDetailRepository;
+        public GenericRepository<PurchaseOrderDetail> PurchaseOrderDetailRepository
+        {
+            get
+            {
+                if (this.purchaseOrderDetailRepository == null)
+                {
+                    this.purchaseOrderDetailRepository = new GenericRepository<PurchaseOrderDetail>(Context);
+                }
+                return purchaseOrderDetailRepository;
 
         #endregion
 
