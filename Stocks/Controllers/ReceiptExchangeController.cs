@@ -298,8 +298,11 @@ namespace Stocks.Controllers
 
                 var Check = unitOfWork.ReceiptExchangeRepository.Get(NoTrack: "NoTrack", filter: m => m.Type == type);
                 var oldDetail = unitOfWork.ReceiptExchangeDetailRepository.Get(NoTrack: "NoTrack", filter: m => m.ReceiptID == model.ReceiptID);
-                unitOfWork.ReceiptExchangeDetailRepository.RemovRange(oldDetail);
+                if (oldDetail != null)
+                {
+                    unitOfWork.ReceiptExchangeDetailRepository.RemovRange(oldDetail);
 
+                }
 
                 if (Check.Any(m => m.Code != Model.Code))
                 {

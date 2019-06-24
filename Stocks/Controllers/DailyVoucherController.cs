@@ -276,8 +276,11 @@ namespace Stocks.Controllers
 
                     .Get(NoTrack: "NoTrack", filter: m => m.EntryID == model.EntryID);
 
+                if (oldDetail != null)
+                {
 
-                unitOfWork.EntryDetailRepository.RemovRange(oldDetail);
+                    unitOfWork.EntryDetailRepository.RemovRange(oldDetail); 
+                }
 
 
                 if (Check.Any(m => m.Code != entry.Code))

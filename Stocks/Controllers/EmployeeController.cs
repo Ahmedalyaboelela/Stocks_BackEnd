@@ -322,8 +322,11 @@ namespace Stocks.Controllers
                     .Get(NoTrack: "NoTrack", filter: m => m.EmployeeID == model.EmployeeID);
 
 
-                unitOfWork.EmployeeCardRepository.RemovRange(oldcard);
+                if (oldcard.Count()>0)
+                {
+                    unitOfWork.EmployeeCardRepository.RemovRange(oldcard);
 
+                }
 
                 if (Check.Any(m => m.Code != empModel.Code))
                 {
@@ -353,8 +356,6 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.EmployeeRepository.Update(model);
-                        unitOfWork.Save();
-
                      
                         foreach (var item in empolyeeCard)
                         {

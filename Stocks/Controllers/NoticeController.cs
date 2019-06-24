@@ -287,7 +287,11 @@ namespace Stocks.Controllers
 
                 var Check = unitOfWork.NoticeRepository.Get(NoTrack: "NoTrack", filter: m => m.Type == type);
                 var oldDetail = unitOfWork.NoticeDetailRepository.Get(NoTrack: "NoTrack", filter: m => m.NoticeID == model.NoticeID);
-                unitOfWork.NoticeDetailRepository.RemovRange(oldDetail);
+
+                if (oldDetail != null)
+                {
+                    unitOfWork.NoticeDetailRepository.RemovRange(oldDetail); 
+                }
 
 
                 if (Check.Any(m => m.Code != Model.Code))

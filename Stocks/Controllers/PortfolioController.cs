@@ -344,77 +344,6 @@ namespace Stocks.Controllers
         }
         #endregion
 
-        //[HttpPost]
-        //[Route("~/api/Portfolio/Add")]
-        //public IActionResult PostEmp([FromBody]  PortfolioModel portModel)
-        //{
-
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        var Check = unitOfWork.PortfolioRepository.Get();
-        //        if (Check.Any(m => m.Code == portModel.Code))
-        //        {
-
-        //            return Ok("الرمز موجود مسبقا");
-        //        }
-        //        else
-        //        {
-
-        //            var modelPor = _mapper.Map<Portfolio>(portModel);
-
-
-        //            var PorCard = portModel.Shareholders;
-        //            var AllAccount = portModel.PortfolioAccounts;
-        //            if (PorCard == null || AllAccount==null)
-        //            {
-        //                unitOfWork.PortfolioRepository.Insert(modelPor);
-        //                unitOfWork.Save();
-        //                return Ok(portModel);
-
-        //            }
-        //            else
-        //            {
-        //                unitOfWork.PortfolioRepository.Insert(modelPor);
-
-        //                foreach (var item in PorCard)
-        //                {
-        //                    item.PortfolioID = modelPor.PortfolioID;
-        //                    var Porcard = _mapper.Map<Portfolioshareholder>(item);
-        //                    unitOfWork.PortfolioShareholderRepository.Insert(Porcard);
-
-
-
-        //                }
-
-
-        //                foreach (var item in AllAccount)
-        //                {
-        //                    PortfolioAccountModel portfolioAccountModel = new PortfolioAccountModel();
-        //                    portfolioAccountModel.AccountID = item.AccountID;
-        //                    portfolioAccountModel.PortfolioID = modelPor.PortfolioID;
-        //                    portfolioAccountModel.Type = item.Type;
-        //                     var Acccard = _mapper.Map<PortfolioAccount>(portfolioAccountModel);
-
-        //                    unitOfWork.PortfolioAccountRepository.Insert(Acccard);
-
-        //                }
-
-
-        //                unitOfWork.Save();
-
-
-
-        //                return Ok(portModel);
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
-
         #region Update Methods
         [HttpPut]
         [Route("~/api/Portfolio/Update/{id}")]
@@ -447,8 +376,11 @@ namespace Stocks.Controllers
 
                       .Get(filter: m => m.PortfolioID == model.PortfolioID);
 
+                    if (oldAccounts != null)
+                    {
 
-                    unitOfWork.PortfolioAccountRepository.RemovRange(oldAccounts);
+                        unitOfWork.PortfolioAccountRepository.RemovRange(oldAccounts); 
+                    }
 
 
                     foreach (var item in portAccounts)
@@ -466,9 +398,12 @@ namespace Stocks.Controllers
 
                     .Get(filter: m => m.PortfolioID == model.PortfolioID);
 
+                    if (oldHolders != null)
+                    {
 
-                    unitOfWork.PortfolioShareholderRepository.RemovRange(oldHolders);
+                        unitOfWork.PortfolioShareholderRepository.RemovRange(oldHolders);
 
+                    }
 
                     foreach (var item in portShareholders)
                     {
@@ -500,9 +435,12 @@ namespace Stocks.Controllers
 
                           .Get(filter: m => m.PortfolioID == model.PortfolioID);
 
+                        if (oldAccounts != null)
+                        {
 
-                        unitOfWork.PortfolioAccountRepository.RemovRange(oldAccounts);
+                            unitOfWork.PortfolioAccountRepository.RemovRange(oldAccounts);
 
+                        }
 
                         foreach (var item in portAccounts)
                         {
@@ -519,10 +457,13 @@ namespace Stocks.Controllers
 
                         .Get(filter: m => m.PortfolioID == model.PortfolioID);
 
+                        if (oldHolders !=null)
+                        {
 
-                        unitOfWork.PortfolioShareholderRepository.RemovRange(oldHolders);
+                            unitOfWork.PortfolioShareholderRepository.RemovRange(oldHolders);
 
 
+                        }
                         foreach (var item in portShareholders)
                         {
                             item.PortfolioID = model.PortfolioID;
