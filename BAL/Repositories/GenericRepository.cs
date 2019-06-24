@@ -120,5 +120,10 @@ namespace BAL.Repositories
         {
             Context.Set<T>().RemoveRange(entities);
         }
+
+        public void RemovRange(IEnumerable<T> entities, string NoTrack = "")
+        {
+            Context.Set<T>().RemoveRange(entities);
+        }
     }
 }

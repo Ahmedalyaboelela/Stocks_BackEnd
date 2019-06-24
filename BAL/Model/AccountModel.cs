@@ -5,7 +5,7 @@ using System.Text;
 namespace BAL.Model
 {
     public class AccountModel
-    {//
+    {
         public int AccountID { get; set; }
         
         public string Code { get; set; }

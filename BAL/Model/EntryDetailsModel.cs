@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BAL.Model
 {
-    class EntryDetailsModel
+  public  class EntryDetailsModel
     {
         public int EntryDetailID { get; set; }
         public decimal Debit { get; set; }

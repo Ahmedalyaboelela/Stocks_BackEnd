@@ -67,6 +67,23 @@ namespace BAL.Mapper
             CreateMap<PortfolioShareHolder, PortfolioShareholderModel>();
             CreateMap<PortfolioShareholderModel, PortfolioShareHolder>() ;
 
+            CreateMap<Setting, SettingModel>();
+            CreateMap<SettingModel, Setting>();
+
+            CreateMap<SellingOrder, SellingOrderModel>();
+            CreateMap<SellingOrderModel, SellingOrder>().ForSourceMember(t => t.Count, opt => opt.DoNotValidate());
+            CreateMap<Entry, EntryModel>();
+            CreateMap<EntryModel, Entry>().ForSourceMember(t => t.Count, opt => opt.DoNotValidate());
+
+            CreateMap<EntryDetail, EntryDetailsModel>();
+            CreateMap<EntryDetailsModel, EntryDetail>();
+
+            CreateMap<SellingOrderDetail, SelingOrderDetailsModel>();
+            CreateMap<SelingOrderDetailsModel, SellingOrderDetail>();
+
+
+
+
             #endregion
 
         }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BAL.Model
 {
-    class EntryModel
+  public  class EntryModel
     {
         public int EntryID { get; set; }
         
@@ -19,5 +19,7 @@ namespace BAL.Model
 
         public int? NoticeID { get; set; }
         public int Count { get; set; }
+
+        public virtual IEnumerable<EntryDetailsModel> DetailsModels { get; set; }
     }
 }

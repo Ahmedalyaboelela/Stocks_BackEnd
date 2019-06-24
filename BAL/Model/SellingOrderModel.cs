@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BAL.Model
 {
-    class SellingOrderModel
+ public class SellingOrderModel
     {
         public int SellingOrderID { get; set; }
 
@@ -19,5 +19,11 @@ namespace BAL.Model
 
         public int PortfolioID { get; set; }
         public int Count { get; set; }
+
+        public virtual IEnumerable<SelingOrderDetailsModel> DetailsModels { get; set; }
+        public virtual IEnumerable<SettingModel> Settings { get; set; } 
+        public EntryModel entryModel { get; set; }
+
+
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BAL.Model
 {
-    class SelingOrderDetailsModel
+  public  class SelingOrderDetailsModel
     {
         public int SellOrderDetailID { get; set; }
         public int StockCount { get; set; }
