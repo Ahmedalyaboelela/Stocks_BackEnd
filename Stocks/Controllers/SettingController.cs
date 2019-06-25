@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,6 +10,7 @@ using DAL.Context;
 using DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
@@ -261,20 +263,41 @@ namespace Stocks.Controllers
                     }
                     #endregion
 
-
-
-                    bool CheckSave = unitOfWork.Save();
-
-
-
-                    if (CheckSave == true)
+                    try
                     {
-                        return Ok(settingModel);
+                        unitOfWork.Save();
                     }
-                    else
+                    catch (DbUpdateException ex)
                     {
-                        return Ok("توجد مشكله ...");
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
                     }
+                    return Ok(4);
+
+                    //bool CheckSave = unitOfWork.Save();
+
+
+
+                    //if (CheckSave == true)
+                    //{
+                    //    return Ok(settingModel);
+                    //}
+                    //else
+                    //{
+                    //    return Ok("توجد مشكله ...");
+                    //}
                 }
 
 

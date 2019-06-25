@@ -291,9 +291,11 @@ namespace Stocks.Controllers
 
                             if (number == 547)
                             {
-                                return Ok("Item related with another data .");
+                                return Ok(5);
 
                             }
+                            else
+                                return Ok(6);
                         }
                     }
                     return Ok(4);

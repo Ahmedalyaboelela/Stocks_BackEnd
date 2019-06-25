@@ -402,15 +402,38 @@ namespace Stocks.Controllers
 
             unitOfWork.EmployeeCardRepository.RemovRange(EmpCard);
             unitOfWork.EmployeeRepository.Delete(employee);
-            var Result = unitOfWork.Save();
-            if (Result == true)
+            try
             {
-                return Ok(4);
+                unitOfWork.Save();
             }
-            else
+            catch (DbUpdateException ex)
             {
-                return Ok("not deleted");
+                var sqlException = ex.GetBaseException() as SqlException;
+
+                if (sqlException != null)
+                {
+                    var number = sqlException.Number;
+
+                    if (number == 547)
+                    {
+                        return Ok(5);
+
+                    }
+                    else
+                        return Ok(6);
+                }
             }
+            return Ok(4);
+
+            //var Result = unitOfWork.Save();
+            //if (Result == true)
+            //{
+            //    return Ok(4);
+            //}
+            //else
+            //{
+            //    return Ok("not deleted");
+            //}
 
         }
 

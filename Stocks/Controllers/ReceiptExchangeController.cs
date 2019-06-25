@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +11,7 @@ using DAL.Context;
 using DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
@@ -386,15 +388,38 @@ namespace Stocks.Controllers
 
                 unitOfWork.ReceiptExchangeDetailRepository.RemovRange(recDetails);
                 unitOfWork.ReceiptExchangeRepository.Delete(RecExc);
-                var Result = unitOfWork.Save();
-                if (Result == true)
+                try
                 {
-                    return Ok(4);
+                    unitOfWork.Save();
                 }
-                else
+                catch (DbUpdateException ex)
                 {
-                    return NotFound();
-                } 
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        var number = sqlException.Number;
+
+                        if (number == 547)
+                        {
+                            return Ok(5);
+
+                        }
+                        else
+                            return Ok(6);
+                    }
+                }
+                return Ok(4);
+
+                //var Result = unitOfWork.Save();
+                //if (Result == true)
+                //{
+                //    return Ok(4);
+                //}
+                //else
+                //{
+                //    return NotFound();
+                //} 
             }
             else
                 return Ok(1);

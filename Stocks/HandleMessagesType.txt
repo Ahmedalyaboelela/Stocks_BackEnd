@@ -4,6 +4,8 @@
 [2]- redundant data [code, name] .
 [3]- invalid model state .
 [4]- transaction done successfully .
+[5]- data related to another tables to delete .
+[6]- save transaction failed .
 
 // .................... flag of 2 identical screen .............//
 [false]- receipt voucher .
