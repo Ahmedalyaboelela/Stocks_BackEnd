@@ -120,7 +120,7 @@ namespace Stocks.Controllers
                 return Ok(GetPortfolio(portfolio));
             }
             else
-                return Ok("enter valid page number ! ");
+                return Ok(1);
         }
 
 
@@ -140,7 +140,7 @@ namespace Stocks.Controllers
 
             }
             else
-                return Ok("Invalid Portfolio Id !");
+                return Ok(1);
         }
 
 
@@ -152,7 +152,7 @@ namespace Stocks.Controllers
 
             if (model == null)
             {
-                return Ok(model);
+                return Ok(0);
             }
 
             for (int i = 0; i < portfolioes.Count(); i++)
@@ -245,11 +245,11 @@ namespace Stocks.Controllers
                 var Check = unitOfWork.PortfolioRepository.Get();
                 if (portModel == null)
                 {
-                    return Ok("no scueess");
+                    return Ok(0);
                 }
                 if (Check.Any(m => m.Code == portModel.Code))
                 {
-                    return Ok("الرمز موجود مسبقا");
+                    return Ok(2);
                 }
                 else
                 {
@@ -338,7 +338,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest();
+                return Ok(3);
             }
 
         }
@@ -352,7 +352,7 @@ namespace Stocks.Controllers
             if (id != portModel.PortfolioID)
             {
 
-                return BadRequest();
+                return Ok(1);
             }
 
             if (ModelState.IsValid)
@@ -482,14 +482,14 @@ namespace Stocks.Controllers
                     }
                     else
                     {
-                        return Ok("الرمز موجود مسبقا");
+                        return Ok(2);
                     }
                 }
 
             }
             else
             {
-                return BadRequest(ModelState);
+                return Ok(3);
             }
         }
         #endregion
@@ -501,43 +501,44 @@ namespace Stocks.Controllers
         [Route("~/api/Portfolio/Delete/{id}")]
         public IActionResult DeletePortfolio(int? id)
         {
-
-            if (id == null)
+            
+            if (id>0)
             {
+                var portfolio = unitOfWork.PortfolioRepository.GetByID(id);
+                if (portfolio == null)
+                {
+                    return BadRequest();
+                }
+                var PortAccounts = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == id);
 
-                return BadRequest();
-            }
-            var portfolio = unitOfWork.PortfolioRepository.GetByID(id);
-            if (portfolio == null)
-            {
-                return BadRequest();
-            }
-            var PortAccounts = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == id);
+                if (PortAccounts.Count() > 0)
+                {
+                    unitOfWork.PortfolioAccountRepository.RemovRange(PortAccounts);
 
-            if(PortAccounts.Count()>0)
-            {
-                unitOfWork.PortfolioAccountRepository.RemovRange(PortAccounts);
+                }
+                var Shareholders = unitOfWork.PortfolioShareholderRepository.Get(filter: m => m.PortfolioID == id);
 
-            }
-             var Shareholders = unitOfWork.PortfolioShareholderRepository.Get(filter: m => m.PortfolioID == id);
+                if (Shareholders.Count() > 0)
+                {
+                    unitOfWork.PortfolioShareholderRepository.RemovRange(Shareholders);
 
-            if (Shareholders.Count() > 0)
-            {
-                unitOfWork.PortfolioShareholderRepository.RemovRange(Shareholders);
-
-            }
+                }
 
 
-            unitOfWork.PortfolioRepository.Delete(portfolio);
-            var Result = unitOfWork.Save();
-            if (Result == true)
-            {
-                return Ok("item deleted .");
+                unitOfWork.PortfolioRepository.Delete(portfolio);
+                var Result = unitOfWork.Save();
+                if (Result == true)
+                {
+                    return Ok(4);
+                }
+                else
+                {
+                    return NotFound();
+                } 
             }
             else
-            {
-                return NotFound();
-            }
+                return Ok(1);
+
 
         }
 
