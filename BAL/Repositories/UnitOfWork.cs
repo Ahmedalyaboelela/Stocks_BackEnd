@@ -226,7 +226,8 @@ namespace BAL.Repositories
                 }
                 return purchaseOrderDetailRepository;
             }
-            }
+        }
+
         #endregion
 
         #region ReceiptExchange Repository
