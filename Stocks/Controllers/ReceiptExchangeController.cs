@@ -23,14 +23,25 @@ namespace Stocks.Controllers
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
 
+        private SettingController setting;
+
         public ReceiptExchangeController(StocksContext context, IMapper mapper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
+            this.setting = new SettingController(context, mapper);
         }
 
         #endregion
 
+        #region Generate Entry
+
+        public IActionResult GenerateEntry()
+        {
+            var settingObj = setting.GetSpecificSetting(1);
+            return Ok();
+        }
+        #endregion
 
         #region GET Methods
 
@@ -229,9 +240,7 @@ namespace Stocks.Controllers
                     var recExcDetails = recExcModel.RecExcDetails;
 
                     var RecExcDetails = _mapper.Map<IEnumerable<ReceiptExchangeDetail>>(recExcModel.RecExcDetails);
-                    try
-                    {
-                        // insert main data of receipt exchange 
+                      // insert main data of receipt exchange 
                         unitOfWork.ReceiptExchangeRepository.Insert(model);
 
                         if (RecExcDetails != null)
@@ -245,25 +254,39 @@ namespace Stocks.Controllers
                         }
 
 
-                        bool CheckSave = unitOfWork.Save();
-
-
-
-                        if (CheckSave == true)
+                        try
                         {
-                            return Ok(recExcModel);
+                            unitOfWork.Save();
+
+                            #region Generate entry
+
+                            var settingObj = setting.GetSpecificSetting(1);
+                            if (settingObj.AutoGenerateEntry)
+                            {
+                                GenerateEntry();
+                            } 
+                            #endregion
                         }
-                        else
+                        catch (DbUpdateException ex)
                         {
-                            return Ok("خطأ في ادخال البيانات");
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+                                // data related
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
                         }
+                        return Ok(model);
 
-                    }
-                    catch (Exception ex)
-                    {
-                        return Ok("خطأ في ادخال البيانات");
-
-                    }
+                    
 
 
                 }
@@ -321,11 +344,39 @@ namespace Stocks.Controllers
 
                     }
 
-                    var Result = unitOfWork.Save();
-                    if (Result == true)
-                        return Ok(Model);
-                    else
-                        return Ok("حدث خطا");
+                    try
+                    {
+                        unitOfWork.Save();
+
+                        #region Generate entry
+
+                        var settingObj = setting.GetSpecificSetting(1);
+                        if (settingObj.AutoGenerateEntry)
+                        {
+                            GenerateEntry();
+                        }
+                        #endregion
+
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+                            // data related
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
+                    return Ok(model);
+
 
                 }
                 else
@@ -345,11 +396,40 @@ namespace Stocks.Controllers
 
                         }
 
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(Model);
-                        else
-                            return Ok("حدث خطا");
+                        try
+                        {
+                            unitOfWork.Save();
+
+                            #region Generate entry
+
+                            var settingObj = setting.GetSpecificSetting(1);
+                            if (settingObj.AutoGenerateEntry)
+                            {
+                                GenerateEntry();
+                            }
+                            #endregion
+
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+                                // data related
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+
+                        return Ok(model);
+
                     }
                     else
                     {

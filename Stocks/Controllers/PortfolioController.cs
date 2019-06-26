@@ -268,8 +268,7 @@ namespace Stocks.Controllers
                     //var PortShareholders = _mapper.Map<IEnumerable<PortfolioShareholderModel>>(portShareholderes); 
                     #endregion
 
-                    try
-                    {
+                    
                         unitOfWork.PortfolioRepository.Insert(model);
 
                         // portfolio accounts
@@ -310,28 +309,30 @@ namespace Stocks.Controllers
                             }
                         }
 
-
-                        bool CheckSave = unitOfWork.Save();
-
-
-
-                        if (CheckSave == true)
+                        try
                         {
-                            return Ok(model);
+                            unitOfWork.Save();
                         }
-                        else
+                        catch (DbUpdateException ex)
                         {
-                            return Ok("تم الفشل بامتياز ركز من فضلك انت بتدخل البيانات.... اتعبنا");
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
                         }
+                        return Ok(model);
 
-                    }
-                    catch (Exception ex)
-                    {
-                        // unitOfWork.Rollback();
-                        return Ok("تم الفشل بامتياز ركز من فضلك انت بتدخل البيانات.... اتعبنا");
-                        //Log, handle or absorbe I don't care ^_^
-                    }
-
+                   
 
                 }
 
@@ -415,14 +416,28 @@ namespace Stocks.Controllers
                         unitOfWork.PortfolioShareholderRepository.Insert(newHolder);
 
                     }
+                    try
+                    {
+                        unitOfWork.Save();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
 
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
 
-                    var Result = unitOfWork.Save();
-                    if (Result == true)
-                        return Ok(portModel);
-                    else
-                        return Ok("حدث خطا");
+                            if (number == 547)
+                            {
+                                return Ok(5);
 
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
+                    return Ok(portModel);
                 }
                 else
                 {
@@ -476,11 +491,28 @@ namespace Stocks.Controllers
                         }
 
                         //  unitOfWork.EmpCardRepository.AddRange(EmpolyeeCard);
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(portModel);
-                        else
-                            return Ok("حدث خطا");
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+                        return Ok(portModel);
                     }
                     else
                     {
