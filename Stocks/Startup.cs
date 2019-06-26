@@ -21,6 +21,7 @@ using Stocks.Extensions;
 using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Http;
+using BAL.Helper;
 
 namespace Stocks
 {
@@ -50,6 +51,7 @@ namespace Stocks
             options.UseLazyLoadingProxies()
             .UseSqlServer(Configuration.GetConnectionString("StocksConnection")));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddTransient<IAccountingHelper, AccountingHelper>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
             services.AddCors();

@@ -7,9 +7,6 @@ namespace BAL.Helper
    
     public enum  ErrorHelper
     {
-        
-
-
-
+ 
     }
 }
