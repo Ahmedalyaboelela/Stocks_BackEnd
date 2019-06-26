@@ -1,0 +1,16 @@
+﻿// ............ types of returned messages .................... //
+[0]- null object found .
+[1]- invalid data entered [id, page number] .
+[2]- redundant data [code, name] .
+[3]- invalid model state .
+[4]- transaction done successfully .
+[5]- data related to another tables to delete .
+[6]- save transaction failed .
+
+// .................... flag of 2 identical screen .............//
+[false]- receipt voucher .
+[true]- exchange voucher .
+
+[false]- notice creditor .
+[true]- notice debitor .
+
