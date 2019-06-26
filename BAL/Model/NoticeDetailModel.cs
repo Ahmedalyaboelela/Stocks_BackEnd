@@ -8,7 +8,7 @@ namespace BAL.Model
     {
         public int NoticeDetailID { get; set; }
         public decimal CreditDebitMoney { get; set; }
-        public float CreditorDebitStocks { get; set; }
+        public float? CreditorDebitStocks { get; set; }
         public int NoticeID { get; set; }
     }
 }

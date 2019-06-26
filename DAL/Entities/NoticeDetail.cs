@@ -10,10 +10,24 @@ namespace DAL.Entities
     {
         [Key]
         public int NoticeDetailID { get; set; }
-        public decimal CreditDebitMoney { get; set; }
-        public float CreditorDebitStocks { get; set; }
 
-        public int NoticeID { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal Debit { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal Credit { get; set; }
+
+        public float? StocksDebit { get; set; }
+
+        public float? StocksCredit { get; set; }
+
+        public int AccountID { get; set; }
+
+       public int NoticeID { get; set; }
+
+
+        [ForeignKey("AccountID")]
+        public virtual Account Account { get; set; }
+
 
         [ForeignKey("NoticeID")]
         public virtual Notice Notice { get; set; }

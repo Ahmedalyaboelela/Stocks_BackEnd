@@ -13,8 +13,8 @@ namespace DAL.Entities
         [Column(TypeName = "decimal(10,2)")]
         public decimal ReceiptExchangeAmount { get; set; }
         public int AccountID { get; set; }
-        public int ChiqueNumber { get; set; }
-        public bool Type { get; set; }
+        public int? ChiqueNumber { get; set; }
+       
         public int ReceiptID { get; set; }
 
         [ForeignKey("ReceiptID")]

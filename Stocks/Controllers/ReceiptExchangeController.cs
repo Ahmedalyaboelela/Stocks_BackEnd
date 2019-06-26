@@ -63,8 +63,8 @@ namespace Stocks.Controllers
                     AccountID = m.AccountID,
                     AccNameAR = m.Account.Code,
                     AccNameEN=m.Account.NameEN,
-                    ChiqueNumber = m.ChiqueNumber,
-                    Type = m.Type
+                    ChiqueNumber = m.ChiqueNumber
+                    //Type = m.Type
                 });
             if (RecExcDetails != null)
                 model.RecExcDetails = RecExcDetails;
@@ -177,8 +177,8 @@ namespace Stocks.Controllers
                                 AccountID = m.AccountID,
                                 AccNameAR = m.Account.Code,
                                 AccNameEN = m.Account.NameEN,
-                                ChiqueNumber = m.ChiqueNumber,
-                                Type = m.Type
+                                ChiqueNumber = m.ChiqueNumber
+                              //  Type = m.Type
 
                             });
                         if (RecExcDetails != null)

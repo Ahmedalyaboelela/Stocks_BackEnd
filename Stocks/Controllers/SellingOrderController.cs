@@ -9,6 +9,8 @@ using DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BAL.Model;
+using BAL.Helper;
+
 namespace Stocks.Controllers
 {
     public class SellingOrderController : Controller
@@ -437,6 +439,7 @@ namespace Stocks.Controllers
                             }
                             else
                             {
+                         
                                 EntryModel entryModel = new EntryModel();
                                 entryModel.SellingOrderID = modelselling.SellingOrderID;
                                 entryModel.ReceiptID = sellingOrderModel.entryModel.ReceiptID;

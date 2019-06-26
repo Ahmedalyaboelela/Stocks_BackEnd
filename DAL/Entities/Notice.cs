@@ -18,12 +18,16 @@ namespace DAL.Entities
 
         public int PortfolioID { get; set; }
         public int EmployeeID { get; set; }
+        public int? CurrencyID { get; set; }
 
         [ForeignKey("PortfolioID")]
         public virtual Portfolio Portfolio { get; set; }
 
         [ForeignKey("EmployeeID")]
         public virtual Employee Employee { get; set; }
+
+        [ForeignKey("CurrencyID")]
+        public virtual Currency Currency { get; set; }
         public virtual ICollection<NoticeDetail> NoticeDetails { get; set; }
 
         public virtual Entry Entry { get; set; }
