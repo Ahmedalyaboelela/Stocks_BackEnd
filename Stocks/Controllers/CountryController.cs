@@ -32,33 +32,26 @@ namespace Stocks.Controllers
 
         #region GET Methods
         [Route("~/api/Country/GetLast")]
-        public CountryModel GetLastCountry()
+        public IActionResult GetLastCountry()
         {
             var country = unitOfWork.CountryRepository.Last();
 
             var model = _mapper.Map<CountryModel>(country);
             if (model == null)
             {
-                return model;
+                return Ok(0);
             }
            
 
             model.Count = unitOfWork.CountryRepository.Count();
-            if (model.Count == 0)
-            {
-                return model;
-
-            }
-
-            return model;
-
-
+           
+            return Ok(model);
 
         }
 
         [HttpGet]
         [Route("~/api/Country/Paging/{pageNumber}")]
-        public CountryModel Pagination(int pageNumber)
+        public IActionResult Pagination(int pageNumber)
         {
             if (pageNumber > 0)
             {
@@ -66,64 +59,60 @@ namespace Stocks.Controllers
                 var model = _mapper.Map<CountryModel>(country);
                 if (model == null)
                 {
-                    return model;
+                    return Ok(0);
                 }
 
                 model.Count = unitOfWork.CountryRepository.Count();
-                if (model.Count == 0)
-                {
-                    return model;
-
-                }
-                return model;
+                
+                return Ok(model);
 
             }
             else
-                return null;
+                return Ok(1);
 
         }
 
         [HttpGet]
         [Route("~/api/Country/Get/{id}")]
 
-        public CountryModel GetCountryById(int id)
+        public IActionResult GetCountryById(int id)
         {
-            var country = unitOfWork.CountryRepository.GetByID(id);
-
-            var model = _mapper.Map<CountryModel>(country);
-            if (model == null)
+            if (id > 0)
             {
-                return model;
+                var country = unitOfWork.CountryRepository.GetByID(id);
+
+                var model = _mapper.Map<CountryModel>(country);
+                if (model == null)
+                {
+                    return Ok(0);
+                }
+                else
+                {
+
+                    model.Count = unitOfWork.CountryRepository.Count();
+                  
+                    return Ok(model);
+                }
             }
             else
-            {
-              
-                model.Count = unitOfWork.CountryRepository.Count();
-                if (model.Count == 0)
-                {
-                    return model;
-
-                }
-
-                return model;
-            }
+                return Ok(1);
 
         }
 
 
 
         [Route("~/api/Country/GetAll")]
-        public IEnumerable<CountryModel> GetAllCountries()
+        public IActionResult GetAllCountries()
         {
             var country = unitOfWork.CountryRepository.Get();
             var model = _mapper.Map<IEnumerable<CountryModel>>(country);
 
             if (model == null)
             {
-                return model;
+                return Ok(0);
             }
 
-            return (model);
+            return Ok(model);
         }
 
         #endregion
@@ -138,14 +127,14 @@ namespace Stocks.Controllers
                 var model = _mapper.Map<Country>(countryModel);
                 if (model == null)
                 {
-                    return Ok(model);
+                    return Ok(0);
                 }
                 var Check = unitOfWork.CountryRepository.Get();
                 
                 if (Check.Any(m => m.NameAR == countryModel.NameAR))
                 {
 
-                    return Ok("الاسم موجود مسبقا");
+                    return Ok(2);
                 }
                 else
                 {
@@ -159,7 +148,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest();
+                return Ok(3);
             }
         }
 
@@ -180,7 +169,7 @@ namespace Stocks.Controllers
                     var model = _mapper.Map<Country>(countryModel);
                     if (model == null)
                     {
-                        return Ok(model);
+                        return Ok(0);
 
                     }
 
@@ -198,18 +187,18 @@ namespace Stocks.Controllers
                     }
                     else
                     {
-                        return Ok(" الاسم  موجود مسبقا");
+                        return Ok(2);
                     }
                     
                 }
                 else
-                    return BadRequest("Invalid Country !");
+                    return Ok(1);
 
 
             }
             else
             {
-                return BadRequest(ModelState);
+                return Ok(3);
             }
         }
 
@@ -220,17 +209,12 @@ namespace Stocks.Controllers
         [Route("~/api/Country/DeleteCountry/{id}")]
         public IActionResult DeleteCountry(int? id)
         {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-
-            else
+            if (id > 0)
             {
                 var country = unitOfWork.CountryRepository.GetByID(id);
                 if (country == null)
                 {
-                    return BadRequest();
+                    return Ok(0);
                 }
                 else
                 {
@@ -250,15 +234,21 @@ namespace Stocks.Controllers
 
                             if (number == 547)
                             {
-                                return Ok("Item related with another data .");
+                                return Ok(5);
 
                             }
+                            else
+                                return Ok(6);
                         }
                     }
-                    return Ok("Item deleted successfully .");
+                    return Ok(4);
 
                 }
             }
+           
+            else
+                return Ok(1);
+            
         }
         #endregion
     }

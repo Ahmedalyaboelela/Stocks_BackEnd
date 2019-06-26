@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +11,7 @@ using DAL.Context;
 using DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
@@ -120,7 +122,7 @@ namespace Stocks.Controllers
                 return Ok(GetPortfolio(portfolio));
             }
             else
-                return Ok("enter valid page number ! ");
+                return Ok(1);
         }
 
 
@@ -140,7 +142,7 @@ namespace Stocks.Controllers
 
             }
             else
-                return Ok("Invalid Portfolio Id !");
+                return Ok(1);
         }
 
 
@@ -152,7 +154,7 @@ namespace Stocks.Controllers
 
             if (model == null)
             {
-                return Ok(model);
+                return Ok(0);
             }
 
             for (int i = 0; i < portfolioes.Count(); i++)
@@ -245,11 +247,11 @@ namespace Stocks.Controllers
                 var Check = unitOfWork.PortfolioRepository.Get();
                 if (portModel == null)
                 {
-                    return Ok("no scueess");
+                    return Ok(0);
                 }
                 if (Check.Any(m => m.Code == portModel.Code))
                 {
-                    return Ok("الرمز موجود مسبقا");
+                    return Ok(2);
                 }
                 else
                 {
@@ -338,82 +340,11 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest();
+                return Ok(3);
             }
 
         }
         #endregion
-
-        //[HttpPost]
-        //[Route("~/api/Portfolio/Add")]
-        //public IActionResult PostEmp([FromBody]  PortfolioModel portModel)
-        //{
-
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        var Check = unitOfWork.PortfolioRepository.Get();
-        //        if (Check.Any(m => m.Code == portModel.Code))
-        //        {
-
-        //            return Ok("الرمز موجود مسبقا");
-        //        }
-        //        else
-        //        {
-
-        //            var modelPor = _mapper.Map<Portfolio>(portModel);
-
-
-        //            var PorCard = portModel.Shareholders;
-        //            var AllAccount = portModel.PortfolioAccounts;
-        //            if (PorCard == null || AllAccount==null)
-        //            {
-        //                unitOfWork.PortfolioRepository.Insert(modelPor);
-        //                unitOfWork.Save();
-        //                return Ok(portModel);
-
-        //            }
-        //            else
-        //            {
-        //                unitOfWork.PortfolioRepository.Insert(modelPor);
-
-        //                foreach (var item in PorCard)
-        //                {
-        //                    item.PortfolioID = modelPor.PortfolioID;
-        //                    var Porcard = _mapper.Map<Portfolioshareholder>(item);
-        //                    unitOfWork.PortfolioShareholderRepository.Insert(Porcard);
-
-
-
-        //                }
-
-
-        //                foreach (var item in AllAccount)
-        //                {
-        //                    PortfolioAccountModel portfolioAccountModel = new PortfolioAccountModel();
-        //                    portfolioAccountModel.AccountID = item.AccountID;
-        //                    portfolioAccountModel.PortfolioID = modelPor.PortfolioID;
-        //                    portfolioAccountModel.Type = item.Type;
-        //                     var Acccard = _mapper.Map<PortfolioAccount>(portfolioAccountModel);
-
-        //                    unitOfWork.PortfolioAccountRepository.Insert(Acccard);
-
-        //                }
-
-
-        //                unitOfWork.Save();
-
-
-
-        //                return Ok(portModel);
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
 
         #region Update Methods
         [HttpPut]
@@ -423,7 +354,7 @@ namespace Stocks.Controllers
             if (id != portModel.PortfolioID)
             {
 
-                return BadRequest();
+                return Ok(1);
             }
 
             if (ModelState.IsValid)
@@ -447,8 +378,11 @@ namespace Stocks.Controllers
 
                       .Get(filter: m => m.PortfolioID == model.PortfolioID);
 
+                    if (oldAccounts != null)
+                    {
 
-                    unitOfWork.PortfolioAccountRepository.RemovRange(oldAccounts);
+                        unitOfWork.PortfolioAccountRepository.RemovRange(oldAccounts); 
+                    }
 
 
                     foreach (var item in portAccounts)
@@ -466,9 +400,12 @@ namespace Stocks.Controllers
 
                     .Get(filter: m => m.PortfolioID == model.PortfolioID);
 
+                    if (oldHolders != null)
+                    {
 
-                    unitOfWork.PortfolioShareholderRepository.RemovRange(oldHolders);
+                        unitOfWork.PortfolioShareholderRepository.RemovRange(oldHolders);
 
+                    }
 
                     foreach (var item in portShareholders)
                     {
@@ -500,9 +437,12 @@ namespace Stocks.Controllers
 
                           .Get(filter: m => m.PortfolioID == model.PortfolioID);
 
+                        if (oldAccounts != null)
+                        {
 
-                        unitOfWork.PortfolioAccountRepository.RemovRange(oldAccounts);
+                            unitOfWork.PortfolioAccountRepository.RemovRange(oldAccounts);
 
+                        }
 
                         foreach (var item in portAccounts)
                         {
@@ -519,10 +459,13 @@ namespace Stocks.Controllers
 
                         .Get(filter: m => m.PortfolioID == model.PortfolioID);
 
+                        if (oldHolders !=null)
+                        {
 
-                        unitOfWork.PortfolioShareholderRepository.RemovRange(oldHolders);
+                            unitOfWork.PortfolioShareholderRepository.RemovRange(oldHolders);
 
 
+                        }
                         foreach (var item in portShareholders)
                         {
                             item.PortfolioID = model.PortfolioID;
@@ -541,14 +484,14 @@ namespace Stocks.Controllers
                     }
                     else
                     {
-                        return Ok("الرمز موجود مسبقا");
+                        return Ok(2);
                     }
                 }
 
             }
             else
             {
-                return BadRequest(ModelState);
+                return Ok(3);
             }
         }
         #endregion
@@ -560,43 +503,67 @@ namespace Stocks.Controllers
         [Route("~/api/Portfolio/Delete/{id}")]
         public IActionResult DeletePortfolio(int? id)
         {
-
-            if (id == null)
+            
+            if (id>0)
             {
+                var portfolio = unitOfWork.PortfolioRepository.GetByID(id);
+                if (portfolio == null)
+                {
+                    return BadRequest();
+                }
+                var PortAccounts = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == id);
 
-                return BadRequest();
-            }
-            var portfolio = unitOfWork.PortfolioRepository.GetByID(id);
-            if (portfolio == null)
-            {
-                return BadRequest();
-            }
-            var PortAccounts = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == id);
+                if (PortAccounts.Count() > 0)
+                {
+                    unitOfWork.PortfolioAccountRepository.RemovRange(PortAccounts);
 
-            if(PortAccounts.Count()>0)
-            {
-                unitOfWork.PortfolioAccountRepository.RemovRange(PortAccounts);
+                }
+                var Shareholders = unitOfWork.PortfolioShareholderRepository.Get(filter: m => m.PortfolioID == id);
 
-            }
-             var Shareholders = unitOfWork.PortfolioShareholderRepository.Get(filter: m => m.PortfolioID == id);
+                if (Shareholders.Count() > 0)
+                {
+                    unitOfWork.PortfolioShareholderRepository.RemovRange(Shareholders);
 
-            if (Shareholders.Count() > 0)
-            {
-                unitOfWork.PortfolioShareholderRepository.RemovRange(Shareholders);
-
-            }
+                }
 
 
-            unitOfWork.PortfolioRepository.Delete(portfolio);
-            var Result = unitOfWork.Save();
-            if (Result == true)
-            {
-                return Ok("item deleted .");
+                unitOfWork.PortfolioRepository.Delete(portfolio);
+                try
+                {
+                    unitOfWork.Save();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        var number = sqlException.Number;
+
+                        if (number == 547)
+                        {
+                            return Ok(5);
+
+                        }
+                        else
+                            return Ok(6);
+                    }
+                }
+                return Ok(4);
+
+                //var Result = unitOfWork.Save();
+                //if (Result == true)
+                //{
+                //    return Ok(4);
+                //}
+                //else
+                //{
+                //    return NotFound();
+                //} 
             }
             else
-            {
-                return NotFound();
-            }
+                return Ok(1);
+
 
         }
 

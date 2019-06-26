@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +11,7 @@ using DAL.Context;
 using DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
@@ -84,7 +86,7 @@ namespace Stocks.Controllers
             if (notice != null)
                 return Ok(GetNotice(notice, type));
             else
-                return Ok("Not Found");
+                return Ok(0);
 
         }
 
@@ -100,11 +102,11 @@ namespace Stocks.Controllers
                 if (notice != null)
                     return Ok(GetNotice(notice, type));
                 else
-                    return Ok("Not Found");
+                    return Ok(0);
 
             }
             else
-                return Ok("enter valid page number ! ");
+                return Ok(1);
         }
 
 
@@ -121,12 +123,12 @@ namespace Stocks.Controllers
                 if (notice != null)
                     return Ok(GetNotice(notice, type));
                 else
-                    return Ok("Not Found");
+                    return Ok(0);
 
 
             }
             else
-                return Ok("Invalid  Id !");
+                return Ok(1);
         }
 
 
@@ -139,7 +141,7 @@ namespace Stocks.Controllers
 
             if (model == null)
             {
-                return Ok(model);
+                return Ok(0);
             }
 
             for (int i = 0; i < notices.Count(); i++)
@@ -201,11 +203,11 @@ namespace Stocks.Controllers
                 var Check = unitOfWork.NoticeRepository.Get();
                 if (Model == null)
                 {
-                    return Ok("no scueess");
+                    return Ok(0);
                 }
                 if (Check.Any(m => m.Code == Model.Code))
                 {
-                    return Ok("الرمز موجود مسبقا");
+                    return Ok(2);
                 }
                 else
                 {
@@ -260,7 +262,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest("Bad Request !");
+                return Ok(3);
             }
         }
         #endregion
@@ -274,7 +276,7 @@ namespace Stocks.Controllers
             if (id != Model.NoticeID)
             {
 
-                return BadRequest();
+                return Ok(1);
             }
 
             if (ModelState.IsValid)
@@ -287,7 +289,11 @@ namespace Stocks.Controllers
 
                 var Check = unitOfWork.NoticeRepository.Get(NoTrack: "NoTrack", filter: m => m.Type == type);
                 var oldDetail = unitOfWork.NoticeDetailRepository.Get(NoTrack: "NoTrack", filter: m => m.NoticeID == model.NoticeID);
-                unitOfWork.NoticeDetailRepository.RemovRange(oldDetail);
+
+                if (oldDetail != null)
+                {
+                    unitOfWork.NoticeDetailRepository.RemovRange(oldDetail); 
+                }
 
 
                 if (Check.Any(m => m.Code != Model.Code))
@@ -337,14 +343,14 @@ namespace Stocks.Controllers
                     }
                     else
                     {
-                        return Ok("الرمز موجود مسبقا");
+                        return Ok(2);
                     }
                 }
 
             }
             else
             {
-                return BadRequest(ModelState);
+                return Ok(3);
             }
         }
         #endregion
@@ -357,33 +363,57 @@ namespace Stocks.Controllers
         public IActionResult Delete(int? id)
         {
 
-            if (id == null)
-            {
-
-                return BadRequest();
-            }
             //var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptID == id).FirstOrDefault();
-            var notice = unitOfWork.NoticeRepository.GetByID(id);
-
-            if (notice == null)
+            if (id>0)
             {
-                return BadRequest();
-            }
-            var noticeDetails = unitOfWork.NoticeDetailRepository.Get(filter: m => m.NoticeID == id);
+                var notice = unitOfWork.NoticeRepository.GetByID(id);
+
+                if (notice == null)
+                {
+                    return Ok(0);
+                }
+                var noticeDetails = unitOfWork.NoticeDetailRepository.Get(filter: m => m.NoticeID == id);
 
 
 
-            unitOfWork.NoticeDetailRepository.RemovRange(noticeDetails);
-            unitOfWork.NoticeRepository.Delete(notice);
-            var Result = unitOfWork.Save();
-            if (Result == true)
-            {
-                return Ok("item deleted .");
+                unitOfWork.NoticeDetailRepository.RemovRange(noticeDetails);
+                unitOfWork.NoticeRepository.Delete(notice);
+                try
+                {
+                    unitOfWork.Save();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        var number = sqlException.Number;
+
+                        if (number == 547)
+                        {
+                            return Ok(5);
+
+                        }
+                        else
+                            return Ok(6);
+                    }
+                }
+                return Ok(4);
+
+                //var Result = unitOfWork.Save();
+                //if (Result == true)
+                //{
+                //    return Ok(4);
+                //}
+                //else
+                //{
+                //    return Ok("not deleted");
+                //} 
             }
             else
-            {
-                return NotFound();
-            }
+                return Ok(1);
+
 
         }
 
