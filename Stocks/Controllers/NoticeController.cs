@@ -66,8 +66,8 @@ namespace Stocks.Controllers
                 {
                     NoticeDetailID = m.NoticeDetailID,
                     NoticeID = m.NoticeID,
-                    CreditDebitMoney = m.CreditDebitMoney,
-                    CreditorDebitStocks = m.CreditorDebitStocks
+                    CreditDebitMoney = m.Credit,
+                    CreditorDebitStocks = m.StocksCredit
                 });
             if (Details != null)
                 model.NoticeModelDetails = Details;
@@ -177,8 +177,8 @@ namespace Stocks.Controllers
                             {
                                 NoticeDetailID = m.NoticeDetailID,
                                 NoticeID = m.NoticeID,
-                                CreditDebitMoney = m.CreditDebitMoney,
-                                CreditorDebitStocks = m.CreditorDebitStocks
+                                CreditDebitMoney = m.Credit,
+                                CreditorDebitStocks = m.StocksCredit
 
                             });
                         if (Details != null)

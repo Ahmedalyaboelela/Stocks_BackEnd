@@ -19,6 +19,8 @@ namespace DAL.Entities
 
         public bool AutoGenerateEntry { get; set; }
 
+        public bool TransferToAccounts { get; set; }
+
         public int VoucherType { get; set; }
 
         public virtual ICollection<SettingAccount> SettingAccounts { get; set; }

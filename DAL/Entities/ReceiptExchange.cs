@@ -14,17 +14,13 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(100)")]
         public string Code { get; set; }
         public DateTime? Date { get; set; }
-        public int CurrencyID { get; set; }
-        //public int AccountID { get; set; }
+        public int? CurrencyID { get; set; }
         public bool Type { get; set; }
         public int? ChiqueNumber { get; set; }
         public DateTime? ChiqueDate { get; set; }
 
         [Column(TypeName = "nvarchar(MAX)")]
         public string Description { get; set; }
-
-        //[ForeignKey("AccountID")]
-        //public virtual Account Account { get; set; }
 
 
         [ForeignKey("CurrencyID")]

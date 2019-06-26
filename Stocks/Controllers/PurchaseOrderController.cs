@@ -185,7 +185,7 @@ namespace Stocks.Controllers
                 model.DetailsModels = Details;
             }
 
-            model.Settings = GetSetting();
+         //   model.SettingModel = GetSetting();
 
             var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
             if (Entry != null)
@@ -266,7 +266,7 @@ namespace Stocks.Controllers
                 model.DetailsModels = Details;
             }
 
-            model.Settings = GetSetting();
+         //   model.Settings = GetSetting();
 
             var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
             if (Entry != null)
@@ -345,7 +345,7 @@ namespace Stocks.Controllers
                 model.DetailsModels = Details;
             }
 
-            model.Settings = GetSetting();
+       //     model.SettingModel = GetSetting();
 
             var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
             if (Entry != null)

@@ -17,10 +17,12 @@ namespace BAL.Model
         public int EmployeeID { get; set; }
 
         public int PortfolioID { get; set; }
+
+        public int PortfolioAccount { get; set; }
         public int Count { get; set; }
 
         public virtual IEnumerable<PurchaseOrderDetailModel> DetailsModels { get; set; }
-        public virtual IEnumerable<SettingModel> Settings { get; set; }
+        public virtual SettingModel SettingModel { get; set; }
         public EntryModel entryModel { get; set; }
     }
 }
