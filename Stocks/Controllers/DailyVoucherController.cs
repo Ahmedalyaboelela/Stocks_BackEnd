@@ -219,19 +219,29 @@ namespace Stocks.Controllers
                             }
                         }
 
-
-                        bool CheckSave = unitOfWork.Save();
-
-
-
-                        if (CheckSave == true)
+                        try
                         {
-                            return Ok(model);
+                            unitOfWork.Save();
                         }
-                        else
+                        catch (DbUpdateException ex)
                         {
-                            return Ok("يوجد خطا بادخال البيانات");
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
                         }
+
+                        return Ok(model);
 
                     }
                     catch (Exception ex)
@@ -300,11 +310,28 @@ namespace Stocks.Controllers
 
                     }
 
-                    var Result = unitOfWork.Save();
-                    if (Result == true)
-                        return Ok(entry);
-                    else
-                        return Ok("حدث خطا");
+                    try
+                    {
+                        unitOfWork.Save();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
+                    return Ok(entry);
 
                 }
                 else
@@ -324,11 +351,28 @@ namespace Stocks.Controllers
 
                         }
 
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(entry);
-                        else
-                            return Ok("حدث خطا");
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+                        return Ok(entry);
                     }
                     else
                     {

@@ -31,6 +31,51 @@ namespace Stocks.Controllers
         #endregion
 
         #region Get Method
+        [Route("~/api/Setting/GetSelected/{type}")]
+        public SettingModel GetSpecificSetting(int type)
+        {
+            var setting = unitOfWork.SettingRepository.Get(filter: a => a.VoucherType == type).FirstOrDefault();
+            var model = _mapper.Map<SettingModel>(setting);
+
+            if (model == null)
+            {
+                return null;
+            }
+
+            #region Assign details to it's setting
+
+            var accounts = setting.SettingAccounts.ToList();
+            var Accmodel = _mapper.Map<IEnumerable<SettingAccountModel>>(accounts).ToList();
+
+
+            // assign setting accounts model to setting model
+
+            if (Accmodel.Count() > 0)
+            {
+
+                var j = 0;
+                if (Accmodel[0].SettingID == model.SettingID)
+                {
+                    foreach (var acc in Accmodel)
+                    {
+                        acc.AccCode = accounts[j].Account.Code;
+                        acc.AccNameAR = accounts[j].Account.NameAR;
+                        acc.AccNameEN = accounts[j].Account.NameEN;
+
+                        j++;
+                    }
+
+                    model.SettingAccs = Accmodel;
+
+                }
+            }
+
+
+            #endregion
+
+            return model;
+        }
+
         [Route("~/api/Setting/Get")]
         public IActionResult GetSetting()
         {
@@ -60,14 +105,17 @@ namespace Stocks.Controllers
 
                 if (Accmodel.Count() > 0)
                 {
-                    if (model[i].SettingID == Accmodel[0].SettingID)
+
+                    var j = 0;
+                    if (Accmodel[0].SettingID == model[i].SettingID)
                     {
                         foreach (var acc in Accmodel)
                         {
-                            acc.AccCode = accounts[i].Account.Code;
-                            acc.AccNameAR = accounts[i].Account.NameAR;
-                            acc.AccNameEN = accounts[i].Account.NameEN;
+                            acc.AccCode = accounts[j].Account.Code;
+                            acc.AccNameAR = accounts[j].Account.NameAR;
+                            acc.AccNameEN = accounts[j].Account.NameEN;
 
+                            j++;
                         }
 
                         model[i].SettingAccs = Accmodel;
@@ -86,59 +134,6 @@ namespace Stocks.Controllers
         }
         #endregion
 
-        #region Get Sepecific Setting
-        [Route("~/api/Setting/GetSelect/{type}")]
-        public IActionResult GetSelectSetting(int type)
-        {
-            var setting = unitOfWork.SettingRepository.Get(filter:a=>a.VoucherType==type).FirstOrDefault();
-            var model = _mapper.Map<SettingModel>(setting);
-
-            if (model == null)
-            {
-                return Ok(0);
-            }
-
-            #region Assign details to it's setting
-          
-            var accounts = setting.SettingAccounts.ToList();
-            var Accmodel = _mapper.Map<IEnumerable<SettingAccountModel>>(accounts).ToList();
-           
-
-            // assign setting accounts model to setting model
-
-            if (Accmodel.Count() > 0)
-            {
-                if (model.SettingID == Accmodel[0].SettingID)
-                {
-                    for (int i = 0; i < Accmodel.Count(); i++)
-                    {
-                        for (int j = i; j ==i; j++)
-                        {
-                            Accmodel[i].AccCode = accounts[i].Account.Code;
-                            Accmodel[i].AccNameAR = accounts[i].Account.NameAR;
-                            Accmodel[i].AccNameEN = accounts[i].Account.NameEN;
-
-                            //// to bind account type to each account
-                            Accmodel[i].AccountType = type;
-
-                        }
-                    }
-
-                       
-
-                    model.SettingAccs = Accmodel;
-
-                }
-                
-
-
-                
-        }
-            #endregion
-
-            return Ok(model);
-        }
-        #endregion
 
         //#region Insert Method
         //public SettingModel Save(SettingModel settingModel,Setting model)

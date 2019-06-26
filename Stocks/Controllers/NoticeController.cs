@@ -22,13 +22,24 @@ namespace Stocks.Controllers
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
+        private SettingController setting;
 
         public NoticeController(StocksContext context, IMapper mapper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
+            this.setting = new SettingController(context, mapper);
         }
 
+        #endregion
+
+        #region Generate Entry
+
+        public IActionResult GenerateEntry()
+        {
+            var settingObj = setting.GetSpecificSetting(1);
+            return Ok();
+        }
         #endregion
 
         #region GET Methods
@@ -234,18 +245,37 @@ namespace Stocks.Controllers
                         }
 
 
-                        bool CheckSave = unitOfWork.Save();
-
-
-
-                        if (CheckSave == true)
+                        try
                         {
-                            return Ok(Model);
+                            unitOfWork.Save();
+                            #region Generate entry
+
+                            var settingObj = setting.GetSpecificSetting(1);
+                            if (settingObj.AutoGenerateEntry)
+                            {
+                                GenerateEntry();
+                            }
+                            #endregion
                         }
-                        else
+                        catch (DbUpdateException ex)
                         {
-                            return Ok("خطأ في ادخال البيانات");
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
                         }
+
+                        return Ok(Model);
 
                     }
                     catch (Exception ex)
@@ -311,12 +341,37 @@ namespace Stocks.Controllers
 
                     }
 
-                    var Result = unitOfWork.Save();
-                    if (Result == true)
-                        return Ok(Model);
-                    else
-                        return Ok("حدث خطا");
+                    try
+                    {
+                        unitOfWork.Save();
+                        #region Generate entry
 
+                        var settingObj = setting.GetSpecificSetting(1);
+                        if (settingObj.AutoGenerateEntry)
+                        {
+                            GenerateEntry();
+                        }
+                        #endregion
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
+
+                    return Ok(Model);
                 }
                 else
                 {
@@ -335,11 +390,37 @@ namespace Stocks.Controllers
 
                         }
 
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(Model);
-                        else
-                            return Ok("حدث خطا");
+                        try
+                        {
+                            unitOfWork.Save();
+                            #region Generate entry
+
+                            var settingObj = setting.GetSpecificSetting(1);
+                            if (settingObj.AutoGenerateEntry)
+                            {
+                                GenerateEntry();
+                            }
+                            #endregion
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+
+                        return Ok(Model);
                     }
                     else
                     {

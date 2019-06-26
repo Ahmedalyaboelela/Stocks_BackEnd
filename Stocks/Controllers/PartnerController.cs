@@ -227,29 +227,46 @@ namespace Stocks.Controllers
                 var model = _mapper.Map<Partner>(partnerModel);
                 if (model == null)
                 {
-                    return Ok(model);
+                    return Ok(0);
                 }
                 var Check = unitOfWork.PartnerRepository.Get();
                 if (Check.Any(m => m.Code == partnerModel.Code))
                 {
 
-                    return Ok("الرمز موجود مسبقا");
+                    return Ok(2);
                 }
                 else
                 {
                     if (Check.Any(m => m.NameAR == partnerModel.NameAR))
                     {
 
-                        return Ok("الاسم موجود مسبقا");
+                        return Ok(2);
                     }
                     else
                     {
                         unitOfWork.PartnerRepository.Insert(model);
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(partnerModel);
-                        else
-                            return NotFound();
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+                        return Ok(partnerModel);
                     }
                 }
 
@@ -259,7 +276,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest();
+                return Ok(3);
             }
         }
         #endregion
@@ -293,12 +310,28 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.PartnerRepository.Update(model);
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(partnerModel);
-                        else
-                            return Ok("حدث خطأ غير متوقع");
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
 
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+                        return Ok(partnerModel);
                     }
                     else
                     {
@@ -306,11 +339,28 @@ namespace Stocks.Controllers
                         {
 
                             unitOfWork.PartnerRepository.Update(model);
-                            var Result = unitOfWork.Save();
-                            if (Result == true)
-                                return Ok(partnerModel);
-                            else
-                                return NotFound();
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
+
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
+                            return Ok(partnerModel);
                         }
                         else
                         {
@@ -319,7 +369,7 @@ namespace Stocks.Controllers
                     }
                 }
                 else
-                    return BadRequest(0);
+                    return Ok(0);
 
 
             }
