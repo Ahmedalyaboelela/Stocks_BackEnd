@@ -13,7 +13,7 @@ namespace DAL.Entities
         [Required]
         [Column(TypeName = "nvarchar(100)")]
         public string Code { get; set; }
-        public bool DoNotGenerateEntry { get; set; }
+        public bool? DoNotGenerateEntry { get; set; }
 
         public bool GenerateEntry { get; set; }
 

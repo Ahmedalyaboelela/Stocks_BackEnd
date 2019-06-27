@@ -2,6 +2,7 @@
 using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
+using DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +21,7 @@ namespace BAL.Helper
             this._mapper = mapper;
         }
 
-        public void TransferToAccounts(List<EntryDetailModel> EntryList)
+        public void TransferToAccounts(List<EntryDetail> EntryList)
         {
             foreach (var item in EntryList)
             {

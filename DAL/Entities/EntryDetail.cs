@@ -11,9 +11,9 @@ namespace DAL.Entities
         [Key]
         public int EntryDetailID { get; set; }
         [Column(TypeName = "decimal(10,2)")]
-        public decimal Debit { get; set; }
+        public decimal? Debit { get; set; }
         [Column(TypeName = "decimal(10,2)")]
-        public decimal Credit { get; set; }
+        public decimal? Credit { get; set; }
 
         public float? StocksDebit { get; set; }
 
