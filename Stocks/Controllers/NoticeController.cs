@@ -42,6 +42,19 @@ namespace Stocks.Controllers
         }
         #endregion
 
+        #region Default Setting
+        public SettingModel DefaultSetting(bool type)
+        {
+            var screenNo = 5;
+            if (type)
+                screenNo = 6;
+
+            var settingObj = setting.GetSpecificSetting(screenNo);
+           
+            return settingObj;
+        }
+        #endregion
+
         #region GET Methods
 
         public NoticeModel GetNotice(Notice notice, bool type)
@@ -66,8 +79,14 @@ namespace Stocks.Controllers
                 {
                     NoticeDetailID = m.NoticeDetailID,
                     NoticeID = m.NoticeID,
-                    CreditDebitMoney = m.Credit,
-                    CreditorDebitStocks = m.StocksCredit
+                    Debit = m.Debit,
+                    Credit=m.Credit,
+                    StocksCredit=m.StocksCredit,
+                    StocksDebit=m.StocksDebit,
+                    AccountID=m.AccountID,
+                    AccCode=m.Account.Code,
+                    AccNameAR=m.Account.NameAR,
+                    AccNameEN=m.Account.NameEN
                 });
             if (Details != null)
                 model.NoticeModelDetails = Details;
@@ -84,7 +103,25 @@ namespace Stocks.Controllers
             model.EmployeeNameEN = notice.Employee.NameEN;
             model.EmployeeCode = notice.Employee.Code;
 
+            #region Setting part
+           
+            model.SettingScreen = DefaultSetting(type);
+
+            #endregion
+
             return model;
+        }
+
+
+        [HttpGet]
+        [Route("~/api/Notice/FirstOpen/{type}")]
+        public IActionResult FirstOpen(bool type)
+        {
+            DefaultSettingModel model = new DefaultSettingModel();
+            model.ScreenSetting = DefaultSetting(type);
+            model.LastCode = unitOfWork.EntryRepository.Last().Code;
+            
+            return Ok(model);
         }
 
         [HttpGet]
@@ -177,8 +214,14 @@ namespace Stocks.Controllers
                             {
                                 NoticeDetailID = m.NoticeDetailID,
                                 NoticeID = m.NoticeID,
-                                CreditDebitMoney = m.Credit,
-                                CreditorDebitStocks = m.StocksCredit
+                                Debit = m.Debit,
+                                Credit = m.Credit,
+                                StocksCredit = m.StocksCredit,
+                                StocksDebit = m.StocksDebit,
+                                AccountID = m.AccountID,
+                                AccCode = m.Account.Code,
+                                AccNameAR = m.Account.NameAR,
+                                AccNameEN = m.Account.NameEN
 
                             });
                         if (Details != null)
