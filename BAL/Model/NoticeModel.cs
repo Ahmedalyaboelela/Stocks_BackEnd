@@ -25,5 +25,7 @@ namespace BAL.Model
 
         public int Count { get; set; }
         public IEnumerable<NoticeDetailModel> NoticeModelDetails { get; set; }
+        public SettingModel SettingScreen { get; set; }
+
     }
 }

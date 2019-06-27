@@ -173,11 +173,28 @@ namespace Stocks.Controllers
                     else
                     {
                         unitOfWork.AccountRepository.Insert(model);
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(accountModel);
-                        else
-                            return NotFound();
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+                        return Ok(accountModel);
                     }
                 }
 
@@ -217,12 +234,28 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.AccountRepository.Update(model);
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(accountModel);
-                        else
-                            return Ok("حدث خطأ غير متوقع");
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
 
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+                        return Ok(accountModel);
                     }
                     else
                     {
@@ -230,11 +263,29 @@ namespace Stocks.Controllers
                         {
 
                             unitOfWork.AccountRepository.Update(model);
-                            var Result = unitOfWork.Save();
-                            if (Result == true)
-                                return Ok(accountModel);
-                            else
-                                return NotFound();
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
+
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
+
+                            return Ok(accountModel);
                         }
                         else
                         {

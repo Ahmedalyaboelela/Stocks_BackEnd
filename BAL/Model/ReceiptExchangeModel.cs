@@ -25,6 +25,7 @@ namespace BAL.Model
         public int Count { get; set; }
         public IEnumerable<ReceiptExchangeDetailModel> RecExcDetails { get; set; }
 
-        public virtual SettingModel SettingModel { get; set; }
+        public SettingModel  SettingScreen { get; set; }
+
     }
 }

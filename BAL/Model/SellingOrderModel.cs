@@ -24,7 +24,7 @@ namespace BAL.Model
 
         public virtual IEnumerable<SelingOrderDetailsModel> DetailsModels { get; set; }
         public virtual SettingModel SettingModel { get; set; } 
-        public EntryModel entryModel { get; set; }
+       
 
 
     }

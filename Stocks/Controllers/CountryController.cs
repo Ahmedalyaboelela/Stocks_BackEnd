@@ -139,11 +139,29 @@ namespace Stocks.Controllers
                 else
                 {
                     unitOfWork.CountryRepository.Insert(model);
-                    var Result = unitOfWork.Save();
-                    if (Result == true)
-                        return Ok(countryModel);
-                    else
-                        return NotFound();
+                    try
+                    {
+                        unitOfWork.Save();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
+
+                    return Ok(countryModel);
                 }
             }
             else
@@ -179,11 +197,29 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.CountryRepository.Update(model);
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(countryModel);
-                        else
-                            return NotFound();
+
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+                        return Ok(countryModel);
                     }
                     else
                     {
