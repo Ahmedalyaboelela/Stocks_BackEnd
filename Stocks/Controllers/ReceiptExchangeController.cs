@@ -58,7 +58,7 @@ namespace Stocks.Controllers
                 .Select(m => new ReceiptExchangeDetailModel
                 {
                     ReceiptExchangeID = m.ReceiptExchangeID,
-                    ReceiptExchangeAmount=m.ReceiptExchangeAmount,
+                  //  ReceiptExchangeAmount=m.ReceiptExchangeAmount,
                     ReceiptID = m.ReceiptID,
                     AccountID = m.AccountID,
                     AccNameAR = m.Account.Code,
@@ -172,7 +172,7 @@ namespace Stocks.Controllers
                             .Select(m => new ReceiptExchangeDetailModel
                             {
                                 ReceiptExchangeID = m.ReceiptExchangeID,
-                                ReceiptExchangeAmount=m.ReceiptExchangeAmount,
+                                //ReceiptExchangeAmount=m.ReceiptExchangeAmount,
                                 ReceiptID = m.ReceiptID,
                                 AccountID = m.AccountID,
                                 AccNameAR = m.Account.Code,

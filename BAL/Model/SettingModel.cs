@@ -9,7 +9,7 @@ namespace BAL.Model
         public int SettingID { get; set; }
         
         public string Code { get; set; }
-        public bool DoNotGenerateEntry { get; set; }
+        public bool? DoNotGenerateEntry { get; set; }
 
         public bool GenerateEntry { get; set; }
 
