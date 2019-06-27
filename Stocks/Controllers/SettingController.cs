@@ -135,26 +135,7 @@ namespace Stocks.Controllers
         #endregion
 
 
-        //#region Insert Method
-        //public SettingModel Save(SettingModel settingModel,Setting model)
-        //{
-        //    var settingAccounts = settingModel.SettingAccs;
-        //    var oldAccounts = unitOfWork.SettingAccountRepository
-
-        //     .Get(NoTrack: "NoTrack", filter: m => m.SettingID == model.SettingID);
-        //    unitOfWork.SettingAccountRepository.RemovRange(oldAccounts);
-
-
-        //    unitOfWork.SettingRepository.Insert(model);
-
-        //        var Result = unitOfWork.Save();
-        //        if (Result == true)
-        //            return settingModel;
-        //        else
-        //            return null;
-
-        //}
-
+        #region Add or Edit Method
         [HttpPost]
         [Route("~/api/Setting/Save")]
         public IActionResult SaveSetting([FromBody] List<SettingModel> settingModel)
@@ -218,7 +199,7 @@ namespace Stocks.Controllers
                     }
 
 
-                } 
+                }
                 #endregion
                 #region Update exist data
                 else
@@ -304,6 +285,28 @@ namespace Stocks.Controllers
                 return Ok(3);
             }
         }
-        
+
+        #endregion
+
+        //#region Insert Method
+        //public SettingModel Save(SettingModel settingModel,Setting model)
+        //{
+        //    var settingAccounts = settingModel.SettingAccs;
+        //    var oldAccounts = unitOfWork.SettingAccountRepository
+
+        //     .Get(NoTrack: "NoTrack", filter: m => m.SettingID == model.SettingID);
+        //    unitOfWork.SettingAccountRepository.RemovRange(oldAccounts);
+
+
+        //    unitOfWork.SettingRepository.Insert(model);
+
+        //        var Result = unitOfWork.Save();
+        //        if (Result == true)
+        //            return settingModel;
+        //        else
+        //            return null;
+
+        //}
+
     }
 }

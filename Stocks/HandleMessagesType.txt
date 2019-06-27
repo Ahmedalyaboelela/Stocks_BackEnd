@@ -14,3 +14,12 @@
 [false]- notice creditor .
 [true]- notice debitor .
 
+// ....................... Transaction Screens .................. //
+
+[1]- selling order .
+[2]- purchase order .
+[3]- receipt voucher .
+[4]- exhange voucher .
+[5]- notice creditor .
+[6]- notice debitor .
+
