@@ -23,6 +23,6 @@ namespace BAL.Model
 
         public virtual IEnumerable<PurchaseOrderDetailModel> DetailsModels { get; set; }
         public virtual SettingModel SettingModel { get; set; }
-        public EntryModel entryModel { get; set; }
+      
     }
 }
