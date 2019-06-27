@@ -16,7 +16,7 @@ namespace BAL.Model
         public bool AutoGenerateEntry { get; set; }
 
         public int VoucherType { get; set; }
-
+        public bool TransferToAccounts { get; set; }
         public virtual IEnumerable<SettingAccountModel> SettingAccs { get; set; }
     }
 }
