@@ -123,12 +123,10 @@ namespace Stocks.Controllers
             if (pageNumber > 0)
             {
                 var employee = unitOfWork.EmployeeRepository.Get(page: pageNumber).FirstOrDefault();
-
-
                 return Ok(GetEmployee(employee));
             }
             else
-                return Ok("enter valid page number ! ");
+                return Ok(1);
         }
 
 
@@ -148,7 +146,7 @@ namespace Stocks.Controllers
 
             }
             else
-                return Ok("Invalid Employee Id !");
+                return Ok(1);
         }
 
 
@@ -160,7 +158,7 @@ namespace Stocks.Controllers
 
             if (model == null)
             {
-                return Ok( model);
+                return Ok( 0);
             }
 
             for (int i = 0; i < employees.Count(); i++)
@@ -227,13 +225,13 @@ namespace Stocks.Controllers
             {
 
                 var Check = unitOfWork.EmployeeRepository.Get();
-                if (empModel == null)
-                {
-                    return Ok("no scueess");
-                }
+                //if (empModel == null)
+                //{
+                //    return Ok(0);
+                //}
                 if (Check.Any(m => m.Code == empModel.Code))
                 {
-                    return Ok("الرمز موجود مسبقا");
+                    return Ok(2);
                 }
                 else
                 {
@@ -244,45 +242,46 @@ namespace Stocks.Controllers
                     var empolyeeCard = empModel.EmployeeCards;
 
                     var EmpolyeeCard = _mapper.Map<IEnumerable<EmployeeCard>>(empolyeeCard);
+                  
+                    unitOfWork.EmployeeRepository.Insert(model);
+                        
+                    if (EmpolyeeCard != null)
+                    {
+                        foreach (var item in empolyeeCard)
+                        {
+                            var obj = _mapper.Map<EmployeeCard>(item);
+                                   
+                            obj.EmployeeID = model.EmployeeID;
+
+                            unitOfWork.EmployeeCardRepository.Insert(obj);
+                                   
+
+                        }
+                    }
+
                     try
                     {
-                        unitOfWork.EmployeeRepository.Insert(model);
-                        
-                            if (EmpolyeeCard != null)
+                        unitOfWork.Save();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
                             {
-                                foreach (var item in empolyeeCard)
-                                {
-                                    var obj = _mapper.Map<EmployeeCard>(item);
-                                   
-                                    obj.EmployeeID = model.EmployeeID;
+                                return Ok(5);
 
-                                    unitOfWork.EmployeeCardRepository.Insert(obj);
-                                   
-
-                                }
-                            }
-
-
-                            bool CheckSave = unitOfWork.Save();
-
-
-
-                            if (CheckSave == true)
-                            {
-                                return Ok(model);
                             }
                             else
-                            {
-                                return Ok("يوجد خطا بادخال البيانات ");
-                            }
+                                return Ok(6);
+                        }
+                    }
+                    return Ok(model);
 
-                    }
-                    catch (Exception ex)
-                    {
-                        // unitOfWork.Rollback();
-                        return Ok("يوجد خطا بادخال البيانات");
-                        //Log, handle or absorbe I don't care ^_^
-                    }
 
 
                 }
@@ -292,7 +291,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest("Bad Request !");
+                return Ok(3);
             }
         }
         #endregion
@@ -306,7 +305,7 @@ namespace Stocks.Controllers
             if (id != empModel.EmployeeID)
             {
 
-                return BadRequest();
+                return Ok(1);
             }
 
             if (ModelState.IsValid)
@@ -322,8 +321,11 @@ namespace Stocks.Controllers
                     .Get(NoTrack: "NoTrack", filter: m => m.EmployeeID == model.EmployeeID);
 
 
-                unitOfWork.EmployeeCardRepository.RemovRange(oldcard);
+                if (oldcard.Count()>0)
+                {
+                    unitOfWork.EmployeeCardRepository.RemovRange(oldcard);
 
+                }
 
                 if (Check.Any(m => m.Code != empModel.Code))
                 {
@@ -340,11 +342,28 @@ namespace Stocks.Controllers
 
                     }
 
-                    var Result = unitOfWork.Save();
-                    if (Result == true)
-                        return Ok(empModel);
-                    else
-                        return Ok("حدث خطا");
+                    try
+                    {
+                        unitOfWork.Save();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
+                    return Ok(model);
 
                 }
                 else
@@ -353,8 +372,6 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.EmployeeRepository.Update(model);
-                        unitOfWork.Save();
-
                      
                         foreach (var item in empolyeeCard)
                         {
@@ -366,22 +383,40 @@ namespace Stocks.Controllers
 
                         }
 
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(empModel);
-                        else
-                            return Ok("حدث خطا");
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+
+                        return Ok(model);
                     }
                     else
                     {
-                        return Ok("الرمز موجود مسبقا");
+                        return Ok(2);
                     }
                 }
 
             }
             else
             {
-                return BadRequest(ModelState);
+                return Ok(3);
             }
         }
         #endregion
@@ -397,12 +432,12 @@ namespace Stocks.Controllers
             if (id == null)
             {
 
-                return BadRequest();
+                return Ok(1);
             }
             var employee = unitOfWork.EmployeeRepository.GetByID(id);
             if (employee == null)
             {
-                return BadRequest();
+                return Ok(0);
             }
             var EmpCard = unitOfWork.EmployeeCardRepository.Get(filter: m => m.EmployeeID == id);
          
@@ -410,123 +445,42 @@ namespace Stocks.Controllers
 
             unitOfWork.EmployeeCardRepository.RemovRange(EmpCard);
             unitOfWork.EmployeeRepository.Delete(employee);
-            var Result = unitOfWork.Save();
-            if (Result == true)
+            try
             {
-                return Ok("item deleted .");
+                unitOfWork.Save();
             }
-            else
+            catch (DbUpdateException ex)
             {
-                return NotFound();
+                var sqlException = ex.GetBaseException() as SqlException;
+
+                if (sqlException != null)
+                {
+                    var number = sqlException.Number;
+
+                    if (number == 547)
+                    {
+                        return Ok(5);
+
+                    }
+                    else
+                        return Ok(6);
+                }
             }
+            return Ok(4);
+
+            //var Result = unitOfWork.Save();
+            //if (Result == true)
+            //{
+            //    return Ok(4);
+            //}
+            //else
+            //{
+            //    return Ok("not deleted");
+            //}
 
         }
 
         #endregion
-
-
-
-        //#region Update Methods
-        //[HttpPut]
-        //[Route("~/api/Employee/Update/{id}")]
-        //public IActionResult Update(int id, [FromBody] EmployeeModel empModel)
-        //{
-        //    if (id != empModel.EmployeeID)
-        //    {
-
-        //        return BadRequest();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        var Check = unitOfWork.EmployeeRepository.Get(NoTrack: "NoTrack");
-
-        //        var modelEmp = _mapper.Map<Employee>(empModel);
-        //        var NewEmpCardmodel = empModel.EmployeeCards;
-        //        //var NewEmpCard = _mapper.Map<IEnumerable<EmployeeCard>>(NewEmpCardmodel);
-
-        //        // Delete old range first :
-        //        var OldEmpCard = unitOfWork.EmployeeCardRepository.Get(filter: m => m.EmployeeID == modelEmp.EmployeeID);
-        //        if (OldEmpCard != null)
-        //        {
-
-        //            unitOfWork.EmployeeCardRepository.RemovRange(OldEmpCard);
-        //            unitOfWork.Save();
-        //        }
-
-
-        //        var NewEmpCard = _mapper.Map<IEnumerable<EmployeeCard>>(NewEmpCardmodel);
-
-        //        if (Check.Any(m => m.Code != modelEmp.Code))
-        //        {
-        //            unitOfWork.EmployeeRepository.Update(modelEmp);
-
-        //            if (NewEmpCard != null)
-        //            {
-        //                foreach (var item in NewEmpCard)
-        //                {
-        //                    item.EmployeeID = modelEmp.EmployeeID;
-        //                    item.EmpCardId = 0;
-        //                    var depcard = _mapper.Map<EmployeeCard>(item);
-
-        //                    unitOfWork.EmployeeCardRepository.Insert(depcard);
-
-        //                }
-        //            }
-
-        //            unitOfWork.Save();
-        //            return Ok(empModel);
-
-
-        //        }
-
-        //        else
-        //        {
-        //            //============================================================================================
-        //            if (Check.Any(m => m.Code == modelEmp.Code && m.EmployeeID == id))
-        //            {
-        //                unitOfWork.EmployeeRepository.Update(modelEmp);
-        //                if (OldEmpCard != null)
-        //                {
-
-        //                    unitOfWork.EmployeeCardRepository.RemovRange(OldEmpCard);
-        //                    unitOfWork.Save();
-        //                }
-        //                if (NewEmpCard != null)
-        //                {
-        //                    foreach (var item in NewEmpCard)
-        //                    {
-        //                        item.EmployeeID = modelEmp.EmployeeID;
-        //                        item.EmpCardId = 0;
-        //                        var depcard = _mapper.Map<EmployeeCard>(item);
-
-        //                        unitOfWork.EmployeeCardRepository.Insert(depcard);
-
-        //                    }
-        //                }
-
-        //                unitOfWork.Save();
-        //                return Ok(empModel);
-
-
-
-        //            }
-
-        //            else
-        //            {
-        //                return Ok("الرمز  موجود مسبقا");
-        //            }
-        //        }
-        //    }
-
-
-        //    else
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
-        //#endregion
 
 
     }

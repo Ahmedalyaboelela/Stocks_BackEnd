@@ -42,7 +42,7 @@ namespace Stocks.Controllers
 
                 if (model == null)
                 {
-                    return Ok( model);
+                    return Ok( 0);
                 }
 
                 // deal with date
@@ -56,12 +56,7 @@ namespace Stocks.Controllers
                 model.CountryNameEn = partner.Country.NameEN;
 
                 model.Count = unitOfWork.PartnerRepository.Count();
-                if (model.Count == 0)
-                {
-                    return Ok( model);
-
-                }
-
+               
                 return Ok( model);
             }
             catch (NullReferenceException ex)
@@ -97,7 +92,7 @@ namespace Stocks.Controllers
                     var model = _mapper.Map<PartenerModel>(partner);
                     if (model == null)
                     {
-                        return Ok(model);
+                        return Ok(0);
                     }
 
                     // deal with date
@@ -111,17 +106,11 @@ namespace Stocks.Controllers
                     model.CountryNameEn = partner.Country.NameEN;
 
                     model.Count = unitOfWork.PartnerRepository.Count();
-                    if (model.Count == 0)
-                    {
-                        return Ok(model);
-
-                    }
+                   
                     return Ok(model);
-
-
                 }
                 else
-                    return Ok();
+                    return Ok(1);
            
             }
             catch (DbUpdateException ex)
@@ -150,51 +139,51 @@ namespace Stocks.Controllers
         [HttpGet]
         [Route("~/api/Partner/Get/{id}")]
 
-        public PartenerModel GetpartnerById(int id)
+        public IActionResult GetpartnerById(int id)
         {
-            var partner = unitOfWork.PartnerRepository.GetByID(id);
-
-            var model = _mapper.Map<PartenerModel>(partner);
-            if (model == null)
+            if (id > 0)
             {
-                return model;
-            }
-            else
-            {
+                var partner = unitOfWork.PartnerRepository.GetByID(id);
 
-                // deal with date
-                model.IssueDate = partner.IssueDate.Value.ToString("dd/MM/yyyy");
-                model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
-
-                model.AccountNameAr = partner.Account.NameAR;
-                model.AccountNameEn = partner.Account.NameEN;
-
-                model.CountryNameAr = partner.Country.NameAR;
-                model.CountryNameEn = partner.Country.NameEN;
-
-                model.Count = unitOfWork.PartnerRepository.Count();
-                if (model.Count == 0)
+                var model = _mapper.Map<PartenerModel>(partner);
+                if (model == null)
                 {
-                    return model;
+                    return Ok(0);
+                }
+                else
+                {
 
+                    // deal with date
+                    model.IssueDate = partner.IssueDate.Value.ToString("dd/MM/yyyy");
+                    model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
+
+                    model.AccountNameAr = partner.Account.NameAR;
+                    model.AccountNameEn = partner.Account.NameEN;
+
+                    model.CountryNameAr = partner.Country.NameAR;
+                    model.CountryNameEn = partner.Country.NameEN;
+
+                    model.Count = unitOfWork.PartnerRepository.Count();
+
+                    return Ok(model);
                 }
 
-                return model;
             }
-
+            else
+                return Ok(1);
         }
 
 
 
         [Route("~/api/Partner/GetAll")]
-        public IEnumerable<PartenerModel> GetAllPartners()
+        public IActionResult GetAllPartners()
         {
             var partner = unitOfWork.PartnerRepository.Get().ToList();
             var model = _mapper.Map<IEnumerable<PartenerModel>>(partner).ToList();
 
             if (model == null)
             {
-                return model;
+                return Ok(0);
             }
 
             for (int i = 0; i < partner.Count(); i++)
@@ -223,7 +212,7 @@ namespace Stocks.Controllers
             }
           
 
-            return (model);
+            return Ok(model);
         }
         #endregion
 
@@ -238,29 +227,46 @@ namespace Stocks.Controllers
                 var model = _mapper.Map<Partner>(partnerModel);
                 if (model == null)
                 {
-                    return Ok(model);
+                    return Ok(0);
                 }
                 var Check = unitOfWork.PartnerRepository.Get();
                 if (Check.Any(m => m.Code == partnerModel.Code))
                 {
 
-                    return Ok("الرمز موجود مسبقا");
+                    return Ok(2);
                 }
                 else
                 {
                     if (Check.Any(m => m.NameAR == partnerModel.NameAR))
                     {
 
-                        return Ok("الاسم موجود مسبقا");
+                        return Ok(2);
                     }
                     else
                     {
                         unitOfWork.PartnerRepository.Insert(model);
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(partnerModel);
-                        else
-                            return NotFound();
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+                        return Ok(partnerModel);
                     }
                 }
 
@@ -270,7 +276,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest();
+                return Ok(3);
             }
         }
         #endregion
@@ -281,7 +287,11 @@ namespace Stocks.Controllers
 
         public IActionResult PutPartner(int id, [FromBody] PartenerModel partnerModel)
         {
-            
+
+            if (id>0)
+            {
+                return Ok(1);
+            }
 
             if (ModelState.IsValid)
             {
@@ -291,7 +301,7 @@ namespace Stocks.Controllers
                     var model = _mapper.Map<Partner>(partnerModel);
                     if (model == null)
                     {
-                        return Ok(model);
+                        return Ok(0);
 
                     }
 
@@ -300,12 +310,28 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.PartnerRepository.Update(model);
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(partnerModel);
-                        else
-                            return Ok("حدث خطأ غير متوقع");
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
 
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+                        return Ok(partnerModel);
                     }
                     else
                     {
@@ -313,26 +339,43 @@ namespace Stocks.Controllers
                         {
 
                             unitOfWork.PartnerRepository.Update(model);
-                            var Result = unitOfWork.Save();
-                            if (Result == true)
-                                return Ok(partnerModel);
-                            else
-                                return NotFound();
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
+
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
+                            return Ok(partnerModel);
                         }
                         else
                         {
-                            return Ok("الرمز موجود مسبقا");
+                            return Ok(2);
                         }
                     }
                 }
                 else
-                    return BadRequest("Invalid Partner !");
+                    return Ok(0);
 
 
             }
             else
             {
-                return BadRequest(ModelState);
+                return Ok(3);
             }
         }
 
@@ -346,7 +389,7 @@ namespace Stocks.Controllers
         {
             if (id == null)
             {
-                return BadRequest();
+                return Ok(1);
             }
 
             else
@@ -354,7 +397,7 @@ namespace Stocks.Controllers
                 var account = unitOfWork.PartnerRepository.GetByID(id);
                 if (account == null)
                 {
-                    return BadRequest();
+                    return Ok(0);
                 }
                 else
                 {
@@ -374,15 +417,14 @@ namespace Stocks.Controllers
 
                             if (number == 547)
                             {
-                                return Ok("Item related with another data .");
+                                return Ok(5);
 
                             }
+                            else
+                                return Ok(6);
                         }
                     }
-                    return Ok("Item deleted successfully .");
-
-
-
+                    return Ok(4);
 
                 }
             }

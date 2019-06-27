@@ -31,14 +31,14 @@ namespace Stocks.Controllers
 
         #region GET Methods
         [Route("~/api/Account/GetLast")]
-        public AccountModel GetLastAccount()
+        public IActionResult GetLastAccount()
         {
             var account = unitOfWork.AccountRepository.Last();
 
             var model = _mapper.Map<AccountModel>(account);
             if (model == null)
             {
-                return model;
+                return Ok(0);
             }
             var ModelParent = unitOfWork.AccountRepository.GetByID(account.AccoutnParentID);
             if (ModelParent != null)
@@ -51,13 +51,8 @@ namespace Stocks.Controllers
 
 
             model.Count = unitOfWork.AccountRepository.Count();
-            if (model.Count == 0)
-            {
-                return model;
-
-            }
-
-            return model;
+           
+            return Ok(model);
 
 
 
@@ -65,7 +60,7 @@ namespace Stocks.Controllers
 
         [HttpGet]
         [Route("~/api/Account/Paging/{pageNumber}")]
-        public AccountModel Pagination(int pageNumber)
+        public IActionResult Pagination(int pageNumber)
         {
             if (pageNumber > 0)
             {
@@ -73,7 +68,7 @@ namespace Stocks.Controllers
                 var model = _mapper.Map<AccountModel>(account);
                 if (model == null)
                 {
-                    return model;
+                    return Ok(0);
                 }
 
                 var ModelParent = unitOfWork.AccountRepository.GetByID(account.AccoutnParentID);
@@ -87,68 +82,65 @@ namespace Stocks.Controllers
 
 
                 model.Count = unitOfWork.AccountRepository.Count();
-                if (model.Count == 0)
-                {
-                    return model;
-
-                }
-                return model;
+               
+                return Ok(model);
 
             }
             else
-                return null;
+                return Ok(1);
            
         }
 
         [HttpGet]
         [Route("~/api/Account/Get/{id}")]
 
-        public AccountModel GetAccountById(int id)
+        public IActionResult GetAccountById(int id)
         {
-            var account = unitOfWork.AccountRepository.GetByID(id);
-
-            var model = _mapper.Map<AccountModel>(account);
-            if (model == null)
+            if (id > 0)
             {
-                return model;
+                var account = unitOfWork.AccountRepository.GetByID(id);
+
+                var model = _mapper.Map<AccountModel>(account);
+                if (model == null)
+                {
+                    return Ok(0);
+                }
+                else
+                {
+                    var ModelParent = unitOfWork.AccountRepository.GetByID(account.AccoutnParentID);
+                    if (ModelParent != null)
+                    {
+                        model.AccoutnParentID = ModelParent.AccountID;
+                        model.NameArParent = ModelParent.NameAR;
+                        model.NameEnParent = ModelParent.NameEN;
+                    }
+
+
+                    model.Count = unitOfWork.AccountRepository.Count();
+
+
+                    return Ok(model);
+                }
             }
             else
-            {
-                var ModelParent = unitOfWork.AccountRepository.GetByID(account.AccoutnParentID);
-                if (ModelParent!= null)
-                {
-                    model.AccoutnParentID = ModelParent.AccountID;
-                    model.NameArParent = ModelParent.NameAR;
-                    model.NameEnParent = ModelParent.NameEN;
-                }
-
-
-                model.Count = unitOfWork.AccountRepository.Count();
-                if (model.Count == 0)
-                {
-                    return model;
-
-                }
-
-                return model;
-            }
+                return Ok(1);
 
         }
 
 
 
         [Route("~/api/Account/GetAll")]
-        public IEnumerable<AccountModel> GetAllAccount()
+        public IActionResult GetAllAccount()
         {
             var account = unitOfWork.AccountRepository.Get();
             var model = _mapper.Map<IEnumerable<AccountModel>>(account);
 
             if (model == null)
             {
-                return model;
+                return Ok(0);
             }
 
-            return (model);
+            return Ok(model);
         }
         #endregion
 
@@ -163,29 +155,46 @@ namespace Stocks.Controllers
                 var model = _mapper.Map<Account>(accountModel);
                 if (model == null)
                 {
-                    return Ok(model);
+                    return Ok(0);
                 }
                 var Check = unitOfWork.AccountRepository.Get();
                 if (Check.Any(m => m.Code == accountModel.Code))
                 {
 
-                    return Ok("الرمز موجود مسبقا");
+                    return Ok(2);
                 }
                 else
                 {
                     if (Check.Any(m => m.NameAR == accountModel.NameAR))
                     {
 
-                        return Ok("الاسم موجود مسبقا");
+                        return Ok(2);
                     }
                     else
                     {
                         unitOfWork.AccountRepository.Insert(model);
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(accountModel);
-                        else
-                            return NotFound();
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+                        return Ok(accountModel);
                     }
                 }
 
@@ -195,7 +204,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest();
+                return Ok(3);
             }
         }
         #endregion
@@ -216,7 +225,7 @@ namespace Stocks.Controllers
                     var model = _mapper.Map<Account>(accountModel);
                     if (model == null)
                     {
-                        return Ok(model);
+                        return Ok(0);
 
                     }
 
@@ -225,12 +234,28 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.AccountRepository.Update(model);
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(accountModel);
-                        else
-                            return Ok("حدث خطأ غير متوقع");
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
 
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+                        return Ok(accountModel);
                     }
                     else
                     {
@@ -238,26 +263,44 @@ namespace Stocks.Controllers
                         {
 
                             unitOfWork.AccountRepository.Update(model);
-                            var Result = unitOfWork.Save();
-                            if (Result == true)
-                                return Ok(accountModel);
-                            else
-                                return NotFound();
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
+
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
+
+                            return Ok(accountModel);
                         }
                         else
                         {
-                            return Ok("الرمز او الاسم  موجود مسبقا");
+                            return Ok(2);
                         }
                     }
                 }
                 else
-                    return BadRequest("Invalid Account !");
+                    return Ok(0);
                
 
             }
             else
             {
-                return BadRequest(ModelState);
+                return Ok(3);
             }
         }
 
@@ -271,7 +314,7 @@ namespace Stocks.Controllers
         {
             if (id == null)
             {
-                return BadRequest();
+                return Ok(1);
             }
 
             else
@@ -279,7 +322,7 @@ namespace Stocks.Controllers
                 var account = unitOfWork.AccountRepository.GetByID(id);
                 if (account == null)
                 {
-                    return BadRequest();
+                    return Ok(0);
                 }
                 else
                 {
@@ -299,12 +342,14 @@ namespace Stocks.Controllers
 
                             if (number == 547)
                             {
-                                return Ok("Item related with another data .");
+                                return Ok(5);
 
                             }
+                            else
+                                return Ok(6);
                         }
                     }
-                    return Ok("Item deleted successfully .");
+                    return Ok(4);
 
                 }
             }

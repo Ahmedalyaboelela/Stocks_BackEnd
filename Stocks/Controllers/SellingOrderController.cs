@@ -9,6 +9,8 @@ using DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BAL.Model;
+using BAL.Helper;
+
 namespace Stocks.Controllers
 {
     public class SellingOrderController : Controller
@@ -35,10 +37,7 @@ namespace Stocks.Controllers
                 AccountID = a.AccountID,
                 AccountType = a.AccountType,
                 SettingAccountID = a.SettingAccountID,
-                Code = a.Setting.Code,
-
-
-
+                Code = a.Setting.Code
             });
 
 
@@ -187,7 +186,7 @@ namespace Stocks.Controllers
                 model.DetailsModels = Details;
             }
 
-            model.Settings = GetSetting();
+          //  model.Settings = GetSetting();
 
             var Entry = unitOfWork.EntryRepository.Get(filter: x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault(); 
             if (Entry !=null)
@@ -271,7 +270,7 @@ namespace Stocks.Controllers
                 model.DetailsModels = Details;
             }
 
-            model.Settings = GetSetting();
+           // model.Settings = GetSetting();
 
             var Entry = unitOfWork.EntryRepository.Get(filter: x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault();
             if (Entry != null)
@@ -354,7 +353,7 @@ namespace Stocks.Controllers
                 model.DetailsModels = Details;
             }
 
-            model.Settings = GetSetting();
+         //   model.Settings = GetSetting();
 
             var Entry = unitOfWork.EntryRepository.Get(filter: x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault();
             if (Entry != null)
@@ -440,6 +439,7 @@ namespace Stocks.Controllers
                             }
                             else
                             {
+                         
                                 EntryModel entryModel = new EntryModel();
                                 entryModel.SellingOrderID = modelselling.SellingOrderID;
                                 entryModel.ReceiptID = sellingOrderModel.entryModel.ReceiptID;

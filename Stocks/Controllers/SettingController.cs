@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,6 +10,7 @@ using DAL.Context;
 using DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
@@ -29,15 +31,60 @@ namespace Stocks.Controllers
         #endregion
 
         #region Get Method
+        [Route("~/api/Setting/GetSelected/{type}")]
+        public SettingModel GetSpecificSetting(int type)
+        {
+            var setting = unitOfWork.SettingRepository.Get(filter: a => a.VoucherType == type).FirstOrDefault();
+            var model = _mapper.Map<SettingModel>(setting);
+
+            if (model == null)
+            {
+                return null;
+            }
+
+            #region Assign details to it's setting
+
+            var accounts = setting.SettingAccounts.ToList();
+            var Accmodel = _mapper.Map<IEnumerable<SettingAccountModel>>(accounts).ToList();
+
+
+            // assign setting accounts model to setting model
+
+            if (Accmodel.Count() > 0)
+            {
+
+                var j = 0;
+                if (Accmodel[0].SettingID == model.SettingID)
+                {
+                    foreach (var acc in Accmodel)
+                    {
+                        acc.AccCode = accounts[j].Account.Code;
+                        acc.AccNameAR = accounts[j].Account.NameAR;
+                        acc.AccNameEN = accounts[j].Account.NameEN;
+
+                        j++;
+                    }
+
+                    model.SettingAccs = Accmodel;
+
+                }
+            }
+
+
+            #endregion
+
+            return model;
+        }
+
         [Route("~/api/Setting/Get")]
-        public IEnumerable<SettingModel> GetSetting()
+        public IActionResult GetSetting()
         {
             var setting = unitOfWork.SettingRepository.Get();
             var model = _mapper.Map<IEnumerable<SettingModel>>(setting).ToList();
 
             if (model == null)
             {
-                return model;
+                return Ok(0);
             }
 
             #region Assign details to it's setting
@@ -58,14 +105,17 @@ namespace Stocks.Controllers
 
                 if (Accmodel.Count() > 0)
                 {
-                    if (model[i].SettingID == Accmodel[0].SettingID)
+
+                    var j = 0;
+                    if (Accmodel[0].SettingID == model[i].SettingID)
                     {
                         foreach (var acc in Accmodel)
                         {
-                            acc.AccCode = accounts[i].Account.Code;
-                            acc.AccNameAR = accounts[i].Account.NameAR;
-                            acc.AccNameEN = accounts[i].Account.NameEN;
+                            acc.AccCode = accounts[j].Account.Code;
+                            acc.AccNameAR = accounts[j].Account.NameAR;
+                            acc.AccNameEN = accounts[j].Account.NameEN;
 
+                            j++;
                         }
 
                         model[i].SettingAccs = Accmodel;
@@ -80,9 +130,10 @@ namespace Stocks.Controllers
             }
             #endregion
 
-            return (model);
+            return Ok(model);
         }
         #endregion
+
 
         //#region Insert Method
         //public SettingModel Save(SettingModel settingModel,Setting model)
@@ -113,7 +164,7 @@ namespace Stocks.Controllers
                 var model = _mapper.Map<IEnumerable<Setting>>(settingModel).ToList();
                 if (model == null)
                 {
-                    return Ok(settingModel);
+                    return Ok(0);
                 }
 
                 var Check = unitOfWork.SettingRepository.Get(NoTrack: "NoTrack");
@@ -207,20 +258,41 @@ namespace Stocks.Controllers
                     }
                     #endregion
 
-
-
-                    bool CheckSave = unitOfWork.Save();
-
-
-
-                    if (CheckSave == true)
+                    try
                     {
-                        return Ok(settingModel);
+                        unitOfWork.Save();
                     }
-                    else
+                    catch (DbUpdateException ex)
                     {
-                        return Ok("توجد مشكله ...");
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
                     }
+                    return Ok(4);
+
+                    //bool CheckSave = unitOfWork.Save();
+
+
+
+                    //if (CheckSave == true)
+                    //{
+                    //    return Ok(settingModel);
+                    //}
+                    //else
+                    //{
+                    //    return Ok("توجد مشكله ...");
+                    //}
                 }
 
 
@@ -229,7 +301,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest("Bad request");
+                return Ok(3);
             }
         }
         

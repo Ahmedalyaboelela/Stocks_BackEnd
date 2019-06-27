@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +11,7 @@ using DAL.Context;
 using DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
@@ -21,14 +23,25 @@ namespace Stocks.Controllers
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
 
+        private SettingController setting;
+
         public ReceiptExchangeController(StocksContext context, IMapper mapper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
+            this.setting = new SettingController(context, mapper);
         }
 
         #endregion
 
+        #region Generate Entry
+
+        public IActionResult GenerateEntry()
+        {
+            var settingObj = setting.GetSpecificSetting(1);
+            return Ok();
+        }
+        #endregion
 
         #region GET Methods
 
@@ -61,8 +74,8 @@ namespace Stocks.Controllers
                     AccountID = m.AccountID,
                     AccNameAR = m.Account.Code,
                     AccNameEN=m.Account.NameEN,
-                    ChiqueNumber = m.ChiqueNumber,
-                    Type = m.Type
+                    ChiqueNumber = m.ChiqueNumber
+                    //Type = m.Type
                 });
             if (RecExcDetails != null)
                 model.RecExcDetails = RecExcDetails;
@@ -88,7 +101,7 @@ namespace Stocks.Controllers
             if(RecExc !=null)
                 return Ok(GetReceiptExchange(RecExc,type));
             else
-                return Ok("Not Found");
+                return Ok(0);
 
         }
 
@@ -104,11 +117,11 @@ namespace Stocks.Controllers
                 if(RecExc != null)
                     return Ok(GetReceiptExchange(RecExc,type));
                 else
-                    return Ok("Not Found");
+                    return Ok(0);
 
             }
             else
-                return Ok("enter valid page number ! ");
+                return Ok(1);
         }
 
 
@@ -125,12 +138,12 @@ namespace Stocks.Controllers
                 if (RecExc != null)
                     return Ok(GetReceiptExchange(RecExc, type));
                 else
-                    return Ok("Not Found");
+                    return Ok(0);
 
 
             }
             else
-                return Ok("Invalid  Id !");
+                return Ok(1);
         }
 
 
@@ -143,7 +156,7 @@ namespace Stocks.Controllers
 
             if (model == null)
             {
-                return Ok(model);
+                return Ok(0);
             }
 
             for (int i = 0; i < RecExcs.Count(); i++)
@@ -175,8 +188,8 @@ namespace Stocks.Controllers
                                 AccountID = m.AccountID,
                                 AccNameAR = m.Account.Code,
                                 AccNameEN = m.Account.NameEN,
-                                ChiqueNumber = m.ChiqueNumber,
-                                Type = m.Type
+                                ChiqueNumber = m.ChiqueNumber
+                              //  Type = m.Type
 
                             });
                         if (RecExcDetails != null)
@@ -212,11 +225,11 @@ namespace Stocks.Controllers
                 var Check = unitOfWork.ReceiptExchangeRepository.Get();
                 if (recExcModel == null)
                 {
-                    return Ok("no scueess");
+                    return Ok(0);
                 }
                 if (Check.Any(m => m.Code == recExcModel.Code))
                 {
-                    return Ok("الرمز موجود مسبقا");
+                    return Ok(2);
                 }
                 else
                 {
@@ -227,9 +240,7 @@ namespace Stocks.Controllers
                     var recExcDetails = recExcModel.RecExcDetails;
 
                     var RecExcDetails = _mapper.Map<IEnumerable<ReceiptExchangeDetail>>(recExcModel.RecExcDetails);
-                    try
-                    {
-                        // insert main data of receipt exchange 
+                      // insert main data of receipt exchange 
                         unitOfWork.ReceiptExchangeRepository.Insert(model);
 
                         if (RecExcDetails != null)
@@ -243,25 +254,39 @@ namespace Stocks.Controllers
                         }
 
 
-                        bool CheckSave = unitOfWork.Save();
-
-
-
-                        if (CheckSave == true)
+                        try
                         {
-                            return Ok(recExcModel);
+                            unitOfWork.Save();
+
+                            #region Generate entry
+
+                            var settingObj = setting.GetSpecificSetting(1);
+                            if (settingObj.AutoGenerateEntry)
+                            {
+                                GenerateEntry();
+                            } 
+                            #endregion
                         }
-                        else
+                        catch (DbUpdateException ex)
                         {
-                            return Ok("خطأ في ادخال البيانات");
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+                                // data related
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
                         }
+                        return Ok(model);
 
-                    }
-                    catch (Exception ex)
-                    {
-                        return Ok("خطأ في ادخال البيانات");
-
-                    }
+                    
 
 
                 }
@@ -271,7 +296,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest("Bad Request !");
+                return Ok(3);
             }
         }
         #endregion
@@ -285,7 +310,7 @@ namespace Stocks.Controllers
             if (id != Model.ReceiptID)
             {
 
-                return BadRequest();
+                return Ok(1);
             }
 
             if (ModelState.IsValid)
@@ -298,8 +323,11 @@ namespace Stocks.Controllers
 
                 var Check = unitOfWork.ReceiptExchangeRepository.Get(NoTrack: "NoTrack", filter: m => m.Type == type);
                 var oldDetail = unitOfWork.ReceiptExchangeDetailRepository.Get(NoTrack: "NoTrack", filter: m => m.ReceiptID == model.ReceiptID);
-                unitOfWork.ReceiptExchangeDetailRepository.RemovRange(oldDetail);
+                if (oldDetail != null)
+                {
+                    unitOfWork.ReceiptExchangeDetailRepository.RemovRange(oldDetail);
 
+                }
 
                 if (Check.Any(m => m.Code != Model.Code))
                 {
@@ -316,11 +344,39 @@ namespace Stocks.Controllers
 
                     }
 
-                    var Result = unitOfWork.Save();
-                    if (Result == true)
-                        return Ok(Model);
-                    else
-                        return Ok("حدث خطا");
+                    try
+                    {
+                        unitOfWork.Save();
+
+                        #region Generate entry
+
+                        var settingObj = setting.GetSpecificSetting(1);
+                        if (settingObj.AutoGenerateEntry)
+                        {
+                            GenerateEntry();
+                        }
+                        #endregion
+
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+                            // data related
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
+                    return Ok(model);
+
 
                 }
                 else
@@ -340,22 +396,51 @@ namespace Stocks.Controllers
 
                         }
 
-                        var Result = unitOfWork.Save();
-                        if (Result == true)
-                            return Ok(Model);
-                        else
-                            return Ok("حدث خطا");
+                        try
+                        {
+                            unitOfWork.Save();
+
+                            #region Generate entry
+
+                            var settingObj = setting.GetSpecificSetting(1);
+                            if (settingObj.AutoGenerateEntry)
+                            {
+                                GenerateEntry();
+                            }
+                            #endregion
+
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+                                // data related
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
+
+                        return Ok(model);
+
                     }
                     else
                     {
-                        return Ok("الرمز موجود مسبقا");
+                        return Ok(2);
                     }
                 }
 
             }
             else
             {
-                return BadRequest(ModelState);
+                return Ok(3);
             }
         }
         #endregion
@@ -368,33 +453,57 @@ namespace Stocks.Controllers
         public IActionResult Delete(int? id)
         {
 
-            if (id == null)
-            {
-
-                return BadRequest();
-            }
             //var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptID == id).FirstOrDefault();
-            var RecExc = unitOfWork.ReceiptExchangeRepository.GetByID(id);
-
-            if (RecExc == null)
+            if (id>0)
             {
-                return BadRequest();
-            }
-            var recDetails = unitOfWork.ReceiptExchangeDetailRepository.Get(filter: m => m.ReceiptID == id);
+                var RecExc = unitOfWork.ReceiptExchangeRepository.GetByID(id);
+
+                if (RecExc == null)
+                {
+                    return Ok(0);
+                }
+                var recDetails = unitOfWork.ReceiptExchangeDetailRepository.Get(filter: m => m.ReceiptID == id);
 
 
 
-            unitOfWork.ReceiptExchangeDetailRepository.RemovRange(recDetails);
-            unitOfWork.ReceiptExchangeRepository.Delete(RecExc);
-            var Result = unitOfWork.Save();
-            if (Result == true)
-            {
-                return Ok("item deleted .");
+                unitOfWork.ReceiptExchangeDetailRepository.RemovRange(recDetails);
+                unitOfWork.ReceiptExchangeRepository.Delete(RecExc);
+                try
+                {
+                    unitOfWork.Save();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        var number = sqlException.Number;
+
+                        if (number == 547)
+                        {
+                            return Ok(5);
+
+                        }
+                        else
+                            return Ok(6);
+                    }
+                }
+                return Ok(4);
+
+                //var Result = unitOfWork.Save();
+                //if (Result == true)
+                //{
+                //    return Ok(4);
+                //}
+                //else
+                //{
+                //    return NotFound();
+                //} 
             }
             else
-            {
-                return NotFound();
-            }
+                return Ok(1);
+
 
         }
 

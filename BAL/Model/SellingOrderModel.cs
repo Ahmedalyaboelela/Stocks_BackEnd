@@ -20,8 +20,10 @@ namespace BAL.Model
         public int PortfolioID { get; set; }
         public int Count { get; set; }
 
+        public int PortfolioAccount { get; set; }
+
         public virtual IEnumerable<SelingOrderDetailsModel> DetailsModels { get; set; }
-        public virtual IEnumerable<SettingModel> Settings { get; set; } 
+        public virtual SettingModel SettingModel { get; set; } 
         public EntryModel entryModel { get; set; }
 
 
