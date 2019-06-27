@@ -203,8 +203,8 @@ namespace Stocks.Controllers
                 if (EntryDetails != null)
                 {
 
-                    model.entryModel = _mapper.Map<EntryModel>(Entry);
-                    model.entryModel.EntryDetailModel = EntryDetails;
+              //      model.entryModel = _mapper.Map<EntryModel>(Entry);
+               //     model.entryModel.EntryDetailModel = EntryDetails;
                 }
             }
 
@@ -284,8 +284,8 @@ namespace Stocks.Controllers
                 if (EntryDetails != null)
                 {
 
-                    model.entryModel = _mapper.Map<EntryModel>(Entry);
-                    model.entryModel.EntryDetailModel = EntryDetails;
+                  //  model.entryModel = _mapper.Map<EntryModel>(Entry);
+                  //  model.entryModel.EntryDetailModel = EntryDetails;
                 }
             }
 
@@ -363,8 +363,8 @@ namespace Stocks.Controllers
                 if (EntryDetails != null)
                 {
 
-                    model.entryModel = _mapper.Map<EntryModel>(Entry);
-                    model.entryModel.EntryDetailModel = EntryDetails;
+                  //  model.entryModel = _mapper.Map<EntryModel>(Entry);
+                   // model.entryModel.EntryDetailModel = EntryDetails;
                 }
             }
 
@@ -429,54 +429,54 @@ namespace Stocks.Controllers
                             unitOfWork.PurchaseOrderDetailRepository.Insert(details);
 
                         }
-                        if (purchaseOrderModel.entryModel != null)
-                        {
-                            var CheckEntry = unitOfWork.EntryRepository.Get();
-                            if (CheckEntry.Any(m => m.Code == purchaseOrderModel.entryModel.Code))
-                            {
+                        //if (purchaseOrderModel.entryModel != null)
+                        //{
+                        //    var CheckEntry = unitOfWork.EntryRepository.Get();
+                        //    if (CheckEntry.Any(m => m.Code == purchaseOrderModel.entryModel.Code))
+                        //    {
 
-                                return Ok("كود القيد مكرر");
-                            }
-                            else
-                            {
-                                EntryModel entryModel = new EntryModel();
-                                entryModel.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
-                                entryModel.ReceiptID = purchaseOrderModel.entryModel.ReceiptID;
-                                entryModel.PurchaseOrderID = modelPurchase.PurchaseOrderID;
-                                entryModel.NoticeID = purchaseOrderModel.entryModel.NoticeID;
-                                entryModel.Code = purchaseOrderModel.entryModel.Code;
-                                entryModel.Count = purchaseOrderModel.entryModel.Count;
-                                entryModel.Date = purchaseOrderModel.entryModel.Date;
+                        //        return Ok("كود القيد مكرر");
+                        //    }
+                        //    else
+                        //    {
+                        //        EntryModel entryModel = new EntryModel();
+                        //        entryModel.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
+                        //        entryModel.ReceiptID = purchaseOrderModel.entryModel.ReceiptID;
+                        //        entryModel.PurchaseOrderID = modelPurchase.PurchaseOrderID;
+                        //        entryModel.NoticeID = purchaseOrderModel.entryModel.NoticeID;
+                        //        entryModel.Code = purchaseOrderModel.entryModel.Code;
+                        //        entryModel.Count = purchaseOrderModel.entryModel.Count;
+                        //        entryModel.Date = purchaseOrderModel.entryModel.Date;
 
-                                var enry = _mapper.Map<Entry>(entryModel);
-                                var entryDetails = purchaseOrderModel.entryModel.EntryDetailModel;
-                                if (entryDetails == null)
-                                {
-                                    unitOfWork.EntryRepository.Insert(enry);
-                                    unitOfWork.Save();
-                                    return Ok(purchaseOrderModel);
-                                }
-                                else
-                                {
-                                    unitOfWork.EntryRepository.Insert(enry);
-                                    foreach (var item2 in entryDetails)
-                                    {
-                                        EntryDetailModel entryDetailsModel = new EntryDetailModel();
-                                        entryDetailsModel.AccountID = item2.AccountID;
-                                        entryDetailsModel.Credit = item2.Credit;
-                                        entryDetailsModel.Debit = item2.Debit;
-                                        entryDetailsModel.EntryID = enry.EntryID;
+                        //        var enry = _mapper.Map<Entry>(entryModel);
+                        //        var entryDetails = purchaseOrderModel.entryModel.EntryDetailModel;
+                        //        if (entryDetails == null)
+                        //        {
+                        //            unitOfWork.EntryRepository.Insert(enry);
+                        //            unitOfWork.Save();
+                        //            return Ok(purchaseOrderModel);
+                        //        }
+                        //        else
+                        //        {
+                        //            unitOfWork.EntryRepository.Insert(enry);
+                        //            foreach (var item2 in entryDetails)
+                        //            {
+                        //                EntryDetailModel entryDetailsModel = new EntryDetailModel();
+                        //                entryDetailsModel.AccountID = item2.AccountID;
+                        //                entryDetailsModel.Credit = item2.Credit;
+                        //                entryDetailsModel.Debit = item2.Debit;
+                        //                entryDetailsModel.EntryID = enry.EntryID;
 
-                                        var details = _mapper.Map<EntryDetail>(entryDetailsModel);
-                                        unitOfWork.EntryDetailRepository.Insert(details);
+                        //                var details = _mapper.Map<EntryDetail>(entryDetailsModel);
+                        //                unitOfWork.EntryDetailRepository.Insert(details);
 
-                                    }
-                                    unitOfWork.Save();
-                                    return Ok(purchaseOrderModel);
-                                }
-                            }
+                        //            }
+                        //            unitOfWork.Save();
+                        //            return Ok(purchaseOrderModel);
+                        //        }
+                        //    }
 
-                        }
+                        //}
 
 
                         unitOfWork.Save();
@@ -547,76 +547,76 @@ namespace Stocks.Controllers
                     }
                     //********************************************
 
-                    if (purchaseOrderModel.entryModel != null)
-                    {
-                        var Check2 = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack");
+                    //if (purchaseOrderModel.entryModel != null)
+                    //{
+                    //    var Check2 = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack");
 
-                        var Entry = _mapper.Map<Entry>(purchaseOrderModel.entryModel);
-                        var NewdDetailsEntry = purchaseOrderModel.entryModel.EntryDetailModel;
-                        var NewdetailsEntry = _mapper.Map<IEnumerable<EntryDetail>>(NewdDetailsEntry);
-                        var OldDetailsEntry = unitOfWork.EntryDetailRepository.Get(filter: m => m.EntryID == Entry.EntryID);
+                    //    var Entry = _mapper.Map<Entry>(purchaseOrderModel.entryModel);
+                    //    var NewdDetailsEntry = purchaseOrderModel.entryModel.EntryDetailModel;
+                    //    var NewdetailsEntry = _mapper.Map<IEnumerable<EntryDetail>>(NewdDetailsEntry);
+                    //    var OldDetailsEntry = unitOfWork.EntryDetailRepository.Get(filter: m => m.EntryID == Entry.EntryID);
 
-                        if (Check2.Any(m => m.Code != Entry.Code))
-                        {
-                            unitOfWork.EntryRepository.Update(Entry);
-                            if (OldDetailsEntry != null)
-                            {
-                                unitOfWork.EntryDetailRepository.RemovRange(OldDetailsEntry);
-                                unitOfWork.Save();
-                            }
-
-
-                            if (NewdetailsEntry != null)
-                            {
-                                foreach (var item in NewdetailsEntry)
-                                {
-                                    item.EntryID = Entry.EntryID;
-                                    item.EntryDetailID = 0;
-                                    var details = _mapper.Map<EntryDetail>(item);
-
-                                    unitOfWork.EntryDetailRepository.Insert(details);
-
-                                }
-                            }
+                    //    if (Check2.Any(m => m.Code != Entry.Code))
+                    //    {
+                    //        unitOfWork.EntryRepository.Update(Entry);
+                    //        if (OldDetailsEntry != null)
+                    //        {
+                    //            unitOfWork.EntryDetailRepository.RemovRange(OldDetailsEntry);
+                    //            unitOfWork.Save();
+                    //        }
 
 
+                    //        if (NewdetailsEntry != null)
+                    //        {
+                    //            foreach (var item in NewdetailsEntry)
+                    //            {
+                    //                item.EntryID = Entry.EntryID;
+                    //                item.EntryDetailID = 0;
+                    //                var details = _mapper.Map<EntryDetail>(item);
 
-                        }
+                    //                unitOfWork.EntryDetailRepository.Insert(details);
+
+                    //            }
+                    //        }
 
 
 
-                        else
-                        {
-                            if (Check2.Any(m => m.Code == Entry.Code && m.EntryID == Entry.EntryID))
-                            {
-                                unitOfWork.EntryRepository.Update(Entry);
-                                if (OldDetailsEntry != null)
-                                {
-                                    unitOfWork.EntryDetailRepository.RemovRange(OldDetailsEntry);
-                                    unitOfWork.Save();
-                                }
+                    //    }
 
 
-                                if (NewdetailsEntry != null)
-                                {
-                                    foreach (var item in NewdetailsEntry)
-                                    {
-                                        item.EntryID = Entry.EntryID;
-                                        item.EntryDetailID = 0;
-                                        var details = _mapper.Map<EntryDetail>(item);
 
-                                        unitOfWork.EntryDetailRepository.Insert(details);
+                    //    else
+                    //    {
+                    //        if (Check2.Any(m => m.Code == Entry.Code && m.EntryID == Entry.EntryID))
+                    //        {
+                    //            unitOfWork.EntryRepository.Update(Entry);
+                    //            if (OldDetailsEntry != null)
+                    //            {
+                    //                unitOfWork.EntryDetailRepository.RemovRange(OldDetailsEntry);
+                    //                unitOfWork.Save();
+                    //            }
 
-                                    }
-                                }
+
+                    //            if (NewdetailsEntry != null)
+                    //            {
+                    //                foreach (var item in NewdetailsEntry)
+                    //                {
+                    //                    item.EntryID = Entry.EntryID;
+                    //                    item.EntryDetailID = 0;
+                    //                    var details = _mapper.Map<EntryDetail>(item);
+
+                    //                    unitOfWork.EntryDetailRepository.Insert(details);
+
+                    //                }
+                    //            }
 
 
-                            }
-                        }
+                    //        }
+                    //    }
 
-                        unitOfWork.Save();
-                        return Ok(purchaseOrderModel);
-                    }
+                    //    unitOfWork.Save();
+                    //    return Ok(purchaseOrderModel);
+                    //}
                 }
 
 
@@ -648,77 +648,77 @@ namespace Stocks.Controllers
                         }
                         //********************************************
 
-                        if (purchaseOrderModel.entryModel != null)
-                        {
-                            var Check2 = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack");
+                        //if (purchaseOrderModel.entryModel != null)
+                        //{
+                        //    var Check2 = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack");
 
-                            var Entry = _mapper.Map<Entry>(purchaseOrderModel.entryModel);
-                            var NewdDetailsEntry = purchaseOrderModel.entryModel.EntryDetailModel;
-                            var NewdetailsEntry = _mapper.Map<IEnumerable<EntryDetail>>(NewdDetailsEntry);
-                            var OldDetailsEntry = unitOfWork.EntryDetailRepository.Get(filter: m => m.EntryID == Entry.EntryID);
+                        //    var Entry = _mapper.Map<Entry>(purchaseOrderModel.entryModel);
+                        //    var NewdDetailsEntry = purchaseOrderModel.entryModel.EntryDetailModel;
+                        //    var NewdetailsEntry = _mapper.Map<IEnumerable<EntryDetail>>(NewdDetailsEntry);
+                        //    var OldDetailsEntry = unitOfWork.EntryDetailRepository.Get(filter: m => m.EntryID == Entry.EntryID);
 
-                            if (Check2.Any(m => m.Code != Entry.Code))
-                            {
-                                unitOfWork.EntryRepository.Update(Entry);
-                                if (OldDetailsEntry != null)
-                                {
-                                    unitOfWork.EntryDetailRepository.RemovRange(OldDetailsEntry);
-                                    unitOfWork.Save();
-                                }
-
-
-                                if (NewdetailsEntry != null)
-                                {
-                                    foreach (var item in NewdetailsEntry)
-                                    {
-                                        item.EntryID = Entry.EntryID;
-                                        item.EntryDetailID = 0;
-                                        var details = _mapper.Map<EntryDetail>(item);
-
-                                        unitOfWork.EntryDetailRepository.Insert(details);
-
-                                    }
-                                }
+                        //    if (Check2.Any(m => m.Code != Entry.Code))
+                        //    {
+                        //        unitOfWork.EntryRepository.Update(Entry);
+                        //        if (OldDetailsEntry != null)
+                        //        {
+                        //            unitOfWork.EntryDetailRepository.RemovRange(OldDetailsEntry);
+                        //            unitOfWork.Save();
+                        //        }
 
 
+                        //        if (NewdetailsEntry != null)
+                        //        {
+                        //            foreach (var item in NewdetailsEntry)
+                        //            {
+                        //                item.EntryID = Entry.EntryID;
+                        //                item.EntryDetailID = 0;
+                        //                var details = _mapper.Map<EntryDetail>(item);
 
-                            }
+                        //                unitOfWork.EntryDetailRepository.Insert(details);
+
+                        //            }
+                        //        }
 
 
 
-                            else
-                            {
-                                if (Check2.Any(m => m.Code == Entry.Code && m.EntryID == Entry.EntryID))
-                                {
-                                    unitOfWork.EntryRepository.Update(Entry);
-                                    if (OldDetailsEntry != null)
-                                    {
-                                        unitOfWork.EntryDetailRepository.RemovRange(OldDetailsEntry);
-                                        unitOfWork.Save();
-                                    }
+                        //    }
 
 
-                                    if (NewdetailsEntry != null)
-                                    {
-                                        foreach (var item in NewdetailsEntry)
-                                        {
-                                            item.EntryID = Entry.EntryID;
-                                            item.EntryDetailID = 0;
-                                            var details = _mapper.Map<EntryDetail>(item);
 
-                                            unitOfWork.EntryDetailRepository.Insert(details);
+                        //    else
+                        //    {
+                        //        if (Check2.Any(m => m.Code == Entry.Code && m.EntryID == Entry.EntryID))
+                        //        {
+                        //            unitOfWork.EntryRepository.Update(Entry);
+                        //            if (OldDetailsEntry != null)
+                        //            {
+                        //                unitOfWork.EntryDetailRepository.RemovRange(OldDetailsEntry);
+                        //                unitOfWork.Save();
+                        //            }
 
-                                        }
-                                    }
+
+                        //            if (NewdetailsEntry != null)
+                        //            {
+                        //                foreach (var item in NewdetailsEntry)
+                        //                {
+                        //                    item.EntryID = Entry.EntryID;
+                        //                    item.EntryDetailID = 0;
+                        //                    var details = _mapper.Map<EntryDetail>(item);
+
+                        //                    unitOfWork.EntryDetailRepository.Insert(details);
+
+                        //                }
+                        //            }
 
 
-                                }
-                            }
+                        //        }
+                        //    }
 
-                            unitOfWork.Save();
-                            return Ok(purchaseOrderModel);
+                        //    unitOfWork.Save();
+                        //    return Ok(purchaseOrderModel);
 
-                        }
+                        //}
 
                     }
 
