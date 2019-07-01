@@ -131,32 +131,25 @@ namespace Stocks.Controllers
 
 
             });
-            EntryModel entryModel = new EntryModel();
-            entryModel.Code = lastEntry.Code;
-            entryModel.Date = lastEntry.Date.ToString();
-            entryModel.DateHijri = DateHelper.GetHijriDate(lastEntry.Date);
-            entryModel.EntryDetailModel = lastEntryDitails;
-            entryModel.EntryID = lastEntry.EntryID;
-            entryModel.NoticeID = lastEntry.NoticeID;
-            entryModel.PurchaseOrderID = lastEntry.PurchaseOrderID;
-            entryModel.ReceiptID = lastEntry.ReceiptID;
-            entryModel.SellingOrderID = lastEntry.SellingOrderID;
-            var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel, entryModel);
+            
+            var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel,null,lastEntry);
             var Entry = _mapper.Map<Entry>(EntryMODEL);
             unitOfWork.EntryRepository.Insert(Entry);
 
             var Details = EntryMODEL.EntryDetailModel;
-            foreach (var item in Details)
-            {
-                item.EntryID = Entry.EntryID;
-                item.EntryDetailID = 0;
-                var details = _mapper.Map<EntryDetail>(item);
-                unitOfWork.EntryDetailRepository.Insert(details);
-
-            }
+            
             if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
             {
-                accountingHelper.TransferToAccounts(EntryMODEL.EntryDetailModel.ToList());
+                accountingHelper.TransferToAccounts(Details.Select(x=> new EntryDetail {
+                    
+                    AccountID=x.AccountID,
+                    Credit=x.Credit,
+                    Debit=x.Debit,
+                    EntryDetailID=x.EntryDetailID,
+                    EntryID=x.EntryID,
+
+
+                }).ToList());
             }
             return Ok();
         }
@@ -211,37 +204,7 @@ namespace Stocks.Controllers
             }
 
 
-         //   model.SettingModel = GetSetting();
-
-            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
-            if (Entry != null)
-            {
-                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
-                {
-                    AccountID = m.AccountID,
-                    Credit = m.Credit,
-                    Debit = m.Debit,
-                    EntryID = m.EntryID,
-                    EntryDetailID = m.EntryDetailID,
-
-
-                });
-                if (EntryDetails != null)
-                {
-
-              //      model.entryModel = _mapper.Map<EntryModel>(Entry);
-               //     model.entryModel.EntryDetailModel = EntryDetails;
-                }
-            }
-
-
-
-
-
-
-
-
-           
+           model.SettingModel = GetSetting();  
             return Ok(model);
 
         }
@@ -294,37 +257,8 @@ namespace Stocks.Controllers
             }
 
 
-         //   model.Settings = GetSetting();
+           model.SettingModel = GetSetting();
 
-            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
-            if (Entry != null)
-            {
-                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
-                {
-                    AccountID = m.AccountID,
-                    Credit = m.Credit,
-                    Debit = m.Debit,
-                    EntryID = m.EntryID,
-                    EntryDetailID = m.EntryDetailID,
-
-
-                });
-                if (EntryDetails != null)
-                {
-
-                  //  model.entryModel = _mapper.Map<EntryModel>(Entry);
-                  //  model.entryModel.EntryDetailModel = EntryDetails;
-                }
-            }
-
-
-
-
-
-
-
-
-         
 
             return Ok(model);
 
@@ -376,37 +310,7 @@ namespace Stocks.Controllers
             }
 
 
-       //     model.SettingModel = GetSetting();
-
-            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
-            if (Entry != null)
-            {
-                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
-                {
-                    AccountID = m.AccountID,
-                    Credit = m.Credit,
-                    Debit = m.Debit,
-                    EntryID = m.EntryID,
-                    EntryDetailID = m.EntryDetailID,
-
-
-                });
-                if (EntryDetails != null)
-                {
-
-                  //  model.entryModel = _mapper.Map<EntryModel>(Entry);
-                   // model.entryModel.EntryDetailModel = EntryDetails;
-                }
-            }
-
-
-
-
-
-
-
-
-
+            model.SettingModel = GetSetting();
             return Ok(model);
         }
 
@@ -474,34 +378,26 @@ namespace Stocks.Controllers
 
 
                     });
-                    EntryModel entryModel = new EntryModel();
-                    entryModel.Code = lastEntry.Code;
-                    entryModel.Date = lastEntry.Date.ToString();
-                    entryModel.DateHijri = DateHelper.GetHijriDate(lastEntry.Date);
-                    entryModel.EntryDetailModel = lastEntryDitails;
-                    entryModel.EntryID = lastEntry.EntryID;
-                    entryModel.NoticeID = lastEntry.NoticeID;
-                    entryModel.PurchaseOrderID = lastEntry.PurchaseOrderID;
-                    entryModel.ReceiptID = lastEntry.ReceiptID;
-                    entryModel.SellingOrderID = lastEntry.SellingOrderID;
-                    var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel, entryModel);
+                    
+                    var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel, null,lastEntry);
                     var Entry = _mapper.Map<Entry>(EntryMODEL);
                     unitOfWork.EntryRepository.Insert(Entry);
 
                     var DetailEnt = EntryMODEL.EntryDetailModel;
-                    foreach (var item in DetailEnt)
-                    {
-                        item.EntryID = Entry.EntryID;
-                        item.EntryDetailID = 0;
-                        var details = _mapper.Map<EntryDetail>(item);
-                        unitOfWork.EntryDetailRepository.Insert(details);
-
-
-
-                    }
+                    
                     if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
                     {
-                        accountingHelper.TransferToAccounts(EntryMODEL.EntryDetailModel.ToList());
+                        accountingHelper.TransferToAccounts(DetailEnt.Select(x=> new EntryDetail {
+
+
+                            EntryDetailID = x.EntryDetailID,
+                            AccountID = x.AccountID,
+                            Credit = x.Credit,
+                            Debit = x.Debit,
+                            EntryID = x.EntryID
+
+
+                        }).ToList());
                     }
 
 
@@ -588,32 +484,24 @@ namespace Stocks.Controllers
 
 
                     });
-                    EntryModel entryModel = new EntryModel();
-                    entryModel.Code = lastEntry.Code;
-                    entryModel.Date = lastEntry.Date.ToString();
-                    entryModel.DateHijri = DateHelper.GetHijriDate(lastEntry.Date);
-                    entryModel.EntryDetailModel = lastEntryDitails;
-                    entryModel.EntryID = lastEntry.EntryID;
-                    entryModel.NoticeID = lastEntry.NoticeID;
-                    entryModel.PurchaseOrderID = lastEntry.PurchaseOrderID;
-                    entryModel.ReceiptID = lastEntry.ReceiptID;
-                    entryModel.SellingOrderID = lastEntry.SellingOrderID;
-                    var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel, entryModel);
+                    
+                    var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel, null,lastEntry);
                     var Entry = _mapper.Map<Entry>(EntryMODEL);
                     unitOfWork.EntryRepository.Insert(Entry);
 
                     var DetailEnt = EntryMODEL.EntryDetailModel;
-                    foreach (var item in DetailEnt)
-                    {
-                        item.EntryID = Entry.EntryID;
-                        item.EntryDetailID = 0;
-                        var details = _mapper.Map<EntryDetail>(item);
-                        unitOfWork.EntryDetailRepository.Insert(details);
-
-                    }
+                    
                     if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
                     {
-                        accountingHelper.TransferToAccounts(EntryMODEL.EntryDetailModel.ToList());
+                        accountingHelper.TransferToAccounts(DetailEnt.Select(x=> new EntryDetail {
+                            EntryDetailID = x.EntryDetailID,
+                            AccountID = x.AccountID,
+                            Credit = x.Credit,
+                            Debit = x.Debit,
+                            EntryID = x.EntryID
+
+
+                        }).ToList());
                     }
 
 
@@ -671,32 +559,24 @@ namespace Stocks.Controllers
 
 
                         });
-                        EntryModel entryModel = new EntryModel();
-                        entryModel.Code = lastEntry.Code;
-                        entryModel.Date = lastEntry.Date.ToString();
-                        entryModel.DateHijri = DateHelper.GetHijriDate(lastEntry.Date);
-                        entryModel.EntryDetailModel = lastEntryDitails;
-                        entryModel.EntryID = lastEntry.EntryID;
-                        entryModel.NoticeID = lastEntry.NoticeID;
-                        entryModel.PurchaseOrderID = lastEntry.PurchaseOrderID;
-                        entryModel.ReceiptID = lastEntry.ReceiptID;
-                        entryModel.SellingOrderID = lastEntry.SellingOrderID;
-                        var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel, entryModel);
+                        
+                        var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel, null,lastEntry);
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         unitOfWork.EntryRepository.Insert(Entry);
 
                         var DetailEnt = EntryMODEL.EntryDetailModel;
-                        foreach (var item in DetailEnt)
-                        {
-                            item.EntryID = Entry.EntryID;
-                            item.EntryDetailID = 0;
-                            var details = _mapper.Map<EntryDetail>(item);
-                            unitOfWork.EntryDetailRepository.Insert(details);
-
-                        }
+                        
                         if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
                         {
-                            accountingHelper.TransferToAccounts(EntryMODEL.EntryDetailModel.ToList());
+                            accountingHelper.TransferToAccounts(DetailEnt.Select(x=> new EntryDetail {
+                                EntryDetailID = x.EntryDetailID,
+                                AccountID = x.AccountID,
+                                Credit = x.Credit,
+                                Debit = x.Debit,
+                                EntryID = x.EntryID
+
+
+                            }).ToList());
                         }
                         unitOfWork.Save();
                         return Ok(purchaseOrderModel);
