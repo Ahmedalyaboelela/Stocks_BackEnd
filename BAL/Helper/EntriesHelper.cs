@@ -12,7 +12,7 @@ namespace BAL.Helper
         // Calculate Entry, EntryDetails using SellingorderModel 
         public static EntryModel CalculateSellingEntry(SellingOrderModel sellingOrderModel=null ,
             PurchaseOrderModel purchaseOrderModel=null, ReceiptExchangeModel receiptExchangeModel=null,
-            Entry LastEntry =null)
+            NoticeModel noticeModel=null,Entry LastEntry =null)
         {
 
             #region Definitions
@@ -239,7 +239,69 @@ namespace BAL.Helper
 
             }
             #endregion
-            #region Notice
+            #region NoticeDebitCredit
+            if (noticeModel != null)
+            {
+                #region ReceiptExchange
+
+
+                var NoticeDetails = noticeModel.NoticeModelDetails;
+                #region EntryMaster
+                if (LastEntry.Code == null)
+                {
+                    Entrymodel.Code = "1";
+                }
+                else
+                {
+                    Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
+                }
+                Entrymodel.Date = DateTime.Now.ToShortDateString();
+                Entrymodel.NoticeID = noticeModel.NoticeID;
+                #endregion
+
+                #region EntryDetails
+                if (NoticeDetails != null)
+                {
+                    foreach (var item in NoticeDetails)
+                    {
+                        if (item.Debit != null )
+                        {
+                            //Add Debit Accounts with values
+                            #region Debit
+                            EntryDetailModel DetailModel = new EntryDetailModel();
+                            DetailModel.Debit = item.Debit;
+                            if (item.StocksDebit != null)
+                                DetailModel.StocksDebit = item.StocksDebit;
+                            DetailModel.AccountID = item.AccountID;
+                            DetailListModel.Add(DetailModel);
+                            #endregion
+                        }
+                        if (item.Credit != null)
+                        {
+
+                            //Add Credit Accounts with values
+                            #region Credit
+                            EntryDetailModel DetailModel = new EntryDetailModel();
+                            DetailModel.Credit = item.Credit;
+                            if (item.StocksCredit != null)
+                                DetailModel.StocksCredit = item.StocksCredit;
+                            DetailModel.AccountID = item.AccountID;
+                            DetailListModel.Add(DetailModel);
+                            #endregion
+                        }
+                    }
+
+
+                    Entrymodel.EntryDetailModel = DetailListModel;
+                }
+
+                #endregion
+
+                #endregion
+
+
+
+            }
             #endregion
             return Entrymodel;
 

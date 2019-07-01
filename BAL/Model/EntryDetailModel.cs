@@ -14,6 +14,10 @@ namespace BAL.Model
 
         public decimal? Credit { get; set; }
 
+        public float? StocksDebit { get; set; }
+
+        public float? StocksCredit { get; set; }
+
         public int AccountID { get; set; }
 
         public string AccNameAR { get; set; }
