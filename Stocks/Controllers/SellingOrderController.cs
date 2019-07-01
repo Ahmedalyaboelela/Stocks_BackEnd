@@ -136,23 +136,23 @@ namespace Stocks.Controllers
             entryModel.PurchaseOrderID = lastEntry.PurchaseOrderID;
             entryModel.ReceiptID = lastEntry.ReceiptID;
             entryModel.SellingOrderID = lastEntry.SellingOrderID;
-            var EntryMODEL = EntriesHelper.CalculateSellingEntry(sellingOrderModel, null, entryModel);
-            var Entry = _mapper.Map<Entry>(EntryMODEL);
-            unitOfWork.EntryRepository.Insert(Entry);
+          //  var EntryMODEL = EntriesHelper.CalculateSellingEntry(sellingOrderModel, null, entryModel);
+            //var Entry = _mapper.Map<Entry>(EntryMODEL);
+            //unitOfWork.EntryRepository.Insert(Entry);
 
-            var Details = EntryMODEL.EntryDetailModel;
-            foreach (var item in Details)
-            {
-                item.EntryID = Entry.EntryID;
-                item.EntryDetailID = 0;
-                var details = _mapper.Map<EntryDetail>(item);
-                unitOfWork.EntryDetailRepository.Insert(details);
+            //var Details = EntryMODEL.EntryDetailModel;
+            //foreach (var item in Details)
+            //{
+            //    item.EntryID = Entry.EntryID;
+            //    item.EntryDetailID = 0;
+            //    var details = _mapper.Map<EntryDetail>(item);
+            //    unitOfWork.EntryDetailRepository.Insert(details);
 
-            }
-            if (sellingOrderModel.SettingModel.TransferToAccounts == true)
-            {
-                accountingHelper.TransferToAccounts(EntryMODEL.EntryDetailModel.ToList());
-            }
+            //}
+            //if (sellingOrderModel.SettingModel.TransferToAccounts == true)
+            //{
+            //    accountingHelper.TransferToAccounts(EntryMODEL.EntryDetailModel.ToList());
+            //}
             return Ok(sellingOrderModel);
         }
 
@@ -161,6 +161,7 @@ namespace Stocks.Controllers
         [Route("~/api/SellingOrder/Manualmigration")]
         public IActionResult Manualmigration(EntryModel EntryMODEL)
         {
+
             
             accountingHelper.TransferToAccounts(EntryMODEL.EntryDetailModel.ToList());
             /*SellingOrderModel sellingOrderModel*/
@@ -190,6 +191,7 @@ namespace Stocks.Controllers
             //entryModel.ReceiptID = lastEntry.ReceiptID;
             //entryModel.SellingOrderID = lastEntry.SellingOrderID;
             //var EntryMODEL = EntriesHelper.CalculateSellingEntry(sellingOrderModel, null, entryModel);
+
             //var Entry = _mapper.Map<Entry>(EntryMODEL);
             //unitOfWork.EntryRepository.Insert(Entry);
 
@@ -207,6 +209,7 @@ namespace Stocks.Controllers
             //{
 
             //   }
+
 
 
             unitOfWork.Save();
@@ -441,23 +444,23 @@ namespace Stocks.Controllers
                     entryModel.PurchaseOrderID = lastEntry.PurchaseOrderID;
                     entryModel.ReceiptID = lastEntry.ReceiptID;
                     entryModel.SellingOrderID = lastEntry.SellingOrderID;
-                    var EntryMODEL = EntriesHelper.CalculateSellingEntry(sellingOrderModel, null, entryModel);
-                    var Entry = _mapper.Map<Entry>(EntryMODEL);
-                    unitOfWork.EntryRepository.Insert(Entry);
+               //     var EntryMODEL = EntriesHelper.CalculateSellingEntry(sellingOrderModel, null, entryModel);
+                    //var Entry = _mapper.Map<Entry>(EntryMODEL);
+                    //unitOfWork.EntryRepository.Insert(Entry);
 
-                    var DetailEnt = EntryMODEL.EntryDetailModel;
-                    foreach (var item in DetailEnt)
-                    {
-                        item.EntryID = Entry.EntryID;
-                        item.EntryDetailID = 0;
-                        var details = _mapper.Map<EntryDetail>(item);
-                        unitOfWork.EntryDetailRepository.Insert(details);
+                    //var DetailEnt = EntryMODEL.EntryDetailModel;
+                    //foreach (var item in DetailEnt)
+                    //{
+                    //    item.EntryID = Entry.EntryID;
+                    //    item.EntryDetailID = 0;
+                    //    var details = _mapper.Map<EntryDetail>(item);
+                    //    unitOfWork.EntryDetailRepository.Insert(details);
 
-                    }
-                    if (sellingOrderModel.SettingModel.TransferToAccounts == true)
-                    {
-                        accountingHelper.TransferToAccounts(EntryMODEL.EntryDetailModel.ToList());
-                    }
+                    //}
+                    //if (sellingOrderModel.SettingModel.TransferToAccounts == true)
+                    //{
+                    //    accountingHelper.TransferToAccounts(EntryMODEL.EntryDetailModel.ToList());
+                    //}
 
 
                     unitOfWork.Save();

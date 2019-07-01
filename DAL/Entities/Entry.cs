@@ -24,6 +24,8 @@ namespace DAL.Entities
 
         public int? NoticeID { get; set; }
 
+        public bool TransferedToAccounts { get; set; }
+
         [ForeignKey("SellingOrderID")]
         public virtual SellingOrder SellingOrder { get; set; }
 

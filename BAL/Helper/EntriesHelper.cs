@@ -1,4 +1,5 @@
 ﻿using BAL.Model;
+using DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +11,8 @@ namespace BAL.Helper
 
         // Calculate Entry, EntryDetails using SellingorderModel 
         public static EntryModel CalculateSellingEntry(SellingOrderModel sellingOrderModel=null ,
-            PurchaseOrderModel purchaseOrderModel=null,EntryModel LastEntryModel=null)
+            PurchaseOrderModel purchaseOrderModel=null, ReceiptExchangeModel receiptExchangeModel=null,
+            Entry LastEntry =null)
         {
 
             #region Definitions
@@ -58,13 +60,13 @@ namespace BAL.Helper
                 #endregion
 
                 #region EntryMaster
-                if (LastEntryModel.Code == null)
+                if (LastEntry.Code == null)
                 {
                     Entrymodel.Code = "1";
                 }
                 else
                 {
-                    Entrymodel.Code = (int.Parse(LastEntryModel.Code) + 1).ToString();
+                    Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
                 }
                 Entrymodel.Date = DateTime.Now.ToShortDateString();
                 Entrymodel.SellingOrderID = sellingOrderModel.SellingOrderID;
@@ -137,13 +139,13 @@ namespace BAL.Helper
                 #endregion
 
                 #region EntryMaster
-                if (LastEntryModel.Code == null)
+                if (LastEntry.Code == null)
                 {
                     Entrymodel.Code = "1";
                 }
                 else
                 {
-                    Entrymodel.Code = (int.Parse(LastEntryModel.Code) + 1).ToString();
+                    Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
                 }
                 Entrymodel.Date = DateTime.Now.ToShortDateString();
                 Entrymodel.PurchaseOrderID  = purchaseOrderModel.PurchaseOrderID;
@@ -177,7 +179,68 @@ namespace BAL.Helper
                 #endregion
             }
             #endregion
+            #region ReceiptExchange
+            if (receiptExchangeModel != null )
+            {
+                #region ReceiptExchange
+       
+                    
+                    var ReceiptExchangeDetails = receiptExchangeModel.RecExcDetails;
+                    #region EntryMaster
+                    if (LastEntry.Code == null)
+                    {
+                        Entrymodel.Code = "1";
+                    }
+                    else
+                    {
+                        Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
+                    }
+                    Entrymodel.Date = DateTime.Now.ToShortDateString();
+                    Entrymodel.ReceiptID = receiptExchangeModel.ReceiptID;
+                    #endregion
 
+                    #region EntryDetails
+                    if(ReceiptExchangeDetails != null)
+                    {
+                        foreach (var item in ReceiptExchangeDetails)
+                        {
+                            if(item.Debit!=null)
+                            {
+                                //Add Debit Accounts with values
+                                #region Debit
+                                EntryDetailModel DetailModel = new EntryDetailModel();
+                                DetailModel.Debit = item.Debit;
+                                DetailModel.AccountID = item.AccountID;
+                                DetailListModel.Add(DetailModel);
+                                #endregion
+                            }
+                            if(item.Credit !=null)
+                            {
+
+                                //Add Credit Accounts with values
+                                #region Credit
+                                EntryDetailModel DetailModel = new EntryDetailModel();
+                                DetailModel.Credit = item.Credit;
+                                DetailModel.AccountID = item.AccountID;
+                                DetailListModel.Add(DetailModel);
+                                #endregion
+                            }
+                        }
+
+
+                        Entrymodel.EntryDetailModel = DetailListModel;
+                    }
+
+                    #endregion
+                
+                #endregion
+
+                
+
+            }
+            #endregion
+            #region Notice
+            #endregion
             return Entrymodel;
 
         }

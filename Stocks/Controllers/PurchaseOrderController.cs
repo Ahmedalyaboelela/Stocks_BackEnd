@@ -210,7 +210,36 @@ namespace Stocks.Controllers
                 model.DetailsModels = Details;
             }
 
-            model.SettingModel = GetSetting();
+
+         //   model.SettingModel = GetSetting();
+
+            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
+            if (Entry != null)
+            {
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
+                {
+                    AccountID = m.AccountID,
+                    Credit = m.Credit,
+                    Debit = m.Debit,
+                    EntryID = m.EntryID,
+                    EntryDetailID = m.EntryDetailID,
+
+
+                });
+                if (EntryDetails != null)
+                {
+
+              //      model.entryModel = _mapper.Map<EntryModel>(Entry);
+               //     model.entryModel.EntryDetailModel = EntryDetails;
+                }
+            }
+
+
+
+
+
+
+
 
            
             return Ok(model);
@@ -264,7 +293,36 @@ namespace Stocks.Controllers
                 model.DetailsModels = Details;
             }
 
-            model.SettingModel = GetSetting();
+
+         //   model.Settings = GetSetting();
+
+            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
+            if (Entry != null)
+            {
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
+                {
+                    AccountID = m.AccountID,
+                    Credit = m.Credit,
+                    Debit = m.Debit,
+                    EntryID = m.EntryID,
+                    EntryDetailID = m.EntryDetailID,
+
+
+                });
+                if (EntryDetails != null)
+                {
+
+                  //  model.entryModel = _mapper.Map<EntryModel>(Entry);
+                  //  model.entryModel.EntryDetailModel = EntryDetails;
+                }
+            }
+
+
+
+
+
+
+
 
          
 
@@ -317,7 +375,37 @@ namespace Stocks.Controllers
                 model.DetailsModels = Details;
             }
 
-           model.SettingModel = GetSetting();
+
+       //     model.SettingModel = GetSetting();
+
+            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
+            if (Entry != null)
+            {
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
+                {
+                    AccountID = m.AccountID,
+                    Credit = m.Credit,
+                    Debit = m.Debit,
+                    EntryID = m.EntryID,
+                    EntryDetailID = m.EntryDetailID,
+
+
+                });
+                if (EntryDetails != null)
+                {
+
+                  //  model.entryModel = _mapper.Map<EntryModel>(Entry);
+                   // model.entryModel.EntryDetailModel = EntryDetails;
+                }
+            }
+
+
+
+
+
+
+
+
 
             return Ok(model);
         }
@@ -364,6 +452,7 @@ namespace Stocks.Controllers
                         purchaseOrderDetailModel.PurchasePrice = item.PurchasePrice;
 
 
+
                         var details = _mapper.Map<PurchaseOrderDetail>(purchaseOrderDetailModel);
                         unitOfWork.PurchaseOrderDetailRepository.Insert(details);
 
@@ -406,6 +495,8 @@ namespace Stocks.Controllers
                         item.EntryDetailID = 0;
                         var details = _mapper.Map<EntryDetail>(item);
                         unitOfWork.EntryDetailRepository.Insert(details);
+
+
 
                     }
                     if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
@@ -481,6 +572,7 @@ namespace Stocks.Controllers
 
                         }
                     }
+
                     var lastEntry = unitOfWork.EntryRepository.Last();
                     var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
                     {
@@ -532,6 +624,7 @@ namespace Stocks.Controllers
 
                     return Ok(purchaseOrderModel);
 
+
                 }
 
 
@@ -562,6 +655,7 @@ namespace Stocks.Controllers
 
                             }
                         }
+
                         var lastEntry = unitOfWork.EntryRepository.Last();
                         var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
                         {
@@ -606,6 +700,7 @@ namespace Stocks.Controllers
                         }
                         unitOfWork.Save();
                         return Ok(purchaseOrderModel);
+
                     }
 
 

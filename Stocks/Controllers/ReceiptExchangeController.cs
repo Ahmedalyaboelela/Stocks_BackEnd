@@ -43,6 +43,19 @@ namespace Stocks.Controllers
         }
         #endregion
 
+        #region Default Setting
+        public SettingModel DefaultSetting(bool type)
+        {
+            var screenNo = 3;
+            if (type)
+                screenNo = 4;
+
+            var settingObj = setting.GetSpecificSetting(screenNo);
+
+            return settingObj;
+        }
+        #endregion
+
         #region GET Methods
 
         public ReceiptExchangeModel GetReceiptExchange(ReceiptExchange RecExc,bool type)
@@ -69,7 +82,7 @@ namespace Stocks.Controllers
                 .Select(m => new ReceiptExchangeDetailModel
                 {
                     ReceiptExchangeID = m.ReceiptExchangeID,
-                    ReceiptExchangeAmount=m.ReceiptExchangeAmount,
+                  //  ReceiptExchangeAmount=m.ReceiptExchangeAmount,
                     ReceiptID = m.ReceiptID,
                     AccountID = m.AccountID,
                     AccNameAR = m.Account.Code,
@@ -87,8 +100,23 @@ namespace Stocks.Controllers
             model.CurrencyNameEN= RecExc.Currency.NameEN;
             model.CurrencyCode = RecExc.Currency.Code;
 
+            #region Setting part
+
+            model.SettingScreen = DefaultSetting(type);
+            #endregion
+
 
             return model;
+        }
+
+        [HttpGet]
+        [Route("~/api/ReceiptExchange/FirstOpen/{type}")]
+        public IActionResult FirstOpen(bool type)
+        {
+            DefaultSettingModel model = new DefaultSettingModel();
+            model.ScreenSetting = DefaultSetting(type);
+            model.LastCode = unitOfWork.EntryRepository.Last().Code;
+            return Ok(model);
         }
 
         [HttpGet]
@@ -183,7 +211,7 @@ namespace Stocks.Controllers
                             .Select(m => new ReceiptExchangeDetailModel
                             {
                                 ReceiptExchangeID = m.ReceiptExchangeID,
-                                ReceiptExchangeAmount=m.ReceiptExchangeAmount,
+                                //ReceiptExchangeAmount=m.ReceiptExchangeAmount,
                                 ReceiptID = m.ReceiptID,
                                 AccountID = m.AccountID,
                                 AccNameAR = m.Account.Code,
