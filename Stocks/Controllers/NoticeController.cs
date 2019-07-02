@@ -836,6 +836,10 @@ namespace Stocks.Controllers
 
 
                 unitOfWork.NoticeDetailRepository.RemovRange(noticeDetails);
+                var entry = unitOfWork.EntryRepository.Get(x => x.NoticeID == id).SingleOrDefault();
+                var entryDitails = unitOfWork.EntryDetailRepository.Get(a => a.EntryID == entry.EntryID);
+                unitOfWork.EntryDetailRepository.RemovRange(entryDitails);
+                unitOfWork.EntryRepository.Delete(entry.EntryID);
                 unitOfWork.NoticeRepository.Delete(notice);
                 try
                 {

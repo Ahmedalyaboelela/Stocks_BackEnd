@@ -707,6 +707,10 @@ namespace Stocks.Controllers
 
 
                 unitOfWork.ReceiptExchangeDetailRepository.RemovRange(recDetails);
+                var entry = unitOfWork.EntryRepository.Get(x=> x.ReceiptID==id).SingleOrDefault();
+                var entryDitails = unitOfWork.EntryDetailRepository.Get(a=> a.EntryID==entry.EntryID);
+                unitOfWork.EntryDetailRepository.RemovRange(entryDitails);
+                unitOfWork.EntryRepository.Delete(entry.EntryID);
                 unitOfWork.ReceiptExchangeRepository.Delete(RecExc);
                 try
                 {
