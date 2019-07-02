@@ -23,12 +23,13 @@ namespace Stocks.Controllers
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
         private SettingController setting;
-
+        private readonly IAccountingHelper accountingHelper;
         public NoticeController(StocksContext context, IMapper mapper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
             this.setting = new SettingController(context, mapper);
+            accountingHelper = new AccountingHelper(context, mapper);
         }
 
         #endregion
@@ -105,7 +106,7 @@ namespace Stocks.Controllers
 
             #region Setting part
            
-            model.SettingScreen = DefaultSetting(type);
+            model.SettingModel = DefaultSetting(type);
 
             #endregion
 
@@ -245,6 +246,150 @@ namespace Stocks.Controllers
 
         #endregion
 
+
+
+
+        [HttpGet]//القيد
+        [Route("~/api/Notice/GetEntry")]
+        public IActionResult GetEntry(NoticeModel noticeModel)
+        {
+            var Entry = unitOfWork.EntryRepository.Get(x => x.NoticeID == noticeModel.NoticeID).SingleOrDefault();
+            var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+            EntryModel entryModel = new EntryModel();
+            entryModel.EntryID = Entry.EntryID;
+            entryModel.Code = Entry.Code;
+            entryModel.Date = Entry.Date.ToString();
+            entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
+            entryModel.NoticeID = Entry.NoticeID;
+            entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+            entryModel.ReceiptID = Entry.ReceiptID;
+            entryModel.SellingOrderID = Entry.SellingOrderID;
+            entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
+            {
+                AccCode = m.Account.Code,
+                AccNameAR = m.Account.NameAR,
+                AccNameEN = m.Account.NameEN,
+                AccountID = m.AccountID,
+                Credit = m.Credit,
+                Debit = m.Debit,
+                EntryDetailID = m.EntryDetailID,
+                EntryID = m.EntryID,
+
+
+            });
+
+            return Ok(entryModel);
+        }
+
+        [HttpPost]// ترحيل يدوي للقيد اليدوي والتلقائي
+        [Route("~/api/Notice/Manualmigration")]
+        public IActionResult Manualmigration(EntryModel EntryMODEL)
+        {
+            var Entry = unitOfWork.EntryRepository.GetByID(EntryMODEL.EntryID);
+            Entry.TransferedToAccounts = true;
+            unitOfWork.EntryRepository.Update(Entry);
+            var Details = EntryMODEL.EntryDetailModel;
+            foreach (var item in Details)
+            {
+                var detail = _mapper.Map<NoticeDetail>(item);
+
+                unitOfWork.NoticeDetailRepository.Update(detail);
+            }
+
+            accountingHelper.TransferToAccounts(Details.Select(x => new EntryDetail
+            {
+                EntryDetailID = x.EntryDetailID,
+                AccountID = x.AccountID,
+                Credit = x.Credit,
+                Debit = x.Debit,
+                EntryID = x.EntryID
+
+
+            }).ToList());
+
+
+
+
+            unitOfWork.Save();
+
+
+
+            return Ok("تم ترحيل القيد");
+
+        }
+
+
+
+
+        [HttpPost] // يولد قيد مع ترحيل تلقائي
+        [Route("~/api/Notice/Generateconstraint")]
+        public IActionResult Generateconstraint(NoticeModel noticeModel)
+        {
+            var lastEntry = unitOfWork.EntryRepository.Last();
+            var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
+            {
+                AccountID = m.AccountID,
+                Credit = m.Credit,
+                Debit = m.Debit,
+                EntryID = m.EntryID,
+                EntryDetailID = m.EntryDetailID,
+                AccCode = m.Account.Code,
+                AccNameAR = m.Account.NameAR,
+                AccNameEN = m.Account.NameEN,
+
+
+
+            });
+
+            var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, null, null, noticeModel,lastEntry);
+            var Entry = _mapper.Map<Entry>(EntryMODEL);
+
+
+            var DetailEnt = EntryMODEL.EntryDetailModel;
+
+            if (noticeModel.SettingModel.TransferToAccounts == true)
+            {
+                Entry.TransferedToAccounts = true;
+                unitOfWork.EntryRepository.Insert(Entry);
+                foreach (var item in DetailEnt)
+                {
+                    item.EntryID = Entry.EntryID;
+                    item.EntryDetailID = 0;
+                    var details = _mapper.Map<NoticeDetail>(item);
+
+                    unitOfWork.NoticeDetailRepository.Insert(details);
+                }
+                accountingHelper.TransferToAccounts(DetailEnt.Select(a => new EntryDetail
+                {
+
+                    Credit = a.Credit,
+                    Debit = a.Debit,
+                    EntryDetailID = a.EntryDetailID,
+                    EntryID = a.EntryID,
+                    StocksCredit = a.StocksCredit,
+                    StocksDebit = a.StocksDebit,
+                    AccountID = a.AccountID
+
+                }).ToList());
+            }
+            else
+            {
+                Entry.TransferedToAccounts = false;
+                unitOfWork.EntryRepository.Insert(Entry);
+                foreach (var item in DetailEnt)
+                {
+                    item.EntryID = Entry.EntryID;
+                    item.EntryDetailID = 0;
+                    var details = _mapper.Map<NoticeDetail>(item);
+
+                    unitOfWork.NoticeDetailRepository.Insert(details);
+
+                }
+            }
+            return Ok(noticeModel);
+        }
+
+
         #region Insert Methods
         [HttpPost]
         [Route("~/api/Notice/Add")]
@@ -290,14 +435,76 @@ namespace Stocks.Controllers
 
                         try
                         {
-                            unitOfWork.Save();
-                            #region Generate entry
 
-                            var settingObj = setting.GetSpecificSetting(1);
-                            if (settingObj.AutoGenerateEntry)
+                            #region Generate entry
+                            //===============================================================توليد قيد مع ترحيل تلقائي============================
+
+                            var lastEntry = unitOfWork.EntryRepository.Last();
+                            var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
                             {
-                                GenerateEntry();
+                                AccountID = m.AccountID,
+                                Credit = m.Credit,
+                                Debit = m.Debit,
+                                EntryID = m.EntryID,
+                                EntryDetailID = m.EntryDetailID,
+                                AccCode = m.Account.Code,
+                                AccNameAR = m.Account.NameAR,
+                                AccNameEN = m.Account.NameEN,
+
+
+
+                            });
+
+                            var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, null, null, Model, lastEntry);
+                            var Entry = _mapper.Map<Entry>(EntryMODEL);
+
+
+                            var DetailEnt = EntryMODEL.EntryDetailModel;
+
+                            if (Model.SettingModel.TransferToAccounts == true)
+                            {
+                                Entry.TransferedToAccounts = true;
+                                unitOfWork.EntryRepository.Insert(Entry);
+                                foreach (var item in DetailEnt)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<NoticeDetail>(item);
+
+                                    unitOfWork.NoticeDetailRepository.Insert(details);
+                                }
+                                accountingHelper.TransferToAccounts(DetailEnt.Select(a => new EntryDetail
+                                {
+
+                                    Credit = a.Credit,
+                                    Debit = a.Debit,
+                                    EntryDetailID = a.EntryDetailID,
+                                    EntryID = a.EntryID,
+                                    StocksCredit = a.StocksCredit,
+                                    StocksDebit = a.StocksDebit,
+                                    AccountID = a.AccountID
+
+                                }).ToList());
                             }
+                            else
+                            {
+                                Entry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Insert(Entry);
+                                foreach (var item in DetailEnt)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<NoticeDetail>(item);
+
+                                    unitOfWork.NoticeDetailRepository.Insert(details);
+
+                                }
+                            }
+
+
+                            unitOfWork.Save();
+
+
                             #endregion
                         }
                         catch (DbUpdateException ex)
@@ -362,11 +569,18 @@ namespace Stocks.Controllers
 
                 var Check = unitOfWork.NoticeRepository.Get(NoTrack: "NoTrack", filter: m => m.Type == type);
                 var oldDetail = unitOfWork.NoticeDetailRepository.Get(NoTrack: "NoTrack", filter: m => m.NoticeID == model.NoticeID);
+                 var Entry = unitOfWork.EntryRepository.Get(filter: x => x.NoticeID == model.NoticeID).SingleOrDefault();
+                var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
 
                 if (oldDetail != null)
                 {
                     unitOfWork.NoticeDetailRepository.RemovRange(oldDetail); 
+                } 
+                if (OldEntryDetails !=null)
+                {
+                    unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
                 }
+             //   unitOfWork.EntryRepository.Delete(OldEntry.EntryID);
 
 
                 if (Check.Any(m => m.Code != Model.Code))
@@ -386,14 +600,75 @@ namespace Stocks.Controllers
 
                     try
                     {
-                        unitOfWork.Save();
+
                         #region Generate entry
 
-                        var settingObj = setting.GetSpecificSetting(1);
-                        if (settingObj.AutoGenerateEntry)
+                        var lastEntry = unitOfWork.EntryRepository.Last();
+                        var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
                         {
-                            GenerateEntry();
+                            AccountID = m.AccountID,
+                            Credit = m.Credit,
+                            Debit = m.Debit,
+                            EntryID = m.EntryID,
+                            EntryDetailID = m.EntryDetailID,
+                            AccCode = m.Account.Code,
+                            AccNameAR = m.Account.NameAR,
+                            AccNameEN = m.Account.NameEN,
+
+
+
+                        });
+
+                        var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, null, null,Model, lastEntry);
+                        var Entry1 = _mapper.Map<Entry>(EntryMODEL);
+
+
+                        var DetailEnt = EntryMODEL.EntryDetailModel;
+
+                        if (Model.SettingModel.TransferToAccounts == true)
+                        {
+                            Entry.TransferedToAccounts = true;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<NoticeDetail>(item);
+
+                                unitOfWork.NoticeDetailRepository.Insert(details);
+                            }
+                            accountingHelper.TransferToAccounts(DetailEnt.Select(a => new EntryDetail
+                            {
+
+                                Credit = a.Credit,
+                                Debit = a.Debit,
+                                EntryDetailID = a.EntryDetailID,
+                                EntryID = a.EntryID,
+                                StocksCredit = a.StocksCredit,
+                                StocksDebit = a.StocksDebit,
+                                AccountID = a.AccountID
+
+                            }).ToList());
                         }
+                        else
+                        {
+                            Entry.TransferedToAccounts = false;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<NoticeDetail>(item);
+
+                                unitOfWork.NoticeDetailRepository.Insert(details);
+
+                            }
+                        }
+
+
+
+                        unitOfWork.Save();
+
                         #endregion
                     }
                     catch (DbUpdateException ex)
@@ -435,14 +710,74 @@ namespace Stocks.Controllers
 
                         try
                         {
-                            unitOfWork.Save();
-                            #region Generate entry
 
-                            var settingObj = setting.GetSpecificSetting(1);
-                            if (settingObj.AutoGenerateEntry)
+                            #region Generate entry
+                            var lastEntry = unitOfWork.EntryRepository.Last();
+                            var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
                             {
-                                GenerateEntry();
+                                AccountID = m.AccountID,
+                                Credit = m.Credit,
+                                Debit = m.Debit,
+                                EntryID = m.EntryID,
+                                EntryDetailID = m.EntryDetailID,
+                                AccCode = m.Account.Code,
+                                AccNameAR = m.Account.NameAR,
+                                AccNameEN = m.Account.NameEN,
+
+
+
+                            });
+
+                            var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, null, null, Model, lastEntry);
+                            var Entry1 = _mapper.Map<Entry>(EntryMODEL);
+
+
+                            var DetailEnt = EntryMODEL.EntryDetailModel;
+
+                            if (Model.SettingModel.TransferToAccounts == true)
+                            {
+                                Entry1.TransferedToAccounts = true;
+                                unitOfWork.EntryRepository.Insert(Entry1);
+                                foreach (var item in DetailEnt)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<NoticeDetail>(item);
+
+                                    unitOfWork.NoticeDetailRepository.Insert(details);
+                                }
+                                accountingHelper.TransferToAccounts(DetailEnt.Select(a => new EntryDetail
+                                {
+
+                                    Credit = a.Credit,
+                                    Debit = a.Debit,
+                                    EntryDetailID = a.EntryDetailID,
+                                    EntryID = a.EntryID,
+                                    StocksCredit = a.StocksCredit,
+                                    StocksDebit = a.StocksDebit,
+                                    AccountID = a.AccountID
+
+                                }).ToList());
                             }
+                            else
+                            {
+                                Entry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Insert(Entry);
+                                foreach (var item in DetailEnt)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<NoticeDetail>(item);
+
+                                    unitOfWork.NoticeDetailRepository.Insert(details);
+
+                                }
+                            }
+
+
+
+                            unitOfWork.Save();
+
                             #endregion
                         }
                         catch (DbUpdateException ex)
