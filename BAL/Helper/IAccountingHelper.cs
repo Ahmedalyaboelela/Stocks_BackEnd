@@ -9,5 +9,6 @@ namespace BAL.Helper
     public interface IAccountingHelper
     {
         void TransferToAccounts(List<EntryDetail> EntryList);
+        void CancelTransferToAccounts(List<EntryDetail> EntryList);
     }
 }

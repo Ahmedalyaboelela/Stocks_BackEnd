@@ -77,7 +77,7 @@ namespace Stocks.Controllers
 
             });
 
-            var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, null, receiptExchangeModel, null, lastEntry);
+            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, receiptExchangeModel, null, lastEntry);
             var Entry = _mapper.Map<Entry>(EntryMODEL);
 
 
@@ -448,7 +448,7 @@ namespace Stocks.Controllers
 
                         });
 
-                        var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, null, recExcModel, null, lastEntry);
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, recExcModel, null, lastEntry);
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
 
 
@@ -558,16 +558,19 @@ namespace Stocks.Controllers
                 var oldDetail = unitOfWork.ReceiptExchangeDetailRepository.Get(NoTrack: "NoTrack", filter: m => m.ReceiptID == model.ReceiptID);
                 var Entry = unitOfWork.EntryRepository.Get(filter: x => x.ReceiptID == model.ReceiptID).SingleOrDefault();
                 var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
-                
+                if (Entry.TransferedToAccounts == true)
+                {
+                    accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
+                }
+
                 if (oldDetail != null)
                 {
                     unitOfWork.ReceiptExchangeDetailRepository.RemovRange(oldDetail);
 
                 } 
-                if (OldEntryDetails !=null)
-                {
+               
                     unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
-                }
+                
 
                 if (Check.Any(m => m.Code != Model.Code))
                 {
@@ -586,15 +589,52 @@ namespace Stocks.Controllers
 
                     try
                     {
-                        unitOfWork.Save();
 
                         #region Generate entry
 
-                        var settingObj = setting.GetSpecificSetting(1);
-                        if (settingObj.AutoGenerateEntry)
+                        var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, Model, null);
+
+                        if (Model.SettingModel.TransferToAccounts == true)
                         {
-                            GenerateEntry();
+                            Entry.TransferedToAccounts = true;
+                            unitOfWork.EntryRepository.Update(Entry);
+                            foreach (var item in EntryDitails)
+                            {
+                                //    item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<ReceiptExchangeDetail>(item);
+
+                                unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
+
+                            }
+                            accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
+                            {
+
+
+                                EntryDetailID = x.EntryDetailID,
+                                AccountID = x.AccountID,
+                                Credit = x.Credit,
+                                Debit = x.Debit,
+                                EntryID = x.EntryID
+
+
+                            }).ToList());
                         }
+                        else
+                        {
+                            Entry.TransferedToAccounts = false;
+                            unitOfWork.EntryRepository.Update(Entry);
+                            foreach (var item in EntryDitails)
+                            {
+                                //  item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<PurchaseOrderDetail>(item);
+
+                                unitOfWork.PurchaseOrderDetailRepository.Insert(details);
+
+                            }
+                        }
+                        unitOfWork.Save();
                         #endregion
 
                     }
@@ -638,15 +678,53 @@ namespace Stocks.Controllers
 
                         try
                         {
-                            unitOfWork.Save();
+
 
                             #region Generate entry
 
-                            var settingObj = setting.GetSpecificSetting(1);
-                            if (settingObj.AutoGenerateEntry)
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID,null,null,Model,null);
+
+                            if (Model.SettingModel.TransferToAccounts == true)
                             {
-                                GenerateEntry();
+                                Entry.TransferedToAccounts = true;
+                                unitOfWork.EntryRepository.Update(Entry);
+                                foreach (var item in EntryDitails)
+                                {
+                                //    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<ReceiptExchangeDetail>(item);
+
+                                    unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
+
+                                }
+                                accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
+                                {
+
+
+                                    EntryDetailID = x.EntryDetailID,
+                                    AccountID = x.AccountID,
+                                    Credit = x.Credit,
+                                    Debit = x.Debit,
+                                    EntryID = x.EntryID
+
+
+                                }).ToList());
                             }
+                            else
+                            {
+                                Entry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Update(Entry);
+                                foreach (var item in EntryDitails)
+                                {
+                                  //  item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<PurchaseOrderDetail>(item);
+
+                                    unitOfWork.PurchaseOrderDetailRepository.Insert(details);
+
+                                }
+                            }
+                            unitOfWork.Save();
                             #endregion
 
                         }
@@ -709,6 +787,10 @@ namespace Stocks.Controllers
                 unitOfWork.ReceiptExchangeDetailRepository.RemovRange(recDetails);
                 var entry = unitOfWork.EntryRepository.Get(x=> x.ReceiptID==id).SingleOrDefault();
                 var entryDitails = unitOfWork.EntryDetailRepository.Get(a=> a.EntryID==entry.EntryID);
+                if (entry.TransferedToAccounts == true)
+                {
+                    accountingHelper.CancelTransferToAccounts(entryDitails.ToList());
+                }
                 unitOfWork.EntryDetailRepository.RemovRange(entryDitails);
                 unitOfWork.EntryRepository.Delete(entry.EntryID);
                 unitOfWork.ReceiptExchangeRepository.Delete(RecExc);

@@ -132,7 +132,7 @@ namespace Stocks.Controllers
 
             });
 
-            var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel, null, null, lastEntry);
+            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, purchaseOrderModel, null, null, lastEntry);
             var Entry = _mapper.Map<Entry>(EntryMODEL);
 
 
@@ -450,8 +450,8 @@ namespace Stocks.Controllers
 
 
                     });
-                    
-                    var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel, null,null,lastEntry);
+
+                    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, purchaseOrderModel, null,null,lastEntry);
                     var Entry = _mapper.Map<Entry>(EntryMODEL);
                   
 
@@ -537,8 +537,12 @@ namespace Stocks.Controllers
                 var NewdDetails = purchaseOrderModel.DetailsModels;
                 var Newdetails = _mapper.Map<IEnumerable<PurchaseOrderDetail>>(NewdDetails);
                 var OldDetails = unitOfWork.PurchaseOrderDetailRepository.Get(filter: m => m.PurchaseID == purchaseOrder.PurchaseOrderID);
-                var OldEntry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrder.PurchaseOrderID == purchaseOrder.PurchaseOrderID).SingleOrDefault();
-                var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == OldEntry.EntryID);
+                var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrder.PurchaseOrderID == purchaseOrder.PurchaseOrderID).SingleOrDefault();
+                var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                if (Entry.TransferedToAccounts == true)
+                {
+                    accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
+                }
                 unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
               //  unitOfWork.EntryRepository.Delete(OldEntry.EntryID);
 
@@ -566,42 +570,24 @@ namespace Stocks.Controllers
                         }
                     }
 
-                    var lastEntry = unitOfWork.EntryRepository.Last();
-                    var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
-                    {
-                        AccountID = m.AccountID,
-                        Credit = m.Credit,
-                        Debit = m.Debit,
-                        EntryID = m.EntryID,
-                        EntryDetailID = m.EntryDetailID,
-                        AccCode = m.Account.Code,
-                        AccNameAR = m.Account.NameAR,
-                        AccNameEN = m.Account.NameEN,
-
-
-
-                    });
                     
-                    var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel, null,null,lastEntry);
-                    var Entry = _mapper.Map<Entry>(EntryMODEL);
-                 
-
-                    var DetailEnt = EntryMODEL.EntryDetailModel;
+                    
+                    var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID,null, purchaseOrderModel,null,null);
                     
                     if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
                     {
                         Entry.TransferedToAccounts = true;
-                        unitOfWork.EntryRepository.Insert(Entry);
-                        foreach (var item in DetailEnt)
+                        unitOfWork.EntryRepository.Update(Entry);
+                        foreach (var item in EntryDitails)
                         {
-                            item.EntryID = Entry.EntryID;
+                          //  item.EntryID = Entry.EntryID;
                             item.EntryDetailID = 0;
                             var details = _mapper.Map<PurchaseOrderDetail>(item);
 
                             unitOfWork.PurchaseOrderDetailRepository.Insert(details);
 
                         }
-                        accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+                        accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
                         {
 
 
@@ -617,10 +603,10 @@ namespace Stocks.Controllers
                     else
                     {
                         Entry.TransferedToAccounts = false;
-                        unitOfWork.EntryRepository.Insert(Entry);
-                        foreach (var item in DetailEnt)
+                        unitOfWork.EntryRepository.Update(Entry);
+                        foreach (var item in EntryDitails)
                         {
-                            item.EntryID = Entry.EntryID;
+                            //item.EntryID = Entry.EntryID;
                             item.EntryDetailID = 0;
                             var details = _mapper.Map<PurchaseOrderDetail>(item);
 
@@ -669,42 +655,24 @@ namespace Stocks.Controllers
                             }
                         }
 
-                        var lastEntry = unitOfWork.EntryRepository.Last();
-                        var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
-                        {
-                            AccountID = m.AccountID,
-                            Credit = m.Credit,
-                            Debit = m.Debit,
-                            EntryID = m.EntryID,
-                            EntryDetailID = m.EntryDetailID,
-                            AccCode = m.Account.Code,
-                            AccNameAR = m.Account.NameAR,
-                            AccNameEN = m.Account.NameEN,
-
-
-
-                        });
                         
-                        var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, purchaseOrderModel, null,null,lastEntry);
-                        var Entry = _mapper.Map<Entry>(EntryMODEL);
-                       
 
-                        var DetailEnt = EntryMODEL.EntryDetailModel;
-                        
+                        var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, purchaseOrderModel,null,null);
+
                         if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
                         {
                             Entry.TransferedToAccounts = true;
-                            unitOfWork.EntryRepository.Insert(Entry);
-                            foreach (var item in DetailEnt)
+                            unitOfWork.EntryRepository.Update(Entry);
+                            foreach (var item in EntryDitails)
                             {
-                                item.EntryID = Entry.EntryID;
+                              //  item.EntryID = Entry.EntryID;
                                 item.EntryDetailID = 0;
                                 var details = _mapper.Map<PurchaseOrderDetail>(item);
 
                                 unitOfWork.PurchaseOrderDetailRepository.Insert(details);
 
                             }
-                            accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+                            accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
                             {
 
 
@@ -720,10 +688,10 @@ namespace Stocks.Controllers
                         else
                         {
                             Entry.TransferedToAccounts = false;
-                            unitOfWork.EntryRepository.Insert(Entry);
-                            foreach (var item in DetailEnt)
+                            unitOfWork.EntryRepository.Update(Entry);
+                            foreach (var item in EntryDitails)
                             {
-                                item.EntryID = Entry.EntryID;
+                              //  item.EntryID = Entry.EntryID;
                                 item.EntryDetailID = 0;
                                 var details = _mapper.Map<PurchaseOrderDetail>(item);
 
@@ -778,7 +746,7 @@ namespace Stocks.Controllers
             var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
             if (Entry.TransferedToAccounts == true)
             {
-
+                accountingHelper.CancelTransferToAccounts(EntryDetails.ToList());
             }
             unitOfWork.EntryDetailRepository.RemovRange(EntryDetails); 
             

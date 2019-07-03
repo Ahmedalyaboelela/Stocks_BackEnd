@@ -341,7 +341,7 @@ namespace Stocks.Controllers
 
             });
 
-            var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, null, null, noticeModel,lastEntry);
+            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel,lastEntry);
             var Entry = _mapper.Map<Entry>(EntryMODEL);
 
 
@@ -455,7 +455,7 @@ namespace Stocks.Controllers
 
                             });
 
-                            var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, null, null, Model, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, Model, lastEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
 
 
@@ -576,10 +576,12 @@ namespace Stocks.Controllers
                 {
                     unitOfWork.NoticeDetailRepository.RemovRange(oldDetail); 
                 } 
-                if (OldEntryDetails !=null)
+                if (Entry.TransferedToAccounts==true)
                 {
-                    unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
+                    accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
                 }
+                    unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
+                
              //   unitOfWork.EntryRepository.Delete(OldEntry.EntryID);
 
 
@@ -603,35 +605,17 @@ namespace Stocks.Controllers
 
                         #region Generate entry
 
-                        var lastEntry = unitOfWork.EntryRepository.Last();
-                        var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
-                        {
-                            AccountID = m.AccountID,
-                            Credit = m.Credit,
-                            Debit = m.Debit,
-                            EntryID = m.EntryID,
-                            EntryDetailID = m.EntryDetailID,
-                            AccCode = m.Account.Code,
-                            AccNameAR = m.Account.NameAR,
-                            AccNameEN = m.Account.NameEN,
+                       
 
-
-
-                        });
-
-                        var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, null, null,Model, lastEntry);
-                        var Entry1 = _mapper.Map<Entry>(EntryMODEL);
-
-
-                        var DetailEnt = EntryMODEL.EntryDetailModel;
-
+                        var DetailEnt = EntriesHelper.UpdateCalculateEntries(Entry.EntryID,null,null,null, Model);
+                       
                         if (Model.SettingModel.TransferToAccounts == true)
                         {
                             Entry.TransferedToAccounts = true;
-                            unitOfWork.EntryRepository.Insert(Entry);
+                            unitOfWork.EntryRepository.Update(Entry);
                             foreach (var item in DetailEnt)
                             {
-                                item.EntryID = Entry.EntryID;
+                               // item.EntryID = Entry.EntryID;
                                 item.EntryDetailID = 0;
                                 var details = _mapper.Map<NoticeDetail>(item);
 
@@ -653,10 +637,10 @@ namespace Stocks.Controllers
                         else
                         {
                             Entry.TransferedToAccounts = false;
-                            unitOfWork.EntryRepository.Insert(Entry);
+                            unitOfWork.EntryRepository.Update(Entry);
                             foreach (var item in DetailEnt)
                             {
-                                item.EntryID = Entry.EntryID;
+                              //  item.EntryID = Entry.EntryID;
                                 item.EntryDetailID = 0;
                                 var details = _mapper.Map<NoticeDetail>(item);
 
@@ -712,35 +696,17 @@ namespace Stocks.Controllers
                         {
 
                             #region Generate entry
-                            var lastEntry = unitOfWork.EntryRepository.Last();
-                            var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
-                            {
-                                AccountID = m.AccountID,
-                                Credit = m.Credit,
-                                Debit = m.Debit,
-                                EntryID = m.EntryID,
-                                EntryDetailID = m.EntryDetailID,
-                                AccCode = m.Account.Code,
-                                AccNameAR = m.Account.NameAR,
-                                AccNameEN = m.Account.NameEN,
+                            
 
-
-
-                            });
-
-                            var EntryMODEL = EntriesHelper.CalculateSellingEntry(null, null, null, Model, lastEntry);
-                            var Entry1 = _mapper.Map<Entry>(EntryMODEL);
-
-
-                            var DetailEnt = EntryMODEL.EntryDetailModel;
+                            var DetailEnt = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, null, Model);
 
                             if (Model.SettingModel.TransferToAccounts == true)
                             {
-                                Entry1.TransferedToAccounts = true;
-                                unitOfWork.EntryRepository.Insert(Entry1);
+                                Entry.TransferedToAccounts = true;
+                                unitOfWork.EntryRepository.Update(Entry);
                                 foreach (var item in DetailEnt)
                                 {
-                                    item.EntryID = Entry.EntryID;
+                                   // item.EntryID = Entry.EntryID;
                                     item.EntryDetailID = 0;
                                     var details = _mapper.Map<NoticeDetail>(item);
 
@@ -838,6 +804,10 @@ namespace Stocks.Controllers
                 unitOfWork.NoticeDetailRepository.RemovRange(noticeDetails);
                 var entry = unitOfWork.EntryRepository.Get(x => x.NoticeID == id).SingleOrDefault();
                 var entryDitails = unitOfWork.EntryDetailRepository.Get(a => a.EntryID == entry.EntryID);
+                if (entry.TransferedToAccounts == true)
+                {
+                    accountingHelper.CancelTransferToAccounts(entryDitails.ToList());
+                }
                 unitOfWork.EntryDetailRepository.RemovRange(entryDitails);
                 unitOfWork.EntryRepository.Delete(entry.EntryID);
                 unitOfWork.NoticeRepository.Delete(notice);
