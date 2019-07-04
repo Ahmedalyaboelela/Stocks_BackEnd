@@ -30,6 +30,17 @@ namespace Stocks.Controllers
         #endregion
 
         #region GET Methods
+        [HttpGet]
+        [Route("~/api/Account/FirstOpen")]
+        public IActionResult FirstOpen()
+        {
+            AccountModel model = new AccountModel();
+            model.LastCode = unitOfWork.AccountRepository.Last().Code;
+            model.Count= unitOfWork.AccountRepository.Count();
+            return Ok(model);
+        }
+
+
         [Route("~/api/Account/GetLast")]
         public IActionResult GetLastAccount()
         {

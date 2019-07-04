@@ -13,5 +13,6 @@ namespace BAL.Model
         public string NameEN { get; set; }
 
         public int Count { get; set; }
+        public string LastCode { get; set; }
     }
 }

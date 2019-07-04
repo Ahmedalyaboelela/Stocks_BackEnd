@@ -100,6 +100,15 @@ namespace Stocks.Controllers
             return model;
         }
 
+        [HttpGet]
+        [Route("~/api/Portfolio/FirstOpen")]
+        public IActionResult FirstOpen()
+        {
+            PortfolioModel model = new PortfolioModel();
+            model.LastCode = unitOfWork.PartnerRepository.Last().Code;
+            model.Count = unitOfWork.PartnerRepository.Count();
+            return Ok(model);
+        }
 
         [HttpGet]
         [Route("~/api/Portfolio/GetLast")]

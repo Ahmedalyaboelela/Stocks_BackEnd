@@ -76,6 +76,8 @@ namespace BAL.Model
         public string NameArParent { get; set; }
         public string NameEnParent { get; set; }
 
+        public string LastCode { get; set; }
+
 
     }
 }

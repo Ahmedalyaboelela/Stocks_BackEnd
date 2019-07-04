@@ -72,6 +72,17 @@ namespace Stocks.Controllers
         }
 
         [HttpGet]
+        [Route("~/api/DailyVoucher/FirstOpen")]
+        public IActionResult FirstOpen()
+        {
+            EntryModel model = new EntryModel();
+            model.LastCode = unitOfWork.PartnerRepository.Last().Code;
+            model.Count = unitOfWork.PartnerRepository.Count();
+            return Ok(model);
+        }
+
+
+        [HttpGet]
         [Route("~/api/DailyVoucher/GetLast")]
         public IActionResult GetLast()
         {

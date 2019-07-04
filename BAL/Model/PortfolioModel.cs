@@ -26,6 +26,7 @@ namespace BAL.Model
 
         public int Count { get; set; }
 
+        public string LastCode { get; set; }
         public IEnumerable<PortfolioAccountModel> folioAccounts { get; set; }
 
         public IEnumerable<PortfolioShareholderModel> Shareholders { get; set; }

@@ -51,5 +51,7 @@ namespace BAL.Model
         public string CountryNameEn { get; set; }
 
         public int Count { get; set; }
+
+        public string LastCode { get; set; }
     }
 }
