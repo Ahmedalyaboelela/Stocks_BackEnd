@@ -23,8 +23,9 @@ namespace BAL.Model
         public int PortfolioAccount { get; set; }
 
         public virtual IEnumerable<SelingOrderDetailsModel> DetailsModels { get; set; }
-        public virtual SettingModel SettingModel { get; set; } 
-       
+        public virtual SettingModel SettingModel { get; set; }
+        public virtual EntryModel EntryModel { get; set; }
+
 
 
     }

@@ -23,37 +23,65 @@ namespace Stocks.Controllers
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
         private SettingController setting;
-
+        private readonly IAccountingHelper accountingHelper;
         public NoticeController(StocksContext context, IMapper mapper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
             this.setting = new SettingController(context, mapper);
+            accountingHelper = new AccountingHelper(context, mapper);
         }
 
         #endregion
 
-        #region Generate Entry
-
-        public IActionResult GenerateEntry()
+        [Route("~/api/PurchaseOrder/GetSettingAccounts/{id}")]
+        public IEnumerable<SettingAccountModel> SettingAccounts(int id)
         {
-            var settingObj = setting.GetSpecificSetting(1);
-            return Ok();
-        }
-        #endregion
 
-        #region Default Setting
-        public SettingModel DefaultSetting(bool type)
+            var setAccounts = unitOfWork.SettingAccountRepository.Get(filter: x => x.SettingID == id).Select(a => new SettingAccountModel
+            {
+
+                SettingID = a.SettingID,
+                AccNameEN = a.Account.NameEN,
+                AccCode = a.Account.Code,
+                AccNameAR = a.Account.NameAR,
+                AccountID = a.AccountID,
+                AccountType = a.AccountType,
+                SettingAccountID = a.SettingAccountID,
+                Code = a.Setting.Code,
+
+
+
+            });
+
+
+
+            return setAccounts;
+
+
+        }
+
+        [Route("~/api/PurchaseOrder/GetSetting")]
+        public SettingModel GetSetting(int flag)
         {
-            var screenNo = 5;
-            if (type)
-                screenNo = 6;
 
-            var settingObj = setting.GetSpecificSetting(screenNo);
-           
-            return settingObj;
+            var setsetting = unitOfWork.SettingRepository.Get(filter: x => x.VoucherType == flag).Select(a => new SettingModel
+            {
+
+                SettingID = a.SettingID,
+                VoucherType = 2,
+                AutoGenerateEntry = a.AutoGenerateEntry,
+                Code = a.Code,
+                DoNotGenerateEntry = a.DoNotGenerateEntry,
+                GenerateEntry = a.GenerateEntry,
+                SettingAccs = SettingAccounts(a.SettingID),
+
+            }).SingleOrDefault();
+            return setsetting;
+
+
         }
-        #endregion
+
 
         #region GET Methods
 
@@ -104,11 +132,16 @@ namespace Stocks.Controllers
             model.EmployeeCode = notice.Employee.Code;
 
             #region Setting part
-           
-            model.SettingScreen = DefaultSetting(type);
+
+            model.SettingModel = GetSetting(3);
 
             #endregion
-
+            var check = unitOfWork.EntryRepository.Get(x => x.NoticeID == notice.NoticeID).SingleOrDefault(); 
+            if (check != null)
+            {
+                model.EntryModel = GetEntry(model.NoticeID);
+            }
+           
             return model;
         }
 
@@ -118,7 +151,7 @@ namespace Stocks.Controllers
         public IActionResult FirstOpen(bool type)
         {
             DefaultSettingModel model = new DefaultSettingModel();
-            model.ScreenSetting = DefaultSetting(type);
+            model.ScreenSetting = GetSetting(3);
             model.LastCode = unitOfWork.EntryRepository.Last().Code;
             
             return Ok(model);
@@ -245,93 +278,274 @@ namespace Stocks.Controllers
 
         #endregion
 
+
+
+
+        [HttpGet]//القيد
+        [Route("~/api/Notice/GetEntry")]
+        public EntryModel GetEntry(int  noticeID)
+        {
+            var Entry = unitOfWork.EntryRepository.Get(x => x.NoticeID == noticeID).SingleOrDefault();
+            var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+            EntryModel entryModel = new EntryModel();
+            entryModel.EntryID = Entry.EntryID;
+            entryModel.Code = Entry.Code;
+            entryModel.Date = Entry.Date.ToString();
+            entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
+            entryModel.NoticeID = Entry.NoticeID;
+            entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+            entryModel.ReceiptID = Entry.ReceiptID;
+            entryModel.SellingOrderID = Entry.SellingOrderID;
+            entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
+            {
+                AccCode = m.Account.Code,
+                AccNameAR = m.Account.NameAR,
+                AccNameEN = m.Account.NameEN,
+                AccountID = m.AccountID,
+                Credit = m.Credit,
+                Debit = m.Debit,
+                EntryDetailID = m.EntryDetailID,
+                EntryID = m.EntryID,
+
+
+            });
+
+            return entryModel;
+        }
+
+        [HttpPost]// ترحيل يدوي للقيد اليدوي والتلقائي
+        [Route("~/api/Notice/ManualmigrationNotice")]
+        public IActionResult ManualmigrationNotice([FromBody]EntryModel EntryMODEL)
+        {
+            var Entry = unitOfWork.EntryRepository.GetByID(EntryMODEL.EntryID);
+            Entry.TransferedToAccounts = true;
+            unitOfWork.EntryRepository.Update(Entry);
+            var Details = EntryMODEL.EntryDetailModel;
+            foreach (var item in Details)
+            {
+                var detail = _mapper.Map<NoticeDetail>(item);
+
+                unitOfWork.NoticeDetailRepository.Update(detail);
+            }
+
+            accountingHelper.TransferToAccounts(Details.Select(x => new EntryDetail
+            {
+                EntryDetailID = x.EntryDetailID,
+                AccountID = x.AccountID,
+                Credit = x.Credit,
+                Debit = x.Debit,
+                EntryID = x.EntryID
+
+
+            }).ToList());
+
+
+
+
+            unitOfWork.Save();
+
+
+
+            return Ok("تم ترحيل القيد");
+
+        }
+
+
+
+
+        [HttpPost] // يولد قيد مع ترحيل تلقائي
+        [Route("~/api/Notice/GenerateconstraintNotice")]
+        public IActionResult GenerateconstraintNotice([FromBody]NoticeModel noticeModel)
+        {
+            var lastEntry = unitOfWork.EntryRepository.Last();
+            var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
+            {
+                AccountID = m.AccountID,
+                Credit = m.Credit,
+                Debit = m.Debit,
+                EntryID = m.EntryID,
+                EntryDetailID = m.EntryDetailID,
+                AccCode = m.Account.Code,
+                AccNameAR = m.Account.NameAR,
+                AccNameEN = m.Account.NameEN,
+
+
+
+            });
+
+            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel,lastEntry);
+            var Entry = _mapper.Map<Entry>(EntryMODEL);
+
+
+            var DetailEnt = EntryMODEL.EntryDetailModel;
+
+            if (noticeModel.SettingModel.TransferToAccounts == true)
+            {
+                Entry.TransferedToAccounts = true;
+                unitOfWork.EntryRepository.Insert(Entry);
+                foreach (var item in DetailEnt)
+                {
+                    item.EntryID = Entry.EntryID;
+                    item.EntryDetailID = 0;
+                    var details = _mapper.Map<NoticeDetail>(item);
+
+                    unitOfWork.NoticeDetailRepository.Insert(details);
+                }
+                accountingHelper.TransferToAccounts(DetailEnt.Select(a => new EntryDetail
+                {
+
+                    Credit = a.Credit,
+                    Debit = a.Debit,
+                    EntryDetailID = a.EntryDetailID,
+                    EntryID = a.EntryID,
+                    StocksCredit = a.StocksCredit,
+                    StocksDebit = a.StocksDebit,
+                    AccountID = a.AccountID
+
+                }).ToList());
+            }
+            else
+            {
+                Entry.TransferedToAccounts = false;
+                unitOfWork.EntryRepository.Insert(Entry);
+                foreach (var item in DetailEnt)
+                {
+                    item.EntryID = Entry.EntryID;
+                    item.EntryDetailID = 0;
+                    var details = _mapper.Map<NoticeDetail>(item);
+
+                    unitOfWork.NoticeDetailRepository.Insert(details);
+
+                }
+            }
+            return Ok(noticeModel);
+        }
+
+
         #region Insert Methods
         [HttpPost]
         [Route("~/api/Notice/Add")]
-        public IActionResult PostItem([FromBody] NoticeModel Model)
+        public IActionResult PostItem([FromBody] NoticeModel noticeModel)
         {
 
+           
             if (ModelState.IsValid)
             {
-
                 var Check = unitOfWork.NoticeRepository.Get();
-                if (Model == null)
+                if (Check.Any(m => m.Code == noticeModel.Code))
                 {
-                    return Ok(0);
-                }
-                if (Check.Any(m => m.Code == Model.Code))
-                {
-                    return Ok(2);
+
+                    return Ok("كود امر بيع مكرر");
                 }
                 else
                 {
-                    // map model to entity
-                    var model = _mapper.Map<Notice>(Model);
+
+                    var notice = _mapper.Map<Notice>(noticeModel);
 
 
-                    //var Details = Model.NoticeModelDetails;
+                    var Details = noticeModel.NoticeModelDetails;
 
-                    var Details = _mapper.Map<IEnumerable<NoticeDetail>>(Model.NoticeModelDetails);
-                    try
+                    unitOfWork.NoticeRepository.Insert(notice);
+
+                    foreach (var item in Details)
                     {
-                        // insert main data of receipt exchange 
-                        unitOfWork.NoticeRepository.Insert(model);
-
-                        if (Details != null)
-                        {
-                            foreach (var item in Model.NoticeModelDetails)
-                            {
-                                var obj = _mapper.Map<NoticeDetail>(item);
-                                obj.NoticeID = model.NoticeID;
-                                unitOfWork.NoticeDetailRepository.Insert(obj);
-                            }
-                        }
-
-
-                        try
-                        {
-                            unitOfWork.Save();
-                            #region Generate entry
-
-                            var settingObj = setting.GetSpecificSetting(1);
-                            if (settingObj.AutoGenerateEntry)
-                            {
-                                GenerateEntry();
-                            }
-                            #endregion
-                        }
-                        catch (DbUpdateException ex)
-                        {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
-                        }
-
-                        return Ok(Model);
+                        NoticeDetailModel noticeDetailModel = new NoticeDetailModel();
+                        noticeDetailModel.NoticeID = notice.NoticeID;
+                        noticeDetailModel.AccountID = item.AccountID;
+                        noticeDetailModel.Credit = item.Credit;
+                        noticeDetailModel.Debit = item.Debit;
+                        noticeDetailModel.StocksCredit = item.StocksCredit;
+                        noticeDetailModel.StocksDebit = item.StocksDebit;
+                        
+                         var details = _mapper.Map<NoticeDetail>(noticeDetailModel);
+                        unitOfWork.NoticeDetailRepository.Insert(details);
 
                     }
-                    catch (Exception ex)
-                    {
-                        return Ok("خطأ في ادخال البيانات");
 
+
+                    //==================================================لا تولد قيد ===================================
+                    if (noticeModel.SettingModel.DoNotGenerateEntry == true)
+                    {
+                        unitOfWork.Save();
+
+                        return Ok(noticeModel);
                     }
+
+                    //===============================================================توليد قيد مع ترحيل تلقائي============================
+
+
+
+                    else if (noticeModel.SettingModel.AutoGenerateEntry == true)
+                    {
+                        var lastEntry = unitOfWork.EntryRepository.Last();
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                        var Entry = _mapper.Map<Entry>(EntryMODEL);
+                        Entry.NoticeID = notice.NoticeID;
+
+                        var DetailEnt = EntryMODEL.EntryDetailModel;
+
+                        if (noticeModel.SettingModel.TransferToAccounts == true)
+                        {
+                            Entry.TransferedToAccounts = true;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
+
+                                unitOfWork.EntryDetailRepository.Insert(details);
+
+                            }
+                            accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+                            {
+
+
+                                EntryDetailID = x.EntryDetailID,
+                                AccountID = x.AccountID,
+                                Credit = x.Credit,
+                                Debit = x.Debit,
+                                EntryID = x.EntryID
+
+
+                            }).ToList());
+                        }
+                    }
+
+                    //================================توليد قيد مع عدم الترحيل====================================== 
+                    if (noticeModel.SettingModel.GenerateEntry == true)
+                    
+                    {
+
+                        var lastEntry = unitOfWork.EntryRepository.Last();
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                        var Entry = _mapper.Map<Entry>(EntryMODEL);
+                        Entry.NoticeID = notice.NoticeID;
+
+                        var DetailEnt = EntryMODEL.EntryDetailModel;
+                        Entry.TransferedToAccounts = false;
+                        unitOfWork.EntryRepository.Insert(Entry);
+                        foreach (var item in DetailEnt)
+                        {
+                            item.EntryID = Entry.EntryID;
+                            item.EntryDetailID = 0;
+                            var details = _mapper.Map<EntryDetail>(item);
+
+                            unitOfWork.EntryDetailRepository.Insert(details);
+
+                        }
+                    }
+
+
+                    unitOfWork.Save();
+
+
+
+                    return Ok(noticeModel);
+
 
 
                 }
-
-
-
             }
             else
             {
@@ -344,9 +558,9 @@ namespace Stocks.Controllers
         #region Update Methods
         [HttpPut]
         [Route("~/api/Notice/Update/{id}/{type}")]
-        public IActionResult Update(int id, bool type, [FromBody] NoticeModel Model)
+        public IActionResult Update(int id, bool type, [FromBody] NoticeModel noticeModel)
         {
-            if (id != Model.NoticeID)
+            if (id != noticeModel.NoticeID)
             {
 
                 return Ok(1);
@@ -354,123 +568,439 @@ namespace Stocks.Controllers
 
             if (ModelState.IsValid)
             {
-                // map main data to entity
-                var model = _mapper.Map<Notice>(Model);
 
-                var Detail = Model.NoticeModelDetails;
-                //var EmpolyeeCard = _mapper.Map<IEnumerable<EmployeeCard>>(empolyeeCard);
+                var Check = unitOfWork.NoticeRepository.Get(NoTrack: "NoTrack");
 
-                var Check = unitOfWork.NoticeRepository.Get(NoTrack: "NoTrack", filter: m => m.Type == type);
-                var oldDetail = unitOfWork.NoticeDetailRepository.Get(NoTrack: "NoTrack", filter: m => m.NoticeID == model.NoticeID);
-
-                if (oldDetail != null)
+                var notice = _mapper.Map<Notice>(noticeModel);
+                var NewdDetails = noticeModel.NoticeModelDetails;
+                var Newdetails = _mapper.Map<IEnumerable<NoticeDetail>>(NewdDetails);
+                var OldDetails = unitOfWork.NoticeDetailRepository.Get(filter: m => m.NoticeID == notice.NoticeID);
+                var EntryCheck = unitOfWork.EntryRepository.Get(x => x.NoticeID == notice.NoticeID).SingleOrDefault();
+                if (EntryCheck != null)
                 {
-                    unitOfWork.NoticeDetailRepository.RemovRange(oldDetail); 
-                }
 
-
-                if (Check.Any(m => m.Code != Model.Code))
-                {
-                    unitOfWork.NoticeRepository.Update(model);
-
-
-                    foreach (var item in Detail)
+                    var Entry = unitOfWork.EntryRepository.Get(filter: x => x.NoticeID == notice.NoticeID).SingleOrDefault();
+                    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                    if (Entry.TransferedToAccounts == true)
                     {
-                        item.NoticeID = model.NoticeID;
-                        item.NoticeDetailID = 0;
-                        var newDetail = _mapper.Map<NoticeDetail>(item);
-
-                        unitOfWork.NoticeDetailRepository.Insert(newDetail);
-
+                        accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
                     }
+                    unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
 
-                    try
+                    if (Check.Any(m => m.Code != notice.Code))
                     {
-                        unitOfWork.Save();
-                        #region Generate entry
-
-                        var settingObj = setting.GetSpecificSetting(1);
-                        if (settingObj.AutoGenerateEntry)
+                        unitOfWork.NoticeRepository.Update(notice);
+                        if (OldDetails != null)
                         {
-                            GenerateEntry();
-                        }
-                        #endregion
-                    }
-                    catch (DbUpdateException ex)
-                    {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
-                    }
-
-                    return Ok(Model);
-                }
-                else
-                {
-                    if (Check.Any(m => m.Code == Model.Code && m.NoticeID == id))
-                    {
-
-                        unitOfWork.NoticeRepository.Update(model);
-
-                        foreach (var item in Detail)
-                        {
-                            item.NoticeID = model.NoticeID;
-                            item.NoticeDetailID = 0;
-                            var neweDetail = _mapper.Map<NoticeDetail>(item);
-
-                            unitOfWork.NoticeDetailRepository.Insert(neweDetail);
-
-                        }
-
-                        try
-                        {
+                            unitOfWork.NoticeDetailRepository.RemovRange(OldDetails);
                             unitOfWork.Save();
-                            #region Generate entry
-
-                            var settingObj = setting.GetSpecificSetting(1);
-                            if (settingObj.AutoGenerateEntry)
-                            {
-                                GenerateEntry();
-                            }
-                            #endregion
                         }
-                        catch (DbUpdateException ex)
+
+
+                        if (Newdetails != null)
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
+                            foreach (var item in Newdetails)
                             {
-                                var number = sqlException.Number;
+                                item.NoticeID = notice.NoticeID;
+                                item.NoticeDetailID = 0;
+                                var details = _mapper.Map<NoticeDetail>(item);
 
-                                if (number == 547)
+                                unitOfWork.NoticeDetailRepository.Insert(details);
+
+                            }
+                        }
+
+
+                        //==================================================لا تولد قيد ===================================
+                        if (noticeModel.SettingModel.DoNotGenerateEntry == true)
+                        {
+                            unitOfWork.EntryRepository.Delete(Entry.EntryID);
+                            unitOfWork.Save();
+
+                            return Ok(noticeModel);
+                        }
+                        //===================================توليد قيد مع ترحيل تلقائي===================================
+                        if (noticeModel.SettingModel.AutoGenerateEntry == true)
+                        {
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, null, noticeModel);
+
+                            if (noticeModel.SettingModel.TransferToAccounts == true)
+                            {
+                                Entry.TransferedToAccounts = true;
+                                unitOfWork.EntryRepository.Update(Entry);
+                                foreach (var item in EntryDitails)
                                 {
-                                    return Ok(5);
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<EntryDetail>(item);
+
+                                    unitOfWork.EntryDetailRepository.Insert(details);
 
                                 }
-                                else
-                                    return Ok(6);
+                                accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
+                                {
+
+
+                                    EntryDetailID = x.EntryDetailID,
+                                    AccountID = x.AccountID,
+                                    Credit = x.Credit,
+                                    Debit = x.Debit,
+                                    EntryID = x.EntryID
+
+
+                                }).ToList());
+                            } 
+                        }
+                        //===================================توليد قيد مع  عدم ترحيل=================================== 
+                        if (noticeModel.SettingModel.GenerateEntry==true)
+                        
+                        {
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, null, noticeModel);
+                            Entry.TransferedToAccounts = false;
+                            unitOfWork.EntryRepository.Update(Entry);
+                            foreach (var item in EntryDitails)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
+
+                                unitOfWork.EntryDetailRepository.Insert(details);
+
+                            }
+                        }
+                        unitOfWork.Save();
+
+
+
+                        return Ok(noticeModel);
+
+
+                    }
+
+
+                    //==========================================Second Case OF Code Of Purchase=======================================
+
+                    else
+                    {
+                        if (Check.Any(m => m.Code == notice.Code && m.NoticeID == id))
+                        {
+                            unitOfWork.NoticeRepository.Update(notice);
+                            if (OldDetails != null)
+                            {
+                                unitOfWork.NoticeDetailRepository.RemovRange(OldDetails);
+                                unitOfWork.Save();
+                            }
+
+
+                            if (Newdetails != null)
+                            {
+                                foreach (var item in Newdetails)
+                                {
+                                    item.NoticeID = notice.NoticeID;
+                                    item.NoticeDetailID = 0;
+                                    var details = _mapper.Map<NoticeDetail>(item);
+
+                                    unitOfWork.NoticeDetailRepository.Insert(details);
+
+                                }
+                            }
+
+
+                            //==================================================لا تولد قيد ===================================
+                            if (noticeModel.SettingModel.DoNotGenerateEntry == true)
+                            {
+                                unitOfWork.EntryRepository.Delete(Entry.EntryID);
+                                unitOfWork.Save();
+
+                                return Ok(noticeModel);
+                            }
+                            //===================================توليد قيد مع ترحيل تلقائي===================================
+                            if (noticeModel.SettingModel.AutoGenerateEntry == true)
+                            {
+                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, null, noticeModel);
+
+                                if (noticeModel.SettingModel.TransferToAccounts == true)
+                                {
+                                    Entry.TransferedToAccounts = true;
+                                    unitOfWork.EntryRepository.Update(Entry);
+                                    foreach (var item in EntryDitails)
+                                    {
+                                        item.EntryID = Entry.EntryID;
+                                        item.EntryDetailID = 0;
+                                        var details = _mapper.Map<EntryDetail>(item);
+
+                                        unitOfWork.EntryDetailRepository.Insert(details);
+
+                                    }
+                                    accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
+                                    {
+
+
+                                        EntryDetailID = x.EntryDetailID,
+                                        AccountID = x.AccountID,
+                                        Credit = x.Credit,
+                                        Debit = x.Debit,
+                                        EntryID = x.EntryID
+
+
+                                    }).ToList());
+                                }
+                               
+                            }
+                            //===================================توليد قيد مع  عدم ترحيل=================================== 
+                            if (noticeModel.SettingModel.GenerateEntry == true)
+
+                            {
+                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, null, noticeModel);
+                                Entry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Update(Entry);
+                                foreach (var item in EntryDitails)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<EntryDetail>(item);
+
+                                    unitOfWork.EntryDetailRepository.Insert(details);
+
+                                }
+                            }
+                            unitOfWork.Save();
+
+
+
+                            return Ok(noticeModel);
+
+                        }
+
+
+                    }
+                    return Ok(noticeModel);
+                }
+
+                // now We Will Create new Entry As Insert
+
+
+                else
+                {
+                    if (Check.Any(m => m.Code != notice.Code))
+                    {
+                        unitOfWork.NoticeRepository.Update(notice);
+                        if (OldDetails != null)
+                        {
+                            unitOfWork.NoticeDetailRepository.RemovRange(OldDetails);
+                            unitOfWork.Save();
+                        }
+
+
+                        if (Newdetails != null)
+                        {
+                            foreach (var item in Newdetails)
+                            {
+                                item.NoticeID = notice.NoticeID;
+                                item.NoticeDetailID = 0;
+                                var details = _mapper.Map<NoticeDetail>(item);
+
+                                unitOfWork.NoticeDetailRepository.Insert(details);
+
                             }
                         }
 
-                        return Ok(Model);
+
+                        //==================================================لا تولد قيد ===================================
+                        if (noticeModel.SettingModel.DoNotGenerateEntry == true)
+                        {
+
+                            unitOfWork.Save();
+
+                            return Ok(noticeModel);
+                        }
+                        //===============================================================توليد قيد مع ترحيل تلقائي============================
+
+
+
+                        else if (noticeModel.SettingModel.AutoGenerateEntry == true)
+                        {
+                            var lastEntry = unitOfWork.EntryRepository.Last();
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                            var Entry = _mapper.Map<Entry>(EntryMODEL);
+                            Entry.ReceiptID = notice.NoticeID;
+
+                            var DetailEnt = EntryMODEL.EntryDetailModel;
+
+                            if (noticeModel.SettingModel.TransferToAccounts == true)
+                            {
+                                Entry.TransferedToAccounts = true;
+                                unitOfWork.EntryRepository.Insert(Entry);
+                                foreach (var item in DetailEnt)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<EntryDetail>(item);
+
+                                    unitOfWork.EntryDetailRepository.Insert(details);
+
+                                }
+                                accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+                                {
+
+
+                                    EntryDetailID = x.EntryDetailID,
+                                    AccountID = x.AccountID,
+                                    Credit = x.Credit,
+                                    Debit = x.Debit,
+                                    EntryID = x.EntryID
+
+
+                                }).ToList());
+                            }
+                        }
+                        //================================توليد قيد مع عدم الترحيل====================================== 
+                        if (noticeModel.SettingModel.GenerateEntry == true)
+
+                        {
+
+                            var lastEntry = unitOfWork.EntryRepository.Last();
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                            var Entry = _mapper.Map<Entry>(EntryMODEL);
+                            Entry.NoticeID = notice.NoticeID;
+
+                            var DetailEnt = EntryMODEL.EntryDetailModel;
+                            Entry.TransferedToAccounts = false;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
+
+                                unitOfWork.EntryDetailRepository.Insert(details);
+
+                            }
+                        }
+
+
+                        unitOfWork.Save();
+
+
+
+                        return Ok(noticeModel);
+
+
                     }
+
+
+                    //==========================================Second Case OF Code Of Purchase=======================================
+
                     else
                     {
-                        return Ok(2);
-                    }
-                }
+                        if (Check.Any(m => m.Code == notice.Code && m.NoticeID == id))
+                        {
+                            unitOfWork.NoticeRepository.Update(notice);
+                            if (OldDetails != null)
+                            {
+                                unitOfWork.NoticeDetailRepository.RemovRange(OldDetails);
+                                unitOfWork.Save();
+                            }
 
+
+                            if (Newdetails != null)
+                            {
+                                foreach (var item in Newdetails)
+                                {
+                                    item.NoticeID = notice.NoticeID;
+                                    item.NoticeDetailID = 0;
+                                    var details = _mapper.Map<ReceiptExchangeDetail>(item);
+
+                                    unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
+
+                                }
+                            }
+
+
+                            //==================================================لا تولد قيد ===================================
+                            if (noticeModel.SettingModel.DoNotGenerateEntry == true)
+                            {
+
+                                unitOfWork.Save();
+
+                                return Ok(noticeModel);
+                            }
+                            //===============================================================توليد قيد مع ترحيل تلقائي============================
+
+
+
+                            else if (noticeModel.SettingModel.AutoGenerateEntry == true)
+                            {
+                                var lastEntry = unitOfWork.EntryRepository.Last();
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                                var Entry = _mapper.Map<Entry>(EntryMODEL);
+                                Entry.NoticeID = notice.NoticeID;
+
+                                var DetailEnt = EntryMODEL.EntryDetailModel;
+
+                                if (noticeModel.SettingModel.TransferToAccounts == true)
+                                {
+                                    Entry.TransferedToAccounts = true;
+                                    unitOfWork.EntryRepository.Insert(Entry);
+                                    foreach (var item in DetailEnt)
+                                    {
+                                        item.EntryID = Entry.EntryID;
+                                        item.EntryDetailID = 0;
+                                        var details = _mapper.Map<EntryDetail>(item);
+
+                                        unitOfWork.EntryDetailRepository.Insert(details);
+
+                                    }
+                                    accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+                                    {
+
+
+                                        EntryDetailID = x.EntryDetailID,
+                                        AccountID = x.AccountID,
+                                        Credit = x.Credit,
+                                        Debit = x.Debit,
+                                        EntryID = x.EntryID
+
+
+                                    }).ToList());
+                                }
+                            }
+                            //================================توليد قيد مع عدم الترحيل====================================== 
+                            if (noticeModel.SettingModel.GenerateEntry == true)
+
+                            {
+
+                                var lastEntry = unitOfWork.EntryRepository.Last();
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                                var Entry = _mapper.Map<Entry>(EntryMODEL);
+                                Entry.NoticeID = notice.NoticeID;
+
+                                var DetailEnt = EntryMODEL.EntryDetailModel;
+                                Entry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Insert(Entry);
+                                foreach (var item in DetailEnt)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<EntryDetail>(item);
+
+                                    unitOfWork.EntryDetailRepository.Insert(details);
+
+                                }
+                            }
+
+
+                            unitOfWork.Save();
+
+
+
+                            return Ok(noticeModel);
+                        }
+
+
+                    }
+                    return Ok(noticeModel);
+                }
             }
             else
             {
@@ -501,6 +1031,14 @@ namespace Stocks.Controllers
 
 
                 unitOfWork.NoticeDetailRepository.RemovRange(noticeDetails);
+                var entry = unitOfWork.EntryRepository.Get(x => x.NoticeID == id).SingleOrDefault();
+                var entryDitails = unitOfWork.EntryDetailRepository.Get(a => a.EntryID == entry.EntryID);
+                if (entry.TransferedToAccounts == true)
+                {
+                    accountingHelper.CancelTransferToAccounts(entryDitails.ToList());
+                }
+                unitOfWork.EntryDetailRepository.RemovRange(entryDitails);
+                unitOfWork.EntryRepository.Delete(entry.EntryID);
                 unitOfWork.NoticeRepository.Delete(notice);
                 try
                 {
