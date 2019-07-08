@@ -35,27 +35,57 @@ namespace Stocks.Controllers
 
         #endregion
 
-        #region Generate Entry
-
-        public IActionResult GenerateEntry()
+        [Route("~/api/PurchaseOrder/GetSettingAccounts/{id}")]
+        public IEnumerable<SettingAccountModel> SettingAccounts(int id)
         {
-            var settingObj = setting.GetSpecificSetting(1);
-            return Ok();
-        }
-        #endregion
 
-        #region Default Setting
-        public SettingModel DefaultSetting(bool type)
+            var setAccounts = unitOfWork.SettingAccountRepository.Get(filter: x => x.SettingID == id).Select(a => new SettingAccountModel
+            {
+
+                SettingID = a.SettingID,
+                AccNameEN = a.Account.NameEN,
+                AccCode = a.Account.Code,
+                AccNameAR = a.Account.NameAR,
+                AccountID = a.AccountID,
+                AccountType = a.AccountType,
+                SettingAccountID = a.SettingAccountID,
+                Code = a.Setting.Code,
+
+
+
+            });
+
+
+
+            return setAccounts;
+
+
+        }
+
+        [Route("~/api/PurchaseOrder/GetSetting")]
+        public SettingModel GetSetting(int flag)
         {
-            var screenNo = 3;
-            if (type)
-                screenNo = 4;
 
-            var settingObj = setting.GetSpecificSetting(screenNo);
+            var setsetting = unitOfWork.SettingRepository.Get(filter: x => x.VoucherType == flag).Select(a => new SettingModel
+            {
 
-            return settingObj;
+                SettingID = a.SettingID,
+                VoucherType = 2,
+                AutoGenerateEntry = a.AutoGenerateEntry,
+                Code = a.Code,
+                DoNotGenerateEntry = a.DoNotGenerateEntry,
+                GenerateEntry = a.GenerateEntry,
+                SettingAccs = SettingAccounts(a.SettingID),
+
+            }).SingleOrDefault();
+            return setsetting;
+
+
         }
-        #endregion
+
+       
+
+        
 
         [HttpPost] // يولد قيد مع ترحيل تلقائي
         [Route("~/api/ReceiptExchange/Generateconstraint")]
@@ -166,9 +196,9 @@ namespace Stocks.Controllers
 
         [HttpGet]//القيد
         [Route("~/api/SellingOrder/GetEntry")]
-        public IActionResult GetEntry(ReceiptExchangeModel receiptExchangeModel)
+        public EntryModel GetEntry(int receiptID)
         {
-            var Entry = unitOfWork.EntryRepository.Get(x => x.ReceiptID == receiptExchangeModel.ReceiptID).SingleOrDefault();
+            var Entry = unitOfWork.EntryRepository.Get(x => x.ReceiptID == receiptID).SingleOrDefault();
             var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
             EntryModel entryModel = new EntryModel();
             entryModel.EntryID = Entry.EntryID;
@@ -193,7 +223,7 @@ namespace Stocks.Controllers
 
             });
 
-            return Ok(entryModel);
+            return entryModel;
         }
 
 
@@ -245,10 +275,13 @@ namespace Stocks.Controllers
 
             #region Setting part
 
-            model.SettingModel = DefaultSetting(type);
+            model.SettingModel = GetSetting(4);
             #endregion
-
-
+            var check = unitOfWork.EntryRepository.Get(x => x.ReceiptID == RecExc.ReceiptID).SingleOrDefault();
+            if (check != null)
+            {
+                model.EntryModel = GetEntry(model.ReceiptID);
+            }
             return model;
         }
 
@@ -257,7 +290,7 @@ namespace Stocks.Controllers
         public IActionResult FirstOpen(bool type)
         {
             DefaultSettingModel model = new DefaultSettingModel();
-            model.ScreenSetting = DefaultSetting(type);
+            model.ScreenSetting = GetSetting(4);
             model.LastCode = unitOfWork.EntryRepository.Last().Code;
             return Ok(model);
         }
@@ -392,65 +425,55 @@ namespace Stocks.Controllers
 
             if (ModelState.IsValid)
             {
-
                 var Check = unitOfWork.ReceiptExchangeRepository.Get();
-                if (recExcModel == null)
-                {
-                    return Ok(0);
-                }
                 if (Check.Any(m => m.Code == recExcModel.Code))
                 {
-                    return Ok(2);
+
+                    return Ok("كود امر بيع مكرر");
                 }
                 else
                 {
-                    // map model to entity
-                    var model = _mapper.Map<ReceiptExchange>(recExcModel);
+
+                    var receipt = _mapper.Map<ReceiptExchange>(recExcModel);
 
 
-                    var recExcDetails = recExcModel.RecExcDetails;
+                    var Details = recExcModel.RecExcDetails;
 
-                    var RecExcDetails = _mapper.Map<IEnumerable<ReceiptExchangeDetail>>(recExcModel.RecExcDetails);
-                      // insert main data of receipt exchange 
-                        unitOfWork.ReceiptExchangeRepository.Insert(model);
+                    unitOfWork.ReceiptExchangeRepository.Insert(receipt);
 
-                        if (RecExcDetails != null)
-                        {
-                            foreach (var item in recExcDetails)
-                            {
-                                var obj = _mapper.Map<ReceiptExchangeDetail>(item);
-                                obj.ReceiptID = model.ReceiptID;
-                                unitOfWork.ReceiptExchangeDetailRepository.Insert(obj);
-                            }
-                        }
+                    foreach (var item in Details)
+                    {
+                        ReceiptExchangeDetailModel receiptExchangeDetailModel = new ReceiptExchangeDetailModel();
+                        receiptExchangeDetailModel.ReceiptID = receipt.ReceiptID;
+                        receiptExchangeDetailModel.AccountID = item.AccountID;
+                        receiptExchangeDetailModel.ChiqueNumber = item.ChiqueNumber;
+                        receiptExchangeDetailModel.Credit = item.Credit;
+                        receiptExchangeDetailModel.Debit = item.Debit;
+                        receiptExchangeDetailModel.Type = item.Type;
+                        var details = _mapper.Map<ReceiptExchangeDetail>(receiptExchangeDetailModel);
+                        unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
 
-
-                        try
-                        {
+                    }
 
 
-                        #region Generate entry
-                        //===============================================================توليد قيد مع ترحيل تلقائي============================
+                    //==================================================لا تولد قيد ===================================
+                    if (recExcModel.SettingModel.DoNotGenerateEntry == true)
+                    {
+                        unitOfWork.Save();
 
+                        return Ok(recExcModel);
+                    }
+
+                    //===============================================================توليد قيد مع ترحيل تلقائي============================
+
+
+
+                    else if (recExcModel.SettingModel.AutoGenerateEntry == true)
+                    {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var lastEntryDitails = unitOfWork.EntryDetailRepository.Get(filter: x => x.EntryID == lastEntry.EntryID).Select(m => new EntryDetailModel
-                        {
-                            AccountID = m.AccountID,
-                            Credit = m.Credit,
-                            Debit = m.Debit,
-                            EntryID = m.EntryID,
-                            EntryDetailID = m.EntryDetailID,
-                            AccCode = m.Account.Code,
-                            AccNameAR = m.Account.NameAR,
-                            AccNameEN = m.Account.NameEN,
-
-
-
-                        });
-
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, recExcModel, null, lastEntry);
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
-
+                        Entry.ReceiptID = receipt.ReceiptID;
 
                         var DetailEnt = EntryMODEL.EntryDetailModel;
 
@@ -462,152 +485,12 @@ namespace Stocks.Controllers
                             {
                                 item.EntryID = Entry.EntryID;
                                 item.EntryDetailID = 0;
-                                var details = _mapper.Map<ReceiptExchangeDetail>(item);
+                                var details = _mapper.Map<EntryDetail>(item);
 
-                                unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
-                            }
-                            accountingHelper.TransferToAccounts(DetailEnt.Select(a => new EntryDetail
-                            {
-
-                                Credit = a.Credit,
-                                Debit = a.Debit,
-                                EntryDetailID = a.EntryDetailID,
-                                EntryID = a.EntryID,
-                                StocksCredit = a.StocksCredit,
-                                StocksDebit = a.StocksDebit,
-                                AccountID = a.AccountID
-
-                            }).ToList());
-                        }
-                        else
-                        {
-                            Entry.TransferedToAccounts = false;
-                            unitOfWork.EntryRepository.Insert(Entry);
-                            foreach (var item in DetailEnt)
-                            {
-                                item.EntryID = Entry.EntryID;
-                                item.EntryDetailID = 0;
-                                var details = _mapper.Map<ReceiptExchangeDetail>(item);
-
-                                unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
+                                unitOfWork.EntryDetailRepository.Insert(details);
 
                             }
-                        }
-
-
-                        unitOfWork.Save();
-
-
-                        #endregion
-                    }
-                    catch (DbUpdateException ex)
-                        {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-                                // data related
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
-                        }
-                        return Ok(model);
-
-                    
-
-
-                }
-
-
-
-            }
-            else
-            {
-                return Ok(3);
-            }
-        }
-        #endregion
-
-
-        #region Update Methods
-        [HttpPut]
-        [Route("~/api/ReceiptExchange/Update/{id}/{type}")]
-        public IActionResult Update(int id,bool type, [FromBody] ReceiptExchangeModel Model)
-        {
-            if (id != Model.ReceiptID)
-            {
-
-                return Ok(1);
-            }
-
-            if (ModelState.IsValid)
-            {
-                // map main data to entity
-                var model = _mapper.Map<ReceiptExchange>(Model);
-
-                var recExcDetail = Model.RecExcDetails;
-                //var EmpolyeeCard = _mapper.Map<IEnumerable<EmployeeCard>>(empolyeeCard);
-
-                var Check = unitOfWork.ReceiptExchangeRepository.Get(NoTrack: "NoTrack", filter: m => m.Type == type);
-                var oldDetail = unitOfWork.ReceiptExchangeDetailRepository.Get(NoTrack: "NoTrack", filter: m => m.ReceiptID == model.ReceiptID);
-                var Entry = unitOfWork.EntryRepository.Get(filter: x => x.ReceiptID == model.ReceiptID).SingleOrDefault();
-                var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
-                if (Entry.TransferedToAccounts == true)
-                {
-                    accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
-                }
-
-                if (oldDetail != null)
-                {
-                    unitOfWork.ReceiptExchangeDetailRepository.RemovRange(oldDetail);
-
-                } 
-               
-                    unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
-                
-
-                if (Check.Any(m => m.Code != Model.Code))
-                {
-                    unitOfWork.ReceiptExchangeRepository.Update(model);
-
-
-                    foreach (var item in recExcDetail)
-                    {
-                        item.ReceiptID = model.ReceiptID;
-                        item.ReceiptExchangeID = 0;
-                        var newDetail = _mapper.Map<ReceiptExchangeDetail>(item);
-
-                        unitOfWork.ReceiptExchangeDetailRepository.Insert(newDetail);
-
-                    }
-
-                    try
-                    {
-
-                        #region Generate entry
-
-                        var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, Model, null);
-
-                        if (Model.SettingModel.TransferToAccounts == true)
-                        {
-                            Entry.TransferedToAccounts = true;
-                            unitOfWork.EntryRepository.Update(Entry);
-                            foreach (var item in EntryDitails)
-                            {
-                                //    item.EntryID = Entry.EntryID;
-                                item.EntryDetailID = 0;
-                                var details = _mapper.Map<ReceiptExchangeDetail>(item);
-
-                                unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
-
-                            }
-                            accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
+                            accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
                             {
 
 
@@ -620,81 +503,132 @@ namespace Stocks.Controllers
 
                             }).ToList());
                         }
-                        else
-                        {
-                            Entry.TransferedToAccounts = false;
-                            unitOfWork.EntryRepository.Update(Entry);
-                            foreach (var item in EntryDitails)
-                            {
-                                //  item.EntryID = Entry.EntryID;
-                                item.EntryDetailID = 0;
-                                var details = _mapper.Map<PurchaseOrderDetail>(item);
-
-                                unitOfWork.PurchaseOrderDetailRepository.Insert(details);
-
-                            }
-                        }
-                        unitOfWork.Save();
-                        #endregion
+                        
+                       
 
                     }
-                    catch (DbUpdateException ex)
+                    //================================توليد قيد مع عدم الترحيل======================================
+                    if (recExcModel.SettingModel.GenerateEntry==true)
+
                     {
-                        var sqlException = ex.GetBaseException() as SqlException;
+                        var lastEntry = unitOfWork.EntryRepository.Last();
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, recExcModel, null, lastEntry);
+                        var Entry = _mapper.Map<Entry>(EntryMODEL);
+                        Entry.ReceiptID = receipt.ReceiptID;
 
-                        if (sqlException != null)
+                        var DetailEnt = EntryMODEL.EntryDetailModel;
+                        Entry.TransferedToAccounts = false;
+                        unitOfWork.EntryRepository.Insert(Entry);
+                        foreach (var item in DetailEnt)
                         {
-                            var number = sqlException.Number;
-                            // data related
-                            if (number == 547)
-                            {
-                                return Ok(5);
+                            item.EntryID = Entry.EntryID;
+                            item.EntryDetailID = 0;
+                            var details = _mapper.Map<EntryDetail>(item);
 
-                            }
-                            else
-                                return Ok(6);
+                            unitOfWork.EntryDetailRepository.Insert(details);
+
                         }
                     }
-                    return Ok(model);
+
+
+                    unitOfWork.Save();
+
+
+
+                    return Ok(recExcModel);
+
 
 
                 }
-                else
+            }
+            else
+            {
+                return Ok(3);
+            }
+        }
+        #endregion
+
+
+        #region Update Methods
+        [HttpPut]
+        [Route("~/api/ReceiptExchange/Update/{id}/{type}")]
+        public IActionResult Update(int id,bool type, [FromBody] ReceiptExchangeModel receiptExchangeModel)
+        {
+            if (id != receiptExchangeModel.ReceiptID)
+            {
+
+                return Ok(1);
+            }
+
+            if (ModelState.IsValid)
+            {
+
+                var Check = unitOfWork.ReceiptExchangeRepository.Get(NoTrack: "NoTrack");
+
+                var ReceiptExchange = _mapper.Map<ReceiptExchange>(receiptExchangeModel);
+                var NewdDetails = receiptExchangeModel.RecExcDetails;
+                var Newdetails = _mapper.Map<IEnumerable<ReceiptExchangeDetail>>(NewdDetails);
+                var OldDetails = unitOfWork.ReceiptExchangeDetailRepository.Get(filter: m => m.ReceiptExchangeID == ReceiptExchange.ReceiptID);
+                var EntryCheck = unitOfWork.EntryRepository.Get(x => x.ReceiptID == ReceiptExchange.ReceiptID).SingleOrDefault();
+                if (EntryCheck != null)
                 {
-                    if (Check.Any(m => m.Code == Model.Code && m.ReceiptID == id))
+
+                    var Entry = unitOfWork.EntryRepository.Get(filter: x => x.ReceiptID == ReceiptExchange.ReceiptID).SingleOrDefault();
+                    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                    if (Entry.TransferedToAccounts == true)
                     {
+                        accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
+                    }
+                    unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
 
-                        unitOfWork.ReceiptExchangeRepository.Update(model);
-                        
-                        foreach (var item in recExcDetail)
+                    if (Check.Any(m => m.Code != ReceiptExchange.Code))
+                    {
+                        unitOfWork.ReceiptExchangeRepository.Update(ReceiptExchange);
+                        if (OldDetails != null)
                         {
-                            item.ReceiptID = model.ReceiptID;
-                            item.ReceiptExchangeID = 0;
-                            var neweDetail = _mapper.Map<ReceiptExchangeDetail>(item);
-
-                            unitOfWork.ReceiptExchangeDetailRepository.Insert(neweDetail);
-
+                            unitOfWork.ReceiptExchangeDetailRepository.RemovRange(OldDetails);
+                            unitOfWork.Save();
                         }
 
-                        try
+
+                        if (Newdetails != null)
                         {
+                            foreach (var item in Newdetails)
+                            {
+                                item.ReceiptID = ReceiptExchange.ReceiptID;
+                                item.ReceiptExchangeID = 0;
+                                var details = _mapper.Map<ReceiptExchangeDetail>(item);
+
+                                unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
+
+                            }
+                        }
 
 
-                            #region Generate entry
+                        //==================================================لا تولد قيد ===================================
+                        if (receiptExchangeModel.SettingModel.DoNotGenerateEntry == true)
+                        {
+                            unitOfWork.EntryRepository.Delete(Entry.EntryID);
+                            unitOfWork.Save();
 
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID,null,null,Model,null);
+                            return Ok(receiptExchangeModel);
+                        }
+                        //===================================توليد قيد مع ترحيل تلقائي===================================
+                        if (receiptExchangeModel.SettingModel.AutoGenerateEntry == true)
+                        {
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, receiptExchangeModel, null);
 
-                            if (Model.SettingModel.TransferToAccounts == true)
+                            if (receiptExchangeModel.SettingModel.TransferToAccounts == true)
                             {
                                 Entry.TransferedToAccounts = true;
                                 unitOfWork.EntryRepository.Update(Entry);
                                 foreach (var item in EntryDitails)
                                 {
-                                //    item.EntryID = Entry.EntryID;
+                                    item.EntryID = Entry.EntryID;
                                     item.EntryDetailID = 0;
-                                    var details = _mapper.Map<ReceiptExchangeDetail>(item);
+                                    var details = _mapper.Map<EntryDetail>(item);
 
-                                    unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
+                                    unitOfWork.EntryDetailRepository.Insert(details);
 
                                 }
                                 accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
@@ -710,51 +644,356 @@ namespace Stocks.Controllers
 
                                 }).ToList());
                             }
-                            else
+                            
+                        }
+                        //===================================توليد قيد مع  عدم ترحيل===================================
+                        if (receiptExchangeModel.SettingModel.GenerateEntry==true)
+                        
+                        {
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, receiptExchangeModel, null);
+                            Entry.TransferedToAccounts = false;
+                            unitOfWork.EntryRepository.Update(Entry);
+                            foreach (var item in EntryDitails)
                             {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
+
+                                unitOfWork.EntryDetailRepository.Insert(details);
+
+                            }
+                        }
+                        unitOfWork.Save();
+
+
+
+                        return Ok(receiptExchangeModel);
+
+
+                    }
+
+
+                    //==========================================Second Case OF Code Of Purchase=======================================
+
+                    else
+                    {
+                        if (Check.Any(m => m.Code == ReceiptExchange.Code && m.ReceiptID == id))
+                        {
+                            unitOfWork.ReceiptExchangeRepository.Update(ReceiptExchange);
+                            if (OldDetails != null)
+                            {
+                                unitOfWork.ReceiptExchangeDetailRepository.RemovRange(OldDetails);
+                                unitOfWork.Save();
+                            }
+
+
+                            if (Newdetails != null)
+                            {
+                                foreach (var item in Newdetails)
+                                {
+                                    item.ReceiptID = ReceiptExchange.ReceiptID;
+                                    item.ReceiptExchangeID = 0;
+                                    var details = _mapper.Map<ReceiptExchangeDetail>(item);
+
+                                    unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
+
+                                }
+                            }
+
+
+                            //==================================================لا تولد قيد ===================================
+                            if (receiptExchangeModel.SettingModel.DoNotGenerateEntry == true)
+                            {
+                                unitOfWork.EntryRepository.Delete(Entry.EntryID);
+                                unitOfWork.Save();
+
+                                return Ok(receiptExchangeModel);
+                            }
+                            //===================================توليد قيد مع ترحيل تلقائي===================================
+                            if (receiptExchangeModel.SettingModel.AutoGenerateEntry == true)
+                            {
+                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, receiptExchangeModel, null);
+
+                                if (receiptExchangeModel.SettingModel.TransferToAccounts == true)
+                                {
+                                    Entry.TransferedToAccounts = true;
+                                    unitOfWork.EntryRepository.Update(Entry);
+                                    foreach (var item in EntryDitails)
+                                    {
+                                        item.EntryID = Entry.EntryID;
+                                        item.EntryDetailID = 0;
+                                        var details = _mapper.Map<EntryDetail>(item);
+
+                                        unitOfWork.EntryDetailRepository.Insert(details);
+
+                                    }
+                                    accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
+                                    {
+
+
+                                        EntryDetailID = x.EntryDetailID,
+                                        AccountID = x.AccountID,
+                                        Credit = x.Credit,
+                                        Debit = x.Debit,
+                                        EntryID = x.EntryID
+
+
+                                    }).ToList());
+                                }
+                                
+                            }
+                            //===================================توليد قيد مع  عدم ترحيل===================================
+                            if (receiptExchangeModel.SettingModel.GenerateEntry == true)
+
+                            {
+                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, receiptExchangeModel, null);
                                 Entry.TransferedToAccounts = false;
                                 unitOfWork.EntryRepository.Update(Entry);
                                 foreach (var item in EntryDitails)
                                 {
-                                  //  item.EntryID = Entry.EntryID;
+                                    item.EntryID = Entry.EntryID;
                                     item.EntryDetailID = 0;
-                                    var details = _mapper.Map<PurchaseOrderDetail>(item);
+                                    var details = _mapper.Map<EntryDetail>(item);
 
-                                    unitOfWork.PurchaseOrderDetailRepository.Insert(details);
+                                    unitOfWork.EntryDetailRepository.Insert(details);
 
                                 }
                             }
                             unitOfWork.Save();
-                            #endregion
+
+
+
+                            return Ok(receiptExchangeModel);
 
                         }
-                        catch (DbUpdateException ex)
+
+
+                    }
+                    return Ok(receiptExchangeModel);
+                }
+
+                // now We Will Create new Entry As Insert
+
+
+                else
+                {
+                    if (Check.Any(m => m.Code != ReceiptExchange.Code))
+                    {
+                        unitOfWork.ReceiptExchangeRepository.Update(ReceiptExchange);
+                        if (OldDetails != null)
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
+                            unitOfWork.ReceiptExchangeDetailRepository.RemovRange(OldDetails);
+                            unitOfWork.Save();
+                        }
 
-                            if (sqlException != null)
+
+                        if (Newdetails != null)
+                        {
+                            foreach (var item in Newdetails)
                             {
-                                var number = sqlException.Number;
-                                // data related
-                                if (number == 547)
-                                {
-                                    return Ok(5);
+                                item.ReceiptID = ReceiptExchange.ReceiptID;
+                                item.ReceiptExchangeID = 0;
+                                var details = _mapper.Map<ReceiptExchangeDetail>(item);
 
-                                }
-                                else
-                                    return Ok(6);
+                                unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
+
                             }
                         }
 
-                        return Ok(model);
+
+                        //==================================================لا تولد قيد ===================================
+                        if (receiptExchangeModel.SettingModel.DoNotGenerateEntry == true)
+                        {
+
+                            unitOfWork.Save();
+
+                            return Ok(receiptExchangeModel);
+                        }
+                        //===============================================================توليد قيد مع ترحيل تلقائي============================
+
+
+
+                        else if (receiptExchangeModel.SettingModel.AutoGenerateEntry == true)
+                        {
+                            var lastEntry = unitOfWork.EntryRepository.Last();
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, receiptExchangeModel, null, lastEntry);
+                            var Entry = _mapper.Map<Entry>(EntryMODEL);
+                            Entry.ReceiptID = ReceiptExchange.ReceiptID;
+
+                            var DetailEnt = EntryMODEL.EntryDetailModel;
+
+                            if (receiptExchangeModel.SettingModel.TransferToAccounts == true)
+                            {
+                                Entry.TransferedToAccounts = true;
+                                unitOfWork.EntryRepository.Insert(Entry);
+                                foreach (var item in DetailEnt)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<EntryDetail>(item);
+
+                                    unitOfWork.EntryDetailRepository.Insert(details);
+
+                                }
+                                accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+                                {
+
+
+                                    EntryDetailID = x.EntryDetailID,
+                                    AccountID = x.AccountID,
+                                    Credit = x.Credit,
+                                    Debit = x.Debit,
+                                    EntryID = x.EntryID
+
+
+                                }).ToList());
+                            }
+                        }
+                        //================================توليد قيد مع عدم الترحيل====================================== 
+                        if (receiptExchangeModel.SettingModel.GenerateEntry==true)
+                        
+                        {
+                            var lastEntry = unitOfWork.EntryRepository.Last();
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, receiptExchangeModel, null, lastEntry);
+                            var Entry = _mapper.Map<Entry>(EntryMODEL);
+                            Entry.ReceiptID = ReceiptExchange.ReceiptID;
+
+                            var DetailEnt = EntryMODEL.EntryDetailModel;
+                            Entry.TransferedToAccounts = false;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
+
+                                unitOfWork.EntryDetailRepository.Insert(details);
+
+                            }
+                        }
+
+
+                        unitOfWork.Save();
+
+
+
+                        return Ok(receiptExchangeModel);
+
 
                     }
+
+
+                    //==========================================Second Case OF Code Of Purchase=======================================
+
                     else
                     {
-                        return Ok(2);
-                    }
-                }
+                        if (Check.Any(m => m.Code == ReceiptExchange.Code && m.ReceiptID == id))
+                        {
+                            unitOfWork.ReceiptExchangeRepository.Update(ReceiptExchange);
+                            if (OldDetails != null)
+                            {
+                                unitOfWork.ReceiptExchangeDetailRepository.RemovRange(OldDetails);
+                                unitOfWork.Save();
+                            }
 
+
+                            if (Newdetails != null)
+                            {
+                                foreach (var item in Newdetails)
+                                {
+                                    item.ReceiptID = ReceiptExchange.ReceiptID;
+                                    item.ReceiptExchangeID = 0;
+                                    var details = _mapper.Map<ReceiptExchangeDetail>(item);
+
+                                    unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
+
+                                }
+                            }
+
+
+                            //==================================================لا تولد قيد ===================================
+                            if (receiptExchangeModel.SettingModel.DoNotGenerateEntry == true)
+                            {
+
+                                unitOfWork.Save();
+
+                                return Ok(receiptExchangeModel);
+                            }
+                            //===============================================================توليد قيد مع ترحيل تلقائي============================
+
+
+
+                            else if (receiptExchangeModel.SettingModel.AutoGenerateEntry == true)
+                            {
+                                var lastEntry = unitOfWork.EntryRepository.Last();
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, receiptExchangeModel, null, lastEntry);
+                                var Entry = _mapper.Map<Entry>(EntryMODEL);
+                                Entry.ReceiptID = ReceiptExchange.ReceiptID;
+
+                                var DetailEnt = EntryMODEL.EntryDetailModel;
+
+                                if (receiptExchangeModel.SettingModel.TransferToAccounts == true)
+                                {
+                                    Entry.TransferedToAccounts = true;
+                                    unitOfWork.EntryRepository.Insert(Entry);
+                                    foreach (var item in DetailEnt)
+                                    {
+                                        item.EntryID = Entry.EntryID;
+                                        item.EntryDetailID = 0;
+                                        var details = _mapper.Map<EntryDetail>(item);
+
+                                        unitOfWork.EntryDetailRepository.Insert(details);
+
+                                    }
+                                    accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+                                    {
+
+
+                                        EntryDetailID = x.EntryDetailID,
+                                        AccountID = x.AccountID,
+                                        Credit = x.Credit,
+                                        Debit = x.Debit,
+                                        EntryID = x.EntryID
+
+
+                                    }).ToList());
+                                }
+                            }
+                            //================================توليد قيد مع عدم الترحيل====================================== 
+                            if (receiptExchangeModel.SettingModel.GenerateEntry == true)
+
+                            {
+                                var lastEntry = unitOfWork.EntryRepository.Last();
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, receiptExchangeModel, null, lastEntry);
+                                var Entry = _mapper.Map<Entry>(EntryMODEL);
+                                Entry.ReceiptID = ReceiptExchange.ReceiptID;
+
+                                var DetailEnt = EntryMODEL.EntryDetailModel;
+                                Entry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Insert(Entry);
+                                foreach (var item in DetailEnt)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<EntryDetail>(item);
+
+                                    unitOfWork.EntryDetailRepository.Insert(details);
+
+                                }
+                            }
+
+
+                            unitOfWork.Save();
+
+
+
+                            return Ok(receiptExchangeModel);
+                        }
+
+
+                    }
+                    return Ok(receiptExchangeModel);
+                }
             }
             else
             {

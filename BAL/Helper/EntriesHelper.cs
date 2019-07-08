@@ -17,7 +17,7 @@ namespace BAL.Helper
 
             #region Definitions
             decimal TotalNet = 0, TotalBankCommision = 0, TotalTaxOnCommision = 0, TotalSTocksSales = 0, TotalSTocksPurchase = 0;
-            List<EntryDetailModel> DetailListModel = null;
+            List<EntryDetailModel> DetailListModel = new List<EntryDetailModel>();
             int AccBankCommision = 0, AccTaxonCommision = 0, AccSalesStocks = 0, AccPuchaseStocks=0;
             EntryModel Entrymodel = new EntryModel();
 
@@ -314,7 +314,7 @@ namespace BAL.Helper
         {
             #region Definitions
             decimal TotalNet = 0, TotalBankCommision = 0, TotalTaxOnCommision = 0, TotalSTocksSales = 0, TotalSTocksPurchase = 0;
-            List<EntryDetailModel> DetailListModel = null;
+            List<EntryDetailModel> DetailListModel = new List<EntryDetailModel>();
             int AccBankCommision = 0, AccTaxonCommision = 0, AccSalesStocks = 0, AccPuchaseStocks = 0;
             EntryModel Entrymodel = new EntryModel();
 

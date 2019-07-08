@@ -18,8 +18,9 @@
 
 [1]- selling order .
 [2]- purchase order .
-[3]- receipt voucher .
-[4]- exhange voucher .
-[5]- notice creditor .
-[6]- notice debitor .
+[3]- notice creditor .
+[4]- notice debitor .
+[5]- receipt voucher .
+[6]- exhange voucher .
+
 

@@ -26,6 +26,8 @@ namespace BAL.Model
         public IEnumerable<ReceiptExchangeDetailModel> RecExcDetails { get; set; }
 
         public SettingModel SettingModel { get; set; }
+         
+        public EntryModel EntryModel { get; set; }
 
     }
 }
