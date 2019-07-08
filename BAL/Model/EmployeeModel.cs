@@ -43,6 +43,8 @@ namespace BAL.Model
 
         public int Count { get; set; }
 
+        public string LastCode { get; set; }
+
         public IEnumerable<EmployeeCardModel> EmployeeCards { get; set; }
 
     }

@@ -108,6 +108,16 @@ namespace Stocks.Controllers
         }
 
         [HttpGet]
+        [Route("~/api/Employee/FirstOpen")]
+        public IActionResult FirstOpen()
+        {
+            EmployeeModel model = new EmployeeModel();
+            model.LastCode = unitOfWork.PartnerRepository.Last().Code;
+            model.Count = unitOfWork.PartnerRepository.Count();
+            return Ok(model);
+        }
+
+        [HttpGet]
         [Route("~/api/Employee/GetLast")]
         public IActionResult GetLastEmp()
         {

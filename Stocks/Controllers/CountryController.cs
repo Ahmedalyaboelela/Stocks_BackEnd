@@ -31,6 +31,17 @@ namespace Stocks.Controllers
         #endregion
 
         #region GET Methods
+        [HttpGet]
+        [Route("~/api/Country/FirstOpen")]
+        public IActionResult FirstOpen()
+        {
+            CountryModel model = new CountryModel();
+            model.LastCode = unitOfWork.PartnerRepository.Last().Code;
+            model.Count = unitOfWork.PartnerRepository.Count();
+            return Ok(model);
+        }
+
+
         [Route("~/api/Country/GetLast")]
         public IActionResult GetLastCountry()
         {

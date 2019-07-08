@@ -23,3 +23,8 @@
 [5]- notice creditor .
 [6]- notice debitor .
 
+// ..................... Portfolio Accounts ................... //
+[1]- portfolio account
+[2]- pocket money account
+[3]- stock account
+
