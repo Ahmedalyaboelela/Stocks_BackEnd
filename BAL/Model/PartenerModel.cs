@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -53,5 +54,6 @@ namespace BAL.Model
         public int Count { get; set; }
 
         public string LastCode { get; set; }
+        public IEnumerable<CountryModel> Countries { get; set; }
     }
 }
