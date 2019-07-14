@@ -10,9 +10,13 @@ namespace BAL.Model
 
         public int EntryID { get; set; }
 
-        public decimal Debit { get; set; }
+        public decimal? Debit { get; set; }
 
-        public decimal Credit { get; set; }
+        public decimal? Credit { get; set; }
+
+        public float? StocksDebit { get; set; }
+
+        public float? StocksCredit { get; set; }
 
         public int AccountID { get; set; }
 

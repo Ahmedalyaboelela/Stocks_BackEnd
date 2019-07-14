@@ -86,7 +86,8 @@ namespace BAL.Mapper
             CreateMap<PurchaseOrderDetailModel, PurchaseOrderDetail>();
 
 
-
+            CreateMap<Currency, CurrencyModel>();
+            CreateMap<CurrencyModel, Currency>().ForSourceMember(t => t.Count, opt => opt.DoNotValidate());
 
 
             #endregion

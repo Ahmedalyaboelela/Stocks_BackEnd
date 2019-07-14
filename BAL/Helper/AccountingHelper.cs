@@ -2,6 +2,7 @@
 using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
+using DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +21,7 @@ namespace BAL.Helper
             this._mapper = mapper;
         }
 
-        public void TransferToAccounts(List<EntryDetailModel> EntryList)
+        public void TransferToAccounts(List<EntryDetail> EntryList)
         {
             foreach (var item in EntryList)
             {
@@ -44,6 +45,32 @@ namespace BAL.Helper
                 unitOfWork.AccountRepository.Update(account);
             }
         }
-            
+
+        public void CancelTransferToAccounts(List<EntryDetail> EntryList)
+        {
+            foreach (var item in EntryList)
+            {
+                var account = unitOfWork.AccountRepository.GetByID(item.AccountID);
+                if (item.Credit != 0)
+                {
+                    if (account.Credit == null)
+                    {
+                        account.Credit = 0;
+                    }
+                    account.Credit -= item.Credit;
+                }
+                if (item.Debit != 0)
+                {
+                    if (account.Debit == null)
+                    {
+                        account.Debit = 0;
+                    }
+                    account.Debit -= item.Debit;
+                }
+                unitOfWork.AccountRepository.Update(account);
+            }
+        }
+
+
     }
 }

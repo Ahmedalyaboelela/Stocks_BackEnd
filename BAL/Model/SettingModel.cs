@@ -10,7 +10,9 @@ namespace BAL.Model
         
         public string Code { get; set; }
 
-        public bool DoNotGenerateEntry { get; set; }
+        public bool? DoNotGenerateEntry { get; set; }
+
+
 
         public bool GenerateEntry { get; set; }
 
@@ -19,7 +21,6 @@ namespace BAL.Model
         public bool TransferToAccounts { get; set; }
 
         public int VoucherType { get; set; }
-
         public virtual IEnumerable<SettingAccountModel> SettingAccs { get; set; }
     }
 }

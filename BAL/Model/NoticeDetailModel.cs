@@ -10,9 +10,9 @@ namespace BAL.Model
 
         public int NoticeID { get; set; }
         
-        public decimal Debit { get; set; }
+        public decimal? Debit { get; set; }
 
-        public decimal Credit { get; set; }
+        public decimal? Credit { get; set; }
 
         public float? StocksDebit { get; set; }
 
