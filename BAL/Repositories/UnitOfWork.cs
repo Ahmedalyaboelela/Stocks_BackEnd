@@ -318,6 +318,20 @@ namespace BAL.Repositories
             }
         }
 
+        private GenericRepository<Currency> currencyRepository;
+        public GenericRepository<Currency> CurrencyRepository
+        {
+            get
+            {
+                if (this.currencyRepository == null)
+                {
+                    this.currencyRepository = new GenericRepository<Currency>(Context);
+                }
+                return currencyRepository;
+            }
+        }
+
+
 
         #endregion
 
