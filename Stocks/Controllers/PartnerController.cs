@@ -38,6 +38,13 @@ namespace Stocks.Controllers
             PartenerModel model = new PartenerModel();
             model.LastCode = unitOfWork.PartnerRepository.Last().Code;
             model.Count = unitOfWork.PartnerRepository.Count();
+            model.Countries = unitOfWork.CountryRepository.Get().Select(m => new CountryModel
+            {
+                CountryID = m.CountryID,
+                NameAR = m.NameAR,
+                NameEN = m.NameEN
+
+            }); 
             return Ok(model);
         }
 
@@ -57,17 +64,48 @@ namespace Stocks.Controllers
                 }
 
                 // deal with date
-                model.IssueDate = partner.IssueDate.Value.ToString("dd/MM/yyyy");
-                model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
+                if (partner.IssueDate != null)
+                {
 
-                model.AccountNameAr = partner.Account.NameAR;
-                model.AccountNameEn = partner.Account.NameEN;
+                    model.IssueDate = partner.IssueDate.Value.ToString("dd/MM/yyyy");
+                    model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
 
-                model.CountryNameAr = partner.Country.NameAR;
-                model.CountryNameEn = partner.Country.NameEN;
+                }
+
+                if(partner.Account !=null)
+                {
+
+                    model.AccountNameAr = partner.Account.NameAR;
+                    model.AccountNameEn = partner.Account.NameEN;
+                }
+
+                if(partner.Country!=null)
+                {
+                    model.CountryNameAr = partner.Country.NameAR;
+                    model.CountryNameEn = partner.Country.NameEN;
+                }
+              
 
                 model.Count = unitOfWork.PartnerRepository.Count();
-               
+                var countries = unitOfWork.CountryRepository.Get();
+                if(countries !=null || countries.Count()>0)
+                {
+                    model.Countries=countries.Select(m => new CountryModel
+                    {
+                        CountryID = m.CountryID,
+                        NameAR = m.NameAR,
+                        NameEN = m.NameEN
+
+                    });
+                }
+                //model.Countries = unitOfWork.CountryRepository.Get().Select(m => new CountryModel
+                //{
+                //    CountryID = m.CountryID,
+                //    NameAR = m.NameAR,
+                //    NameEN = m.NameEN
+
+                //});
+
                 return Ok( model);
             }
             catch (NullReferenceException ex)
@@ -107,9 +145,13 @@ namespace Stocks.Controllers
                     }
 
                     // deal with date
-                    model.IssueDate = partner.IssueDate.Value.ToString("dd/MM/yyyy");
-                    model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
+                    if(partner.IssueDate!=null)
+                    {
 
+                        model.IssueDate = partner.IssueDate.Value.ToString("dd/MM/yyyy");
+                        model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
+
+                    }
                     model.AccountNameAr = partner.Account.NameAR;
                     model.AccountNameEn = partner.Account.NameEN;
 
@@ -117,7 +159,14 @@ namespace Stocks.Controllers
                     model.CountryNameEn = partner.Country.NameEN;
 
                     model.Count = unitOfWork.PartnerRepository.Count();
-                   
+                    model.Countries = unitOfWork.CountryRepository.Get().Select(m => new CountryModel
+                    {
+                        CountryID = m.CountryID,
+                        NameAR = m.NameAR,
+                        NameEN = m.NameEN
+
+                    });
+
                     return Ok(model);
                 }
                 else
@@ -165,14 +214,25 @@ namespace Stocks.Controllers
                 {
 
                     // deal with date
-                    model.IssueDate = partner.IssueDate.Value.ToString("dd/MM/yyyy");
-                    model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
+                    if (partner.IssueDate != null)
+                    {
 
+                        model.IssueDate = partner.IssueDate.Value.ToString("dd/MM/yyyy");
+                        model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
+
+                    }
                     model.AccountNameAr = partner.Account.NameAR;
                     model.AccountNameEn = partner.Account.NameEN;
 
                     model.CountryNameAr = partner.Country.NameAR;
                     model.CountryNameEn = partner.Country.NameEN;
+                    model.Countries = unitOfWork.CountryRepository.Get().Select(m => new CountryModel
+                    {
+                        CountryID = m.CountryID,
+                        NameAR = m.NameAR,
+                        NameEN = m.NameEN
+
+                    });
 
                     model.Count = unitOfWork.PartnerRepository.Count();
 
@@ -204,13 +264,46 @@ namespace Stocks.Controllers
                     if (model[j].PartnerID == partner[i].PartnerID)
                     {
                         // deal with date
-                        model[j].IssueDate = partner[i].IssueDate.Value.ToString("dd/MM/yyyy");
-                        model[j].IssueDateHijri = DateHelper.GetHijriDate(partner[i].IssueDate);
 
-                        model[j].AccountNameAr = partner[i].Account.NameAR;
-                        model[j].AccountNameEn = partner[i].Account.NameEN;
-                        model[j].CountryNameAr = partner[i].Country.NameAR;
-                        model[j].CountryNameEn = partner[i].Country.NameEN;
+
+                        //model[j].IssueDate = partner[i].IssueDate.Value.ToString("dd/MM/yyyy");
+                        //model[j].IssueDateHijri = DateHelper.GetHijriDate(partner[i].IssueDate);
+
+
+                        if (partner[i].IssueDate != null)
+                        {
+
+                            model[j].IssueDate = partner[i].IssueDate.Value.ToString("dd/MM/yyyy");
+                            model[j].IssueDateHijri = DateHelper.GetHijriDate(partner[i].IssueDate);
+
+                        }
+
+                        if(partner[i].Account !=null)
+                        {
+
+                            model[j].AccountNameAr = partner[i].Account.NameAR;
+                            model[j].AccountNameEn = partner[i].Account.NameEN;
+                        }
+
+                        if(partner[i].Country !=null)
+                        {
+
+                            model[j].CountryNameAr = partner[i].Country.NameAR;
+                            model[j].CountryNameEn = partner[i].Country.NameEN;
+                        }
+
+                        var countries = unitOfWork.CountryRepository.Get();
+                        if(countries !=null || countries.Count()>0)
+                        {
+                            model[j].Countries = countries.Select(m => new CountryModel
+                            {
+                                CountryID = m.CountryID,
+                                NameAR = m.NameAR,
+                                NameEN = m.NameEN
+
+                            });
+                        }
+                       
 
 
                     }
@@ -299,7 +392,7 @@ namespace Stocks.Controllers
         public IActionResult PutPartner(int id, [FromBody] PartenerModel partnerModel)
         {
 
-            if (id>0)
+            if (id<0)
             {
                 return Ok(1);
             }
