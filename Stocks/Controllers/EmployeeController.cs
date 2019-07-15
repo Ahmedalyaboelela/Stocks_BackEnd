@@ -112,8 +112,8 @@ namespace Stocks.Controllers
         public IActionResult FirstOpen()
         {
             EmployeeModel model = new EmployeeModel();
-            model.LastCode = unitOfWork.PartnerRepository.Last().Code;
-            model.Count = unitOfWork.PartnerRepository.Count();
+            model.LastCode = unitOfWork.EmployeeRepository.Last().Code;
+            model.Count = unitOfWork.EmployeeRepository.Count();
             return Ok(model);
         }
 
