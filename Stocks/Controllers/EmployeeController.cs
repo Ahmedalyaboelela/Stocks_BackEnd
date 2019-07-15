@@ -71,9 +71,12 @@ namespace Stocks.Controllers
                 return model;
             }
             #region Date part
+            if(employee.BirthDate!=null)
+            {
 
-            model.BirthDate = employee.BirthDate.Value.ToString("dd/MM/yyyy");
-            model.BirthDateHijri = DateHelper.GetHijriDate(employee.BirthDate);
+                model.BirthDate = employee.BirthDate.Value.ToString("dd/MM/yyyy");
+                model.BirthDateHijri = DateHelper.GetHijriDate(employee.BirthDate);
+            }
             #endregion
 
             #region Cards part
@@ -341,16 +344,19 @@ namespace Stocks.Controllers
                 {
                     unitOfWork.EmployeeRepository.Update(model);
                     
-
-                    foreach (var item in empolyeeCard)
+                    if(empolyeeCard!= null || empolyeeCard.Count()>0)
                     {
-                        item.EmployeeID = model.EmployeeID;
-                        item.EmpCardId = 0;
-                        var newcard = _mapper.Map<EmployeeCard>(item);
+                        foreach (var item in empolyeeCard)
+                        {
+                            item.EmployeeID = model.EmployeeID;
+                            item.EmpCardId = 0;
+                            var newcard = _mapper.Map<EmployeeCard>(item);
 
-                        unitOfWork.EmployeeCardRepository.Insert(newcard);
+                            unitOfWork.EmployeeCardRepository.Insert(newcard);
 
+                        }
                     }
+                   
 
                     try
                     {
@@ -382,15 +388,18 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.EmployeeRepository.Update(model);
-                     
-                        foreach (var item in empolyeeCard)
+
+                        if (empolyeeCard != null || empolyeeCard.Count()>0)
                         {
-                            item.EmployeeID = model.EmployeeID;
-                            item.EmpCardId = 0;
-                            var newcard = _mapper.Map<EmployeeCard>(item);
+                            foreach (var item in empolyeeCard)
+                            {
+                                item.EmployeeID = model.EmployeeID;
+                                item.EmpCardId = 0;
+                                var newcard = _mapper.Map<EmployeeCard>(item);
 
-                            unitOfWork.EmployeeCardRepository.Insert(newcard);
+                                unitOfWork.EmployeeCardRepository.Insert(newcard);
 
+                            } 
                         }
 
                         try
@@ -452,8 +461,11 @@ namespace Stocks.Controllers
             var EmpCard = unitOfWork.EmployeeCardRepository.Get(filter: m => m.EmployeeID == id);
          
 
+            if(EmpCard !=null || EmpCard.Count()>0)
+            {
+                unitOfWork.EmployeeCardRepository.RemovRange(EmpCard);
 
-            unitOfWork.EmployeeCardRepository.RemovRange(EmpCard);
+            }
             unitOfWork.EmployeeRepository.Delete(employee);
             try
             {
