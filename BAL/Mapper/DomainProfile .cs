@@ -64,9 +64,9 @@ namespace BAL.Mapper
             CreateMap<PortfolioAccountModel, PortfolioAccount>();
 
             // portfolio shareholders
-            CreateMap<PortfolioShareHolder, PortfolioShareholderModel>();
+            CreateMap<PortfolioOpeningStocks, PortfolioOpeningStocksModel>();
 
-            CreateMap<PortfolioShareholderModel, PortfolioShareHolder>();
+            CreateMap<PortfolioOpeningStocksModel, PortfolioOpeningStocks>();
 
 
             CreateMap<Setting, SettingModel>();

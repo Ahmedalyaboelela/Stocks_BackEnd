@@ -6,16 +6,16 @@ using System.Text;
 
 namespace DAL.Entities
 {
-    public class PortfolioShareHolder
+    public class PortfolioOpeningStocks
     {
         [Key]
-        public int PortShareID { get; set; }
+        public int PortOPenStockID { get; set; }
+
+        public float StocksCount { get; set; }
+
         [Column(TypeName = "decimal(10,2)")]
-        public decimal Amount { get; set; }
-        public float Percentage { get; set; }
-        public int StocksCount { get; set; }
-        [Column(TypeName = "nvarchar(MAX)")]
-        public string Notes { get; set; }
+        public decimal StockValue { get; set; }
+
         public int PortfolioID { get; set; }
         public int PartnerID { get; set; }
 
