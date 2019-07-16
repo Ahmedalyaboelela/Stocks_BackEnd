@@ -48,7 +48,7 @@ namespace Stocks.Controllers
             {
                 return Ok(0);
             }
-           
+
 
 
             model.Count = unitOfWork.CurrencyRepository.Count();
@@ -72,7 +72,7 @@ namespace Stocks.Controllers
                     return Ok(0);
                 }
 
-                
+
 
 
                 model.Count = unitOfWork.CurrencyRepository.Count();
@@ -101,7 +101,7 @@ namespace Stocks.Controllers
                 }
                 else
                 {
-                    
+
 
                     model.Count = unitOfWork.CurrencyRepository.Count();
 
@@ -116,13 +116,13 @@ namespace Stocks.Controllers
 
 
 
-       
+
         #endregion
 
         #region Insert Method
 
         [HttpPost]
-        [Route("~/api/Currency/AddCurrency")]
+        [Route("~/api/Currency/AddCurrency/")]
         public IActionResult AddCurrency([FromBody] CurrencyModel currencyModel)
         {
             if (ModelState.IsValid)
@@ -138,34 +138,34 @@ namespace Stocks.Controllers
 
                     return Ok(2);
                 }
-                
-                    else
+
+                else
+                {
+                    unitOfWork.CurrencyRepository.Insert(model);
+                    try
                     {
-                        unitOfWork.CurrencyRepository.Insert(model);
-                        try
-                        {
-                            unitOfWork.Save();
-                        }
-                        catch (DbUpdateException ex)
-                        {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
-                        }
-                        return Ok(currencyModel);
+                        unitOfWork.Save();
                     }
-                
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
+                    return Ok(currencyModel);
+                }
+
 
 
 
@@ -185,92 +185,57 @@ namespace Stocks.Controllers
         public IActionResult PutAccount(int id, [FromBody] CurrencyModel currencyModel)
         {
 
+            if (id != currencyModel.CurrencyID)
+            {
+
+                return BadRequest();
+            }
 
             if (ModelState.IsValid)
             {
-                var checkcurrency = unitOfWork.CurrencyRepository.Get(filter: a => a.CurrencyID == id);
-                if (checkcurrency != null)
+                var model = _mapper.Map<Currency>(currencyModel);
+                if (model == null)
                 {
-                    var model = _mapper.Map<Currency>(currencyModel);
-                    if (model == null)
-                    {
-                        return Ok(0);
-
-                    }
-
-                    var Check = unitOfWork.CurrencyRepository.Get(NoTrack: "NoTrack");
-                    if (!Check.Any(m => m.Code == currencyModel.Code))
-                    {
-
-                        unitOfWork.CurrencyRepository.Update(model);
-                        try
-                        {
-                            unitOfWork.Save();
-                        }
-                        catch (DbUpdateException ex)
-                        {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
-                        }
-                        return Ok(currencyModel);
-                    }
-                    else
-                    {
-                        if (Check.Any(m => m.Code == currencyModel.Code && m.CurrencyID == id))
-                        {
-
-                            unitOfWork.CurrencyRepository.Update(model);
-                            try
-                            {
-                                unitOfWork.Save();
-                            }
-                            catch (DbUpdateException ex)
-                            {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
-                            }
-
-                            return Ok(currencyModel);
-                        }
-                        else
-                        {
-                            return Ok(2);
-                        }
-                    }
-                }
-                else
                     return Ok(0);
 
+                }
 
+                var Check = unitOfWork.CurrencyRepository.Get(NoTrack: "NoTrack");
+                if (!Check.Any(m => m.NameAR == model.NameAR))
+                {
+
+                    unitOfWork.CurrencyRepository.Update(model);
+                    try
+                    {
+                        var Result = unitOfWork.Save();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
+                    return Ok(currencyModel);
+
+                }
             }
+
             else
             {
                 return Ok(3);
             }
+            return Ok();
         }
 
         #endregion

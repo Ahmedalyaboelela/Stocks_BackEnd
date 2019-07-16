@@ -36,8 +36,8 @@ namespace Stocks.Controllers
         public IActionResult FirstOpen()
         {
             CountryModel model = new CountryModel();
-            model.LastCode = unitOfWork.PartnerRepository.Last().Code;
-            model.Count = unitOfWork.PartnerRepository.Count();
+            model.LastCode = unitOfWork.CountryRepository.Last().Code;
+            model.Count = unitOfWork.CountryRepository.Count();
             return Ok(model);
         }
 
@@ -52,10 +52,10 @@ namespace Stocks.Controllers
             {
                 return Ok(0);
             }
-           
+
 
             model.Count = unitOfWork.CountryRepository.Count();
-           
+
             return Ok(model);
 
         }
@@ -74,7 +74,7 @@ namespace Stocks.Controllers
                 }
 
                 model.Count = unitOfWork.CountryRepository.Count();
-                
+
                 return Ok(model);
 
             }
@@ -101,7 +101,7 @@ namespace Stocks.Controllers
                 {
 
                     model.Count = unitOfWork.CountryRepository.Count();
-                  
+
                     return Ok(model);
                 }
             }
@@ -141,7 +141,7 @@ namespace Stocks.Controllers
                     return Ok(0);
                 }
                 var Check = unitOfWork.CountryRepository.Get();
-                
+
                 if (Check.Any(m => m.NameAR == countryModel.NameAR))
                 {
 
@@ -203,7 +203,7 @@ namespace Stocks.Controllers
                     }
 
                     var Check = unitOfWork.CountryRepository.Get(NoTrack: "NoTrack");
-                
+
                     if (!Check.Any(m => m.NameAR == countryModel.NameAR && m.CountryID != id))
                     {
 
@@ -236,7 +236,7 @@ namespace Stocks.Controllers
                     {
                         return Ok(2);
                     }
-                    
+
                 }
                 else
                     return Ok(1);
@@ -292,10 +292,10 @@ namespace Stocks.Controllers
 
                 }
             }
-           
+
             else
                 return Ok(1);
-            
+
         }
         #endregion
     }
