@@ -80,28 +80,32 @@ namespace Stocks.Controllers
             #endregion
 
             #region Cards part
-            var EmpCard = unitOfWork.EmployeeCardRepository
+            var empCard = unitOfWork.EmployeeCardRepository
 
-                .Get(filter: m => m.EmployeeID == employee.EmployeeID)
-                .Select(m => new EmployeeCardModel
+                .Get(filter: m => m.EmployeeID == employee.EmployeeID);
+                if(empCard !=null)
                 {
-                    EmpCardId = m.EmpCardId,
-                    CardType = m.CardType,
-                    IssuePlace = m.IssuePlace,
-                    Code = m.Code,
-                    IssueDate = m.IssueDate.Value.ToString("dd/MM/yyyy"),
-                    IssueDateHigri = DateHelper.GetHijriDate(m.IssueDate),
-                    EndDate = m.EndDate.Value.ToString("dd/MM/yyyy"),
-                    EndDateHigri = DateHelper.GetHijriDate(m.EndDate),
-                    RenewalDate = m.RenewalDate.Value.ToString("dd/MM/yyyy"),
-                    RenewalDateHigri = DateHelper.GetHijriDate(m.RenewalDate),
-                    Notes = m.Notes,
-                    EmployeeID = m.EmployeeID,
-                    Fees = m.Fees,
+                    var EmpCard=empCard.Select(m => new EmployeeCardModel()
+                    {
+                        EmpCardId = m.EmpCardId,
+                        CardType = m.CardType,
+                        IssuePlace = m.IssuePlace,
+                        Code = m.Code,
+                        IssueDate = m.IssueDate!=null? m.IssueDate.Value.ToString("dd/MM/yyyy"):null,
+                        IssueDateHigri = m.IssueDate != null ? DateHelper.GetHijriDate(m.IssueDate): null,
+                        EndDate = m.EndDate!=null? m.EndDate.Value.ToString("dd/MM/yyyy"): null,
+                        EndDateHigri = m.EndDate != null ? DateHelper.GetHijriDate(m.EndDate): null,
+                        RenewalDate = m.RenewalDate !=null? m.RenewalDate.Value.ToString("dd/MM/yyyy"): null,
+                        RenewalDateHigri = m.RenewalDate != null ? DateHelper.GetHijriDate(m.RenewalDate): null,
+                        Notes = m.Notes,
+                        EmployeeID = m.EmployeeID,
+                        Fees = m.Fees,
 
-                });
-            if (EmpCard != null)
-                model.EmployeeCards = EmpCard;
+                    });
+                    model.emplCards = EmpCard;
+            }
+                
+         
 
             #endregion
 
@@ -196,19 +200,19 @@ namespace Stocks.Controllers
                                 CardType = m.CardType,
                                 IssuePlace = m.IssuePlace,
                                 Code = m.Code,
-                                IssueDate = m.IssueDate.Value.ToString("dd/MM/yyyy"),
-                                IssueDateHigri = DateHelper.GetHijriDate(m.IssueDate),
-                                EndDate = m.EndDate.Value.ToString("dd/MM/yyyy"),
-                                EndDateHigri = DateHelper.GetHijriDate(m.EndDate),
-                                RenewalDate = m.RenewalDate.Value.ToString("dd/MM/yyyy"),
-                                RenewalDateHigri = DateHelper.GetHijriDate(m.RenewalDate),
+                                IssueDate = m.IssueDate != null ? m.IssueDate.Value.ToString("dd/MM/yyyy") : null,
+                                IssueDateHigri = m.IssueDate != null ? DateHelper.GetHijriDate(m.IssueDate) : null,
+                                EndDate = m.EndDate != null ? m.EndDate.Value.ToString("dd/MM/yyyy") : null,
+                                EndDateHigri = m.EndDate != null ? DateHelper.GetHijriDate(m.EndDate) : null,
+                                RenewalDate = m.RenewalDate != null ? m.RenewalDate.Value.ToString("dd/MM/yyyy") : null,
+                                RenewalDateHigri = m.RenewalDate != null ? DateHelper.GetHijriDate(m.RenewalDate) : null,
                                 Notes = m.Notes,
                                 EmployeeID = m.EmployeeID,
                                 Fees = m.Fees,
 
                             });
                         if (EmpCard != null)
-                            model[j].EmployeeCards = EmpCard;
+                            model[j].emplCards = EmpCard;
 
                         #endregion
 
@@ -252,7 +256,7 @@ namespace Stocks.Controllers
                     var model = _mapper.Map<Employee>(empModel);
                     
 
-                    var empolyeeCard = empModel.EmployeeCards;
+                    var empolyeeCard = empModel.emplCards;
 
                     var EmpolyeeCard = _mapper.Map<IEnumerable<EmployeeCard>>(empolyeeCard);
                   
@@ -325,7 +329,7 @@ namespace Stocks.Controllers
             {
                 var model = _mapper.Map<Employee>(empModel);
 
-                var empolyeeCard = empModel.EmployeeCards;
+                var empolyeeCard = empModel.emplCards;
                 //var EmpolyeeCard = _mapper.Map<IEnumerable<EmployeeCard>>(empolyeeCard);
 
                 var Check = unitOfWork.EmployeeRepository.Get(NoTrack: "NoTrack");
@@ -339,12 +343,33 @@ namespace Stocks.Controllers
                     unitOfWork.EmployeeCardRepository.RemovRange(oldcard);
 
                 }
+                try
+                {
+                    unitOfWork.Save();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        var number = sqlException.Number;
+
+                        if (number == 547)
+                        {
+                            return Ok(5);
+
+                        }
+                        else
+                            return Ok(6);
+                    }
+                }
 
                 if (Check.Any(m => m.Code != empModel.Code))
                 {
                     unitOfWork.EmployeeRepository.Update(model);
                     
-                    if(empolyeeCard!= null || empolyeeCard.Count()>0)
+                    if(empolyeeCard!= null)
                     {
                         foreach (var item in empolyeeCard)
                         {
