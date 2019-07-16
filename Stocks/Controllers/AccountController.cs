@@ -35,8 +35,13 @@ namespace Stocks.Controllers
         public IActionResult FirstOpen()
         {
             AccountModel model = new AccountModel();
-            model.LastCode = unitOfWork.AccountRepository.Last().Code;
-            model.Count= unitOfWork.AccountRepository.Count();
+            var count = unitOfWork.AccountRepository.Count();
+            if(count>0)
+            {
+                model.LastCode = unitOfWork.AccountRepository.Last().Code;
+                model.Count = count;
+            }
+           
             return Ok(model);
         }
 

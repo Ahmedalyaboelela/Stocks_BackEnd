@@ -119,8 +119,13 @@ namespace Stocks.Controllers
         public IActionResult FirstOpen()
         {
             EmployeeModel model = new EmployeeModel();
-            model.LastCode = unitOfWork.EmployeeRepository.Last().Code;
-            model.Count = unitOfWork.EmployeeRepository.Count();
+            var count = unitOfWork.EmployeeRepository.Count();
+            if(count>0)
+            {
+                model.LastCode = unitOfWork.EmployeeRepository.Last().Code;
+                model.Count = count;
+            }
+           
             return Ok(model);
         }
 
@@ -185,34 +190,41 @@ namespace Stocks.Controllers
                     if (model[j].EmployeeID == employees[i].EmployeeID)
                     {
                         #region Date part
+                        if(employees[i].BirthDate!=null)
+                        {
 
-                        model[j].BirthDate = employees[i].BirthDate.Value.ToString("dd/MM/yyyy");
-                        model[j].BirthDateHijri = DateHelper.GetHijriDate(employees[i].BirthDate);
+                            model[j].BirthDate = employees[i].BirthDate.Value.ToString("dd/MM/yyyy");
+                            model[j].BirthDateHijri = DateHelper.GetHijriDate(employees[i].BirthDate);
+                        }
                         #endregion
 
                         #region Cards part
-                        var EmpCard = unitOfWork.EmployeeCardRepository
+                        if(unitOfWork.EmployeeCardRepository.Count()>0)
+                        {
+                            var EmpCard = unitOfWork.EmployeeCardRepository
 
-                            .Get(filter: m => m.EmployeeID == employees[i].EmployeeID)
-                            .Select(m => new EmployeeCardModel
-                            {
-                                EmpCardId = m.EmpCardId,
-                                CardType = m.CardType,
-                                IssuePlace = m.IssuePlace,
-                                Code = m.Code,
-                                IssueDate = m.IssueDate != null ? m.IssueDate.Value.ToString("dd/MM/yyyy") : null,
-                                IssueDateHigri = m.IssueDate != null ? DateHelper.GetHijriDate(m.IssueDate) : null,
-                                EndDate = m.EndDate != null ? m.EndDate.Value.ToString("dd/MM/yyyy") : null,
-                                EndDateHigri = m.EndDate != null ? DateHelper.GetHijriDate(m.EndDate) : null,
-                                RenewalDate = m.RenewalDate != null ? m.RenewalDate.Value.ToString("dd/MM/yyyy") : null,
-                                RenewalDateHigri = m.RenewalDate != null ? DateHelper.GetHijriDate(m.RenewalDate) : null,
-                                Notes = m.Notes,
-                                EmployeeID = m.EmployeeID,
-                                Fees = m.Fees,
+                           .Get(filter: m => m.EmployeeID == employees[i].EmployeeID)
+                           .Select(m => new EmployeeCardModel
+                           {
+                               EmpCardId = m.EmpCardId,
+                               CardType = m.CardType,
+                               IssuePlace = m.IssuePlace,
+                               Code = m.Code,
+                               IssueDate = m.IssueDate != null ? m.IssueDate.Value.ToString("dd/MM/yyyy") : null,
+                               IssueDateHigri = m.IssueDate != null ? DateHelper.GetHijriDate(m.IssueDate) : null,
+                               EndDate = m.EndDate != null ? m.EndDate.Value.ToString("dd/MM/yyyy") : null,
+                               EndDateHigri = m.EndDate != null ? DateHelper.GetHijriDate(m.EndDate) : null,
+                               RenewalDate = m.RenewalDate != null ? m.RenewalDate.Value.ToString("dd/MM/yyyy") : null,
+                               RenewalDateHigri = m.RenewalDate != null ? DateHelper.GetHijriDate(m.RenewalDate) : null,
+                               Notes = m.Notes,
+                               EmployeeID = m.EmployeeID,
+                               Fees = m.Fees,
 
-                            });
-                        if (EmpCard != null)
-                            model[j].emplCards = EmpCard;
+                           });
+                            if (EmpCard != null)
+                                model[j].emplCards = EmpCard;
+
+                        }
 
                         #endregion
 
