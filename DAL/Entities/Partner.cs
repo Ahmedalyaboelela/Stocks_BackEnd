@@ -65,6 +65,6 @@ namespace DAL.Entities
         [ForeignKey("CountryID")]
         public virtual Country Country { get; set; }
 
-        public virtual ICollection<PortfolioShareHolder> PortfolioShareHolders { get; set; }
+        public virtual ICollection<PortfolioOpeningStocks> PortfolioOpeningStocks { get; set; }
     }
 }

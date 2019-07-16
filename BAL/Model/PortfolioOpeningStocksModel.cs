@@ -4,17 +4,14 @@ using System.Text;
 
 namespace BAL.Model
 {
-   public class PortfolioShareholderModel
+   public class PortfolioOpeningStocksModel
     {
-        public int PortShareID { get; set; }
+        public int PortOPenStockID { get; set; }
 
-        public decimal Amount { get; set; }
+        public float StocksCount { get; set; }
 
-        public float Percentage { get; set; }
+        public decimal StockValue { get; set; }
 
-        public int StocksCount { get; set; }
-
-        public string Notes { get; set; }
 
         public int PortfolioID { get; set; }
 

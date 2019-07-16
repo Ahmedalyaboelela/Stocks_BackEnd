@@ -8,12 +8,14 @@ using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CountryController : ControllerBase
@@ -31,6 +33,7 @@ namespace Stocks.Controllers
         #endregion
 
         #region GET Methods
+     
         [HttpGet]
         [Route("~/api/Country/FirstOpen")]
         public IActionResult FirstOpen()
@@ -129,6 +132,7 @@ namespace Stocks.Controllers
         #endregion
 
         #region Insert Method
+      
         [HttpPost]
         [Route("~/api/Country/AddCountry/")]
         public IActionResult PostCountry([FromBody] CountryModel countryModel)
