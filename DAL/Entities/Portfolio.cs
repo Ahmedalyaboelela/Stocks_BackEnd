@@ -26,16 +26,11 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(MAX)")]
         public string Description { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal? StockValue { get; set; }
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal? PortfolioCapital { get; set; }
-
-        public int? PartnerCount { get; set; }
+        public float? OpeningStocksCount { get; set; }
 
         public float? StocksCount { get; set; }
 
-        public virtual ICollection<PortfolioShareHolder> PortfolioShareHolders { get; set; }
+        public virtual ICollection<PortfolioOpeningStocks> PortfolioOpeningStocks { get; set; }
         public virtual ICollection<PortfolioAccount> PortfolioAccounts { get; set; }
         public virtual ICollection<SellingOrder> SellOrders { get; set; }
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }

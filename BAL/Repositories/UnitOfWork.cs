@@ -129,16 +129,16 @@ namespace BAL.Repositories
             }
         }
 
-        private GenericRepository<PortfolioShareHolder> portfolioShareholderRepository;
-        public GenericRepository<PortfolioShareHolder> PortfolioShareholderRepository
+        private GenericRepository<PortfolioOpeningStocks> portfolioOpeningStocksRepository;
+        public GenericRepository<PortfolioOpeningStocks> PortfolioOpeningStocksRepository
         {
             get
             {
-                if (this.portfolioShareholderRepository == null)
+                if (this.portfolioOpeningStocksRepository == null)
                 {
-                    this.portfolioShareholderRepository = new GenericRepository<PortfolioShareHolder>(Context);
+                    this.portfolioOpeningStocksRepository = new GenericRepository<PortfolioOpeningStocks>(Context);
                 }
-                return portfolioShareholderRepository;
+                return portfolioOpeningStocksRepository;
             }
         }
 
