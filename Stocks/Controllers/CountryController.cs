@@ -8,12 +8,14 @@ using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CountryController : ControllerBase
@@ -31,11 +33,13 @@ namespace Stocks.Controllers
         #endregion
 
         #region GET Methods
+     
         [HttpGet]
         [Route("~/api/Country/FirstOpen")]
         public IActionResult FirstOpen()
         {
             CountryModel model = new CountryModel();
+
             var count = unitOfWork.PartnerRepository.Count();
             if(count>0)
             {
@@ -43,6 +47,7 @@ namespace Stocks.Controllers
                 model.LastCode = unitOfWork.PartnerRepository.Last().Code;
                 model.Count = count;
             }
+
             return Ok(model);
         }
 
@@ -63,10 +68,12 @@ namespace Stocks.Controllers
             {
                 return Ok(0);
             }
-           
+
+
 
             model.Count = count;
            
+
             return Ok(model);
 
         }
@@ -85,7 +92,7 @@ namespace Stocks.Controllers
                 }
 
                 model.Count = unitOfWork.CountryRepository.Count();
-                
+
                 return Ok(model);
 
             }
@@ -119,10 +126,12 @@ namespace Stocks.Controllers
                     else
                     {
 
+
                         model.Count = unitOfWork.CountryRepository.Count();
 
                         return Ok(model);
                     }
+
                 }
                
             }
@@ -150,6 +159,7 @@ namespace Stocks.Controllers
         #endregion
 
         #region Insert Method
+      
         [HttpPost]
         [Route("~/api/Country/AddCountry/")]
         public IActionResult PostCountry([FromBody] CountryModel countryModel)
@@ -162,7 +172,7 @@ namespace Stocks.Controllers
                     return Ok(0);
                 }
                 var Check = unitOfWork.CountryRepository.Get();
-                
+
                 if (Check.Any(m => m.NameAR == countryModel.NameAR))
                 {
 
@@ -173,7 +183,11 @@ namespace Stocks.Controllers
                     unitOfWork.CountryRepository.Insert(model);
                     try
                     {
-                        unitOfWork.Save();
+                        var result = unitOfWork.Save();
+                        if (result == true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {
@@ -224,7 +238,7 @@ namespace Stocks.Controllers
                     }
 
                     var Check = unitOfWork.CountryRepository.Get(NoTrack: "NoTrack");
-                
+
                     if (!Check.Any(m => m.NameAR == countryModel.NameAR && m.CountryID != id))
                     {
 
@@ -232,7 +246,11 @@ namespace Stocks.Controllers
 
                         try
                         {
-                            unitOfWork.Save();
+                            var result = unitOfWork.Save();
+                            if (result == true)
+                            {
+                                return Ok(7);
+                            }
                         }
                         catch (DbUpdateException ex)
                         {
@@ -257,7 +275,7 @@ namespace Stocks.Controllers
                     {
                         return Ok(2);
                     }
-                    
+
                 }
                 else
                     return Ok(1);
@@ -290,7 +308,11 @@ namespace Stocks.Controllers
                     unitOfWork.CountryRepository.Delete(id);
                     try
                     {
-                        unitOfWork.Save();
+                    var result=    unitOfWork.Save(); 
+                        if (result== true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {
@@ -313,10 +335,10 @@ namespace Stocks.Controllers
 
                 }
             }
-           
+
             else
                 return Ok(1);
-            
+
         }
         #endregion
     }

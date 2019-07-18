@@ -19,17 +19,19 @@ namespace BAL.Model
         public string EstablishDateHijri { get; set; }
 
         public string Description { get; set; }
-        
-        public decimal? StockValue { get; set; }
+
+        public float? OpeningStocksCount { get; set; }
+
+        public float? StocksCount { get; set; }
       
-        public decimal? PortfolioCapital { get; set; }
+    
 
         public int Count { get; set; }
 
         public string LastCode { get; set; }
         public IEnumerable<PortfolioAccountModel> folioAccounts { get; set; }
 
-        public IEnumerable<PortfolioShareholderModel> Shareholders { get; set; }
+        public IEnumerable<PortfolioOpeningStocksModel> portopeningmodels { get; set; }
 
    
     }

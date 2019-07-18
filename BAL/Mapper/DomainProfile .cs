@@ -52,7 +52,11 @@ namespace BAL.Mapper
 
             #endregion
 
-            #region Map Setting
+
+   
+
+
+
 
             CreateMap<Setting, SettingModel>();
             CreateMap<SettingModel, Setting>();
@@ -97,10 +101,11 @@ namespace BAL.Mapper
             CreateMap<PortfolioAccount, PortfolioAccountModel>();
             CreateMap<PortfolioAccountModel, PortfolioAccount>();
 
-            // portfolio shareholders
-            CreateMap<PortfolioShareHolder, PortfolioShareholderModel>();
 
-            CreateMap<PortfolioShareholderModel, PortfolioShareHolder>();
+            // portfolio shareholders
+            CreateMap<PortfolioOpeningStocks, PortfolioOpeningStocksModel>();
+
+            CreateMap<PortfolioOpeningStocksModel, PortfolioOpeningStocks>();
 
 
             #endregion

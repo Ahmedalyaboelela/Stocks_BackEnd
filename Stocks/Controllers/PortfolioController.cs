@@ -70,16 +70,13 @@ namespace Stocks.Controllers
             #endregion
 
             #region Shareholders part
-            var PortShareholders = unitOfWork.PortfolioShareholderRepository
+            var PortShareholders = unitOfWork.PortfolioOpeningStocksRepository
 
                 .Get(filter: m => m.PortfolioID == portfolio.PortfolioID)
-                .Select(m => new PortfolioShareholderModel
+                .Select(m => new PortfolioOpeningStocksModel
                 {
-                    PortShareID = m.PortShareID,
-                    Amount = m.Amount,
-                    Percentage = m.Percentage,
+                    PortOPenStockID = m.PortOPenStockID,
                     StocksCount = m.StocksCount,
-                    Notes = m.Notes,
                     PartnerID = m.PartnerID,
                     PartnerCode = m.Partner.Code,
                     PartnerNameAR = m.Partner.NameAR,
@@ -91,7 +88,7 @@ namespace Stocks.Controllers
 
                 });
             if (PortShareholders != null)
-                model.Shareholders = PortShareholders;
+                model.portopeningmodels = PortShareholders;
 
             #endregion
 
@@ -206,16 +203,13 @@ namespace Stocks.Controllers
                         #endregion
 
                         #region shareholders Part
-                        var shareholders = unitOfWork.PortfolioShareholderRepository
+                        var shareholders = unitOfWork.PortfolioOpeningStocksRepository
 
                             .Get(filter: m => m.PortfolioID == portfolioes[i].PortfolioID)
-                         .Select(m => new PortfolioShareholderModel
+                         .Select(m => new PortfolioOpeningStocksModel
                          {
-                             PortShareID = m.PortShareID,
-                             Amount = m.Amount,
-                             Percentage = m.Percentage,
+                             PortOPenStockID = m.PortOPenStockID,
                              StocksCount = m.StocksCount,
-                             Notes = m.Notes,
                              PartnerID = m.PartnerID,
                              PartnerCode = m.Partner.Code,
                              PartnerNameAR = m.Partner.NameAR,
@@ -227,7 +221,7 @@ namespace Stocks.Controllers
 
                          });
                         if (shareholders != null)
-                            model[j].Shareholders = shareholders;
+                            model[j].portopeningmodels = shareholders;
 
                         #endregion
 
@@ -275,7 +269,7 @@ namespace Stocks.Controllers
                     #region Bind List Accounts & Shareholders
 
                     var portAccounts = portModel.folioAccounts;
-                    var portShareholderes = portModel.Shareholders;
+                    var portShareholderes = portModel.portopeningmodels;
 
 
                     //var PortAccounts = _mapper.Map<IEnumerable<PortfolioAccountModel>>(portAccounts);
@@ -305,18 +299,18 @@ namespace Stocks.Controllers
                         {
                             foreach (var item in portShareholderes)
                             {
-                                if (item.PortShareID == 0)
+                                if (item.PortOPenStockID == 0)
                                 {
                                     item.PortfolioID = model.PortfolioID;
-                                    var obj = _mapper.Map<PortfolioShareHolder>(item);
+                                    var obj = _mapper.Map<PortfolioOpeningStocks>(item);
 
-                                    unitOfWork.PortfolioShareholderRepository.Insert(obj);
+                                    unitOfWork.PortfolioOpeningStocksRepository.Insert(obj);
                                 }
                                 else
                                 {
-                                    var obj = _mapper.Map<PortfolioShareHolder>(item);
+                                    var obj = _mapper.Map<PortfolioOpeningStocks>(item);
 
-                                    unitOfWork.PortfolioShareholderRepository.Update(obj);
+                                    unitOfWork.PortfolioOpeningStocksRepository.Update(obj);
                                 }
 
 
@@ -378,7 +372,7 @@ namespace Stocks.Controllers
 
                 var portAccounts = portModel.folioAccounts;
 
-                var portShareholders = portModel.Shareholders;
+                var portShareholders = portModel.portopeningmodels;
 
                 //var EmpolyeeCard = _mapper.Map<IEnumerable<EmployeeCard>>(empolyeeCard);
 
@@ -411,23 +405,23 @@ namespace Stocks.Controllers
 
 
                     // shareholders
-                    var oldHolders = unitOfWork.PortfolioShareholderRepository
+                    var oldHolders = unitOfWork.PortfolioOpeningStocksRepository
 
                     .Get(filter: m => m.PortfolioID == model.PortfolioID);
 
                     if (oldHolders != null)
                     {
 
-                        unitOfWork.PortfolioShareholderRepository.RemovRange(oldHolders);
+                        unitOfWork.PortfolioOpeningStocksRepository.RemovRange(oldHolders);
 
                     }
 
                     foreach (var item in portShareholders)
                     {
                         item.PortfolioID = model.PortfolioID;
-                        var newHolder = _mapper.Map<PortfolioShareHolder>(item);
+                        var newHolder = _mapper.Map<PortfolioOpeningStocks>(item);
 
-                        unitOfWork.PortfolioShareholderRepository.Insert(newHolder);
+                        unitOfWork.PortfolioOpeningStocksRepository.Insert(newHolder);
 
                     }
                     try
@@ -484,23 +478,23 @@ namespace Stocks.Controllers
 
 
                         // shareholders
-                        var oldHolders = unitOfWork.PortfolioShareholderRepository
+                        var oldHolders = unitOfWork.PortfolioOpeningStocksRepository
 
                         .Get(filter: m => m.PortfolioID == model.PortfolioID);
 
                         if (oldHolders !=null)
                         {
 
-                            unitOfWork.PortfolioShareholderRepository.RemovRange(oldHolders);
+                            unitOfWork.PortfolioOpeningStocksRepository.RemovRange(oldHolders);
 
 
                         }
                         foreach (var item in portShareholders)
                         {
                             item.PortfolioID = model.PortfolioID;
-                            var newHolder = _mapper.Map<PortfolioShareHolder>(item);
+                            var newHolder = _mapper.Map<PortfolioOpeningStocks>(item);
 
-                            unitOfWork.PortfolioShareholderRepository.Insert(newHolder);
+                            unitOfWork.PortfolioOpeningStocksRepository.Insert(newHolder);
 
                         }
 
@@ -564,11 +558,11 @@ namespace Stocks.Controllers
                     unitOfWork.PortfolioAccountRepository.RemovRange(PortAccounts);
 
                 }
-                var Shareholders = unitOfWork.PortfolioShareholderRepository.Get(filter: m => m.PortfolioID == id);
+                var Shareholders = unitOfWork.PortfolioOpeningStocksRepository.Get(filter: m => m.PortfolioID == id);
 
                 if (Shareholders.Count() > 0)
                 {
-                    unitOfWork.PortfolioShareholderRepository.RemovRange(Shareholders);
+                    unitOfWork.PortfolioOpeningStocksRepository.RemovRange(Shareholders);
 
                 }
 
