@@ -102,8 +102,13 @@ namespace Stocks.Controllers
         public IActionResult FirstOpen()
         {
             PortfolioModel model = new PortfolioModel();
-            model.LastCode = unitOfWork.PartnerRepository.Last().Code;
-            model.Count = unitOfWork.PartnerRepository.Count();
+            var count = unitOfWork.PartnerRepository.Count();
+            if(count>0)
+            {
+                model.LastCode = unitOfWork.PartnerRepository.Last().Code;
+                model.Count = count;
+            }
+            
             return Ok(model);
         }
 

@@ -108,6 +108,22 @@ namespace Stocks.Controllers
 
 
 
+        [HttpGet]
+        [Route("~/api/SellingOrder/FirstOpen")]
+        public IActionResult FirstOpen()
+        {
+            SellingOrderModel model = new SellingOrderModel();
+            var count = unitOfWork.SellingOrderReposetory.Count();
+            if (count > 0)
+            {
+                model.LastCode = unitOfWork.SellingOrderReposetory.Last().Code;
+                model.Count = count;
+            }
+            model.SettingModel = GetSetting(1);
+
+
+            return Ok(model);
+        }
 
 
 
@@ -234,6 +250,45 @@ namespace Stocks.Controllers
 
             }
 
+            #region portfolio data
+            var portfolio = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true);
+            if (portfolio != null)
+            {
+
+                sellingOrderModel.PortfolioAccount = portfolio.AccountID;
+
+                // portfolio data
+                sellingOrderModel.PortfolioCode = portfolio.Portfolio.Code;
+                sellingOrderModel.PortfolioNameAR = portfolio.Portfolio.NameAR;
+                sellingOrderModel.PortfolioNameEN = portfolio.Portfolio.NameEN;
+                sellingOrderModel.PortfolioID = portfolio.Portfolio.PortfolioID;
+            }
+
+            #endregion
+
+            // employee data
+            #region employee part
+            var employee = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == selling.EmployeeID);
+            if (employee != null)
+            {
+                sellingOrderModel.EmpCode = employee.Code;
+                sellingOrderModel.EmpNameAR = employee.NameAR;
+                sellingOrderModel.EmpNameEN = employee.NameEN;
+                sellingOrderModel.EmployeeID = employee.EmployeeID;
+
+            }
+            #endregion
+
+            // date part
+            #region Date part
+            if (selling.Date != null)
+            {
+
+                sellingOrderModel.SellDate = selling.Date.Value.ToString("dd/MM/yyyy");
+                sellingOrderModel.SellDateHijri = DateHelper.GetHijriDate(selling.Date);
+            }
+
+            #endregion
 
 
 
@@ -289,6 +344,45 @@ namespace Stocks.Controllers
             }
 
 
+            #region portfolio data
+            var portfolio = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true);
+            if (portfolio != null)
+            {
+
+                model.PortfolioAccount = portfolio.AccountID;
+
+                // portfolio data
+                model.PortfolioCode = portfolio.Portfolio.Code;
+                model.PortfolioNameAR = portfolio.Portfolio.NameAR;
+                model.PortfolioNameEN = portfolio.Portfolio.NameEN;
+                model.PortfolioID = portfolio.Portfolio.PortfolioID;
+            }
+
+            #endregion
+
+            // employee data
+            #region employee part
+            var employee = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == selling.EmployeeID);
+            if (employee != null)
+            {
+                model.EmpCode = employee.Code;
+                model.EmpNameAR = employee.NameAR;
+                model.EmpNameEN = employee.NameEN;
+                model.EmployeeID = employee.EmployeeID;
+
+            }
+            #endregion
+
+            // date part
+            #region Date part
+            if (selling.Date != null)
+            {
+
+                model.SellDate = selling.Date.Value.ToString("dd/MM/yyyy");
+                model.SellDateHijri = DateHelper.GetHijriDate(selling.Date);
+            }
+
+            #endregion
 
 
             model.Count = unitOfWork.SellingOrderReposetory.Count();
@@ -335,13 +429,53 @@ namespace Stocks.Controllers
 
 
         [HttpGet]
-        [Route("~/api/Pagination/SellingOrder/{pageNumber}")]
+        [Route("~/api/SellingOrder/Paging/{pageNumber}")]
         public IActionResult PaginationSellingOrder(int pageNumber)
         {
             var selling = unitOfWork.SellingOrderReposetory.Get(page: pageNumber).FirstOrDefault();
 
             var model = _mapper.Map<SellingOrderModel>(selling);
-            model.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true).AccountID;
+
+            #region portfolio data
+            var portfolio = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true);
+            if (portfolio != null)
+            {
+
+                model.PortfolioAccount = portfolio.AccountID;
+
+                // portfolio data
+                model.PortfolioCode = portfolio.Portfolio.Code;
+                model.PortfolioNameAR = portfolio.Portfolio.NameAR;
+                model.PortfolioNameEN = portfolio.Portfolio.NameEN;
+                model.PortfolioID = portfolio.Portfolio.PortfolioID;
+            }
+
+            #endregion
+
+            // employee data
+            #region employee part
+            var employee = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == selling.EmployeeID);
+            if (employee != null)
+            {
+                model.EmpCode = employee.Code;
+                model.EmpNameAR = employee.NameAR;
+                model.EmpNameEN = employee.NameEN;
+                model.EmployeeID = employee.EmployeeID;
+
+            } 
+            #endregion
+
+            // date part
+            #region Date part
+            if (selling.Date != null)
+            {
+
+                model.SellDate = selling.Date.Value.ToString("dd/MM/yyyy");
+                model.SellDateHijri = DateHelper.GetHijriDate(selling.Date);
+            }
+
+            #endregion
+
             if (model == null)
             {
                 return Ok(model);
@@ -382,11 +516,11 @@ namespace Stocks.Controllers
 
             model.SettingModel = GetSetting(1);
 
-            var check = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault();
-            if (check != null)
-            {
-                model.EntryModel = GetEntry(selling.SellingOrderID);
-            }
+            //var check = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault();
+            //if (check != null)
+            //{
+            //    model.EntryModel = GetEntry(selling.SellingOrderID);
+            //}
 
             return Ok(model);
 
@@ -415,7 +549,8 @@ namespace Stocks.Controllers
                     var Details = sellingOrderModel.DetailsModels;
                    
                         unitOfWork.SellingOrderReposetory.Insert(modelselling);
-
+                    if(Details != null)
+                    {
                         foreach (var item in Details)
                         {
                             SelingOrderDetailsModel selingOrderDetailsModel = new SelingOrderDetailsModel();
@@ -428,11 +563,14 @@ namespace Stocks.Controllers
                             selingOrderDetailsModel.TaxRateOnCommission = item.TaxRateOnCommission;
                             selingOrderDetailsModel.BankCommission = item.BankCommission;
                             selingOrderDetailsModel.BankCommissionRate = item.BankCommissionRate;
-                           
+
                             var details = _mapper.Map<SellingOrderDetail>(selingOrderDetailsModel);
                             unitOfWork.SellingOrderDetailRepository.Insert(details);
-                           
+
                         }
+
+                    }
+
 
                     //==================================================لا تولد قيد ===================================
                     if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
@@ -443,60 +581,60 @@ namespace Stocks.Controllers
                     }
 
                     //===============================================================توليد قيد مع ترحيل تلقائي============================
-                    else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
-                    {
-                        var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
-                        EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
-                        var Entry = _mapper.Map<Entry>(EntryMODEL);
-                        var DetailEnt = EntryMODEL.EntryDetailModel;
+                    //else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
+                    //{
+                    //    var lastEntry = unitOfWork.EntryRepository.Last();
+                    //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                    //    EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
+                    //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+                    //    var DetailEnt = EntryMODEL.EntryDetailModel;
 
-                        if (sellingOrderModel.SettingModel.TransferToAccounts == true)
-                        {
-                            Entry.TransferedToAccounts = true;
-                            unitOfWork.EntryRepository.Insert(Entry);
-                            foreach (var item in DetailEnt)
-                            {
-                                item.EntryID = Entry.EntryID;
-                                item.EntryDetailID = 0;
-                                var details = _mapper.Map<EntryDetail>(item);
+                    //    if (sellingOrderModel.SettingModel.TransferToAccounts == true)
+                    //    {
+                    //        Entry.TransferedToAccounts = true;
+                    //        unitOfWork.EntryRepository.Insert(Entry);
+                    //        foreach (var item in DetailEnt)
+                    //        {
+                    //            item.EntryID = Entry.EntryID;
+                    //            item.EntryDetailID = 0;
+                    //            var details = _mapper.Map<EntryDetail>(item);
 
-                                unitOfWork.EntryDetailRepository.Insert(details);
-                            }
-                            accountingHelper.TransferToAccounts(DetailEnt.Select(a => new EntryDetail
-                            {
+                    //            unitOfWork.EntryDetailRepository.Insert(details);
+                    //        }
+                    //        accountingHelper.TransferToAccounts(DetailEnt.Select(a => new EntryDetail
+                    //        {
 
-                                Credit = a.Credit,
-                                Debit = a.Debit,
-                                EntryDetailID = a.EntryDetailID,
-                                EntryID = a.EntryID,
-                                StocksCredit = a.StocksCredit,
-                                StocksDebit = a.StocksDebit,
-                                AccountID = a.AccountID
+                    //            Credit = a.Credit,
+                    //            Debit = a.Debit,
+                    //            EntryDetailID = a.EntryDetailID,
+                    //            EntryID = a.EntryID,
+                    //            StocksCredit = a.StocksCredit,
+                    //            StocksDebit = a.StocksDebit,
+                    //            AccountID = a.AccountID
 
-                            }).ToList());
-                        }
-                    }
-                        //================================توليد قيد مع عدم الترحيل====================================== 
-                    else if (sellingOrderModel.SettingModel.GenerateEntry==true )
+                    //        }).ToList());
+                    //    }
+                    //}
+                    //    //================================توليد قيد مع عدم الترحيل====================================== 
+                    //else if (sellingOrderModel.SettingModel.GenerateEntry==true )
                         
-                        {
-                        var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
-                        EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
-                        var Entry = _mapper.Map<Entry>(EntryMODEL);
-                        var DetailEnt = EntryMODEL.EntryDetailModel;
-                        Entry.TransferedToAccounts = false;
-                            unitOfWork.EntryRepository.Insert(Entry);
-                            foreach (var item in DetailEnt)
-                            {
-                                item.EntryID = Entry.EntryID;
-                                item.EntryDetailID = 0;
-                                var details = _mapper.Map<EntryDetail>(item);
+                    //    {
+                    //    var lastEntry = unitOfWork.EntryRepository.Last();
+                    //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                    //    EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
+                    //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+                    //    var DetailEnt = EntryMODEL.EntryDetailModel;
+                    //    Entry.TransferedToAccounts = false;
+                    //        unitOfWork.EntryRepository.Insert(Entry);
+                    //        foreach (var item in DetailEnt)
+                    //        {
+                    //            item.EntryID = Entry.EntryID;
+                    //            item.EntryDetailID = 0;
+                    //            var details = _mapper.Map<EntryDetail>(item);
 
-                                unitOfWork.EntryDetailRepository.Insert(details);
-                            }
-                        }
+                    //            unitOfWork.EntryDetailRepository.Insert(details);
+                    //        }
+                    //    }
                     
                     unitOfWork.Save();
                     return Ok(sellingOrderModel);
@@ -518,11 +656,15 @@ namespace Stocks.Controllers
         [Route("~/api/SellingOrder/PutSellingOrder/{id}")]
         public IActionResult PutSellingOrder(int id, [FromBody]  SellingOrderModel sellingOrderModel)
         {
-            if (id != sellingOrderModel.SellingOrderID)
+            if(sellingOrderModel !=null)
             {
+                if (id != sellingOrderModel.SellingOrderID)
+                {
 
-                return BadRequest();
+                    return BadRequest();
+                }
             }
+           
 
             if (ModelState.IsValid)
             {
@@ -530,452 +672,461 @@ namespace Stocks.Controllers
                 var Check = unitOfWork.SellingOrderReposetory.Get(NoTrack: "NoTrack");
 
                 var sellingOrder = _mapper.Map<SellingOrder>(sellingOrderModel);
-                var NewdDetails = sellingOrderModel.DetailsModels;
-                var Newdetails = _mapper.Map<IEnumerable<SellingOrderDetail>>(NewdDetails);
-                var OldDetails = unitOfWork.SellingOrderDetailRepository.Get(filter: m => m.SellingOrderID == sellingOrder.SellingOrderID);
-                var EntryCheck = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == sellingOrder.SellingOrderID).SingleOrDefault();
-                if (EntryCheck != null)
-                {
+                //var NewdDetails = sellingOrderModel.DetailsModels;
+                //var Newdetails = _mapper.Map<IEnumerable<SellingOrderDetail>>(NewdDetails);
+                //var OldDetails = unitOfWork.SellingOrderDetailRepository.Get(filter: m => m.SellingOrderID == sellingOrder.SellingOrderID); 
+                //var EntryCheck = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == sellingOrder.SellingOrderID).SingleOrDefault();
+                //if (EntryCheck != null)
+                //{
 
-                    var Entry = unitOfWork.EntryRepository.Get(filter: x => x.SellingOrderID == sellingOrder.SellingOrderID).SingleOrDefault();
-                    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
-                    if (Entry.TransferedToAccounts == true)
-                    {
-                        accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
-                    }
-                    unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
+                //    var Entry = unitOfWork.EntryRepository.Get(filter: x => x.SellingOrderID == sellingOrder.SellingOrderID).SingleOrDefault();
+                //    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                //    if (Entry.TransferedToAccounts == true)
+                //    {
+                //        accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
+                //    }
+                //    unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
 
-                    if (Check.Any(m => m.Code != sellingOrder.Code))
-                    {
-                        unitOfWork.SellingOrderReposetory.Update(sellingOrder);
-                        if (OldDetails != null)
-                        {
-                            unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                            unitOfWork.Save();
-                        }
-
-
-                        if (Newdetails != null)
-                        {
-                            foreach (var item in Newdetails)
-                            {
-                                item.SellingOrderID = sellingOrder.SellingOrderID;
-                                item.SellOrderDetailID = 0;
-                                var details = _mapper.Map<SellingOrderDetail>(item);
-
-                                unitOfWork.SellingOrderDetailRepository.Insert(details);
-
-                            }
-                        }
+                //    if (Check.Any(m => m.Code != sellingOrder.Code))
+                //    {
+                //        unitOfWork.SellingOrderReposetory.Update(sellingOrder);
+                //        if (OldDetails != null)
+                //        {
+                //            unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
+                //            unitOfWork.Save();
+                //        }
 
 
-                        //==================================================لا تولد قيد ===================================
-                        if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
-                        {
-                            unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                            unitOfWork.Save();
+                //        if (Newdetails != null)
+                //        {
+                //            foreach (var item in Newdetails)
+                //            {
+                //                item.SellingOrderID = sellingOrder.SellingOrderID;
+                //                item.SellOrderDetailID = 0;
+                //                var details = _mapper.Map<SellingOrderDetail>(item);
 
-                            return Ok(sellingOrderModel);
-                        }
-                        //===================================توليد قيد مع ترحيل تلقائي===================================
-                        if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
-                        {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+                //                unitOfWork.SellingOrderDetailRepository.Insert(details);
 
-                            if (sellingOrderModel.SettingModel.TransferToAccounts == true)
-                            {
-                                Entry.TransferedToAccounts = true;
-                                unitOfWork.EntryRepository.Update(Entry);
-                                foreach (var item in EntryDitails)
-                                {
-                                    item.EntryID = Entry.EntryID;
-                                    item.EntryDetailID = 0;
-                                    var details = _mapper.Map<EntryDetail>(item);
-
-                                    unitOfWork.EntryDetailRepository.Insert(details);
-
-                                }
-                                accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
-                                {
+                //            }
+                //        }
 
 
-                                    EntryDetailID = x.EntryDetailID,
-                                    AccountID = x.AccountID,
-                                    Credit = x.Credit,
-                                    Debit = x.Debit,
-                                    EntryID = x.EntryID
+                //        //==================================================لا تولد قيد ===================================
+                //        if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
+                //        {
+                //            unitOfWork.EntryRepository.Delete(Entry.EntryID);
+                //            unitOfWork.Save();
+
+                //            return Ok(sellingOrderModel);
+                //        }
+                //        //===================================توليد قيد مع ترحيل تلقائي===================================
+                //        //if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
+                //        //{
+                //        //    var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+
+                //        //    if (sellingOrderModel.SettingModel.TransferToAccounts == true)
+                //        //    {
+                //        //        Entry.TransferedToAccounts = true;
+                //        //        unitOfWork.EntryRepository.Update(Entry);
+                //        //        foreach (var item in EntryDitails)
+                //        //        {
+                //        //            item.EntryID = Entry.EntryID;
+                //        //            item.EntryDetailID = 0;
+                //        //            var details = _mapper.Map<EntryDetail>(item);
+
+                //        //            unitOfWork.EntryDetailRepository.Insert(details);
+
+                //        //        }
+                //        //        accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
+                //        //        {
 
 
-                                }).ToList());
-                            }
-                           
-                        }
-                        //===================================توليد قيد مع  عدم ترحيل=================================== 
-                        if (sellingOrderModel.SettingModel.GenerateEntry==true)
-                        
-                        {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
-                            Entry.TransferedToAccounts = false;
-                            unitOfWork.EntryRepository.Update(Entry);
-                            foreach (var item in EntryDitails)
-                            {
-                                item.EntryID = Entry.EntryID;
-                                item.EntryDetailID = 0;
-                                var details = _mapper.Map<EntryDetail>(item);
-
-                                unitOfWork.EntryDetailRepository.Insert(details);
-
-                            }
-                        }
-                        unitOfWork.Save();
+                //        //            EntryDetailID = x.EntryDetailID,
+                //        //            AccountID = x.AccountID,
+                //        //            Credit = x.Credit,
+                //        //            Debit = x.Debit,
+                //        //            EntryID = x.EntryID
 
 
+                //        //        }).ToList());
+                //        //    }
 
-                        return Ok(sellingOrderModel);
+                //        //}
+                //        ////===================================توليد قيد مع  عدم ترحيل=================================== 
+                //        //if (sellingOrderModel.SettingModel.GenerateEntry==true)
 
+                //        //{
+                //        //    var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+                //        //    Entry.TransferedToAccounts = false;
+                //        //    unitOfWork.EntryRepository.Update(Entry);
+                //        //    foreach (var item in EntryDitails)
+                //        //    {
+                //        //        item.EntryID = Entry.EntryID;
+                //        //        item.EntryDetailID = 0;
+                //        //        var details = _mapper.Map<EntryDetail>(item);
 
-                    }
+                //        //        unitOfWork.EntryDetailRepository.Insert(details);
 
+                //        //    }
+                //        //}
 
-                    //==========================================Second Case OF Code Of Purchase=======================================
-
-                    else
-                    {
-                        if (Check.Any(m => m.Code == sellingOrder.Code && m.SellingOrderID == id))
-                        {
-                            unitOfWork.SellingOrderReposetory.Update(sellingOrder);
-                            if (OldDetails != null)
-                            {
-                                unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                                unitOfWork.Save();
-                            }
-
-
-                            if (Newdetails != null)
-                            {
-                                foreach (var item in Newdetails)
-                                {
-                                    item.SellingOrderID = sellingOrder.SellingOrderID;
-                                    item.SellOrderDetailID = 0;
-                                    var details = _mapper.Map<SellingOrderDetail>(item);
-
-                                    unitOfWork.SellingOrderDetailRepository.Insert(details);
-
-                                }
-                            }
-
-
-                            //==================================================لا تولد قيد ===================================
-                            if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
-                            {
-                                unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                                unitOfWork.Save();
-
-                                return Ok(sellingOrderModel);
-                            }
-                            //===================================توليد قيد مع ترحيل تلقائي===================================
-                            if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
-                            {
-                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
-
-                                if (sellingOrderModel.SettingModel.TransferToAccounts == true)
-                                {
-                                    Entry.TransferedToAccounts = true;
-                                    unitOfWork.EntryRepository.Update(Entry);
-                                    foreach (var item in EntryDitails)
-                                    {
-                                        item.EntryID = Entry.EntryID;
-                                        item.EntryDetailID = 0;
-                                        var details = _mapper.Map<EntryDetail>(item);
-
-                                        unitOfWork.EntryDetailRepository.Insert(details);
-
-                                    }
-                                    accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
-                                    {
-
-
-                                        EntryDetailID = x.EntryDetailID,
-                                        AccountID = x.AccountID,
-                                        Credit = x.Credit,
-                                        Debit = x.Debit,
-                                        EntryID = x.EntryID
-
-
-                                    }).ToList());
-                                }
-                               
-                            }
-                            //===================================توليد قيد مع  عدم ترحيل=================================== 
-                            if (sellingOrderModel.SettingModel.GenerateEntry == true)
-
-                            {
-                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
-                                Entry.TransferedToAccounts = false;
-                                unitOfWork.EntryRepository.Update(Entry);
-                                foreach (var item in EntryDitails)
-                                {
-                                    item.EntryID = Entry.EntryID;
-                                    item.EntryDetailID = 0;
-                                    var details = _mapper.Map<EntryDetail>(item);
-
-                                    unitOfWork.EntryDetailRepository.Insert(details);
-
-                                }
-                            }
-                            unitOfWork.Save();
+                //        unitOfWork.Save();
 
 
 
-                            return Ok(sellingOrderModel);
-
-                        }
+                //        return Ok(sellingOrderModel);
 
 
-                    }
-                    return Ok(sellingOrderModel);
-                }
+                //    }
+
+
+                //    //==========================================Second Case OF Code Of Purchase=======================================
+
+                //    else
+                //    {
+                //        if (Check.Any(m => m.Code == sellingOrder.Code && m.SellingOrderID == id))
+                //        {
+                //            unitOfWork.SellingOrderReposetory.Update(sellingOrder);
+                //            if (OldDetails != null)
+                //            {
+                //                unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
+                //                unitOfWork.Save();
+                //            }
+
+
+                //            if (Newdetails != null)
+                //            {
+                //                foreach (var item in Newdetails)
+                //                {
+                //                    item.SellingOrderID = sellingOrder.SellingOrderID;
+                //                    item.SellOrderDetailID = 0;
+                //                    var details = _mapper.Map<SellingOrderDetail>(item);
+
+                //                    unitOfWork.SellingOrderDetailRepository.Insert(details);
+
+                //                }
+                //            }
+
+
+                //            //==================================================لا تولد قيد ===================================
+                //            if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
+                //            {
+                //                unitOfWork.EntryRepository.Delete(Entry.EntryID);
+                //                unitOfWork.Save();
+
+                //                return Ok(sellingOrderModel);
+                //            }
+                //            //===================================توليد قيد مع ترحيل تلقائي===================================
+                //            if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
+                //            {
+                //                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+
+                //                if (sellingOrderModel.SettingModel.TransferToAccounts == true)
+                //                {
+                //                    Entry.TransferedToAccounts = true;
+                //                    unitOfWork.EntryRepository.Update(Entry);
+                //                    foreach (var item in EntryDitails)
+                //                    {
+                //                        item.EntryID = Entry.EntryID;
+                //                        item.EntryDetailID = 0;
+                //                        var details = _mapper.Map<EntryDetail>(item);
+
+                //                        unitOfWork.EntryDetailRepository.Insert(details);
+
+                //                    }
+                //                    accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
+                //                    {
+
+
+                //                        EntryDetailID = x.EntryDetailID,
+                //                        AccountID = x.AccountID,
+                //                        Credit = x.Credit,
+                //                        Debit = x.Debit,
+                //                        EntryID = x.EntryID
+
+
+                //                    }).ToList());
+                //                }
+
+                //            }
+                //            //===================================توليد قيد مع  عدم ترحيل=================================== 
+                //            if (sellingOrderModel.SettingModel.GenerateEntry == true)
+
+                //            {
+                //                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+                //                Entry.TransferedToAccounts = false;
+                //                unitOfWork.EntryRepository.Update(Entry);
+                //                foreach (var item in EntryDitails)
+                //                {
+                //                    item.EntryID = Entry.EntryID;
+                //                    item.EntryDetailID = 0;
+                //                    var details = _mapper.Map<EntryDetail>(item);
+
+                //                    unitOfWork.EntryDetailRepository.Insert(details);
+
+                //                }
+                //            }
+                //            unitOfWork.Save();
+
+
+
+                //            return Ok(sellingOrderModel);
+
+                //        }
+
+
+                //    }
+                //    return Ok(sellingOrderModel);
+                //}
 
                 // now We Will Create new Entry As Insert
 
-
-                else
-                {
-                    if (Check.Any(m => m.Code != sellingOrder.Code))
-                    {
-                        unitOfWork.SellingOrderReposetory.Update(sellingOrder);
-                        if (OldDetails != null)
-                        {
-                            unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                            unitOfWork.Save();
-                        }
-
-
-                        if (Newdetails != null)
-                        {
-                            foreach (var item in Newdetails)
-                            {
-                                item.SellingOrderID = sellingOrder.SellingOrderID;
-                                item.SellOrderDetailID = 0;
-                                var details = _mapper.Map<SellingOrderDetail>(item);
-
-                                unitOfWork.SellingOrderDetailRepository.Insert(details);
-
-                            }
-                        }
-
-
-                        //==================================================لا تولد قيد ===================================
-                        if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
-                        {
-
-                            unitOfWork.Save();
-
-                            return Ok(sellingOrderModel);
-                        }
-                        //===============================================================توليد قيد مع ترحيل تلقائي============================
-
-
-
-                        else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
-                        {
-                            var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
-                            EntryMODEL.SellingOrderID = sellingOrder.SellingOrderID;
-                            var Entry = _mapper.Map<Entry>(EntryMODEL);
-                            Entry.SellingOrderID = sellingOrder.SellingOrderID;
-
-                            var DetailEnt = EntryMODEL.EntryDetailModel;
-
-                            if (sellingOrderModel.SettingModel.TransferToAccounts == true)
-                            {
-                                Entry.TransferedToAccounts = true;
-                                unitOfWork.EntryRepository.Insert(Entry);
-                                foreach (var item in DetailEnt)
-                                {
-                                    item.EntryID = Entry.EntryID;
-                                    item.EntryDetailID = 0;
-                                    var details = _mapper.Map<EntryDetail>(item);
-
-                                    unitOfWork.EntryDetailRepository.Insert(details);
-
-                                }
-                                accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
-                                {
-
-
-                                    EntryDetailID = x.EntryDetailID,
-                                    AccountID = x.AccountID,
-                                    Credit = x.Credit,
-                                    Debit = x.Debit,
-                                    EntryID = x.EntryID
-
-
-                                }).ToList());
-                            }
-                            //================================توليد قيد مع عدم الترحيل======================================
-                           
-
-                        }
-                        if (sellingOrderModel.SettingModel.GenerateEntry==true)
-                        
-                        {
-                            var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
-                            EntryMODEL.SellingOrderID = sellingOrder.SellingOrderID;
-                            var Entry = _mapper.Map<Entry>(EntryMODEL);
-                            Entry.SellingOrderID = sellingOrder.SellingOrderID;
-
-                            var DetailEnt = EntryMODEL.EntryDetailModel;
-                            Entry.TransferedToAccounts = false;
-                            unitOfWork.EntryRepository.Insert(Entry);
-                            foreach (var item in DetailEnt)
-                            {
-                                item.EntryID = Entry.EntryID;
-                                item.EntryDetailID = 0;
-                                var details = _mapper.Map<EntryDetail>(item);
-
-                                unitOfWork.EntryDetailRepository.Insert(details);
-
-                            }
-                        }
-
-
-                        unitOfWork.Save();
-
-
-
-                        return Ok(sellingOrderModel);
-
-
-                    }
-
-
-                    //==========================================Second Case OF Code Of Purchase=======================================
-
-                    else
-                    {
-                        if (Check.Any(m => m.Code == sellingOrder.Code && m.SellingOrderID == id))
-                        {
-                            unitOfWork.SellingOrderReposetory.Update(sellingOrder);
-                            if (OldDetails != null)
-                            {
-                                unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                                unitOfWork.Save();
-                            }
-
-
-                            if (Newdetails != null)
-                            {
-                                foreach (var item in Newdetails)
-                                {
-                                    item.SellingOrderID = sellingOrder.SellingOrderID;
-                                    item.SellOrderDetailID = 0;
-                                    var details = _mapper.Map<SellingOrderDetail>(item);
-
-                                    unitOfWork.SellingOrderDetailRepository.Insert(details);
-
-                                }
-                            }
-
-
-                            //==================================================لا تولد قيد ===================================
-                            if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
-                            {
-
-                                unitOfWork.Save();
-
-                                return Ok(sellingOrderModel);
-                            }
-                            //===============================================================توليد قيد مع ترحيل تلقائي============================
-
-
-
-                            else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
-                            {
-                                var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
-                                var Entry = _mapper.Map<Entry>(EntryMODEL);
-                                Entry.SellingOrderID = sellingOrder.SellingOrderID;
-
-                                var DetailEnt = EntryMODEL.EntryDetailModel;
-
-                                if (sellingOrderModel.SettingModel.TransferToAccounts == true)
-                                {
-                                    Entry.TransferedToAccounts = true;
-                                    unitOfWork.EntryRepository.Insert(Entry);
-                                    foreach (var item in DetailEnt)
-                                    {
-                                        item.EntryID = Entry.EntryID;
-                                        item.EntryDetailID = 0;
-                                        var details = _mapper.Map<EntryDetail>(item);
-
-                                        unitOfWork.EntryDetailRepository.Insert(details);
-
-                                    }
-                                    accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
-                                    {
-
-
-                                        EntryDetailID = x.EntryDetailID,
-                                        AccountID = x.AccountID,
-                                        Credit = x.Credit,
-                                        Debit = x.Debit,
-                                        EntryID = x.EntryID
-
-
-                                    }).ToList());
-                                }
-                               
-                               
-
-                            }
-                            //================================توليد قيد مع عدم الترحيل====================================== 
-                            if (sellingOrderModel.SettingModel.GenerateEntry==true)
-                           
-                            {
-                                var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
-                                var Entry = _mapper.Map<Entry>(EntryMODEL);
-                                Entry.SellingOrderID = sellingOrder.SellingOrderID;
-
-                                var DetailEnt = EntryMODEL.EntryDetailModel;
-                                Entry.TransferedToAccounts = false;
-                                unitOfWork.EntryRepository.Insert(Entry);
-                                foreach (var item in DetailEnt)
-                                {
-                                    item.EntryID = Entry.EntryID;
-                                    item.EntryDetailID = 0;
-                                    var details = _mapper.Map<EntryDetail>(item);
-
-                                    unitOfWork.EntryDetailRepository.Insert(details);
-
-                                }
-                            }
-
-
-                            unitOfWork.Save();
-
-
-
-                            return Ok(sellingOrderModel);
-                        }
-
-
-                    }
-                    return Ok(sellingOrderModel);
-                }
             }
+            //else
+            //{
+            //    if (Check.Any(m => m.Code != sellingOrder.Code))
+            //    {
+            //        unitOfWork.SellingOrderReposetory.Update(sellingOrder);
+            //        //if (OldDetails != null)
+            //        //{
+            //        //    unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
+            //        //    unitOfWork.Save();
+            //        //}
+
+
+            //        //if (Newdetails != null)
+            //        //{
+            //        //    foreach (var item in Newdetails)
+            //        //    {
+            //        //        item.SellingOrderID = sellingOrder.SellingOrderID;
+            //        //        item.SellOrderDetailID = 0;
+            //        //        var details = _mapper.Map<SellingOrderDetail>(item);
+
+            //        //        unitOfWork.SellingOrderDetailRepository.Insert(details);
+
+            //        //    }
+            //        //}
+
+
+            //        //==================================================لا تولد قيد ===================================
+            //        if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
+            //        {
+
+            //            unitOfWork.Save();
+
+            //            return Ok(sellingOrderModel);
+            //        }
+            //        //===============================================================توليد قيد مع ترحيل تلقائي============================
+
+
+
+            //        //else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
+            //        //{
+            //        //    var lastEntry = unitOfWork.EntryRepository.Last();
+            //        //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+            //        //    EntryMODEL.SellingOrderID = sellingOrder.SellingOrderID;
+            //        //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+            //        //    Entry.SellingOrderID = sellingOrder.SellingOrderID;
+
+            //        //    var DetailEnt = EntryMODEL.EntryDetailModel;
+
+            //        //    if (sellingOrderModel.SettingModel.TransferToAccounts == true)
+            //        //    {
+            //        //        Entry.TransferedToAccounts = true;
+            //        //        unitOfWork.EntryRepository.Insert(Entry);
+            //        //        foreach (var item in DetailEnt)
+            //        //        {
+            //        //            item.EntryID = Entry.EntryID;
+            //        //            item.EntryDetailID = 0;
+            //        //            var details = _mapper.Map<EntryDetail>(item);
+
+            //        //            unitOfWork.EntryDetailRepository.Insert(details);
+
+            //        //        }
+            //        //        accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+            //        //        {
+
+
+            //        //            EntryDetailID = x.EntryDetailID,
+            //        //            AccountID = x.AccountID,
+            //        //            Credit = x.Credit,
+            //        //            Debit = x.Debit,
+            //        //            EntryID = x.EntryID
+
+
+            //        //        }).ToList());
+            //        //    }
+            //        //    //================================توليد قيد مع عدم الترحيل======================================
+
+
+            //        //}
+            //        //if (sellingOrderModel.SettingModel.GenerateEntry==true)
+
+            //        //{
+            //        //    var lastEntry = unitOfWork.EntryRepository.Last();
+            //        //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+            //        //    EntryMODEL.SellingOrderID = sellingOrder.SellingOrderID;
+            //        //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+            //        //    Entry.SellingOrderID = sellingOrder.SellingOrderID;
+
+            //        //    var DetailEnt = EntryMODEL.EntryDetailModel;
+            //        //    Entry.TransferedToAccounts = false;
+            //        //    unitOfWork.EntryRepository.Insert(Entry);
+            //        //    foreach (var item in DetailEnt)
+            //        //    {
+            //        //        item.EntryID = Entry.EntryID;
+            //        //        item.EntryDetailID = 0;
+            //        //        var details = _mapper.Map<EntryDetail>(item);
+
+            //        //        unitOfWork.EntryDetailRepository.Insert(details);
+
+            //        //    }
+            //        //}
+
+
+            //        unitOfWork.Save();
+
+
+
+            //        return Ok(sellingOrderModel);
+
+
+            //    }
+
+
+            //    //==========================================Second Case OF Code Of Purchase=======================================
+
+            //    else
+            //    {
+            //        if (Check.Any(m => m.Code == sellingOrder.Code && m.SellingOrderID == id))
+            //        {
+            //            unitOfWork.SellingOrderReposetory.Update(sellingOrder);
+            //            //if (OldDetails != null)
+            //            //{
+            //            //    unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
+            //            //    unitOfWork.Save();
+            //            //}
+
+
+            //            //if (Newdetails != null)
+            //            //{
+            //            //    foreach (var item in Newdetails)
+            //            //    {
+            //            //        item.SellingOrderID = sellingOrder.SellingOrderID;
+            //            //        item.SellOrderDetailID = 0;
+            //            //        var details = _mapper.Map<SellingOrderDetail>(item);
+
+            //            //        unitOfWork.SellingOrderDetailRepository.Insert(details);
+
+            //            //    }
+            //            //}
+
+
+            //            //==================================================لا تولد قيد ===================================
+            //            if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
+            //            {
+
+            //                unitOfWork.Save();
+
+            //                return Ok(sellingOrderModel);
+            //            }
+            //            //===============================================================توليد قيد مع ترحيل تلقائي============================
+
+
+
+            //            //else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
+            //            //{
+            //            //    var lastEntry = unitOfWork.EntryRepository.Last();
+            //            //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+            //            //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+            //            //    Entry.SellingOrderID = sellingOrder.SellingOrderID;
+
+            //            //    var DetailEnt = EntryMODEL.EntryDetailModel;
+
+            //            //    if (sellingOrderModel.SettingModel.TransferToAccounts == true)
+            //            //    {
+            //            //        Entry.TransferedToAccounts = true;
+            //            //        unitOfWork.EntryRepository.Insert(Entry);
+            //            //        foreach (var item in DetailEnt)
+            //            //        {
+            //            //            item.EntryID = Entry.EntryID;
+            //            //            item.EntryDetailID = 0;
+            //            //            var details = _mapper.Map<EntryDetail>(item);
+
+            //            //            unitOfWork.EntryDetailRepository.Insert(details);
+
+            //            //        }
+            //            //        accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+            //            //        {
+
+
+            //            //            EntryDetailID = x.EntryDetailID,
+            //            //            AccountID = x.AccountID,
+            //            //            Credit = x.Credit,
+            //            //            Debit = x.Debit,
+            //            //            EntryID = x.EntryID
+
+
+            //            //        }).ToList());
+            //            //    }
+
+
+
+            //            //}
+            //            ////================================توليد قيد مع عدم الترحيل====================================== 
+            //            //if (sellingOrderModel.SettingModel.GenerateEntry==true)
+
+            //            //{
+            //            //    var lastEntry = unitOfWork.EntryRepository.Last();
+            //            //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+            //            //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+            //            //    Entry.SellingOrderID = sellingOrder.SellingOrderID;
+
+            //            //    var DetailEnt = EntryMODEL.EntryDetailModel;
+            //            //    Entry.TransferedToAccounts = false;
+            //            //    unitOfWork.EntryRepository.Insert(Entry);
+            //            //    foreach (var item in DetailEnt)
+            //            //    {
+            //            //        item.EntryID = Entry.EntryID;
+            //            //        item.EntryDetailID = 0;
+            //            //        var details = _mapper.Map<EntryDetail>(item);
+
+            //            //        unitOfWork.EntryDetailRepository.Insert(details);
+
+            //            //    }
+            //            //}
+
+
+            //            unitOfWork.Save();
+
+
+
+            //            return Ok(sellingOrderModel);
+            //        }
+
+
+            //    }
+
+
+            //    return Ok(sellingOrderModel);
+
+            //}
+
+
+
+        
+            //
             else
             {
                 return BadRequest();
             }
+              return Ok(sellingOrderModel);
 
 
         }
 
         [HttpDelete]
-        [Route("~/api/DeleteSellingOrder/DeleteSelling/{id}")]
+        [Route("~/api/SellingOrder/DeleteSelling/{id}")]
         public IActionResult DeleteSelling(int? id)
         {
 
@@ -992,14 +1143,14 @@ namespace Stocks.Controllers
             var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: m => m.SellingOrderID == id);
            
             unitOfWork.SellingOrderDetailRepository.RemovRange(Details);
-            var Entry = unitOfWork.EntryRepository.Get(filter: x=> x.SellingOrderID==id).SingleOrDefault();
-            var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a=> a.EntryID==Entry.EntryID); 
-            if (Entry.TransferedToAccounts==true)
-            {
-                accountingHelper.CancelTransferToAccounts(EntryDetails.ToList());
-            }
-            unitOfWork.EntryDetailRepository.RemovRange(EntryDetails);
-            unitOfWork.EntryRepository.Delete(Entry.EntryID);
+            //var Entry = unitOfWork.EntryRepository.Get(filter: x=> x.SellingOrderID==id).SingleOrDefault();
+            //var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a=> a.EntryID==Entry.EntryID); 
+            //if (Entry.TransferedToAccounts==true)
+            //{
+            //    accountingHelper.CancelTransferToAccounts(EntryDetails.ToList());
+            //}
+            //unitOfWork.EntryDetailRepository.RemovRange(EntryDetails);
+            //unitOfWork.EntryRepository.Delete(Entry.EntryID);
 
             unitOfWork.SellingOrderReposetory.Delete(id);
             var Result = unitOfWork.Save();

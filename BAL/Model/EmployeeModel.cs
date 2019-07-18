@@ -45,7 +45,7 @@ namespace BAL.Model
 
         public string LastCode { get; set; }
 
-        public IEnumerable<EmployeeCardModel> EmployeeCards { get; set; }
+        public IEnumerable<EmployeeCardModel> emplCards { get; set; }
 
     }
 }
