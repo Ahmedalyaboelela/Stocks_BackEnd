@@ -144,7 +144,11 @@ namespace Stocks.Controllers
                     unitOfWork.CurrencyRepository.Insert(model);
                     try
                     {
-                        unitOfWork.Save();
+                        var result = unitOfWork.Save();
+                        if (result == true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {
@@ -208,6 +212,10 @@ namespace Stocks.Controllers
                     try
                     {
                         var Result = unitOfWork.Save();
+                        if (Result == true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {
@@ -264,7 +272,11 @@ namespace Stocks.Controllers
                     unitOfWork.CurrencyRepository.Delete(id);
                     try
                     {
-                        unitOfWork.Save();
+                    var result= unitOfWork.Save();
+                        if (result == true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {

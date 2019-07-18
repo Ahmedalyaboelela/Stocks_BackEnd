@@ -156,7 +156,11 @@ namespace Stocks.Controllers
                     unitOfWork.CountryRepository.Insert(model);
                     try
                     {
-                        unitOfWork.Save();
+                        var result = unitOfWork.Save();
+                        if (result == true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {
@@ -215,7 +219,11 @@ namespace Stocks.Controllers
 
                         try
                         {
-                            unitOfWork.Save();
+                            var result = unitOfWork.Save();
+                            if (result == true)
+                            {
+                                return Ok(7);
+                            }
                         }
                         catch (DbUpdateException ex)
                         {
@@ -273,7 +281,11 @@ namespace Stocks.Controllers
                     unitOfWork.CountryRepository.Delete(id);
                     try
                     {
-                        unitOfWork.Save();
+                    var result=    unitOfWork.Save(); 
+                        if (result== true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {
