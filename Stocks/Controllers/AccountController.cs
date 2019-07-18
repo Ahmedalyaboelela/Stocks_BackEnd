@@ -143,12 +143,24 @@ namespace Stocks.Controllers
 
         }
 
+        [Route("~/api/Account/GetAllMain")]
+        public IActionResult GetAllMainAccount()
+        {
+            var account = unitOfWork.AccountRepository.Get(filter: a => a.AccountType == true);
+            var model = _mapper.Map<IEnumerable<AccountModel>>(account);
 
+            if (model == null)
+            {
+                return Ok(0);
+            }
+
+            return Ok(model);
+        }
 
         [Route("~/api/Account/GetAll")]
         public IActionResult GetAllAccount()
         {
-            var account = unitOfWork.AccountRepository.Get();
+            var account = unitOfWork.AccountRepository.Get(filter:a=>a.AccountType==false);
             var model = _mapper.Map<IEnumerable<AccountModel>>(account);
 
             if (model == null)

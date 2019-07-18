@@ -52,6 +52,40 @@ namespace BAL.Mapper
 
             #endregion
 
+            #region Map Setting
+
+            CreateMap<Setting, SettingModel>();
+            CreateMap<SettingModel, Setting>();
+            #endregion
+
+            #region Map Selling order
+
+            CreateMap<SellingOrder, SellingOrderModel>();
+            CreateMap<SellingOrderModel, SellingOrder>()
+                .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
+                 .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.SellDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+
+
+            CreateMap<SellingOrderDetail, SelingOrderDetailsModel>();
+            CreateMap<SelingOrderDetailsModel, SellingOrderDetail>();
+            #endregion
+
+            #region Map Purchase order
+
+            CreateMap<PurchaseOrder, PurchaseOrderModel>();
+            CreateMap<PurchaseOrderModel, PurchaseOrder>().ForSourceMember(t => t.Count, opt => opt.DoNotValidate());
+
+            CreateMap<PurchaseOrderDetail, PurchaseOrderDetailModel>();
+            CreateMap<PurchaseOrderDetailModel, PurchaseOrderDetail>();
+
+            #endregion
+
+            #region Map Currency
+
+            CreateMap<Currency, CurrencyModel>();
+            CreateMap<CurrencyModel, Currency>().ForSourceMember(t => t.Count, opt => opt.DoNotValidate());
+            #endregion
+
             #region Map Portfolio
             // portfolio
             CreateMap<Portfolio, PortfolioModel>();
@@ -67,27 +101,6 @@ namespace BAL.Mapper
             CreateMap<PortfolioShareHolder, PortfolioShareholderModel>();
 
             CreateMap<PortfolioShareholderModel, PortfolioShareHolder>();
-
-
-            CreateMap<Setting, SettingModel>();
-            CreateMap<SettingModel, Setting>();
-
-            CreateMap<SellingOrder, SellingOrderModel>();
-            CreateMap<SellingOrderModel, SellingOrder>().ForSourceMember(t => t.Count, opt => opt.DoNotValidate());
-
-
-            CreateMap<SellingOrderDetail, SelingOrderDetailsModel>();
-            CreateMap<SelingOrderDetailsModel, SellingOrderDetail>();
-
-            CreateMap<PurchaseOrder, PurchaseOrderModel>();
-            CreateMap<PurchaseOrderModel, PurchaseOrder>().ForSourceMember(t => t.Count, opt => opt.DoNotValidate());
-
-            CreateMap<PurchaseOrderDetail, PurchaseOrderDetailModel>();
-            CreateMap<PurchaseOrderDetailModel, PurchaseOrderDetail>();
-
-
-            CreateMap<Currency, CurrencyModel>();
-            CreateMap<CurrencyModel, Currency>().ForSourceMember(t => t.Count, opt => opt.DoNotValidate());
 
 
             #endregion
