@@ -8,9 +8,9 @@ namespace BAL.Model
     {
         public int PortOPenStockID { get; set; }
 
-        public float StocksCount { get; set; }
+        public float OpeningStocksCount { get; set; }
 
-        public decimal StockValue { get; set; }
+        public decimal OpeningStockValue { get; set; }
 
 
         public int PortfolioID { get; set; }

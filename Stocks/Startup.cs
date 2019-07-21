@@ -23,6 +23,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Http;
 using BAL.Helper;
 using DAL.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Stocks
 {
@@ -53,6 +54,14 @@ namespace Stocks
             .UseSqlServer(Configuration.GetConnectionString("StocksConnection")));
             services.AddDefaultIdentity<ApplicationUser>()
            .AddEntityFrameworkStores<StocksContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 4;
+            });
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddTransient<IAccountingHelper, AccountingHelper>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
