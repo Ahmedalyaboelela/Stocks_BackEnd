@@ -32,8 +32,13 @@ namespace Stocks.Controllers
         public IActionResult FirstOpen()
         {
             CurrencyModel currencyModel = new CurrencyModel();
-            currencyModel.LastCode = unitOfWork.CurrencyRepository.Last().Code;
-            currencyModel.Count = unitOfWork.CurrencyRepository.Count();
+            var count = unitOfWork.CurrencyRepository.Count();
+            if(count>0)
+            {
+                currencyModel.LastCode = unitOfWork.CurrencyRepository.Last().Code;
+                currencyModel.Count = count;
+            }
+          
             return Ok(currencyModel);
         }
 
@@ -144,7 +149,11 @@ namespace Stocks.Controllers
                     unitOfWork.CurrencyRepository.Insert(model);
                     try
                     {
-                        unitOfWork.Save();
+                        var result = unitOfWork.Save();
+                        if (result == true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {
@@ -208,6 +217,10 @@ namespace Stocks.Controllers
                     try
                     {
                         var Result = unitOfWork.Save();
+                        if (Result == true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {
@@ -264,7 +277,11 @@ namespace Stocks.Controllers
                     unitOfWork.CurrencyRepository.Delete(id);
                     try
                     {
-                        unitOfWork.Save();
+                    var result= unitOfWork.Save();
+                        if (result == true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {

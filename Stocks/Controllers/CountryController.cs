@@ -39,8 +39,15 @@ namespace Stocks.Controllers
         public IActionResult FirstOpen()
         {
             CountryModel model = new CountryModel();
-            model.LastCode = unitOfWork.CountryRepository.Last().Code;
-            model.Count = unitOfWork.CountryRepository.Count();
+
+            var count = unitOfWork.PartnerRepository.Count();
+            if(count>0)
+            {
+
+                model.LastCode = unitOfWork.PartnerRepository.Last().Code;
+                model.Count = count;
+            }
+
             return Ok(model);
         }
 
@@ -48,6 +55,12 @@ namespace Stocks.Controllers
         [Route("~/api/Country/GetLast")]
         public IActionResult GetLastCountry()
         {
+            var count = unitOfWork.CountryRepository.Count();
+            if(count==0)
+            {
+                return Ok(0);
+
+            }
             var country = unitOfWork.CountryRepository.Last();
 
             var model = _mapper.Map<CountryModel>(country);
@@ -57,7 +70,9 @@ namespace Stocks.Controllers
             }
 
 
-            model.Count = unitOfWork.CountryRepository.Count();
+
+            model.Count = count;
+           
 
             return Ok(model);
 
@@ -93,20 +108,32 @@ namespace Stocks.Controllers
         {
             if (id > 0)
             {
-                var country = unitOfWork.CountryRepository.GetByID(id);
-
-                var model = _mapper.Map<CountryModel>(country);
-                if (model == null)
+                var count = unitOfWork.CountryRepository.Count();
+                if(count==0)
                 {
                     return Ok(0);
+
                 }
                 else
                 {
+                    var country = unitOfWork.CountryRepository.GetByID(id);
 
-                    model.Count = unitOfWork.CountryRepository.Count();
+                    var model = _mapper.Map<CountryModel>(country);
+                    if (model == null)
+                    {
+                        return Ok(0);
+                    }
+                    else
+                    {
 
-                    return Ok(model);
+
+                        model.Count = unitOfWork.CountryRepository.Count();
+
+                        return Ok(model);
+                    }
+
                 }
+               
             }
             else
                 return Ok(1);
@@ -156,7 +183,11 @@ namespace Stocks.Controllers
                     unitOfWork.CountryRepository.Insert(model);
                     try
                     {
-                        unitOfWork.Save();
+                        var result = unitOfWork.Save();
+                        if (result == true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {
@@ -215,7 +246,11 @@ namespace Stocks.Controllers
 
                         try
                         {
-                            unitOfWork.Save();
+                            var result = unitOfWork.Save();
+                            if (result == true)
+                            {
+                                return Ok(7);
+                            }
                         }
                         catch (DbUpdateException ex)
                         {
@@ -273,7 +308,11 @@ namespace Stocks.Controllers
                     unitOfWork.CountryRepository.Delete(id);
                     try
                     {
-                        unitOfWork.Save();
+                    var result=    unitOfWork.Save(); 
+                        if (result== true)
+                        {
+                            return Ok(7);
+                        }
                     }
                     catch (DbUpdateException ex)
                     {
