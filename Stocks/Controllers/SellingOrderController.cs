@@ -28,10 +28,10 @@ namespace Stocks.Controllers
         [Route("~/api/SellingOrder/GetSettingAccounts/{id}")]
         public IEnumerable<SettingAccountModel> SettingAccounts(int id)
         {
-
+         
             var setAccounts = unitOfWork.SettingAccountRepository.Get(filter: x => x.SettingID == id).Select(a => new SettingAccountModel
             {
-
+                
                 SettingID = a.SettingID,
                 AccNameEN = a.Account.NameEN,
                 AccCode = a.Account.Code,
@@ -39,7 +39,12 @@ namespace Stocks.Controllers
                 AccountID = a.AccountID,
                 AccountType = a.AccountType,
                 SettingAccountID = a.SettingAccountID,
-                Code = a.Setting.Code
+                Code = a.Setting.Code,
+                ParentAccountID=a.Account.AccoutnParentID,
+                ParentAccCode= unitOfWork.AccountRepository.GetEntity(s=>s.AccountID==a.Account.AccoutnParentID).Code,
+                ParentAccNameAR = unitOfWork.AccountRepository.GetEntity(s => s.AccountID == a.Account.AccoutnParentID).NameAR,
+                ParentAccNameEN = unitOfWork.AccountRepository.GetEntity(s => s.AccountID == a.Account.AccoutnParentID).NameEN,
+
             });
 
 
@@ -614,27 +619,40 @@ namespace Stocks.Controllers
 
                             }).ToList());
                         }
-                    }
-                    //================================توليد قيد مع عدم الترحيل====================================== 
-                    else if (sellingOrderModel.SettingModel.GenerateEntry == true)
-
-                    {
-                        var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
-                        EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
-                        var Entry = _mapper.Map<Entry>(EntryMODEL);
-                        var DetailEnt = EntryMODEL.EntryDetailModel;
-                        Entry.TransferedToAccounts = false;
-                        unitOfWork.EntryRepository.Insert(Entry);
-                        foreach (var item in DetailEnt)
+                        else
                         {
-                            item.EntryID = Entry.EntryID;
-                            item.EntryDetailID = 0;
-                            var details = _mapper.Map<EntryDetail>(item);
+                            Entry.TransferedToAccounts = true;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
 
-                            unitOfWork.EntryDetailRepository.Insert(details);
+                                unitOfWork.EntryDetailRepository.Insert(details);
+                            }
                         }
                     }
+                    //================================توليد قيد مع عدم الترحيل====================================== 
+                    //else if (sellingOrderModel.SettingModel.GenerateEntry == true)
+
+                    //{
+                    //    var lastEntry = unitOfWork.EntryRepository.Last();
+                    //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                    //    EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
+                    //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+                    //    var DetailEnt = EntryMODEL.EntryDetailModel;
+                    //    Entry.TransferedToAccounts = false;
+                    //    unitOfWork.EntryRepository.Insert(Entry);
+                    //    foreach (var item in DetailEnt)
+                    //    {
+                    //        item.EntryID = Entry.EntryID;
+                    //        item.EntryDetailID = 0;
+                    //        var details = _mapper.Map<EntryDetail>(item);
+
+                    //        unitOfWork.EntryDetailRepository.Insert(details);
+                    //    }
+                    //}
 
                     unitOfWork.Save();
                     return Ok(sellingOrderModel);
