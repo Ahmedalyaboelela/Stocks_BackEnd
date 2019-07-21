@@ -531,13 +531,9 @@ namespace Stocks.Controllers
                 {
                     return BadRequest();
                 }
-                var PortAccounts = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == id);
+                var PortAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: m => m.PortfolioID == id);
 
-                if (PortAccounts.Count() > 0)
-                {
-                    unitOfWork.PortfolioAccountRepository.RemovRange(PortAccounts);
-
-                }
+                unitOfWork.PortfolioAccountRepository.Delete(PortAccount.PortfolioID);
                 var Shareholders = unitOfWork.PortfolioOpeningStocksRepository.Get(filter: m => m.PortfolioID == id);
 
                 if (Shareholders.Count() > 0)
