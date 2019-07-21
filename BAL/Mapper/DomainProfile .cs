@@ -51,16 +51,8 @@ namespace BAL.Mapper
             ;
 
             #endregion
-
-
-   
-
-
-
-
             CreateMap<Setting, SettingModel>();
             CreateMap<SettingModel, Setting>();
-            #endregion
 
             #region Map Selling order
 
@@ -167,6 +159,11 @@ namespace BAL.Mapper
             CreateMap<SettingAccountModel, SettingAccount>();
 
 
+            #endregion
+
+            #region Map PortfolioTransaction
+            CreateMap<PortfolioTransaction, PortfolioTransactionModel>();
+            CreateMap<PortfolioTransactionModel, PortfolioTransaction>();
             #endregion
 
         }

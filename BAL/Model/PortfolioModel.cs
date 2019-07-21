@@ -31,10 +31,11 @@ namespace BAL.Model
         public string AccountCode{ get; set; }
 
        
-         public IEnumerable<PortfolioAccountModel> folioAccounts { get; set; }
+     //    public IEnumerable<PortfolioAccountModel> folioAccounts { get; set; }
 
         public IEnumerable<PortfolioOpeningStocksModel> portfolioOpeningStocksModels { get; set; }
+        public IEnumerable<PortfolioTransactionModel> portfolioTransactionModels { get; set; }
 
-   
+
     }
 }
