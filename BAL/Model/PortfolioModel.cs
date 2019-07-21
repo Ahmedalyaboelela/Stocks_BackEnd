@@ -28,10 +28,16 @@ namespace BAL.Model
 
         public int Count { get; set; }
 
-        public string LastCode { get; set; }
-        public IEnumerable<PortfolioAccountModel> folioAccounts { get; set; }
+        public string LastCode { get; set; } 
+        public int? AccountID { get; set; }
+        public string AccountNameAR { get; set; }
+        public string AccountNameEN { get; set; }
+        public string AccountCode{ get; set; }
 
-        public IEnumerable<PortfolioOpeningStocksModel> portopeningmodels { get; set; }
+       
+         public IEnumerable<PortfolioAccountModel> folioAccounts { get; set; }
+
+        public IEnumerable<PortfolioOpeningStocksModel> portfolioOpeningStocksModels { get; set; }
 
    
     }

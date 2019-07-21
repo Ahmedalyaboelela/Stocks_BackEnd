@@ -8,8 +8,8 @@ namespace BAL.Model
     {
         public int PortOPenStockID { get; set; }
 
-        public float StocksCount { get; set; }
-
+        public float StocksCountpart { get; set; }
+     
         public decimal StockValue { get; set; }
 
 
@@ -28,5 +28,6 @@ namespace BAL.Model
         public string PartnerNameAR { get; set; }
 
         public string PartnerNameEN { get; set; }
+       
     }
 }
