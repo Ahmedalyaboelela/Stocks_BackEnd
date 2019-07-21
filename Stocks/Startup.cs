@@ -22,6 +22,7 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Http;
 using BAL.Helper;
+using DAL.Entities;
 
 namespace Stocks
 {
@@ -50,6 +51,8 @@ namespace Stocks
             services.AddDbContext<StocksContext>(options =>
             options.UseLazyLoadingProxies()
             .UseSqlServer(Configuration.GetConnectionString("StocksConnection")));
+            services.AddDefaultIdentity<ApplicationUser>()
+           .AddEntityFrameworkStores<StocksContext>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddTransient<IAccountingHelper, AccountingHelper>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -76,7 +79,7 @@ namespace Stocks
 
             //app.ConfigureExceptionHandler(logger);
             app.ConfigureCustomExceptionMiddleware();
-
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

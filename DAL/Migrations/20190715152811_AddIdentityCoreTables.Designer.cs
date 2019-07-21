@@ -4,14 +4,16 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(StocksContext))]
-    partial class StocksContextModelSnapshot : ModelSnapshot
+    [Migration("20190715152811_AddIdentityCoreTables")]
+    partial class AddIdentityCoreTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -452,7 +454,13 @@ namespace DAL.Migrations
                     b.Property<string>("NameEN")
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<float?>("OpeningStocksCount");
+                    b.Property<int?>("PartnerCount");
+
+                    b.Property<decimal?>("PortfolioCapital")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal?>("StockValue")
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<float?>("StocksCount");
 
@@ -482,28 +490,33 @@ namespace DAL.Migrations
                     b.ToTable("PortfolioAccounts");
                 });
 
-            modelBuilder.Entity("DAL.Entities.PortfolioOpeningStocks", b =>
+            modelBuilder.Entity("DAL.Entities.PortfolioShareHolder", b =>
                 {
-                    b.Property<int>("PortOPenStockID")
+                    b.Property<int>("PortShareID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(MAX)");
+
                     b.Property<int>("PartnerID");
+
+                    b.Property<float>("Percentage");
 
                     b.Property<int>("PortfolioID");
 
-                    b.Property<decimal>("StockValue")
-                        .HasColumnType("decimal(10,2)");
+                    b.Property<int>("StocksCount");
 
-                    b.Property<float>("StocksCount");
-
-                    b.HasKey("PortOPenStockID");
+                    b.HasKey("PortShareID");
 
                     b.HasIndex("PartnerID");
 
                     b.HasIndex("PortfolioID");
 
-                    b.ToTable("PortfolioOpeningStocks");
+                    b.ToTable("PortfolioShareHolders");
                 });
 
             modelBuilder.Entity("DAL.Entities.PurchaseOrder", b =>
@@ -1019,15 +1032,15 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("DAL.Entities.PortfolioOpeningStocks", b =>
+            modelBuilder.Entity("DAL.Entities.PortfolioShareHolder", b =>
                 {
                     b.HasOne("DAL.Entities.Partner", "Partner")
-                        .WithMany("PortfolioOpeningStocks")
+                        .WithMany("PortfolioShareHolders")
                         .HasForeignKey("PartnerID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DAL.Entities.Portfolio", "Portfolio")
-                        .WithMany("PortfolioOpeningStocks")
+                        .WithMany("PortfolioShareHolders")
                         .HasForeignKey("PortfolioID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
