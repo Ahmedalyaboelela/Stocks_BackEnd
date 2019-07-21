@@ -30,9 +30,14 @@ namespace DAL.Entities
 
         public int SellingOrderID { get; set; }
 
+        public int PartnerID { get; set; }
+
 
 
         [ForeignKey("SellingOrderID")]
         public virtual SellingOrder SellOrder { get; set; }
+
+        [ForeignKey("PartnerID")]
+        public virtual Partner Partner { get; set; }
     }
 }

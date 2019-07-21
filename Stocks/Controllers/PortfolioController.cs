@@ -76,7 +76,7 @@ namespace Stocks.Controllers
                 .Select(m => new PortfolioOpeningStocksModel
                 {
                     PortOPenStockID = m.PortOPenStockID,
-                    StocksCount = m.StocksCount,
+                    OpeningStocksCount = m.OpeningStocksCount,
                     PartnerID = m.PartnerID,
                     PartnerCode = m.Partner.Code,
                     PartnerNameAR = m.Partner.NameAR,
@@ -204,7 +204,7 @@ namespace Stocks.Controllers
                          .Select(m => new PortfolioOpeningStocksModel
                          {
                              PortOPenStockID = m.PortOPenStockID,
-                             StocksCount = m.StocksCount,
+                             OpeningStocksCount = m.OpeningStocksCount,
                              PartnerID = m.PartnerID,
                              PartnerCode = m.Partner.Code,
                              PartnerNameAR = m.Partner.NameAR,

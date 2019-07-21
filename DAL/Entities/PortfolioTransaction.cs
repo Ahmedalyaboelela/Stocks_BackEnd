@@ -6,15 +6,14 @@ using System.Text;
 
 namespace DAL.Entities
 {
-    public class PortfolioOpeningStocks
+    public class PortfolioTransaction
     {
         [Key]
-        public int PortOPenStockID { get; set; }
-
-        public float OpeningStocksCount { get; set; }
+        public int PortTransID { get; set; }
+        public float CurrentStocksCount { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal OpeningStockValue { get; set; }
+        public decimal CurrentStockValue { get; set; }
 
         public int PortfolioID { get; set; }
         public int PartnerID { get; set; }
