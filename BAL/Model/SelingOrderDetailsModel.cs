@@ -26,6 +26,10 @@ namespace BAL.Model
         public decimal NetAmmount { get; set; }
 
         public int SellingOrderID { get; set; }
+        public int PartnerID { get; set; }
+        public string PartnerNameAR { get; set; }
+        public string PartnerNameEN { get; set; }
+        public string PartnerCode { get; set; }
 
     }
 }

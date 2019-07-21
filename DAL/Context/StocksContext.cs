@@ -36,6 +36,10 @@ namespace DAL.Context
         public DbSet<PortfolioAccount> PortfolioAccounts  { get; set; }
 
         public DbSet<PortfolioOpeningStocks> PortfolioOpeningStocks { get; set; }
+
+        public DbSet<PortfolioTransaction> PortfolioTransactions { get; set; }
+
+        
         public DbSet<ReceiptExchange> ReceiptExchanges { get; set; }
         public DbSet<ReceiptExchangeDetail> ReceiptExchangeDetails { get; set; }
 

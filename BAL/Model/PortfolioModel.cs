@@ -20,12 +20,8 @@ namespace BAL.Model
 
         public string Description { get; set; }
 
-        public float? OpeningStocksCount { get; set; }
-
-        public float? StocksCount { get; set; }
+        public float? TotalStocksCount { get; set; }
       
-    
-
         public int Count { get; set; }
 
         public string LastCode { get; set; } 

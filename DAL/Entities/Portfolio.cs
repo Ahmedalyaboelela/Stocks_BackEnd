@@ -26,12 +26,11 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(MAX)")]
         public string Description { get; set; }
 
-        public float? OpeningStocksCount { get; set; }
-
-        public float? StocksCount { get; set; }
+        public float? TotalStocksCount { get; set; }
 
         public virtual ICollection<PortfolioOpeningStocks> PortfolioOpeningStocks { get; set; }
         public virtual ICollection<PortfolioAccount> PortfolioAccounts { get; set; }
+        public virtual ICollection<PortfolioTransaction> PortfolioTransactions { get; set; }
         public virtual ICollection<SellingOrder> SellOrders { get; set; }
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual ICollection<Notice> Notices { get; set; }

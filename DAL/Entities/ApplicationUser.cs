@@ -10,5 +10,7 @@ namespace DAL.Entities
     {
         [Column(TypeName = "nvarchar(250)")]
         public string FullName { get; set; }
+
+        public DateTime Creationdate { get; set; }
     }
 }

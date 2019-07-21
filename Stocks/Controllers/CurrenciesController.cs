@@ -32,8 +32,13 @@ namespace Stocks.Controllers
         public IActionResult FirstOpen()
         {
             CurrencyModel currencyModel = new CurrencyModel();
-            currencyModel.LastCode = unitOfWork.CurrencyRepository.Last().Code;
-            currencyModel.Count = unitOfWork.CurrencyRepository.Count();
+            var count = unitOfWork.CurrencyRepository.Count();
+            if(count>0)
+            {
+                currencyModel.LastCode = unitOfWork.CurrencyRepository.Last().Code;
+                currencyModel.Count = count;
+            }
+          
             return Ok(currencyModel);
         }
 
