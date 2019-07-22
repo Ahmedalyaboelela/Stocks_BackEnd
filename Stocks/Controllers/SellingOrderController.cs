@@ -141,8 +141,10 @@ namespace Stocks.Controllers
             {
                 var lastEntry = unitOfWork.EntryRepository.Last();
 
+                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingOrderModel.PortfolioID && m.Type == true)
+                    .Select(m => m.AccountID).SingleOrDefault();
 
-                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                 var Entry = _mapper.Map<Entry>(EntryMODEL);
 
 
@@ -302,6 +304,7 @@ namespace Stocks.Controllers
                             .Select(m => new SelingOrderDetailsModel
                             {
 
+
                                 SellingOrderID = m.SellingOrderID,
                                 SellOrderDetailID = m.SellOrderDetailID,
                                 BankCommission = m.BankCommission,
@@ -312,6 +315,10 @@ namespace Stocks.Controllers
                                 StockCount = m.StockCount,
                                 TaxOnCommission = m.TaxOnCommission,
                                 TaxRateOnCommission = m.TaxRateOnCommission,
+                                PartnerID = m.PartnerID,
+                                PartnerCode = m.Partner.Code,
+                                PartnerNameAR = m.Partner.NameAR,
+                                PartnerNameEN = m.Partner.NameEN
                             });
             if (Details != null)
             {
@@ -403,6 +410,7 @@ namespace Stocks.Controllers
                             .Select(m => new SelingOrderDetailsModel
                             {
 
+
                                 SellingOrderID = m.SellingOrderID,
                                 SellOrderDetailID = m.SellOrderDetailID,
                                 BankCommission = m.BankCommission,
@@ -413,6 +421,10 @@ namespace Stocks.Controllers
                                 StockCount = m.StockCount,
                                 TaxOnCommission = m.TaxOnCommission,
                                 TaxRateOnCommission = m.TaxRateOnCommission,
+                                PartnerID = m.PartnerID,
+                                PartnerCode = m.Partner.Code,
+                                PartnerNameAR = m.Partner.NameAR,
+                                PartnerNameEN = m.Partner.NameEN
                             });
             if (Details != null)
             {
@@ -511,6 +523,10 @@ namespace Stocks.Controllers
                                 StockCount = m.StockCount,
                                 TaxOnCommission = m.TaxOnCommission,
                                 TaxRateOnCommission = m.TaxRateOnCommission,
+                                PartnerID=m.PartnerID,
+                                PartnerCode=m.Partner.Code,
+                                PartnerNameAR=m.Partner.NameAR,
+                                PartnerNameEN=m.Partner.NameEN
                             });
             if (Details != null)
             {
@@ -539,6 +555,7 @@ namespace Stocks.Controllers
         {
             if (ModelState.IsValid)
             {
+                int portofolioaccount = 0;
                 var Check = unitOfWork.SellingOrderReposetory.Get();
                 if (Check.Any(m => m.Code == sellingOrderModel.Code))
                 {
@@ -547,7 +564,7 @@ namespace Stocks.Controllers
                 }
                 else
                 {
-
+                    portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
                     var modelselling = _mapper.Map<SellingOrder>(sellingOrderModel);
 
 
@@ -568,6 +585,7 @@ namespace Stocks.Controllers
                             selingOrderDetailsModel.TaxRateOnCommission = item.TaxRateOnCommission;
                             selingOrderDetailsModel.BankCommission = item.BankCommission;
                             selingOrderDetailsModel.BankCommissionRate = item.BankCommissionRate;
+                            selingOrderDetailsModel.PartnerID = item.PartnerID;
 
                             var details = _mapper.Map<SellingOrderDetail>(selingOrderDetailsModel);
                             unitOfWork.SellingOrderDetailRepository.Insert(details);
@@ -589,7 +607,8 @@ namespace Stocks.Controllers
                     else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                    
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                         EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         var DetailEnt = EntryMODEL.EntryDetailModel;
@@ -674,7 +693,8 @@ namespace Stocks.Controllers
         [Route("~/api/SellingOrder/PutSellingOrder/{id}")]
         public IActionResult PutSellingOrder(int id, [FromBody]  SellingOrderModel sellingOrderModel)
         {
-            if(sellingOrderModel !=null)
+            int portofolioaccount = 0;
+            if (sellingOrderModel !=null)
             {
                 if (id != sellingOrderModel.SellingOrderID)
                 {
@@ -688,7 +708,8 @@ namespace Stocks.Controllers
             {
 
                 var Check = unitOfWork.SellingOrderReposetory.Get(NoTrack: "NoTrack");
-
+                portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingOrderModel.PortfolioID && m.Type == true)
+                        .Select(m => m.AccountID).SingleOrDefault();
                 var sellingOrder = _mapper.Map<SellingOrder>(sellingOrderModel);
                 var NewdDetails = sellingOrderModel.DetailsModels;
                 var Newdetails = _mapper.Map<IEnumerable<SellingOrderDetail>>(NewdDetails);
@@ -740,7 +761,7 @@ namespace Stocks.Controllers
                         //===================================توليد قيد مع ترحيل تلقائي===================================
                         if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                         {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
 
                             if (sellingOrderModel.SettingModel.TransferToAccounts == true)
                             {
@@ -774,7 +795,7 @@ namespace Stocks.Controllers
                         if (sellingOrderModel.SettingModel.GenerateEntry == true)
 
                         {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
                             Entry.TransferedToAccounts = false;
                             unitOfWork.EntryRepository.Update(Entry);
                             foreach (var item in EntryDitails)
@@ -837,7 +858,7 @@ namespace Stocks.Controllers
                           //===================================توليد قيد مع ترحيل تلقائي===================================
                           if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                           {
-                              var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+                              var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
 
                               if (sellingOrderModel.SettingModel.TransferToAccounts == true)
                               {
@@ -871,7 +892,7 @@ namespace Stocks.Controllers
                           if (sellingOrderModel.SettingModel.GenerateEntry == true)
 
                           {
-                              var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+                              var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
                               Entry.TransferedToAccounts = false;
                               unitOfWork.EntryRepository.Update(Entry);
                               foreach (var item in EntryDitails)
@@ -939,7 +960,7 @@ namespace Stocks.Controllers
                     else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                         EntryMODEL.SellingOrderID = sellingOrder.SellingOrderID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.SellingOrderID = sellingOrder.SellingOrderID;
@@ -983,7 +1004,7 @@ namespace Stocks.Controllers
 
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                         EntryMODEL.SellingOrderID = sellingOrder.SellingOrderID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.SellingOrderID = sellingOrder.SellingOrderID;
@@ -1056,7 +1077,7 @@ namespace Stocks.Controllers
                         else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                         {
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
                             Entry.SellingOrderID = sellingOrder.SellingOrderID;
 
@@ -1097,7 +1118,7 @@ namespace Stocks.Controllers
 
                         {
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
                             Entry.SellingOrderID = sellingOrder.SellingOrderID;
 

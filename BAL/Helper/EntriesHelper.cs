@@ -10,7 +10,7 @@ namespace BAL.Helper
     {
 
         // Calculate Entry, EntryDetails using Models Case Insert
-        public static EntryModel InsertCalculatedEntries(SellingOrderModel sellingOrderModel=null ,
+        public static EntryModel InsertCalculatedEntries(int portofolioaccount,SellingOrderModel sellingOrderModel=null ,
             PurchaseOrderModel purchaseOrderModel=null, ReceiptExchangeModel receiptExchangeModel=null,
             NoticeModel noticeModel=null,Entry LastEntry =null)
         {
@@ -77,7 +77,7 @@ namespace BAL.Helper
                 #region Debit
                 EntryDetailModel DetailModel1 = new EntryDetailModel();
                 DetailModel1.Debit = TotalNet;
-                DetailModel1.AccountID = sellingOrderModel.PortfolioAccount;
+                DetailModel1.AccountID = portofolioaccount;
                 DetailListModel.Add(DetailModel1);
                 EntryDetailModel DetailModel2 = new EntryDetailModel();
                 DetailModel2.Debit = TotalBankCommision;
@@ -155,8 +155,8 @@ namespace BAL.Helper
                 //Add Debit Accounts with values
                 #region Debit
                 EntryDetailModel DetailModel1 = new EntryDetailModel();
-                DetailModel1.Debit = TotalSTocksPurchase;
-                DetailModel1.AccountID = purchaseOrderModel.PortfolioAccount;
+                DetailModel1.Credit = TotalNet;
+                DetailModel1.AccountID = AccPuchaseStocks;
                 DetailListModel.Add(DetailModel1);
                 EntryDetailModel DetailModel2 = new EntryDetailModel();
                 DetailModel2.Debit = TotalBankCommision;
@@ -170,9 +170,10 @@ namespace BAL.Helper
 
                 //Add Credit Accounts with values
                 #region Credit
+
                 EntryDetailModel DetailModel4 = new EntryDetailModel();
-                DetailModel4.Credit = TotalNet;
-                DetailModel4.AccountID = AccPuchaseStocks;
+                DetailModel4.Debit = TotalSTocksPurchase;
+                DetailModel4.AccountID = portofolioaccount;
                 DetailListModel.Add(DetailModel4);
                 #endregion
                 Entrymodel.EntryDetailModel = DetailListModel;
@@ -308,7 +309,7 @@ namespace BAL.Helper
         }
 
         // Calculate EntryDetails using Models Case Update
-        public static List<EntryDetailModel> UpdateCalculateEntries(int EntryID,SellingOrderModel sellingOrderModel = null,
+        public static List<EntryDetailModel> UpdateCalculateEntries(int portofolioaccount,int EntryID,SellingOrderModel sellingOrderModel = null,
             PurchaseOrderModel purchaseOrderModel = null, ReceiptExchangeModel receiptExchangeModel = null,
             NoticeModel noticeModel = null)
         {
@@ -362,7 +363,7 @@ namespace BAL.Helper
                 #region Debit
                 EntryDetailModel DetailModel1 = new EntryDetailModel();
                 DetailModel1.Debit = TotalNet;
-                DetailModel1.AccountID = sellingOrderModel.PortfolioAccount;
+                DetailModel1.AccountID = portofolioaccount;
                 DetailModel1.EntryID = EntryID;
                 DetailListModel.Add(DetailModel1);
                 EntryDetailModel DetailModel2 = new EntryDetailModel();
@@ -427,14 +428,14 @@ namespace BAL.Helper
                 }
                 #endregion
 
-          
+
 
                 #region EntryDetails
                 //Add Debit Accounts with values
                 #region Debit
                 EntryDetailModel DetailModel1 = new EntryDetailModel();
-                DetailModel1.Debit = TotalSTocksPurchase;
-                DetailModel1.AccountID = purchaseOrderModel.PortfolioAccount;
+                DetailModel1.Credit = TotalNet;
+                DetailModel1.AccountID = AccPuchaseStocks;
                 DetailModel1.EntryID = EntryID;
                 DetailListModel.Add(DetailModel1);
                 EntryDetailModel DetailModel2 = new EntryDetailModel();
@@ -451,13 +452,14 @@ namespace BAL.Helper
 
                 //Add Credit Accounts with values
                 #region Credit
+ 
                 EntryDetailModel DetailModel4 = new EntryDetailModel();
-                DetailModel4.Credit = TotalNet;
-                DetailModel4.AccountID = AccPuchaseStocks;
-                DetailModel1.EntryID = EntryID;
+                DetailModel4.Debit = TotalSTocksPurchase;
+                DetailModel4.AccountID = portofolioaccount;
+                DetailModel4.EntryID = EntryID;
                 DetailListModel.Add(DetailModel4);
                 #endregion
-  
+
                 #endregion
             }
             #endregion

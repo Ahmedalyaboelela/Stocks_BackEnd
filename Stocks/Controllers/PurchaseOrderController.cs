@@ -119,9 +119,10 @@ namespace Stocks.Controllers
             if (purchaseOrderModel.SettingModel.GenerateEntry==true)
             {
                 var lastEntry = unitOfWork.EntryRepository.Last();
+                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.PortfolioAccountID).SingleOrDefault();
 
 
-                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, purchaseOrderModel, null, null, lastEntry);
+                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
                 var Entry = _mapper.Map<Entry>(EntryMODEL);
 
 
@@ -421,6 +422,7 @@ namespace Stocks.Controllers
                 {
 
                     var purchaseOrder = _mapper.Map<PurchaseOrder>(purchaseOrderModel);
+                    int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.PortfolioAccountID).SingleOrDefault();
 
 
                     var Details = purchaseOrderModel.DetailsModels;
@@ -463,7 +465,7 @@ namespace Stocks.Controllers
                     else  if (purchaseOrderModel.SettingModel.AutoGenerateEntry==true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, purchaseOrderModel, null, null, lastEntry);
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
                         EntryMODEL.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         
@@ -505,7 +507,7 @@ namespace Stocks.Controllers
 
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, purchaseOrderModel, null, null, lastEntry);
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
                         EntryMODEL.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
 
@@ -559,6 +561,7 @@ namespace Stocks.Controllers
             {
 
                 var Check = unitOfWork.PurchaseOrderRepository.Get(NoTrack: "NoTrack");
+                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.PortfolioAccountID).SingleOrDefault();
 
                 var purchaseOrder = _mapper.Map<PurchaseOrder>(purchaseOrderModel);
                 var NewdDetails = purchaseOrderModel.DetailsModels;
@@ -611,7 +614,7 @@ namespace Stocks.Controllers
                         //===================================توليد قيد مع ترحيل تلقائي===================================
                         if (purchaseOrderModel.SettingModel.AutoGenerateEntry == true)
                         {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, purchaseOrderModel, null, null);
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, purchaseOrderModel, null, null);
 
                             if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
                             {
@@ -645,7 +648,7 @@ namespace Stocks.Controllers
                         if (purchaseOrderModel.SettingModel.GenerateEntry==true)
                         
                         {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, purchaseOrderModel, null, null);
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, purchaseOrderModel, null, null);
                             Entry.TransferedToAccounts = false;
                             unitOfWork.EntryRepository.Update(Entry);
                             foreach (var item in EntryDitails)
@@ -708,7 +711,7 @@ namespace Stocks.Controllers
                             //===================================توليد قيد مع ترحيل تلقائي===================================
                             if (purchaseOrderModel.SettingModel.AutoGenerateEntry == true)
                             {
-                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, purchaseOrderModel, null, null);
+                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, purchaseOrderModel, null, null);
 
                                 if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
                                 {
@@ -741,7 +744,7 @@ namespace Stocks.Controllers
                             if (purchaseOrderModel.SettingModel.GenerateEntry == true)
 
                             {
-                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, purchaseOrderModel, null, null);
+                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, purchaseOrderModel, null, null);
                                 Entry.TransferedToAccounts = false;
                                 unitOfWork.EntryRepository.Update(Entry);
                                 foreach (var item in EntryDitails)
@@ -817,7 +820,7 @@ namespace Stocks.Controllers
                         else if (purchaseOrderModel.SettingModel.AutoGenerateEntry == true)
                         {
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, purchaseOrderModel, null, null, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
                             Entry.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
 
@@ -921,7 +924,7 @@ namespace Stocks.Controllers
                             else if (purchaseOrderModel.SettingModel.AutoGenerateEntry == true)
                             {
                                 var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, purchaseOrderModel, null, null, lastEntry);
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
                                 purchaseOrder.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
                                 var Entry = _mapper.Map<Entry>(EntryMODEL);
                                 Entry.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
@@ -959,7 +962,7 @@ namespace Stocks.Controllers
                             if (purchaseOrderModel.SettingModel.GenerateEntry==true)
                             { 
                                 var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, purchaseOrderModel, null, null, lastEntry);
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
                                 purchaseOrder.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
                                 var Entry = _mapper.Map<Entry>(EntryMODEL);
                                 Entry.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
