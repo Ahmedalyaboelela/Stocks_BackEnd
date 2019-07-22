@@ -87,7 +87,9 @@ namespace BAL.Mapper
             CreateMap<Portfolio, PortfolioModel>();
             CreateMap<PortfolioModel, Portfolio>()
                  .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                .ForMember(t => t.EstablishDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.EstablishDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                .ForMember(t => t.EstablishDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.EstablishDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
+                 .ForSourceMember(t => t.RSBalance, opt => opt.DoNotValidate());
+               
 
             // portfolio accounts
             CreateMap<PortfolioAccount, PortfolioAccountModel>();

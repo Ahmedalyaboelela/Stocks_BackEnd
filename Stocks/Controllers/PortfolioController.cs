@@ -59,7 +59,7 @@ namespace Stocks.Controllers
                 model.AccountNameEN = PortAccount.Account.NameEN;
 
             }
-               
+            model.RSBalance = PortAccount.Account.Debit - PortAccount.Account.Credit;
 
             #endregion
 
@@ -87,7 +87,7 @@ namespace Stocks.Controllers
                 {
                     model.TotalStocksCount += item.OpeningStocksCount;
                 }
-                //var currentStocks = unitOfWork.PortfolioTransactions.GetEntity(x=> x.PortfolioID==portfolio.PortfolioID).CurrentStocksCount;
+               
             }
                
             

@@ -23,6 +23,7 @@ namespace BAL.Model
         public float? TotalStocksCount { get; set; }
       
         public int Count { get; set; }
+        public decimal? RSBalance { get; set; }
 
         public string LastCode { get; set; } 
         public int? AccountID { get; set; }
