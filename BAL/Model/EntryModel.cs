@@ -26,6 +26,8 @@ namespace BAL.Model
 
         public string LastCode { get; set; }
 
+        public bool TransferedToAccounts { get; set; }
+
         public virtual IEnumerable<EntryDetailModel> EntryDetailModel { get; set; }
 
 
