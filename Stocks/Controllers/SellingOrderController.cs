@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BAL.Model;
 using BAL.Helper;
+using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
 
 namespace Stocks.Controllers
 {
@@ -28,10 +30,10 @@ namespace Stocks.Controllers
         [Route("~/api/SellingOrder/GetSettingAccounts/{id}")]
         public IEnumerable<SettingAccountModel> SettingAccounts(int id)
         {
-
+         
             var setAccounts = unitOfWork.SettingAccountRepository.Get(filter: x => x.SettingID == id).Select(a => new SettingAccountModel
             {
-
+                
                 SettingID = a.SettingID,
                 AccNameEN = a.Account.NameEN,
                 AccCode = a.Account.Code,
@@ -39,7 +41,12 @@ namespace Stocks.Controllers
                 AccountID = a.AccountID,
                 AccountType = a.AccountType,
                 SettingAccountID = a.SettingAccountID,
-                Code = a.Setting.Code
+                Code = a.Setting.Code,
+                ParentAccountID=a.Account.AccoutnParentID,
+                ParentAccCode= unitOfWork.AccountRepository.GetEntity(s=>s.AccountID==a.Account.AccoutnParentID).Code,
+                ParentAccNameAR = unitOfWork.AccountRepository.GetEntity(s => s.AccountID == a.Account.AccoutnParentID).NameAR,
+                ParentAccNameEN = unitOfWork.AccountRepository.GetEntity(s => s.AccountID == a.Account.AccoutnParentID).NameEN,
+
             });
 
 
@@ -52,33 +59,42 @@ namespace Stocks.Controllers
 
 
         [HttpGet]//القيد
-        [Route("~/api/SellingOrder/GetEntry")]
+        [Route("~/api/SellingOrder/GetEntry/{sellingOrderID}")]
         public EntryModel GetEntry(int sellingOrderID)
         {
             var Entry = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == sellingOrderID).SingleOrDefault();
-            var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
             EntryModel entryModel = new EntryModel();
-            entryModel.EntryID = Entry.EntryID;
-            entryModel.Code = Entry.Code;
-            entryModel.Date = Entry.Date.ToString();
-            entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
-            entryModel.NoticeID = Entry.NoticeID;
-            entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
-            entryModel.ReceiptID = Entry.ReceiptID;
-            entryModel.SellingOrderID = Entry.SellingOrderID;
-            entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
+
+            if (Entry!=null)
             {
-                AccCode = m.Account.Code,
-                AccNameAR = m.Account.NameAR,
-                AccNameEN = m.Account.NameEN,
-                AccountID = m.AccountID,
-                Credit = m.Credit,
-                Debit = m.Debit,
-                EntryDetailID = m.EntryDetailID,
-                EntryID = m.EntryID,
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                entryModel.EntryID = Entry.EntryID;
+                entryModel.Code = Entry.Code;
+                entryModel.Date = Entry.Date.Value.ToString("dd/MM/yyyy");
+                entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
+                entryModel.NoticeID = Entry.NoticeID;
+                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.ReceiptID = Entry.ReceiptID;
+                entryModel.SellingOrderID = Entry.SellingOrderID;
+                entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
+                {
+                    AccCode = m.Account.Code,
+                    AccNameAR = m.Account.NameAR,
+                    AccNameEN = m.Account.NameEN,
+                    AccountID = m.AccountID,
+                    ParentAccountID = m.Account.AccoutnParentID,
+                    ParentAccCode = unitOfWork.AccountRepository.Get(filter:a=>a.AccountID==m.Account.AccoutnParentID).Select(s=>s.Code).FirstOrDefault(),
+                    ParentAccNameAR = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.NameAR).FirstOrDefault(),
+                    Credit = m.Credit,
+                    Debit = m.Debit,
+                    EntryDetailID = m.EntryDetailID,
+                    EntryID = m.EntryID,
 
 
-            });
+                });
+                entryModel.TransferedToAccounts = Entry.TransferedToAccounts;
+            }
+        
 
             return entryModel;
         }
@@ -129,15 +145,17 @@ namespace Stocks.Controllers
 
 
         [HttpPost] // يولد قيد يدوي مع ترحيل تلقائي
-        [Route("~/api/sellingOrderModel/GenerateconstraintManual")]
+        [Route("~/api/SellingOrder/GenerateconstraintManual")]
         public IActionResult GenerateconstraintManual([FromBody] SellingOrderModel sellingOrderModel)
         {
             if (sellingOrderModel.SettingModel.GenerateEntry == true)
             {
                 var lastEntry = unitOfWork.EntryRepository.Last();
 
+                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingOrderModel.PortfolioID && m.Type == true)
+                    .Select(m => m.AccountID).SingleOrDefault();
 
-                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                 var Entry = _mapper.Map<Entry>(EntryMODEL);
 
 
@@ -204,13 +222,15 @@ namespace Stocks.Controllers
             //var Entry = unitOfWork.EntryRepository.GetByID(EntryMODEL.EntryID);
             //Entry.TransferedToAccounts = true;
             //unitOfWork.EntryRepository.Update(Entry);
-            var Details = entryModel.EntryDetailModel; 
+            var Details = entryModel.EntryDetailModel;
             //foreach (var item in Details)
             //{
             //    var detail = _mapper.Map<SellingOrderDetail>(item);
 
             //    unitOfWork.SellingOrderDetailRepository.Update(detail);
             //}
+
+  
 
             accountingHelper.TransferToAccounts(Details.Select(x => new EntryDetail
             {
@@ -223,7 +243,10 @@ namespace Stocks.Controllers
 
             }).ToList());
 
-
+            // update entry with transfere flag
+            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.EntryID == entryModel.EntryID).SingleOrDefault();
+            Entry.TransferedToAccounts = true;
+            unitOfWork.EntryRepository.Update(Entry);
 
 
             unitOfWork.Save();
@@ -246,7 +269,7 @@ namespace Stocks.Controllers
             sellingOrderModel.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true).AccountID;
             if (sellingOrderModel == null)
             {
-                return Ok(sellingOrderModel);
+                return Ok(0);
 
             }
 
@@ -297,6 +320,7 @@ namespace Stocks.Controllers
                             .Select(m => new SelingOrderDetailsModel
                             {
 
+
                                 SellingOrderID = m.SellingOrderID,
                                 SellOrderDetailID = m.SellOrderDetailID,
                                 BankCommission = m.BankCommission,
@@ -307,6 +331,10 @@ namespace Stocks.Controllers
                                 StockCount = m.StockCount,
                                 TaxOnCommission = m.TaxOnCommission,
                                 TaxRateOnCommission = m.TaxRateOnCommission,
+                                PartnerID = m.PartnerID,
+                                PartnerCode = m.Partner.Code,
+                                PartnerNameAR = m.Partner.NameAR,
+                                PartnerNameEN = m.Partner.NameEN
                             });
             if (Details != null)
             {
@@ -332,98 +360,112 @@ namespace Stocks.Controllers
         [Route("~/api/SellingOrder/GetSellingOrderByID/{id}")]
         public IActionResult GetSellingOrderByID(int id)
         {
-            var selling = unitOfWork.SellingOrderReposetory.GetByID(id);
-
-
-            var model = _mapper.Map<SellingOrderModel>(selling);
-            model.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true).AccountID;
-            if (model == null)
+            if(id>0)
             {
+                var selling = unitOfWork.SellingOrderReposetory.GetByID(id);
+
+
+                var model = _mapper.Map<SellingOrderModel>(selling);
+                model.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true).AccountID;
+                if (model == null)
+                {
+                    return Ok(model);
+
+                }
+
+
+                #region portfolio data
+                var portfolio = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true);
+                if (portfolio != null)
+                {
+
+                    model.PortfolioAccount = portfolio.AccountID;
+
+                    // portfolio data
+                    model.PortfolioCode = portfolio.Portfolio.Code;
+                    model.PortfolioNameAR = portfolio.Portfolio.NameAR;
+                    model.PortfolioNameEN = portfolio.Portfolio.NameEN;
+                    model.PortfolioID = portfolio.Portfolio.PortfolioID;
+                }
+
+                #endregion
+
+                // employee data
+                #region employee part
+                var employee = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == selling.EmployeeID);
+                if (employee != null)
+                {
+                    model.EmpCode = employee.Code;
+                    model.EmpNameAR = employee.NameAR;
+                    model.EmpNameEN = employee.NameEN;
+                    model.EmployeeID = employee.EmployeeID;
+
+                }
+                #endregion
+
+                // date part
+                #region Date part
+                if (selling.Date != null)
+                {
+
+                    model.SellDate = selling.Date.Value.ToString("dd/MM/yyyy");
+                    model.SellDateHijri = DateHelper.GetHijriDate(selling.Date);
+                }
+
+                #endregion
+
+
+                model.Count = unitOfWork.SellingOrderReposetory.Count();
+
+                if (model.Count == 0)
+                {
+                    return Ok(model);
+                }
+
+
+
+                var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrderID == selling.SellingOrderID)
+                                .Select(m => new SelingOrderDetailsModel
+                                {
+
+
+                                    SellingOrderID = m.SellingOrderID,
+                                    SellOrderDetailID = m.SellOrderDetailID,
+                                    BankCommission = m.BankCommission,
+                                    BankCommissionRate = m.BankCommissionRate,
+                                    NetAmmount = m.NetAmmount,
+                                    SelingValue = m.SelingValue,
+                                    SellingPrice = m.SellingPrice,
+                                    StockCount = m.StockCount,
+                                    TaxOnCommission = m.TaxOnCommission,
+                                    TaxRateOnCommission = m.TaxRateOnCommission,
+                                    PartnerID = m.PartnerID,
+                                    PartnerCode = m.Partner.Code,
+                                    PartnerNameAR = m.Partner.NameAR,
+                                    PartnerNameEN = m.Partner.NameEN
+                                });
+                if (Details != null)
+                {
+
+
+                    model.DetailsModels = Details;
+                }
+
+                model.SettingModel = GetSetting(1);
+                var check = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault();
+                if (check != null)
+                {
+                    model.EntryModel = GetEntry(selling.SellingOrderID);
+                }
+
                 return Ok(model);
-
             }
-
-
-            #region portfolio data
-            var portfolio = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true);
-            if (portfolio != null)
+            else
             {
-
-                model.PortfolioAccount = portfolio.AccountID;
-
-                // portfolio data
-                model.PortfolioCode = portfolio.Portfolio.Code;
-                model.PortfolioNameAR = portfolio.Portfolio.NameAR;
-                model.PortfolioNameEN = portfolio.Portfolio.NameEN;
-                model.PortfolioID = portfolio.Portfolio.PortfolioID;
-            }
-
-            #endregion
-
-            // employee data
-            #region employee part
-            var employee = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == selling.EmployeeID);
-            if (employee != null)
-            {
-                model.EmpCode = employee.Code;
-                model.EmpNameAR = employee.NameAR;
-                model.EmpNameEN = employee.NameEN;
-                model.EmployeeID = employee.EmployeeID;
+                return Ok(1);
 
             }
-            #endregion
 
-            // date part
-            #region Date part
-            if (selling.Date != null)
-            {
-
-                model.SellDate = selling.Date.Value.ToString("dd/MM/yyyy");
-                model.SellDateHijri = DateHelper.GetHijriDate(selling.Date);
-            }
-
-            #endregion
-
-
-            model.Count = unitOfWork.SellingOrderReposetory.Count();
-
-            if (model.Count == 0)
-            {
-                return Ok(model);
-            }
-
-
-
-            var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrderID == selling.SellingOrderID)
-                            .Select(m => new SelingOrderDetailsModel
-                            {
-
-                                SellingOrderID = m.SellingOrderID,
-                                SellOrderDetailID = m.SellOrderDetailID,
-                                BankCommission = m.BankCommission,
-                                BankCommissionRate = m.BankCommissionRate,
-                                NetAmmount = m.NetAmmount,
-                                SelingValue = m.SelingValue,
-                                SellingPrice = m.SellingPrice,
-                                StockCount = m.StockCount,
-                                TaxOnCommission = m.TaxOnCommission,
-                                TaxRateOnCommission = m.TaxRateOnCommission,
-                            });
-            if (Details != null)
-            {
-
-
-                model.DetailsModels = Details;
-            }
-
-            model.SettingModel = GetSetting(1);
-            var check = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault();
-            if (check != null)
-            {
-                model.EntryModel = GetEntry(selling.SellingOrderID);
-            }
-
-            return Ok(model);
 
         }
 
@@ -432,67 +474,69 @@ namespace Stocks.Controllers
         [Route("~/api/SellingOrder/Paging/{pageNumber}")]
         public IActionResult PaginationSellingOrder(int pageNumber)
         {
-            var selling = unitOfWork.SellingOrderReposetory.Get(page: pageNumber).FirstOrDefault();
-
-            var model = _mapper.Map<SellingOrderModel>(selling);
-
-            #region portfolio data
-            var portfolio = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true);
-            if (portfolio != null)
+            if(pageNumber>0)
             {
+                var selling = unitOfWork.SellingOrderReposetory.Get(page: pageNumber).FirstOrDefault();
 
-                model.PortfolioAccount = portfolio.AccountID;
+                var model = _mapper.Map<SellingOrderModel>(selling);
 
-                // portfolio data
-                model.PortfolioCode = portfolio.Portfolio.Code;
-                model.PortfolioNameAR = portfolio.Portfolio.NameAR;
-                model.PortfolioNameEN = portfolio.Portfolio.NameEN;
-                model.PortfolioID = portfolio.Portfolio.PortfolioID;
-            }
+                #region portfolio data
+                var portfolio = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true);
+                if (portfolio != null)
+                {
 
-            #endregion
+                    model.PortfolioAccount = portfolio.AccountID;
 
-            // employee data
-            #region employee part
-            var employee = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == selling.EmployeeID);
-            if (employee != null)
-            {
-                model.EmpCode = employee.Code;
-                model.EmpNameAR = employee.NameAR;
-                model.EmpNameEN = employee.NameEN;
-                model.EmployeeID = employee.EmployeeID;
+                    // portfolio data
+                    model.PortfolioCode = portfolio.Portfolio.Code;
+                    model.PortfolioNameAR = portfolio.Portfolio.NameAR;
+                    model.PortfolioNameEN = portfolio.Portfolio.NameEN;
+                    model.PortfolioID = portfolio.Portfolio.PortfolioID;
+                }
 
-            } 
-            #endregion
+                #endregion
 
-            // date part
-            #region Date part
-            if (selling.Date != null)
-            {
+                // employee data
+                #region employee part
+                var employee = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == selling.EmployeeID);
+                if (employee != null)
+                {
+                    model.EmpCode = employee.Code;
+                    model.EmpNameAR = employee.NameAR;
+                    model.EmpNameEN = employee.NameEN;
+                    model.EmployeeID = employee.EmployeeID;
 
-                model.SellDate = selling.Date.Value.ToString("dd/MM/yyyy");
-                model.SellDateHijri = DateHelper.GetHijriDate(selling.Date);
-            }
+                }
+                #endregion
 
-            #endregion
+                // date part
+                #region Date part
+                if (selling.Date != null)
+                {
 
-            if (model == null)
-            {
-                return Ok(model);
+                    model.SellDate = selling.Date.Value.ToString("dd/MM/yyyy");
+                    model.SellDateHijri = DateHelper.GetHijriDate(selling.Date);
+                }
 
-            }
+                #endregion
 
+                if (model == null)
+                {
+                    return Ok(model);
 
-            model.Count = unitOfWork.SellingOrderReposetory.Count();
-
-            if (model.Count == 0)
-            {
-                return Ok(model);
-            }
-
+                }
 
 
-            var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrderID == selling.SellingOrderID)
+                model.Count = unitOfWork.SellingOrderReposetory.Count();
+
+                if (model.Count == 0)
+                {
+                    return Ok(model);
+                }
+
+
+
+                var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrderID == selling.SellingOrderID)
                             .Select(m => new SelingOrderDetailsModel
                             {
 
@@ -506,23 +550,34 @@ namespace Stocks.Controllers
                                 StockCount = m.StockCount,
                                 TaxOnCommission = m.TaxOnCommission,
                                 TaxRateOnCommission = m.TaxRateOnCommission,
+                                PartnerID = m.PartnerID,
+                                PartnerCode = m.Partner.Code,
+                                PartnerNameAR = m.Partner.NameAR,
+                                PartnerNameEN = m.Partner.NameEN
                             });
-            if (Details != null)
-            {
+                if (Details != null)
+                {
 
 
-                model.DetailsModels = Details;
+                    model.DetailsModels = Details;
+                }
+
+                model.SettingModel = GetSetting(1);
+
+                var check = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault();
+                if (check != null)
+                {
+                    model.EntryModel = GetEntry(selling.SellingOrderID);
+                }
+
+                return Ok(model);
             }
-
-            model.SettingModel = GetSetting(1);
-
-            var check = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == selling.SellingOrderID).SingleOrDefault();
-            if (check != null)
+            else
             {
-                model.EntryModel = GetEntry(selling.SellingOrderID);
-            }
+                return Ok(1);
 
-            return Ok(model);
+            }
+           
 
         }
 
@@ -534,15 +589,17 @@ namespace Stocks.Controllers
         {
             if (ModelState.IsValid)
             {
+                int portofolioaccount = 0;
                 var Check = unitOfWork.SellingOrderReposetory.Get();
                 if (Check.Any(m => m.Code == sellingOrderModel.Code))
                 {
 
-                    return Ok("كود امر بيع مكرر");
+                    return Ok(2);
+
                 }
                 else
                 {
-
+                    portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
                     var modelselling = _mapper.Map<SellingOrder>(sellingOrderModel);
 
 
@@ -563,6 +620,7 @@ namespace Stocks.Controllers
                             selingOrderDetailsModel.TaxRateOnCommission = item.TaxRateOnCommission;
                             selingOrderDetailsModel.BankCommission = item.BankCommission;
                             selingOrderDetailsModel.BankCommissionRate = item.BankCommissionRate;
+                            selingOrderDetailsModel.PartnerID = item.PartnerID;
 
                             var details = _mapper.Map<SellingOrderDetail>(selingOrderDetailsModel);
                             unitOfWork.SellingOrderDetailRepository.Insert(details);
@@ -584,7 +642,8 @@ namespace Stocks.Controllers
                     else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                    
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                         EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         var DetailEnt = EntryMODEL.EntryDetailModel;
@@ -614,29 +673,64 @@ namespace Stocks.Controllers
 
                             }).ToList());
                         }
-                    }
-                    //================================توليد قيد مع عدم الترحيل====================================== 
-                    else if (sellingOrderModel.SettingModel.GenerateEntry == true)
-
-                    {
-                        var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
-                        EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
-                        var Entry = _mapper.Map<Entry>(EntryMODEL);
-                        var DetailEnt = EntryMODEL.EntryDetailModel;
-                        Entry.TransferedToAccounts = false;
-                        unitOfWork.EntryRepository.Insert(Entry);
-                        foreach (var item in DetailEnt)
+                        else
                         {
-                            item.EntryID = Entry.EntryID;
-                            item.EntryDetailID = 0;
-                            var details = _mapper.Map<EntryDetail>(item);
+                            Entry.TransferedToAccounts = true;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
 
-                            unitOfWork.EntryDetailRepository.Insert(details);
+                                unitOfWork.EntryDetailRepository.Insert(details);
+                            }
                         }
                     }
+                    //================================توليد قيد مع عدم الترحيل====================================== 
+                    //else if (sellingOrderModel.SettingModel.GenerateEntry == true)
 
-                    unitOfWork.Save();
+                    //{
+                    //    var lastEntry = unitOfWork.EntryRepository.Last();
+                    //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                    //    EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
+                    //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+                    //    var DetailEnt = EntryMODEL.EntryDetailModel;
+                    //    Entry.TransferedToAccounts = false;
+                    //    unitOfWork.EntryRepository.Insert(Entry);
+                    //    foreach (var item in DetailEnt)
+                    //    {
+                    //        item.EntryID = Entry.EntryID;
+                    //        item.EntryDetailID = 0;
+                    //        var details = _mapper.Map<EntryDetail>(item);
+
+                    //        unitOfWork.EntryDetailRepository.Insert(details);
+                    //    }
+                    //}
+
+                    try
+                    {
+                        unitOfWork.Save();
+
+                    }
+
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
                     return Ok(sellingOrderModel);
 
 
@@ -645,23 +739,26 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest();
+                return Ok(3);
+
             }
         }
 
 
 
 
-        [HttpPost]
+        [HttpPut]
         [Route("~/api/SellingOrder/PutSellingOrder/{id}")]
         public IActionResult PutSellingOrder(int id, [FromBody]  SellingOrderModel sellingOrderModel)
         {
-            if(sellingOrderModel !=null)
+            int portofolioaccount = 0;
+            if (sellingOrderModel !=null)
             {
                 if (id != sellingOrderModel.SellingOrderID)
                 {
 
-                    return BadRequest();
+                    return Ok(1);
+
                 }
             }
            
@@ -670,7 +767,8 @@ namespace Stocks.Controllers
             {
 
                 var Check = unitOfWork.SellingOrderReposetory.Get(NoTrack: "NoTrack");
-
+                portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingOrderModel.PortfolioID && m.Type == true)
+                        .Select(m => m.AccountID).SingleOrDefault();
                 var sellingOrder = _mapper.Map<SellingOrder>(sellingOrderModel);
                 var NewdDetails = sellingOrderModel.DetailsModels;
                 var Newdetails = _mapper.Map<IEnumerable<SellingOrderDetail>>(NewdDetails);
@@ -715,14 +813,34 @@ namespace Stocks.Controllers
                       if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                       {
                           unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                          unitOfWork.Save();
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
 
-                          return Ok(sellingOrderModel);
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
+
+                            return Ok(sellingOrderModel);
                       }
                         //===================================توليد قيد مع ترحيل تلقائي===================================
                         if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                         {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
 
                             if (sellingOrderModel.SettingModel.TransferToAccounts == true)
                             {
@@ -745,7 +863,9 @@ namespace Stocks.Controllers
                                     AccountID = x.AccountID,
                                     Credit = x.Credit,
                                     Debit = x.Debit,
-                                    EntryID = x.EntryID
+                                    EntryID = x.EntryID,
+                                    StocksCredit=x.StocksCredit,
+                                    StocksDebit=x.StocksDebit
 
 
                                 }).ToList());
@@ -756,7 +876,7 @@ namespace Stocks.Controllers
                         if (sellingOrderModel.SettingModel.GenerateEntry == true)
 
                         {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
                             Entry.TransferedToAccounts = false;
                             unitOfWork.EntryRepository.Update(Entry);
                             foreach (var item in EntryDitails)
@@ -770,11 +890,30 @@ namespace Stocks.Controllers
                             }
                         }
 
-                        unitOfWork.Save();
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
 
 
-
-                      return Ok(sellingOrderModel);
+                        return Ok(sellingOrderModel);
 
 
                   }
@@ -790,8 +929,28 @@ namespace Stocks.Controllers
                           if (OldDetails != null)
                           {
                               unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                              unitOfWork.Save();
-                          }
+                                try
+                                {
+                                    unitOfWork.Save();
+                                }
+                                catch (DbUpdateException ex)
+                                {
+                                    var sqlException = ex.GetBaseException() as SqlException;
+
+                                    if (sqlException != null)
+                                    {
+                                        var number = sqlException.Number;
+
+                                        if (number == 547)
+                                        {
+                                            return Ok(5);
+
+                                        }
+                                        else
+                                            return Ok(6);
+                                    }
+                                }
+                            }
 
 
                           if (Newdetails != null)
@@ -812,14 +971,34 @@ namespace Stocks.Controllers
                           if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                           {
                               unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                              unitOfWork.Save();
+                                try
+                                {
+                                    unitOfWork.Save();
+                                }
+                                catch (DbUpdateException ex)
+                                {
+                                    var sqlException = ex.GetBaseException() as SqlException;
 
-                              return Ok(sellingOrderModel);
+                                    if (sqlException != null)
+                                    {
+                                        var number = sqlException.Number;
+
+                                        if (number == 547)
+                                        {
+                                            return Ok(5);
+
+                                        }
+                                        else
+                                            return Ok(6);
+                                    }
+                                }
+
+                                return Ok(sellingOrderModel);
                           }
                           //===================================توليد قيد مع ترحيل تلقائي===================================
                           if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                           {
-                              var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+                              var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
 
                               if (sellingOrderModel.SettingModel.TransferToAccounts == true)
                               {
@@ -842,7 +1021,9 @@ namespace Stocks.Controllers
                                       AccountID = x.AccountID,
                                       Credit = x.Credit,
                                       Debit = x.Debit,
-                                      EntryID = x.EntryID
+                                      EntryID = x.EntryID,
+                                      StocksDebit=x.StocksDebit,
+                                      StocksCredit=x.StocksCredit
 
 
                                   }).ToList());
@@ -853,7 +1034,7 @@ namespace Stocks.Controllers
                           if (sellingOrderModel.SettingModel.GenerateEntry == true)
 
                           {
-                              var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, sellingOrderModel, null, null, null);
+                              var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
                               Entry.TransferedToAccounts = false;
                               unitOfWork.EntryRepository.Update(Entry);
                               foreach (var item in EntryDitails)
@@ -866,11 +1047,30 @@ namespace Stocks.Controllers
 
                               }
                           }
-                          unitOfWork.Save();
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
+
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
 
 
-
-                          return Ok(sellingOrderModel);
+                            return Ok(sellingOrderModel);
 
                       }
 
@@ -888,8 +1088,28 @@ namespace Stocks.Controllers
                     if (OldDetails != null)
                     {
                         unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                        unitOfWork.Save();
-                    }
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
+
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
+                        }
 
 
                     if (Newdetails != null)
@@ -910,9 +1130,29 @@ namespace Stocks.Controllers
                     if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                     {
 
-                        unitOfWork.Save();
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
 
-                        return Ok(sellingOrderModel);
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
+
+                            return Ok(sellingOrderModel);
                     }
                     //===============================================================توليد قيد مع ترحيل تلقائي============================
 
@@ -921,7 +1161,7 @@ namespace Stocks.Controllers
                     else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                         EntryMODEL.SellingOrderID = sellingOrder.SellingOrderID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.SellingOrderID = sellingOrder.SellingOrderID;
@@ -949,15 +1189,30 @@ namespace Stocks.Controllers
                                 AccountID = x.AccountID,
                                 Credit = x.Credit,
                                 Debit = x.Debit,
-                                EntryID = x.EntryID
+                                EntryID = x.EntryID,
+                                StocksCredit=x.StocksCredit,
+                                StocksDebit=x.StocksDebit
 
 
                             }).ToList());
                         }
+                            else
+                            {
+                                Entry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Insert(Entry);
+                                foreach (var item in DetailEnt)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<EntryDetail>(item);
+
+                                    unitOfWork.EntryDetailRepository.Insert(details);
+
+                                }
+                            }
 
 
-
-                    }
+                        }
 
                     //================================توليد قيد مع عدم الترحيل======================================
 
@@ -965,7 +1220,7 @@ namespace Stocks.Controllers
 
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                         EntryMODEL.SellingOrderID = sellingOrder.SellingOrderID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.SellingOrderID = sellingOrder.SellingOrderID;
@@ -985,11 +1240,30 @@ namespace Stocks.Controllers
                     }
 
 
-                    unitOfWork.Save();
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
 
 
-
-                    return Ok(sellingOrderModel);
+                        return Ok(sellingOrderModel);
 
 
                 }
@@ -1005,8 +1279,28 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                            unitOfWork.Save();
-                        }
+                                try
+                                {
+                                    unitOfWork.Save();
+                                }
+                                catch (DbUpdateException ex)
+                                {
+                                    var sqlException = ex.GetBaseException() as SqlException;
+
+                                    if (sqlException != null)
+                                    {
+                                        var number = sqlException.Number;
+
+                                        if (number == 547)
+                                        {
+                                            return Ok(5);
+
+                                        }
+                                        else
+                                            return Ok(6);
+                                    }
+                                }
+                            }
 
 
                         if (Newdetails != null)
@@ -1027,9 +1321,29 @@ namespace Stocks.Controllers
                         if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                         {
 
-                            unitOfWork.Save();
+                                try
+                                {
+                                    unitOfWork.Save();
+                                }
+                                catch (DbUpdateException ex)
+                                {
+                                    var sqlException = ex.GetBaseException() as SqlException;
 
-                            return Ok(sellingOrderModel);
+                                    if (sqlException != null)
+                                    {
+                                        var number = sqlException.Number;
+
+                                        if (number == 547)
+                                        {
+                                            return Ok(5);
+
+                                        }
+                                        else
+                                            return Ok(6);
+                                    }
+                                }
+
+                                return Ok(sellingOrderModel);
                         }
                         //===============================================================توليد قيد مع ترحيل تلقائي============================
 
@@ -1038,7 +1352,7 @@ namespace Stocks.Controllers
                         else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                         {
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
                             Entry.SellingOrderID = sellingOrder.SellingOrderID;
 
@@ -1065,7 +1379,9 @@ namespace Stocks.Controllers
                                     AccountID = x.AccountID,
                                     Credit = x.Credit,
                                     Debit = x.Debit,
-                                    EntryID = x.EntryID
+                                    EntryID = x.EntryID,
+                                    StocksDebit=x.StocksDebit,
+                                    StocksCredit=x.StocksCredit
 
 
                                 }).ToList());
@@ -1079,7 +1395,7 @@ namespace Stocks.Controllers
 
                         {
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
                             Entry.SellingOrderID = sellingOrder.SellingOrderID;
 
@@ -1098,11 +1414,31 @@ namespace Stocks.Controllers
                         }
 
 
-                        unitOfWork.Save();
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
 
 
 
-                        return Ok(sellingOrderModel);
+                            return Ok(sellingOrderModel);
                     }
 
 
@@ -1121,9 +1457,9 @@ namespace Stocks.Controllers
 
             else
             {
-                return BadRequest();
+                return Ok(3);
+
             }
-              return Ok(sellingOrderModel);
 
 
         }
@@ -1136,12 +1472,14 @@ namespace Stocks.Controllers
             if (id == null)
             {
 
-                return BadRequest();
+                return Ok(1);
+
             }
             var modelSelling = unitOfWork.SellingOrderReposetory.GetByID(id);
             if (modelSelling == null)
             {
-                return BadRequest();
+                return Ok(0);
+
             }
             var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: m => m.SellingOrderID == id);
            
@@ -1156,15 +1494,28 @@ namespace Stocks.Controllers
             //unitOfWork.EntryRepository.Delete(Entry.EntryID);
 
             unitOfWork.SellingOrderReposetory.Delete(id);
-            var Result = unitOfWork.Save();
-            if (Result == true)
+            try
             {
-                return Ok();
+                unitOfWork.Save();
             }
-            else
+            catch (DbUpdateException ex)
             {
-                return NotFound();
+                var sqlException = ex.GetBaseException() as SqlException;
+
+                if (sqlException != null)
+                {
+                    var number = sqlException.Number;
+
+                    if (number == 547)
+                    {
+                        return Ok(5);
+
+                    }
+                    else
+                        return Ok(6);
+                }
             }
+            return Ok(4);
 
         }
 
