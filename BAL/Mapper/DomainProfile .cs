@@ -52,12 +52,7 @@ namespace BAL.Mapper
 
             #endregion
 
-
-   
-
-
-
-
+            #region Map Setting
             CreateMap<Setting, SettingModel>();
             CreateMap<SettingModel, Setting>();
             #endregion

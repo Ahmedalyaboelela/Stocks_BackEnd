@@ -17,6 +17,8 @@ namespace DAL.Entities
 
         public int PortfolioID { get; set; }
         public int PartnerID { get; set; }
+         
+        public bool HasTransaction { get; set; }
 
         [ForeignKey("PortfolioID")]
         public virtual Portfolio Portfolio { get; set; }
