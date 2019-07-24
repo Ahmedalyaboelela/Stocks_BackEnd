@@ -34,7 +34,7 @@ namespace BAL.Model
        
      //    public IEnumerable<PortfolioAccountModel> folioAccounts { get; set; }
 
-        public IEnumerable<PortfolioOpeningStocksModel> portfolioOpeningStocksModels { get; set; }
+        public IEnumerable<PortfolioOpeningStocksModel> portfolioOpeningStocksArray { get; set; }
       //  public IEnumerable<PortfolioTransactionModel> portfolioTransactionModels { get; set; }
 
 

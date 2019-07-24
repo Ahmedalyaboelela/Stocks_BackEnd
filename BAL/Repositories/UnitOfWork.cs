@@ -338,16 +338,16 @@ namespace BAL.Repositories
 
 
         #region PortfolioTransactions Repository
-        private GenericRepository<PortfolioTransaction> portfolioTransactions;
-        public GenericRepository<PortfolioTransaction> PortfolioTransactions
+        private GenericRepository<PortfolioTransaction> portfolioTransactionsRepository;
+        public GenericRepository<PortfolioTransaction> PortfolioTransactionsRepository
         {
             get
             {
-                if (this.PortfolioTransactions == null)
+                if (this.portfolioTransactionsRepository == null)
                 {
-                    this.portfolioTransactions = new GenericRepository<PortfolioTransaction>(Context);
+                    this.portfolioTransactionsRepository = new GenericRepository<PortfolioTransaction>(Context);
                 }
-                return PortfolioTransactions;
+                return portfolioTransactionsRepository;
             }
         }
         #endregion

@@ -160,7 +160,7 @@ namespace Stocks.Controllers
         [Route("~/api/Account/GetAll")]
         public IActionResult GetAllAccount()
         {
-            var account = unitOfWork.AccountRepository.Get(filter:a=>a.AccountType==false);
+            var account = unitOfWork.AccountRepository.Get();
             var model = _mapper.Map<IEnumerable<AccountModel>>(account);
 
             if (model == null)
