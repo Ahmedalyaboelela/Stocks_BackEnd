@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using DAL.Entities;
 using BAL.Helper;
+using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
 
 namespace Stocks.Controllers
 {
@@ -41,7 +43,7 @@ namespace Stocks.Controllers
             entryModel.NoticeID = Entry.NoticeID;
             entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
             entryModel.ReceiptID = Entry.ReceiptID;
-            entryModel.SellingOrderID = Entry.SellingOrderID;
+            entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
             entryModel.EntryDetailModel = EntryDetails.Select(m=> new EntryDetailModel {
                 AccCode=m.Account.Code,
                 AccNameAR=m.Account.NameAR,
@@ -73,7 +75,10 @@ namespace Stocks.Controllers
                 AccountType = a.AccountType,
                 SettingAccountID = a.SettingAccountID,
                 Code = a.Setting.Code,
-
+                ParentAccountID = a.Account.AccoutnParentID,
+                ParentAccCode = unitOfWork.AccountRepository.GetEntity(s => s.AccountID == a.Account.AccoutnParentID).Code,
+                ParentAccNameAR = unitOfWork.AccountRepository.GetEntity(s => s.AccountID == a.Account.AccoutnParentID).NameAR,
+                ParentAccNameEN = unitOfWork.AccountRepository.GetEntity(s => s.AccountID == a.Account.AccoutnParentID).NameEN,
 
 
             });
@@ -108,6 +113,25 @@ namespace Stocks.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("~/api/PurchaseOrder/FirstOpen")]
+        public IActionResult FirstOpen()
+        {
+            PurchaseOrderModel model = new PurchaseOrderModel();
+            var count = unitOfWork.PurchaseOrderRepository.Count();
+            if (count > 0)
+            {
+                model.LastCode = unitOfWork.PurchaseOrderRepository.Last().Code;
+                model.Count = count;
+            }
+            else
+                model.Count = 0;
+            model.SettingModel = GetSetting(2);
+
+
+            return Ok(model);
+        }
 
 
 
@@ -184,12 +208,12 @@ namespace Stocks.Controllers
 
         [HttpPost]// ترحيل يدوي للقيد اليدوي والتلقائي
         [Route("~/api/PurchaseOrder/Manualmigration")]
-        public IActionResult Manualmigration([FromBody]EntryModel EntryModel)
+        public IActionResult Manualmigration([FromBody]EntryModel entryModel)
         {
             //var Entry = unitOfWork.EntryRepository.GetByID(EntryMODEL.EntryID);
             //Entry.TransferedToAccounts = true;
             //unitOfWork.EntryRepository.Update(Entry);
-            var Details = EntryModel.EntryDetailModel;
+            var Details = entryModel.EntryDetailModel;
             //foreach (var item in Details)
             //{
             //    var detail = _mapper.Map<EntryDetail>(item);
@@ -208,6 +232,9 @@ namespace Stocks.Controllers
 
             }).ToList());
 
+            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.EntryID == entryModel.EntryID).SingleOrDefault();
+            Entry.TransferedToAccounts = true;
+            unitOfWork.EntryRepository.Update(Entry);
 
 
 
@@ -232,10 +259,49 @@ namespace Stocks.Controllers
             model.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x=> x.PortfolioID==purchase.PortfolioID && x.Type==true).AccountID;
             if (model == null)
             {
-                return Ok(model);
+                return Ok(0);
 
             }
 
+            #region portfolio data
+            var portfolio = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == purchase.PortfolioID && x.Type == true);
+            if (portfolio != null)
+            {
+
+                model.PortfolioAccount = portfolio.AccountID;
+
+                // portfolio data
+                model.PortfolioCode = portfolio.Portfolio.Code;
+                model.PortfolioNameAR = portfolio.Portfolio.NameAR;
+                model.PortfolioNameEN = portfolio.Portfolio.NameEN;
+                model.PortfolioID = portfolio.Portfolio.PortfolioID;
+            }
+
+            #endregion
+
+            // employee data
+            #region employee part
+            var employee = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == purchase.EmployeeID);
+            if (employee != null)
+            {
+                model.EmpCode = employee.Code;
+                model.EmpNameAR = employee.NameAR;
+                model.EmpNameEN = employee.NameEN;
+                model.EmployeeID = employee.EmployeeID;
+
+            }
+            #endregion
+
+            // date part
+            #region Date part
+            if (purchase.Date != null)
+            {
+
+                model.PurchaseDate = purchase.Date.Value.ToString("dd/MM/yyyy");
+                model.PurchaseDateHijri = DateHelper.GetHijriDate(purchase.Date);
+            }
+
+            #endregion
 
             model.Count = unitOfWork.PurchaseOrderRepository.Count();
 
@@ -243,7 +309,8 @@ namespace Stocks.Controllers
             {
                 return Ok(model);
             }
-            
+
+          
 
 
             var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseID == purchase.PurchaseOrderID)
@@ -260,6 +327,10 @@ namespace Stocks.Controllers
                                 StockCount = m.StockCount,
                                 TaxOnCommission = m.TaxOnCommission,
                                 TaxRateOnCommission = m.TaxRateOnCommission,
+                                PartnerID = m.PartnerID,
+                                PartnerCode = m.Partner.Code,
+                                PartnerNameAR = m.Partner.NameAR,
+                                PartnerNameEN = m.Partner.NameEN
                             });
             if (Details != null)
             {
@@ -288,116 +359,223 @@ namespace Stocks.Controllers
 
         [HttpGet]
         [Route("~/api/PurchaseOrder/GetPurchaseOrderbyID/{id}")]
-        public IActionResult GetSPurchaseOrderByID(int id)
+        public IActionResult GetPurchaseOrderByID(int id)
         {
-            var purchase = unitOfWork.PurchaseOrderRepository.GetByID(id);
-
-            var model = _mapper.Map<PurchaseOrderModel>(purchase);
-            model.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == purchase.PortfolioID && x.Type == true).AccountID;
-            if (model == null)
+            if (id > 0)
             {
+
+
+                var purchase = unitOfWork.PurchaseOrderRepository.GetByID(id);
+
+                var model = _mapper.Map<PurchaseOrderModel>(purchase);
+                model.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == purchase.PortfolioID && x.Type == true).AccountID;
+                if (model == null)
+                {
+                    return Ok(model);
+
+                }
+
+
+                #region portfolio data
+                var portfolio = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == purchase.PortfolioID && x.Type == true);
+                if (portfolio != null)
+                {
+
+                    model.PortfolioAccount = portfolio.AccountID;
+
+                    // portfolio data
+                    model.PortfolioCode = portfolio.Portfolio.Code;
+                    model.PortfolioNameAR = portfolio.Portfolio.NameAR;
+                    model.PortfolioNameEN = portfolio.Portfolio.NameEN;
+                    model.PortfolioID = portfolio.Portfolio.PortfolioID;
+                }
+
+                #endregion
+
+                // employee data
+                #region employee part
+                var employee = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == purchase.EmployeeID);
+                if (employee != null)
+                {
+                    model.EmpCode = employee.Code;
+                    model.EmpNameAR = employee.NameAR;
+                    model.EmpNameEN = employee.NameEN;
+                    model.EmployeeID = employee.EmployeeID;
+
+                }
+                #endregion
+
+                // date part
+                #region Date part
+                if (purchase.Date != null)
+                {
+
+                    model.PurchaseDate = purchase.Date.Value.ToString("dd/MM/yyyy");
+                    model.PurchaseDateHijri = DateHelper.GetHijriDate(purchase.Date);
+                }
+
+                #endregion
+
+
+                model.Count = unitOfWork.PurchaseOrderRepository.Count();
+
+                if (model.Count == 0)
+                {
+                    return Ok(model);
+                }
+
+
+
+                var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseID == purchase.PurchaseOrderID)
+                                .Select(m => new PurchaseOrderDetailModel
+                                {
+
+                                    PurchaseID = m.PurchaseID,
+                                    BankCommission = m.BankCommission,
+                                    NetAmmount = m.NetAmmount,
+                                    PurchaseOrderDetailID = m.PurchaseOrderDetailID,
+                                    BankCommissionRate = m.BankCommissionRate,
+                                    PurchasePrice = m.PurchasePrice,
+                                    PurchaseValue = m.PurchaseValue,
+                                    StockCount = m.StockCount,
+                                    TaxOnCommission = m.TaxOnCommission,
+                                    TaxRateOnCommission = m.TaxRateOnCommission,
+                                    PartnerID = m.PartnerID,
+                                    PartnerCode = m.Partner.Code,
+                                    PartnerNameAR = m.Partner.NameAR,
+                                    PartnerNameEN = m.Partner.NameEN
+                                });
+                if (Details != null)
+                {
+
+
+                    model.DetailsModels = Details;
+                }
+
+
+                model.SettingModel = GetSetting(2);
+
+                var check = unitOfWork.EntryRepository.Get(x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
+                if (check != null)
+                {
+                    model.EntryModel = GetEntryPurchaseOrderModel(purchase.PurchaseOrderID);
+                }
                 return Ok(model);
-
             }
-
-
-            model.Count = unitOfWork.PurchaseOrderRepository.Count();
-
-            if (model.Count == 0)
-            {
-                return Ok(model);
-            }
-
-
-
-            var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseID == purchase.PurchaseOrderID)
-                            .Select(m => new PurchaseOrderDetailModel
-                            {
-
-                                PurchaseID = m.PurchaseID,
-                                BankCommission = m.BankCommission,
-                                NetAmmount = m.NetAmmount,
-                                PurchaseOrderDetailID = m.PurchaseOrderDetailID,
-                                BankCommissionRate = m.BankCommissionRate,
-                                PurchasePrice = m.PurchasePrice,
-                                PurchaseValue = m.PurchaseValue,
-                                StockCount = m.StockCount,
-                                TaxOnCommission = m.TaxOnCommission,
-                                TaxRateOnCommission = m.TaxRateOnCommission,
-                            });
-            if (Details != null)
-            {
-
-
-                model.DetailsModels = Details;
-            }
-
-
-           model.SettingModel = GetSetting(2);
-
-            var check = unitOfWork.EntryRepository.Get(x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
-            if (check != null)
-            {
-                model.EntryModel = GetEntryPurchaseOrderModel(purchase.PurchaseOrderID);
-            }
-            return Ok(model);
+            else
+                return Ok(1);
 
         }
 
 
         [HttpGet]
-        [Route("~/api/Pagination/PurchaseOrder/{pageNumber}")]
+        [Route("~/api/PurchaseOrder/Paging/{pageNumber}")]
         public IActionResult PaginationPurchaseOrder(int pageNumber)
         {
-            var purchase = unitOfWork.PurchaseOrderRepository.Get(page: pageNumber).FirstOrDefault();
-            var model = _mapper.Map<PurchaseOrderModel>(purchase);
-            model.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == purchase.PortfolioID && x.Type == true).AccountID;
-            if (model == null)
+            if (pageNumber > 0)
             {
+
+
+                var purchase = unitOfWork.PurchaseOrderRepository.Get(page: pageNumber).FirstOrDefault();
+                var model = _mapper.Map<PurchaseOrderModel>(purchase);
+                model.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == purchase.PortfolioID && x.Type == true).AccountID;
+
+
+                #region portfolio data
+                var portfolio = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == purchase.PortfolioID && x.Type == true);
+                if (portfolio != null)
+                {
+
+                    model.PortfolioAccount = portfolio.AccountID;
+
+                    // portfolio data
+                    model.PortfolioCode = portfolio.Portfolio.Code;
+                    model.PortfolioNameAR = portfolio.Portfolio.NameAR;
+                    model.PortfolioNameEN = portfolio.Portfolio.NameEN;
+                    model.PortfolioID = portfolio.Portfolio.PortfolioID;
+                }
+
+                #endregion
+
+                // employee data
+                #region employee part
+                var employee = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == purchase.EmployeeID);
+                if (employee != null)
+                {
+                    model.EmpCode = employee.Code;
+                    model.EmpNameAR = employee.NameAR;
+                    model.EmpNameEN = employee.NameEN;
+                    model.EmployeeID = employee.EmployeeID;
+
+                }
+                #endregion
+
+                // date part
+                #region Date part
+                if (purchase.Date != null)
+                {
+
+                    model.PurchaseDate = purchase.Date.Value.ToString("dd/MM/yyyy");
+                    model.PurchaseDateHijri = DateHelper.GetHijriDate(purchase.Date);
+                }
+
+                #endregion
+
+
+                if (model == null)
+                {
+                    return Ok(model);
+
+                }
+
+
+                model.Count = unitOfWork.PurchaseOrderRepository.Count();
+
+                if (model.Count == 0)
+                {
+                    return Ok(model);
+                }
+
+
+
+                var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseID == purchase.PurchaseOrderID)
+                                .Select(m => new PurchaseOrderDetailModel
+                                {
+
+                                    PurchaseID = m.PurchaseID,
+                                    BankCommission = m.BankCommission,
+                                    NetAmmount = m.NetAmmount,
+                                    PurchaseOrderDetailID = m.PurchaseOrderDetailID,
+                                    BankCommissionRate = m.BankCommissionRate,
+                                    PurchasePrice = m.PurchasePrice,
+                                    PurchaseValue = m.PurchaseValue,
+                                    StockCount = m.StockCount,
+                                    TaxOnCommission = m.TaxOnCommission,
+                                    TaxRateOnCommission = m.TaxRateOnCommission,
+                                    PartnerID = m.PartnerID,
+                                    PartnerCode = m.Partner.Code,
+                                    PartnerNameAR = m.Partner.NameAR,
+                                    PartnerNameEN = m.Partner.NameEN
+                                });
+                if (Details != null)
+                {
+
+
+                    model.DetailsModels = Details;
+                }
+
+
+                model.SettingModel = GetSetting(2);
+                var check = unitOfWork.EntryRepository.Get(x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
+                if (check != null)
+                {
+                    model.EntryModel = GetEntryPurchaseOrderModel(purchase.PurchaseOrderID);
+                }
                 return Ok(model);
-
             }
+            else
+                return Ok(1);
 
-
-            model.Count = unitOfWork.PurchaseOrderRepository.Count();
-
-            if (model.Count == 0)
-            {
-                return Ok(model);
-            }
-
-
-
-            var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseID == purchase.PurchaseOrderID)
-                            .Select(m => new PurchaseOrderDetailModel
-                            {
-
-                                PurchaseID = m.PurchaseID,
-                                BankCommission = m.BankCommission,
-                                NetAmmount = m.NetAmmount,
-                                PurchaseOrderDetailID = m.PurchaseOrderDetailID,
-                                BankCommissionRate = m.BankCommissionRate,
-                                PurchasePrice = m.PurchasePrice,
-                                PurchaseValue = m.PurchaseValue,
-                                StockCount = m.StockCount,
-                                TaxOnCommission = m.TaxOnCommission,
-                                TaxRateOnCommission = m.TaxRateOnCommission,
-                            });
-            if (Details != null)
-            {
-
-
-                model.DetailsModels = Details;
-            }
-
-
-            model.SettingModel = GetSetting(2);
-            var check = unitOfWork.EntryRepository.Get(x => x.PurchaseOrderID == purchase.PurchaseOrderID).SingleOrDefault();
-            if (check != null)
-            {
-                model.EntryModel = GetEntryPurchaseOrderModel(purchase.PurchaseOrderID);
-            }
-            return Ok(model);
         }
 
           
@@ -416,7 +594,7 @@ namespace Stocks.Controllers
                 if (Check.Any(m => m.Code == purchaseOrderModel.Code))
                 {
 
-                    return Ok("كود امر بيع مكرر");
+                    return Ok(2);
                 }
                 else
                 {
@@ -468,8 +646,6 @@ namespace Stocks.Controllers
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
                         EntryMODEL.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
-                        
-
                         var DetailEnt = EntryMODEL.EntryDetailModel;
 
                         if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
@@ -487,47 +663,82 @@ namespace Stocks.Controllers
                             }
                             accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
                             {
-
-
                                 EntryDetailID = x.EntryDetailID,
                                 AccountID = x.AccountID,
                                 Credit = x.Credit,
                                 Debit = x.Debit,
-                                EntryID = x.EntryID
-
+                                EntryID = x.EntryID,
+                                StocksCredit = x.StocksCredit,
+                                StocksDebit = x.StocksDebit,
 
                             }).ToList());
                         }
-                       
-                        
+
+                        else
+                        {
+                            Entry.TransferedToAccounts = true;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
+
+                                unitOfWork.EntryDetailRepository.Insert(details);
+                            }
+                        }
 
                     }
                     //================================توليد قيد مع عدم الترحيل======================================
-                    else if (purchaseOrderModel.SettingModel.GenerateEntry == true)
+                    #region generate entry commented
+                    //else if (purchaseOrderModel.SettingModel.GenerateEntry == true)
 
+                    //{
+                    //    var lastEntry = unitOfWork.EntryRepository.Last();
+                    //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
+                    //    EntryMODEL.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
+                    //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+
+
+                    //    var DetailEnt = EntryMODEL.EntryDetailModel;
+                    //    Entry.TransferedToAccounts = false;
+                    //    unitOfWork.EntryRepository.Insert(Entry);
+                    //    foreach (var item in DetailEnt)
+                    //    {
+                    //        item.EntryID = Entry.EntryID;
+                    //        item.EntryDetailID = 0;
+                    //        var details = _mapper.Map<EntryDetail>(item);
+
+                    //        unitOfWork.EntryDetailRepository.Insert(details);
+
+                    //    }
+                    //} 
+                    #endregion
+
+
+                    try
                     {
-                        var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
-                        EntryMODEL.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
-                        var Entry = _mapper.Map<Entry>(EntryMODEL);
+                        unitOfWork.Save();
 
-
-                        var DetailEnt = EntryMODEL.EntryDetailModel;
-                        Entry.TransferedToAccounts = false;
-                        unitOfWork.EntryRepository.Insert(Entry);
-                        foreach (var item in DetailEnt)
-                        {
-                            item.EntryID = Entry.EntryID;
-                            item.EntryDetailID = 0;
-                            var details = _mapper.Map<EntryDetail>(item);
-
-                            unitOfWork.EntryDetailRepository.Insert(details);
-
-                        }
                     }
 
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
 
-                    unitOfWork.Save();
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
 
 
 
@@ -539,7 +750,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest();
+                return Ok(3);
             }
         }
 
@@ -551,10 +762,13 @@ namespace Stocks.Controllers
         [Route("~/api/PurchaseOrder/PutPurchaseOrder/{id}")]
         public IActionResult PutPurchaseOrder(int id, [FromBody]  PurchaseOrderModel purchaseOrderModel )
         {
-            if (id != purchaseOrderModel.PurchaseOrderID)
+            if (purchaseOrderModel != null)
             {
+                if (id != purchaseOrderModel.PurchaseOrderID)
+                {
 
-                return BadRequest();
+                    return Ok(1);
+                }
             }
 
             if (ModelState.IsValid)
@@ -607,7 +821,27 @@ namespace Stocks.Controllers
                         if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                         {
                             unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                            unitOfWork.Save();
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
+
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
 
                             return Ok(purchaseOrderModel);
                         }
@@ -631,14 +865,13 @@ namespace Stocks.Controllers
                                 }
                                 accountingHelper.TransferToAccounts(EntryDitails.Select(x => new EntryDetail
                                 {
-
-
                                     EntryDetailID = x.EntryDetailID,
                                     AccountID = x.AccountID,
                                     Credit = x.Credit,
                                     Debit = x.Debit,
-                                    EntryID = x.EntryID
-
+                                    EntryID = x.EntryID,
+                                    StocksCredit = x.StocksCredit,
+                                    StocksDebit = x.StocksDebit
 
                                 }).ToList());
                             }
@@ -662,7 +895,27 @@ namespace Stocks.Controllers
                             }
                         }
 
-                        unitOfWork.Save();
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
 
 
 
@@ -682,7 +935,27 @@ namespace Stocks.Controllers
                             if (OldDetails != null)
                             {
                                 unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
-                                unitOfWork.Save();
+                                try
+                                {
+                                    unitOfWork.Save();
+                                }
+                                catch (DbUpdateException ex)
+                                {
+                                    var sqlException = ex.GetBaseException() as SqlException;
+
+                                    if (sqlException != null)
+                                    {
+                                        var number = sqlException.Number;
+
+                                        if (number == 547)
+                                        {
+                                            return Ok(5);
+
+                                        }
+                                        else
+                                            return Ok(6);
+                                    }
+                                }
                             }
 
 
@@ -704,7 +977,27 @@ namespace Stocks.Controllers
                             if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                             {
                                 unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                                unitOfWork.Save();
+                                try
+                                {
+                                    unitOfWork.Save();
+                                }
+                                catch (DbUpdateException ex)
+                                {
+                                    var sqlException = ex.GetBaseException() as SqlException;
+
+                                    if (sqlException != null)
+                                    {
+                                        var number = sqlException.Number;
+
+                                        if (number == 547)
+                                        {
+                                            return Ok(5);
+
+                                        }
+                                        else
+                                            return Ok(6);
+                                    }
+                                }
 
                                 return Ok(purchaseOrderModel);
                             }
@@ -734,7 +1027,9 @@ namespace Stocks.Controllers
                                         AccountID = x.AccountID,
                                         Credit = x.Credit,
                                         Debit = x.Debit,
-                                        EntryID = x.EntryID
+                                        EntryID = x.EntryID,
+                                        StocksDebit = x.StocksDebit,
+                                        StocksCredit = x.StocksCredit
 
 
                                     }).ToList());
@@ -758,12 +1053,27 @@ namespace Stocks.Controllers
                                 }
                             }
 
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
 
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
 
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
 
-
-
-                            unitOfWork.Save();
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
 
 
 
@@ -787,7 +1097,27 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
-                            unitOfWork.Save();
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
+
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
                         }
 
 
@@ -808,8 +1138,28 @@ namespace Stocks.Controllers
                         //==================================================لا تولد قيد ===================================
                         if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                         {
-                           
-                            unitOfWork.Save();
+
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
+
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
 
                             return Ok(purchaseOrderModel);
                         }
@@ -847,7 +1197,9 @@ namespace Stocks.Controllers
                                     AccountID = x.AccountID,
                                     Credit = x.Credit,
                                     Debit = x.Debit,
-                                    EntryID = x.EntryID
+                                    EntryID = x.EntryID,
+                                    StocksCredit = x.StocksCredit,
+                                    StocksDebit = x.StocksDebit
 
 
                                 }).ToList());
@@ -871,7 +1223,27 @@ namespace Stocks.Controllers
                         }
 
 
-                        unitOfWork.Save();
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
 
 
 
@@ -891,7 +1263,27 @@ namespace Stocks.Controllers
                             if (OldDetails != null)
                             {
                                 unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
-                                unitOfWork.Save();
+                                try
+                                {
+                                    unitOfWork.Save();
+                                }
+                                catch (DbUpdateException ex)
+                                {
+                                    var sqlException = ex.GetBaseException() as SqlException;
+
+                                    if (sqlException != null)
+                                    {
+                                        var number = sqlException.Number;
+
+                                        if (number == 547)
+                                        {
+                                            return Ok(5);
+
+                                        }
+                                        else
+                                            return Ok(6);
+                                    }
+                                }
                             }
 
 
@@ -912,8 +1304,28 @@ namespace Stocks.Controllers
                             //==================================================لا تولد قيد ===================================
                             if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                             {
-                                
-                                unitOfWork.Save();
+
+                                try
+                                {
+                                    unitOfWork.Save();
+                                }
+                                catch (DbUpdateException ex)
+                                {
+                                    var sqlException = ex.GetBaseException() as SqlException;
+
+                                    if (sqlException != null)
+                                    {
+                                        var number = sqlException.Number;
+
+                                        if (number == 547)
+                                        {
+                                            return Ok(5);
+
+                                        }
+                                        else
+                                            return Ok(6);
+                                    }
+                                }
 
                                 return Ok(purchaseOrderModel);
                             }
@@ -952,7 +1364,9 @@ namespace Stocks.Controllers
                                         AccountID = x.AccountID,
                                         Credit = x.Credit,
                                         Debit = x.Debit,
-                                        EntryID = x.EntryID
+                                        EntryID = x.EntryID,
+                                        StocksDebit = x.StocksDebit,
+                                        StocksCredit = x.StocksCredit
 
 
                                     }).ToList());
@@ -982,7 +1396,27 @@ namespace Stocks.Controllers
                             }
 
 
-                            unitOfWork.Save();
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
+
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
 
 
 
@@ -996,7 +1430,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return BadRequest();
+                return Ok(3);
             }
 
 
@@ -1011,19 +1445,19 @@ namespace Stocks.Controllers
 
 
         [HttpDelete]
-        [Route("~/api/DeletePurchaseOrder/DeletePurchase/{id}")]
+        [Route("~/api/PurchaseOrder/DeletePurchase/{id}")]
         public IActionResult DeletePurchase(int? id)
         {
 
-            if (id == null)
+            if (id == null )
             {
 
-                return BadRequest();
+                return Ok(1);
             }
             var modelPurchase = unitOfWork.PurchaseOrderRepository.GetByID(id);
             if (modelPurchase == null)
             {
-                return BadRequest();
+                return Ok(0);
             }
             var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: m => m.PurchaseID == id);
 
@@ -1039,15 +1473,29 @@ namespace Stocks.Controllers
             unitOfWork.EntryRepository.Delete(Entry.EntryID);
 
             unitOfWork.PurchaseOrderRepository.Delete(id);
-            var Result = unitOfWork.Save();
-            if (Result == true)
+            try
             {
-                return Ok();
+                unitOfWork.Save();
             }
-            else
+            catch (DbUpdateException ex)
             {
-                return NotFound();
+                var sqlException = ex.GetBaseException() as SqlException;
+
+                if (sqlException != null)
+                {
+                    var number = sqlException.Number;
+
+                    if (number == 547)
+                    {
+                        return Ok(5);
+
+                    }
+                    else
+                        return Ok(6);
+                }
             }
+            return Ok(4);
+
 
         }
 

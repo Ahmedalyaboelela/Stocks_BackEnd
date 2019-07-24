@@ -269,7 +269,7 @@ namespace Stocks.Controllers
             sellingOrderModel.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true).AccountID;
             if (sellingOrderModel == null)
             {
-                return Ok(sellingOrderModel);
+                return Ok(0);
 
             }
 
@@ -863,7 +863,9 @@ namespace Stocks.Controllers
                                     AccountID = x.AccountID,
                                     Credit = x.Credit,
                                     Debit = x.Debit,
-                                    EntryID = x.EntryID
+                                    EntryID = x.EntryID,
+                                    StocksCredit=x.StocksCredit,
+                                    StocksDebit=x.StocksDebit
 
 
                                 }).ToList());
@@ -1019,7 +1021,9 @@ namespace Stocks.Controllers
                                       AccountID = x.AccountID,
                                       Credit = x.Credit,
                                       Debit = x.Debit,
-                                      EntryID = x.EntryID
+                                      EntryID = x.EntryID,
+                                      StocksDebit=x.StocksDebit,
+                                      StocksCredit=x.StocksCredit
 
 
                                   }).ToList());
@@ -1185,15 +1189,30 @@ namespace Stocks.Controllers
                                 AccountID = x.AccountID,
                                 Credit = x.Credit,
                                 Debit = x.Debit,
-                                EntryID = x.EntryID
+                                EntryID = x.EntryID,
+                                StocksCredit=x.StocksCredit,
+                                StocksDebit=x.StocksDebit
 
 
                             }).ToList());
                         }
+                            else
+                            {
+                                Entry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Insert(Entry);
+                                foreach (var item in DetailEnt)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<EntryDetail>(item);
+
+                                    unitOfWork.EntryDetailRepository.Insert(details);
+
+                                }
+                            }
 
 
-
-                    }
+                        }
 
                     //================================توليد قيد مع عدم الترحيل======================================
 
@@ -1360,7 +1379,9 @@ namespace Stocks.Controllers
                                     AccountID = x.AccountID,
                                     Credit = x.Credit,
                                     Debit = x.Debit,
-                                    EntryID = x.EntryID
+                                    EntryID = x.EntryID,
+                                    StocksDebit=x.StocksDebit,
+                                    StocksCredit=x.StocksCredit
 
 
                                 }).ToList());
@@ -1393,27 +1414,27 @@ namespace Stocks.Controllers
                         }
 
 
-                            try
-                            {
-                                unitOfWork.Save();
-                            }
-                            catch (DbUpdateException ex)
-                            {
-                                var sqlException = ex.GetBaseException() as SqlException;
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
 
-                                if (sqlException != null)
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
                                 {
-                                    var number = sqlException.Number;
+                                    return Ok(5);
 
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
                                 }
+                                else
+                                    return Ok(6);
                             }
+                        }
 
 
 
