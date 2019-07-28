@@ -372,8 +372,11 @@ namespace Stocks.Controllers
 
 
             });
+            int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == noticeModel.PortfolioID && m.Type == true)
+                .Select(m => m.PortfolioAccountID).SingleOrDefault();
 
-            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel,lastEntry);
+
+            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel,lastEntry);
             var Entry = _mapper.Map<Entry>(EntryMODEL);
 
 
@@ -431,6 +434,8 @@ namespace Stocks.Controllers
            
             if (ModelState.IsValid)
             {
+                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == noticeModel.PortfolioID && m.Type == true).Select(m => m.PortfolioAccountID).SingleOrDefault();
+
                 var Check = unitOfWork.NoticeRepository.Get();
                 if (Check.Any(m => m.Code == noticeModel.Code))
                 {
@@ -478,7 +483,7 @@ namespace Stocks.Controllers
                     else if (noticeModel.SettingModel.AutoGenerateEntry == true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.NoticeID = notice.NoticeID;
 
@@ -518,7 +523,7 @@ namespace Stocks.Controllers
                     {
 
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.NoticeID = notice.NoticeID;
 
@@ -570,6 +575,7 @@ namespace Stocks.Controllers
             {
 
                 var Check = unitOfWork.NoticeRepository.Get(NoTrack: "NoTrack");
+                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == noticeModel.PortfolioID && m.Type == true).Select(m => m.PortfolioAccountID).SingleOrDefault();
 
                 var notice = _mapper.Map<Notice>(noticeModel);
                 var NewdDetails = noticeModel.NoticeModelDetails;
@@ -622,7 +628,7 @@ namespace Stocks.Controllers
                         //===================================توليد قيد مع ترحيل تلقائي===================================
                         if (noticeModel.SettingModel.AutoGenerateEntry == true)
                         {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, null, noticeModel);
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, null, null, noticeModel);
 
                             if (noticeModel.SettingModel.TransferToAccounts == true)
                             {
@@ -655,7 +661,7 @@ namespace Stocks.Controllers
                         if (noticeModel.SettingModel.GenerateEntry==true)
                         
                         {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, null, noticeModel);
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, null, null, noticeModel);
                             Entry.TransferedToAccounts = false;
                             unitOfWork.EntryRepository.Update(Entry);
                             foreach (var item in EntryDitails)
@@ -717,7 +723,7 @@ namespace Stocks.Controllers
                             //===================================توليد قيد مع ترحيل تلقائي===================================
                             if (noticeModel.SettingModel.AutoGenerateEntry == true)
                             {
-                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, null, noticeModel);
+                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, null, null, noticeModel);
 
                                 if (noticeModel.SettingModel.TransferToAccounts == true)
                                 {
@@ -751,7 +757,7 @@ namespace Stocks.Controllers
                             if (noticeModel.SettingModel.GenerateEntry == true)
 
                             {
-                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, null, noticeModel);
+                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, null, null, noticeModel);
                                 Entry.TransferedToAccounts = false;
                                 unitOfWork.EntryRepository.Update(Entry);
                                 foreach (var item in EntryDitails)
@@ -821,7 +827,7 @@ namespace Stocks.Controllers
                         else if (noticeModel.SettingModel.AutoGenerateEntry == true)
                         {
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel, lastEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
                             Entry.ReceiptID = notice.NoticeID;
 
@@ -860,7 +866,7 @@ namespace Stocks.Controllers
                         {
 
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel, lastEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
                             Entry.NoticeID = notice.NoticeID;
 
@@ -932,7 +938,7 @@ namespace Stocks.Controllers
                             else if (noticeModel.SettingModel.AutoGenerateEntry == true)
                             {
                                 var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel, lastEntry);
                                 var Entry = _mapper.Map<Entry>(EntryMODEL);
                                 Entry.NoticeID = notice.NoticeID;
 
@@ -971,7 +977,7 @@ namespace Stocks.Controllers
                             {
 
                                 var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, null, noticeModel, lastEntry);
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel, lastEntry);
                                 var Entry = _mapper.Map<Entry>(EntryMODEL);
                                 Entry.NoticeID = notice.NoticeID;
 

@@ -41,7 +41,7 @@ namespace Stocks.Controllers
             {
                 model.Count = _userManager.Users.Count();
                 return Ok(model);
-            }
+            }  
         }
 
 

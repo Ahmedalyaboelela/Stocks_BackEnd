@@ -26,5 +26,12 @@ namespace BAL.Model
 
         public string AccCode { get; set; }
 
+        public int? ParentAccountID { get; set; }
+
+        public string ParentAccNameAR { get; set; }
+
+        public string ParentAccNameEN { get; set; }
+
+        public string ParentAccCode { get; set; }
     }
 }
