@@ -88,23 +88,26 @@ namespace Stocks.Controllers
 
             var Portfoli = unitOfWork.PortfolioRepository.Get().Select(a => new PortfolioModel
             {
-                PortfolioID=a.PortfolioID,
+                PortfolioID = a.PortfolioID,
                 Code = a.Code,
                 Description = a.Description,
                 EstablishDate = a.EstablishDate.ToString(),
                 EstablishDateHijri = DateHelper.GetHijriDate(a.EstablishDate),
                 AccountID = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).AccountID,
-                AccountCode= unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.Code,
-                AccountNameAR= unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.NameAR,
-                AccountNameEN= unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.NameEN,
-                PortfolioAccountDebit= unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.Debit,
-                NameAR =a.NameAR,
-                NameEN=a.NameEN,
-                TotalStocksCount=a.TotalStocksCount,
-               
-
-
-
+                AccountCode = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.Code,
+                AccountNameAR = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.NameAR,
+                AccountNameEN = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.NameEN,
+                PortfolioAccountDebit = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.Debit,
+                NameAR = a.NameAR,
+                NameEN = a.NameEN,
+                TotalStocksCount = a.TotalStocksCount,
+                portfolioOpeningStocksArray = unitOfWork.PortfolioOpeningStocksRepository.Get(filter: s => s.PortfolioID == a.PortfolioID).Select(x => new PortfolioOpeningStocksModel
+                {
+                    PartnerID=x.PartnerID,
+                    PartnerCode=x.Partner.Code,
+                    PartnerNameAR=x.Partner.NameAR,
+                    PartnerNameEN=x.Partner.NameEN
+                }),
 
             });
 
@@ -280,15 +283,36 @@ namespace Stocks.Controllers
            
             if (type==true)
             {
-                var noti = unitOfWork.NoticeRepository.Get(filter: x => x.Type == true).Last();
-                model.LastCode = noti.Code;
-                model.SettingModel = GetSetting(4);
+                if(unitOfWork.NoticeRepository.Get(filter: x => x.Type == true).Count()>0)
+                {
+                    if (unitOfWork.NoticeRepository.Get(filter: x => x.Type == true).Last() == null)
+                    {
+                        return Ok(0);
+                    }
+                    var noti = unitOfWork.NoticeRepository.Get(filter: x => x.Type == true).Last();
+
+
+                    model.LastCode = noti.Code;
+                    model.SettingModel = GetSetting(4);
+                }
+
             }
             else
             {
-                var noti = unitOfWork.NoticeRepository.Get(filter: x => x.Type == false).Last();
-                model.LastCode = noti.Code;
-                model.SettingModel = GetSetting(3);
+                if (unitOfWork.NoticeRepository.Get(filter: x => x.Type == false).Count() > 0)
+                {
+                    if (unitOfWork.NoticeRepository.Get(filter: x => x.Type == false).Last() == null)
+                    {
+                        return Ok(0);
+                    }
+
+                    var noti = unitOfWork.NoticeRepository.Get(filter: x => x.Type == false).Last();
+
+                    model.LastCode = noti.Code;
+                    model.SettingModel = GetSetting(3);
+                }
+
+               
             }
            
             
