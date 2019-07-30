@@ -34,7 +34,123 @@ namespace Stocks.Controllers
 
         #endregion
 
-        [Route("~/api/PurchaseOrder/GetSettingAccounts/{id}")]
+
+
+        [Route("~/api/Notice/GetCurrency")]
+        public IEnumerable<CurrencyModel> GetAllcurency()
+        {
+
+            var currency = unitOfWork.CurrencyRepository.Get().Select(a => new CurrencyModel
+            {
+
+                Code = a.Code,
+                CurrencyID=a.CurrencyID,
+                CurrencyValue=a.CurrencyValue,
+                NameAR=a.NameAR,
+                NameEN=a.NameEN,
+                PartName=a.PartName,
+                PartValue=a.PartValue
+                 
+
+
+
+            });
+
+
+
+            return currency;
+
+
+        }
+
+        [Route("~/api/Notice/GetAllAccounts")]
+      
+        public IActionResult GetAllAccounts()
+        {
+            var account = unitOfWork.AccountRepository.Get(filter: a => a.AccountType == false);
+            var model = _mapper.Map<IEnumerable<AccountModel>>(account);
+
+            if (model == null)
+            {
+                return Ok(0);
+            }
+
+            return Ok(model);
+        }
+    
+
+
+
+
+        [Route("~/api/Notice/GetPortfolios")]
+        public IEnumerable<PortfolioModel> GetPortfolio()
+        {
+
+            var Portfoli = unitOfWork.PortfolioRepository.Get().Select(a => new PortfolioModel
+            {
+                PortfolioID=a.PortfolioID,
+                Code = a.Code,
+                Description = a.Description,
+                EstablishDate = a.EstablishDate.ToString(),
+                EstablishDateHijri = DateHelper.GetHijriDate(a.EstablishDate),
+                AccountID = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).AccountID,
+                AccountCode= unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.Code,
+                AccountNameAR= unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.NameAR,
+                AccountNameEN= unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.NameEN,
+                PortfolioAccountDebit= unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.Debit,
+                NameAR =a.NameAR,
+                NameEN=a.NameEN,
+                TotalStocksCount=a.TotalStocksCount,
+               
+
+
+
+
+            });
+
+
+
+            return Portfoli;
+
+
+        }
+
+
+        [Route("~/api/Notice/GetEmps")]
+        public IEnumerable<EmployeeModel> GetEmps()
+        {
+
+            var Epms = unitOfWork.EmployeeRepository.Get().Select(a => new EmployeeModel
+            {
+                EmployeeID=a.EmployeeID,
+                Age=a.Age,
+                BankAccNum=a.BankAccNum,
+                BirthDate=a.BirthDate.ToString(),
+                BirthDateHijri=DateHelper.GetHijriDate(a.BirthDate),
+                Code=a.Code,
+                Email=a.Email,
+                ImagePath=a.ImagePath,
+                IsActive=a.IsActive,
+                IsInternal=a.IsInternal,
+                NameAR=a.NameAR,
+                NameEN=a.NameEN,
+                Mobile=a.Mobile,
+                Nationality=a.Nationality,
+                Religion=a.Religion,
+                Profession=a.Profession,
+                PassportProfession=a.PassportProfession,
+            });
+
+
+
+            return Epms;
+
+
+        }
+
+
+
+        [Route("~/api/Notice/GetSettingAccounts/{id}")]
         public IEnumerable<SettingAccountModel> SettingAccounts(int id)
         {
 
@@ -49,7 +165,7 @@ namespace Stocks.Controllers
                 AccountType = a.AccountType,
                 SettingAccountID = a.SettingAccountID,
                 Code = a.Setting.Code,
-
+                
 
 
             });
@@ -132,8 +248,15 @@ namespace Stocks.Controllers
             model.EmployeeCode = notice.Employee.Code;
 
             #region Setting part
-
-            model.SettingModel = GetSetting(3);
+            if (type==true)
+            {
+                model.SettingModel = GetSetting(4);
+            }
+            else
+            {
+                model.SettingModel = GetSetting(3);
+            }
+           
 
             #endregion
             var check = unitOfWork.EntryRepository.Get(x => x.NoticeID == notice.NoticeID).SingleOrDefault(); 
@@ -150,9 +273,24 @@ namespace Stocks.Controllers
         [Route("~/api/Notice/FirstOpen/{type}")]
         public IActionResult FirstOpen(bool type)
         {
-            DefaultSettingModel model = new DefaultSettingModel();
-            model.ScreenSetting = GetSetting(3);
-            model.LastCode = unitOfWork.EntryRepository.Last().Code;
+            //  DefaultSettingModel model = new DefaultSettingModel();
+            //model.ScreenSetting = GetSetting(3);
+            //model.LastCode = unitOfWork.EntryRepository.Last().Code;
+            NoticeModel model = new NoticeModel();
+           
+            if (type==true)
+            {
+                var noti = unitOfWork.NoticeRepository.Get(filter: x => x.Type == true).Last();
+                model.LastCode = noti.Code;
+                model.SettingModel = GetSetting(4);
+            }
+            else
+            {
+                var noti = unitOfWork.NoticeRepository.Get(filter: x => x.Type == false).Last();
+                model.LastCode = noti.Code;
+                model.SettingModel = GetSetting(3);
+            }
+           
             
             return Ok(model);
         }
@@ -173,8 +311,8 @@ namespace Stocks.Controllers
 
 
         [HttpGet]
-        [Route("~/api/Notice/Paging/{pageNumber}/{type}")]
-        public IActionResult Pagination(int pageNumber, bool type)
+        [Route("~/api/Notice/Paging/{type}/{pageNumber}")]
+        public IActionResult Pagination(bool type ,int pageNumber )
         {
             if (pageNumber > 0)
             {
@@ -192,9 +330,9 @@ namespace Stocks.Controllers
 
 
         [HttpGet]
-        [Route("~/api/Notice/Get/{id}/{type}")]
+        [Route("~/api/Notice/Get/{type}/{id}")]
 
-        public IActionResult GetById(int id, bool type)
+        public IActionResult GetById(bool type,int id)
         {
 
             if (id > 0)
@@ -282,7 +420,7 @@ namespace Stocks.Controllers
 
 
         [HttpGet]//القيد
-        [Route("~/api/Notice/GetEntry")]
+        [Route("~/api/Notice/GetEntry/{noticeID}")]
         public EntryModel GetEntry(int  noticeID)
         {
             var Entry = unitOfWork.EntryRepository.Get(x => x.NoticeID == noticeID).SingleOrDefault();
@@ -314,7 +452,7 @@ namespace Stocks.Controllers
         }
 
         [HttpPost]// ترحيل يدوي للقيد اليدوي والتلقائي
-        [Route("~/api/Notice/ManualmigrationNotice")]
+        [Route("~/api/Notice/ManualmigrationNotice/EntryMODEL")]
         public IActionResult ManualmigrationNotice([FromBody]EntryModel EntryMODEL)
         {
             var Entry = unitOfWork.EntryRepository.GetByID(EntryMODEL.EntryID);
@@ -518,28 +656,28 @@ namespace Stocks.Controllers
                     }
 
                     //================================توليد قيد مع عدم الترحيل====================================== 
-                    if (noticeModel.SettingModel.GenerateEntry == true)
+                    //if (noticeModel.SettingModel.GenerateEntry == true)
                     
-                    {
+                    //{
 
-                        var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
-                        var Entry = _mapper.Map<Entry>(EntryMODEL);
-                        Entry.NoticeID = notice.NoticeID;
+                    //    var lastEntry = unitOfWork.EntryRepository.Last();
+                    //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
+                    //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+                    //    Entry.NoticeID = notice.NoticeID;
 
-                        var DetailEnt = EntryMODEL.EntryDetailModel;
-                        Entry.TransferedToAccounts = false;
-                        unitOfWork.EntryRepository.Insert(Entry);
-                        foreach (var item in DetailEnt)
-                        {
-                            item.EntryID = Entry.EntryID;
-                            item.EntryDetailID = 0;
-                            var details = _mapper.Map<EntryDetail>(item);
+                    //    var DetailEnt = EntryMODEL.EntryDetailModel;
+                    //    Entry.TransferedToAccounts = false;
+                    //    unitOfWork.EntryRepository.Insert(Entry);
+                    //    foreach (var item in DetailEnt)
+                    //    {
+                    //        item.EntryID = Entry.EntryID;
+                    //        item.EntryDetailID = 0;
+                    //        var details = _mapper.Map<EntryDetail>(item);
 
-                            unitOfWork.EntryDetailRepository.Insert(details);
+                    //        unitOfWork.EntryDetailRepository.Insert(details);
 
-                        }
-                    }
+                    //    }
+                    //}
 
 
                     unitOfWork.Save();
@@ -562,8 +700,8 @@ namespace Stocks.Controllers
 
         #region Update Methods
         [HttpPut]
-        [Route("~/api/Notice/Update/{id}/{type}")]
-        public IActionResult Update(int id, bool type, [FromBody] NoticeModel noticeModel)
+        [Route("~/api/Notice/Update/{type}/{id}")]
+        public IActionResult Update(bool type, int id, [FromBody] NoticeModel noticeModel)
         {
             if (id != noticeModel.NoticeID)
             {
@@ -684,7 +822,7 @@ namespace Stocks.Controllers
                     }
 
 
-                    //==========================================Second Case OF Code Of Purchase=======================================
+                    //==========================================Second Case OF Code Of notice=======================================
 
                     else
                     {
@@ -754,22 +892,22 @@ namespace Stocks.Controllers
                                
                             }
                             //===================================توليد قيد مع  عدم ترحيل=================================== 
-                            if (noticeModel.SettingModel.GenerateEntry == true)
+                            //if (noticeModel.SettingModel.GenerateEntry == true)
 
-                            {
-                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, null, null, noticeModel);
-                                Entry.TransferedToAccounts = false;
-                                unitOfWork.EntryRepository.Update(Entry);
-                                foreach (var item in EntryDitails)
-                                {
-                                    item.EntryID = Entry.EntryID;
-                                    item.EntryDetailID = 0;
-                                    var details = _mapper.Map<EntryDetail>(item);
+                            //{
+                            //    var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, null, null, noticeModel);
+                            //    Entry.TransferedToAccounts = false;
+                            //    unitOfWork.EntryRepository.Update(Entry);
+                            //    foreach (var item in EntryDitails)
+                            //    {
+                            //        item.EntryID = Entry.EntryID;
+                            //        item.EntryDetailID = 0;
+                            //        var details = _mapper.Map<EntryDetail>(item);
 
-                                    unitOfWork.EntryDetailRepository.Insert(details);
+                            //        unitOfWork.EntryDetailRepository.Insert(details);
 
-                                }
-                            }
+                            //    }
+                            //}
                             unitOfWork.Save();
 
 
@@ -861,28 +999,28 @@ namespace Stocks.Controllers
                             }
                         }
                         //================================توليد قيد مع عدم الترحيل====================================== 
-                        if (noticeModel.SettingModel.GenerateEntry == true)
+                        //if (noticeModel.SettingModel.GenerateEntry == true)
 
-                        {
+                        //{
 
-                            var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel, lastEntry);
-                            var Entry = _mapper.Map<Entry>(EntryMODEL);
-                            Entry.NoticeID = notice.NoticeID;
+                        //    var lastEntry = unitOfWork.EntryRepository.Last();
+                        //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel, lastEntry);
+                        //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+                        //    Entry.NoticeID = notice.NoticeID;
 
-                            var DetailEnt = EntryMODEL.EntryDetailModel;
-                            Entry.TransferedToAccounts = false;
-                            unitOfWork.EntryRepository.Insert(Entry);
-                            foreach (var item in DetailEnt)
-                            {
-                                item.EntryID = Entry.EntryID;
-                                item.EntryDetailID = 0;
-                                var details = _mapper.Map<EntryDetail>(item);
+                        //    var DetailEnt = EntryMODEL.EntryDetailModel;
+                        //    Entry.TransferedToAccounts = false;
+                        //    unitOfWork.EntryRepository.Insert(Entry);
+                        //    foreach (var item in DetailEnt)
+                        //    {
+                        //        item.EntryID = Entry.EntryID;
+                        //        item.EntryDetailID = 0;
+                        //        var details = _mapper.Map<EntryDetail>(item);
 
-                                unitOfWork.EntryDetailRepository.Insert(details);
+                        //        unitOfWork.EntryDetailRepository.Insert(details);
 
-                            }
-                        }
+                        //    }
+                        //}
 
 
                         unitOfWork.Save();
@@ -895,7 +1033,7 @@ namespace Stocks.Controllers
                     }
 
 
-                    //==========================================Second Case OF Code Of Purchase=======================================
+                    //==========================================Second Case OF Code Of notice=======================================
 
                     else
                     {
@@ -972,28 +1110,28 @@ namespace Stocks.Controllers
                                 }
                             }
                             //================================توليد قيد مع عدم الترحيل====================================== 
-                            if (noticeModel.SettingModel.GenerateEntry == true)
+                            //if (noticeModel.SettingModel.GenerateEntry == true)
 
-                            {
+                            //{
 
-                                var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel, lastEntry);
-                                var Entry = _mapper.Map<Entry>(EntryMODEL);
-                                Entry.NoticeID = notice.NoticeID;
+                            //    var lastEntry = unitOfWork.EntryRepository.Last();
+                            //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel, lastEntry);
+                            //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+                            //    Entry.NoticeID = notice.NoticeID;
 
-                                var DetailEnt = EntryMODEL.EntryDetailModel;
-                                Entry.TransferedToAccounts = false;
-                                unitOfWork.EntryRepository.Insert(Entry);
-                                foreach (var item in DetailEnt)
-                                {
-                                    item.EntryID = Entry.EntryID;
-                                    item.EntryDetailID = 0;
-                                    var details = _mapper.Map<EntryDetail>(item);
+                            //    var DetailEnt = EntryMODEL.EntryDetailModel;
+                            //    Entry.TransferedToAccounts = false;
+                            //    unitOfWork.EntryRepository.Insert(Entry);
+                            //    foreach (var item in DetailEnt)
+                            //    {
+                            //        item.EntryID = Entry.EntryID;
+                            //        item.EntryDetailID = 0;
+                            //        var details = _mapper.Map<EntryDetail>(item);
 
-                                    unitOfWork.EntryDetailRepository.Insert(details);
+                            //        unitOfWork.EntryDetailRepository.Insert(details);
 
-                                }
-                            }
+                            //    }
+                            //}
 
 
                             unitOfWork.Save();
@@ -1023,7 +1161,7 @@ namespace Stocks.Controllers
         public IActionResult Delete(int? id)
         {
 
-            //var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptID == id).FirstOrDefault();
+          
             if (id>0)
             {
                 var notice = unitOfWork.NoticeRepository.GetByID(id);
@@ -1046,38 +1184,11 @@ namespace Stocks.Controllers
                 unitOfWork.EntryDetailRepository.RemovRange(entryDitails);
                 unitOfWork.EntryRepository.Delete(entry.EntryID);
                 unitOfWork.NoticeRepository.Delete(notice);
-                try
-                {
+               
                     unitOfWork.Save();
-                }
-                catch (DbUpdateException ex)
-                {
-                    var sqlException = ex.GetBaseException() as SqlException;
-
-                    if (sqlException != null)
-                    {
-                        var number = sqlException.Number;
-
-                        if (number == 547)
-                        {
-                            return Ok(5);
-
-                        }
-                        else
-                            return Ok(6);
-                    }
-                }
+             
                 return Ok(4);
 
-                //var Result = unitOfWork.Save();
-                //if (Result == true)
-                //{
-                //    return Ok(4);
-                //}
-                //else
-                //{
-                //    return Ok("not deleted");
-                //} 
             }
             else
                 return Ok(1);

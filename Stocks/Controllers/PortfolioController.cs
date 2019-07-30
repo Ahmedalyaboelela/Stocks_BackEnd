@@ -309,106 +309,29 @@ namespace Stocks.Controllers
             if (ModelState.IsValid)
             {
                 var model = _mapper.Map<Portfolio>(portModel);
-
-             
-
-                var OpeningStocks = portModel.portfolioOpeningStocksArray;
-
-               
-
-                var Check = unitOfWork.PortfolioRepository.Get(NoTrack: "NoTrack");
-
-                if (!Check.Any(m => m.Code == portModel.Code))
+                var currentStocks = unitOfWork.PortfolioTransactionsRepository.Get(x => x.PortfolioID == model.PortfolioID);
+                foreach (var item in currentStocks)
                 {
-                    unitOfWork.PortfolioRepository.Update(model);
-
-                    // portfolio accounts
-                    unitOfWork.PortfolioRepository.Update(model);
-                    unitOfWork.Save();
-                    var oldAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == model.PortfolioID);
-                    unitOfWork.PortfolioAccountRepository.Delete(oldAccount.PortfolioAccountID);
-                    if (portModel.AccountID != null)
+                    if (item.HasTransaction == true)
                     {
-                        PortfolioAccountModel portfolioAccountModel = new PortfolioAccountModel();
-                        portfolioAccountModel.AccountID = portModel.AccountID;
-                        portfolioAccountModel.PortfolioID = model.PortfolioID;
-                        portfolioAccountModel.Type = true;
-                        var portfolioAccount = _mapper.Map<PortfolioAccount>(portfolioAccountModel);
-                        unitOfWork.PortfolioAccountRepository.Insert(portfolioAccount);
-
-
+                        return Ok(5);
                     }
 
-                    // shareholders
-                    var oldHolders = unitOfWork.PortfolioOpeningStocksRepository
-
-                    .Get(filter: m => m.PortfolioID == model.PortfolioID);
-
-                    if (oldHolders != null)
-                    {
-
-                        unitOfWork.PortfolioOpeningStocksRepository.RemovRange(oldHolders);
-                         
-                    }
-                    if (OpeningStocks !=null)
-                    {
-
-                        foreach (var item in OpeningStocks)
-                        {
-                            item.PortfolioID = model.PortfolioID;
-                            var newHolder = _mapper.Map<PortfolioOpeningStocks>(item);
-
-                            unitOfWork.PortfolioOpeningStocksRepository.Insert(newHolder);
-
-                        }    
-
-                        //CurrentStocks
-                        foreach (var item in OpeningStocks)
-                        {
-                            PortfolioTransactionModel portfolioTransaction = new PortfolioTransactionModel();
-                            portfolioTransaction.PortfolioID = model.PortfolioID;
-                            portfolioTransaction.PartnerID = item.PartnerID;
-                            portfolioTransaction.CurrentStockValue = item.OpeningStockValue;
-                            portfolioTransaction.CurrentStocksCount = item.OpeningStocksCount;
-                            var obj = _mapper.Map<PortfolioTransaction>(portfolioTransaction);
-                            unitOfWork.PortfolioTransactionsRepository.Insert(obj);
-                        }
-                    }
-                    
-
-                    try
-                    {
-                        unitOfWork.Save();
-                    }
-                    catch (DbUpdateException ex)
-                    {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
-                    }
-                    return Ok(7);
                 }
-                else
-                {
-                    if (Check.Any(m => m.Code == portModel.Code && m.PortfolioID == id))
-                    {
+                 
 
+                    var OpeningStocks = portModel.portfolioOpeningStocksArray;
+                    var Check = unitOfWork.PortfolioRepository.Get(NoTrack: "NoTrack");
+
+                    if (!Check.Any(m => m.Code == portModel.Code))
+                    {
+                        unitOfWork.PortfolioRepository.Update(model);
+
+                        // portfolio accounts
                         unitOfWork.PortfolioRepository.Update(model);
                         unitOfWork.Save();
-                    var oldAccount=unitOfWork.PortfolioAccountRepository.GetEntity(x=> x.PortfolioID==model.PortfolioID);
+                        var oldAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == model.PortfolioID);
                         unitOfWork.PortfolioAccountRepository.Delete(oldAccount.PortfolioAccountID);
-                        // portfolio accounts
                         if (portModel.AccountID != null)
                         {
                             PortfolioAccountModel portfolioAccountModel = new PortfolioAccountModel();
@@ -421,72 +344,128 @@ namespace Stocks.Controllers
 
                         }
 
-
-
                         // shareholders
                         var oldHolders = unitOfWork.PortfolioOpeningStocksRepository
 
                         .Get(filter: m => m.PortfolioID == model.PortfolioID);
 
-                        if (oldHolders !=null)
+                        if (oldHolders != null)
                         {
 
                             unitOfWork.PortfolioOpeningStocksRepository.RemovRange(oldHolders);
-
 
                         }
                         if (OpeningStocks != null)
                         {
 
-                            foreach (var item in OpeningStocks)
+                            foreach (var item5 in OpeningStocks)
                             {
-                                item.PortfolioID = model.PortfolioID;
-                                var newHolder = _mapper.Map<PortfolioOpeningStocks>(item);
+                                item5.PortfolioID = model.PortfolioID;
+                                var newHolder = _mapper.Map<PortfolioOpeningStocks>(item5);
 
                                 unitOfWork.PortfolioOpeningStocksRepository.Insert(newHolder);
 
                             }
 
                             //CurrentStocks
-                            foreach (var item in OpeningStocks)
+
+                            if (currentStocks != null)
+                            {
+                                unitOfWork.PortfolioTransactionsRepository.RemovRange(currentStocks);
+                            }
+                            foreach (var item6 in OpeningStocks)
                             {
                                 PortfolioTransactionModel portfolioTransaction = new PortfolioTransactionModel();
                                 portfolioTransaction.PortfolioID = model.PortfolioID;
-                                portfolioTransaction.PartnerID = item.PartnerID;
-                                portfolioTransaction.CurrentStockValue = item.OpeningStockValue;
-                                portfolioTransaction.CurrentStocksCount = item.OpeningStocksCount;
+                                portfolioTransaction.PartnerID = item6.PartnerID;
+                                portfolioTransaction.CurrentStockValue = item6.OpeningStockValue;
+                                portfolioTransaction.CurrentStocksCount = item6.OpeningStocksCount;
                                 var obj = _mapper.Map<PortfolioTransaction>(portfolioTransaction);
                                 unitOfWork.PortfolioTransactionsRepository.Insert(obj);
                             }
                         }
-                        try
-                        {
-                            unitOfWork.Save();
-                        }
-                        catch (DbUpdateException ex)
-                        {
-                            var sqlException = ex.GetBaseException() as SqlException;
 
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
+                        unitOfWork.Save();
 
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
-                        }
                         return Ok(7);
                     }
                     else
                     {
-                        return Ok(2);
+                        if (Check.Any(m => m.Code == portModel.Code && m.PortfolioID == id))
+                        {
+
+                            unitOfWork.PortfolioRepository.Update(model);
+                            unitOfWork.Save();
+                            var oldAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == model.PortfolioID);
+                            unitOfWork.PortfolioAccountRepository.Delete(oldAccount.PortfolioAccountID);
+                            // portfolio accounts
+                            if (portModel.AccountID != null)
+                            {
+                                PortfolioAccountModel portfolioAccountModel = new PortfolioAccountModel();
+                                portfolioAccountModel.AccountID = portModel.AccountID;
+                                portfolioAccountModel.PortfolioID = model.PortfolioID;
+                                portfolioAccountModel.Type = true;
+                                var portfolioAccount = _mapper.Map<PortfolioAccount>(portfolioAccountModel);
+                                unitOfWork.PortfolioAccountRepository.Insert(portfolioAccount);
+
+
+                            }
+
+
+
+                            // shareholders
+                            var oldHolders = unitOfWork.PortfolioOpeningStocksRepository
+
+                            .Get(filter: m => m.PortfolioID == model.PortfolioID);
+
+                            if (oldHolders != null)
+                            {
+
+                                unitOfWork.PortfolioOpeningStocksRepository.RemovRange(oldHolders);
+
+
+                            }
+                            if (OpeningStocks != null)
+                            {
+
+                                foreach (var item2 in OpeningStocks)
+                                {
+                                    item2.PortfolioID = model.PortfolioID;
+                                    var newHolder = _mapper.Map<PortfolioOpeningStocks>(item2);
+
+                                    unitOfWork.PortfolioOpeningStocksRepository.Insert(newHolder);
+
+                                }
+
+                                //CurrentStocks                           
+                                if (currentStocks != null)
+                                {
+                                    unitOfWork.PortfolioTransactionsRepository.RemovRange(currentStocks);
+                                }
+                                foreach (var item3 in OpeningStocks)
+                                {
+                                    PortfolioTransactionModel portfolioTransaction = new PortfolioTransactionModel();
+                                    portfolioTransaction.PortfolioID = model.PortfolioID;
+                                    portfolioTransaction.PartnerID = item3.PartnerID;
+                                    portfolioTransaction.CurrentStockValue = item3.OpeningStockValue;
+                                    portfolioTransaction.CurrentStocksCount = item3.OpeningStocksCount;
+                                    var obj = _mapper.Map<PortfolioTransaction>(portfolioTransaction);
+                                    unitOfWork.PortfolioTransactionsRepository.Insert(obj);
+                                }
+                            }
+
+                            unitOfWork.Save();
+
+                            return Ok(7);
+                        }
+                        else
+                        {
+                            return Ok(2);
+                        }
                     }
-                }
+                
+
+
 
             }
             else
@@ -511,6 +490,15 @@ namespace Stocks.Controllers
                 {
                     return BadRequest();
                 }
+                var currentstocks = unitOfWork.PortfolioTransactionsRepository.Get(x=> x.PortfolioID==portfolio.PortfolioID);
+                foreach (var item in currentstocks)
+                {
+                    if (item.HasTransaction==true)
+                    {
+                        return Ok(5);
+                    }
+                }
+                unitOfWork.PortfolioTransactionsRepository.RemovRange(currentstocks);
                 var PortAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: m => m.PortfolioID == id);
                 unitOfWork.PortfolioAccountRepository.Delete(PortAccount.PortfolioAccountID);
 
@@ -524,39 +512,8 @@ namespace Stocks.Controllers
 
 
                 unitOfWork.PortfolioRepository.Delete(portfolio);
-                try
-                {
-                    unitOfWork.Save();
+                  unitOfWork.Save();
                     return Ok(7);
-                }
-                catch (DbUpdateException ex)
-                {
-                    var sqlException = ex.GetBaseException() as SqlException;
-
-                    if (sqlException != null)
-                    {
-                        var number = sqlException.Number;
-
-                        if (number == 547)
-                        {
-                            return Ok(5);
-
-                        }
-                        else
-                            return Ok(6);
-                    }
-                }
-                return Ok(4);
-
-                //var Result = unitOfWork.Save();
-                //if (Result == true)
-                //{
-                //    return Ok(4);
-                //}
-                //else
-                //{
-                //    return NotFound();
-                //} 
             }
             else
                 return Ok(1);

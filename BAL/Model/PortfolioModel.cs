@@ -30,9 +30,10 @@ namespace BAL.Model
         public string AccountNameAR { get; set; }
         public string AccountNameEN { get; set; }
         public string AccountCode{ get; set; }
+        public decimal? PortfolioAccountDebit { get; set; }
 
-       
-     //    public IEnumerable<PortfolioAccountModel> folioAccounts { get; set; }
+
+        //    public IEnumerable<PortfolioAccountModel> folioAccounts { get; set; }
 
         public IEnumerable<PortfolioOpeningStocksModel> portfolioOpeningStocksArray { get; set; }
       //  public IEnumerable<PortfolioTransactionModel> portfolioTransactionModels { get; set; }

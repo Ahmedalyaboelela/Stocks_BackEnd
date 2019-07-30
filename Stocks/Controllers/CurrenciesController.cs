@@ -147,31 +147,14 @@ namespace Stocks.Controllers
                 else
                 {
                     unitOfWork.CurrencyRepository.Insert(model);
-                    try
-                    {
+                   
                         var result = unitOfWork.Save();
                         if (result == true)
                         {
                             return Ok(7);
                         }
-                    }
-                    catch (DbUpdateException ex)
-                    {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
-                    }
+                    
+               
                     return Ok(currencyModel);
                 }
 
@@ -191,7 +174,7 @@ namespace Stocks.Controllers
         [HttpPut]
         [Route("~/api/Currency/EditCurrency/{id}")]
 
-        public IActionResult PutAccount(int id, [FromBody] CurrencyModel currencyModel)
+        public IActionResult Putcurrency(int id, [FromBody] CurrencyModel currencyModel)
         {
 
             if (id != currencyModel.CurrencyID)
@@ -206,40 +189,40 @@ namespace Stocks.Controllers
                 if (model == null)
                 {
                     return Ok(0);
+                }
+                var Check = unitOfWork.CurrencyRepository.Get(NoTrack: "NoTrack");
+
+                if (Check.Any(m => m.Code == currencyModel.Code))
+                {
+                    unitOfWork.CurrencyRepository.Update(model);
+
+                    var Result = unitOfWork.Save();
+                    if (Result == true)
+                    {
+                        return Ok(7);
+                    }
+
+
+                    return Ok(currencyModel);
+
 
                 }
-
-                var Check = unitOfWork.CurrencyRepository.Get(NoTrack: "NoTrack");
-                if (!Check.Any(m => m.NameAR == model.NameAR))
+                else
                 {
-
-                    unitOfWork.CurrencyRepository.Update(model);
-                    try
+                    if (Check.Any(m => m.Code != currencyModel.Code && m.CurrencyID == currencyModel.CurrencyID))
                     {
+                        unitOfWork.CurrencyRepository.Update(model);
+
                         var Result = unitOfWork.Save();
                         if (Result == true)
                         {
                             return Ok(7);
                         }
+
+
+                        return Ok(currencyModel);
                     }
-                    catch (DbUpdateException ex)
-                    {
-                        var sqlException = ex.GetBaseException() as SqlException;
 
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
-                    }
-                    return Ok(currencyModel);
 
                 }
             }
@@ -248,7 +231,7 @@ namespace Stocks.Controllers
             {
                 return Ok(3);
             }
-            return Ok();
+            return Ok(currencyModel);
         }
 
         #endregion

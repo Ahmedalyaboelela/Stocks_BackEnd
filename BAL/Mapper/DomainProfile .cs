@@ -56,7 +56,8 @@ namespace BAL.Mapper
             #region Map Setting
             CreateMap<Setting, SettingModel>();
             CreateMap<SettingModel, Setting>();
-
+          
+            #endregion 
             #region Map Selling order
 
             CreateMap<SellingOrder, SellingOrderModel>();
@@ -128,7 +129,7 @@ namespace BAL.Mapper
             CreateMap<Notice, NoticeModel>();
             CreateMap<NoticeModel, Notice>()
                  .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                 .ForMember(t => t.NoticeDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.NoticeDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                .ForMember(t => t.NoticeDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.NoticeDate, "yyyy-MM-dd", CultureInfo.InvariantCulture)));
 
 
             // Notice Details
