@@ -56,7 +56,42 @@ namespace Stocks.Controllers
 
         }
 
+        public EntryModel GetEntry(Entry Entry)
+        {
+            EntryModel entryModel = new EntryModel();
 
+            if (Entry != null)
+            {
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                entryModel.EntryID = Entry.EntryID;
+                entryModel.Code = Entry.Code;
+                entryModel.Date = Entry.Date.Value.ToString("dd/MM/yyyy");
+                entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
+                entryModel.NoticeID = Entry.NoticeID;
+                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.ReceiptID = Entry.ReceiptID;
+                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
+                {
+                    AccCode = m.Account.Code,
+                    AccNameAR = m.Account.NameAR,
+                    AccNameEN = m.Account.NameEN,
+                    AccountID = m.AccountID,
+                    ParentAccountID = m.Account.AccoutnParentID,
+                    ParentAccCode = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.Code).FirstOrDefault(),
+                    ParentAccNameAR = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.NameAR).FirstOrDefault(),
+                    Credit = m.Credit,
+                    Debit = m.Debit,
+                    EntryDetailID = m.EntryDetailID,
+                    EntryID = m.EntryID,
+
+
+                });
+                entryModel.TransferedToAccounts = Entry.TransferedToAccounts;
+
+            }
+            return entryModel;
+        }
 
         [HttpGet]//القيد
         [Route("~/api/SellingOrder/GetEntry/{sellingOrderID}")]
@@ -253,7 +288,7 @@ namespace Stocks.Controllers
 
 
 
-            return Ok("تم ترحيل القيد");
+            return Ok(GetEntry(Entry));
 
         }
 

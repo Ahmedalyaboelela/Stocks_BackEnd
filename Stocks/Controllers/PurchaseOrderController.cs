@@ -29,33 +29,82 @@ namespace Stocks.Controllers
             accountingHelper = new AccountingHelper(context, mapper);
         }
 
+        public EntryModel GetEntry(Entry Entry)
+        {
+            EntryModel entryModel = new EntryModel();
+
+            if (Entry != null)
+            {
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                entryModel.EntryID = Entry.EntryID;
+                entryModel.Code = Entry.Code;
+                entryModel.Date = Entry.Date.Value.ToString("dd/MM/yyyy");
+                entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
+                entryModel.NoticeID = Entry.NoticeID;
+                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.ReceiptID = Entry.ReceiptID;
+                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
+                {
+                    AccCode = m.Account.Code,
+                    AccNameAR = m.Account.NameAR,
+                    AccNameEN = m.Account.NameEN,
+                    AccountID = m.AccountID,
+                    ParentAccountID = m.Account.AccoutnParentID,
+                    ParentAccCode = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.Code).FirstOrDefault(),
+                    ParentAccNameAR = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.NameAR).FirstOrDefault(),
+                    Credit = m.Credit,
+                    Debit = m.Debit,
+                    EntryDetailID = m.EntryDetailID,
+                    EntryID = m.EntryID,
+
+
+                });
+                entryModel.TransferedToAccounts = Entry.TransferedToAccounts;
+
+            }
+            return entryModel;
+        }
+
         [HttpGet] //القيد 
         [Route("~/api/PurchaseOrder/GetEntry")]
         public EntryModel GetEntryPurchaseOrderModel( int PurchaseOrderID)
         {
             var Entry = unitOfWork.EntryRepository.Get(x => x.PurchaseOrderID == PurchaseOrderID).SingleOrDefault();
-            var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a=> a.EntryID==Entry.EntryID);
+
             EntryModel entryModel = new EntryModel();
-            entryModel.EntryID = Entry.EntryID;
-            entryModel.Code = Entry.Code;
-            entryModel.Date = Entry.Date.ToString();
-            entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
-            entryModel.NoticeID = Entry.NoticeID;
-            entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
-            entryModel.ReceiptID = Entry.ReceiptID;
-            entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
-            entryModel.EntryDetailModel = EntryDetails.Select(m=> new EntryDetailModel {
-                AccCode=m.Account.Code,
-                AccNameAR=m.Account.NameAR,
-                AccNameEN=m.Account.NameEN,
-                AccountID=m.AccountID,
-                Credit=m.Credit,
-                Debit=m.Debit,
-                EntryDetailID=m.EntryDetailID,
-                EntryID=m.EntryID,
+
+            if (Entry != null)
+            {
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                entryModel.EntryID = Entry.EntryID;
+                entryModel.Code = Entry.Code;
+                entryModel.Date = Entry.Date.Value.ToString("dd/MM/yyyy");
+                entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
+                entryModel.NoticeID = Entry.NoticeID;
+                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.ReceiptID = Entry.ReceiptID;
+                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
+                {
+                    AccCode = m.Account.Code,
+                    AccNameAR = m.Account.NameAR,
+                    AccNameEN = m.Account.NameEN,
+                    AccountID = m.AccountID,
+                    ParentAccountID = m.Account.AccoutnParentID,
+                    ParentAccCode = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.Code).FirstOrDefault(),
+                    ParentAccNameAR = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.NameAR).FirstOrDefault(),
+                    Credit = m.Credit,
+                    Debit = m.Debit,
+                    EntryDetailID = m.EntryDetailID,
+                    EntryID = m.EntryID,
 
 
-            });
+                });
+                entryModel.TransferedToAccounts = Entry.TransferedToAccounts;
+
+            }
+
 
             return entryModel;
         }
@@ -143,7 +192,7 @@ namespace Stocks.Controllers
             if (purchaseOrderModel.SettingModel.GenerateEntry==true)
             {
                 var lastEntry = unitOfWork.EntryRepository.Last();
-                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.PortfolioAccountID).SingleOrDefault();
+                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
 
 
                 var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
@@ -193,12 +242,10 @@ namespace Stocks.Controllers
                     }
                 }
 
+                unitOfWork.Save();
+                //purchaseOrderModel.EntryModel = GetEntryPurchaseOrderModel(purchaseOrderModel.PurchaseOrderID);
+
             }
-
-
-            unitOfWork.Save();
-
-
 
             return Ok(purchaseOrderModel);
 
@@ -242,7 +289,7 @@ namespace Stocks.Controllers
 
 
 
-            return Ok("تم ترحيل القيد");
+            return Ok(GetEntry(Entry));
 
         }
 
@@ -600,7 +647,7 @@ namespace Stocks.Controllers
                 {
 
                     var purchaseOrder = _mapper.Map<PurchaseOrder>(purchaseOrderModel);
-                    int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.PortfolioAccountID).SingleOrDefault();
+                    int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
 
 
                     var Details = purchaseOrderModel.DetailsModels;
@@ -619,6 +666,7 @@ namespace Stocks.Controllers
                         purchaseOrderDetailModel.BankCommissionRate = item.BankCommissionRate;
                         purchaseOrderDetailModel.PurchaseValue = item.PurchaseValue;
                         purchaseOrderDetailModel.PurchasePrice = item.PurchasePrice;
+                        purchaseOrderDetailModel.PartnerID = item.PartnerID;
 
 
 
@@ -676,7 +724,7 @@ namespace Stocks.Controllers
 
                         else
                         {
-                            Entry.TransferedToAccounts = true;
+                            Entry.TransferedToAccounts = false;
                             unitOfWork.EntryRepository.Insert(Entry);
                             foreach (var item in DetailEnt)
                             {
@@ -739,6 +787,10 @@ namespace Stocks.Controllers
                                 return Ok(6);
                         }
                     }
+                    catch(Exception ex)
+                    {
+                        return Ok(6);
+                    }
 
 
 
@@ -775,7 +827,8 @@ namespace Stocks.Controllers
             {
 
                 var Check = unitOfWork.PurchaseOrderRepository.Get(NoTrack: "NoTrack");
-                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.PortfolioAccountID).SingleOrDefault();
+                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true)
+                    .Select(m => m.AccountID).SingleOrDefault();
 
                 var purchaseOrder = _mapper.Map<PurchaseOrder>(purchaseOrderModel);
                 var NewdDetails = purchaseOrderModel.DetailsModels;

@@ -21,6 +21,6 @@ namespace BAL.Model
         public bool TransferToAccounts { get; set; }
 
         public int VoucherType { get; set; }
-        public virtual IEnumerable<SettingAccountModel> SettingAccs { get; set; }
+        public IEnumerable<SettingAccountModel> SettingAccs { get; set; }
     }
 }
