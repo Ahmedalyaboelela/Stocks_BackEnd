@@ -11,8 +11,9 @@ namespace BAL.Model
         public string NameAR { get; set; }
         
         public string NameEN { get; set; }
-
+        public string newCode { get; set; }
         public int Count { get; set; }
         public string LastCode { get; set; }
+        
     }
 }

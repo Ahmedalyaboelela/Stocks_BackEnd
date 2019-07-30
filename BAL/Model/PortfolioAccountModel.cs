@@ -8,7 +8,7 @@ namespace BAL.Model
     {
         public int PortfolioAccountID { get; set; }
 
-        public int AccountID { get; set; }
+        public int? AccountID { get; set; }
 
         public string AccountCode { get; set; }
 
@@ -25,6 +25,8 @@ namespace BAL.Model
         public string PortfolioNameEN { get; set; }
 
         public bool Type { get; set; }
+        public decimal? Credit { get; set; }
+        public decimal? Debit { get; set; }
 
 
 

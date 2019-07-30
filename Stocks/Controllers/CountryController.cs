@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
-    [Authorize]
+   
     [Route("api/[controller]")]
     [ApiController]
     public class CountryController : ControllerBase
@@ -40,13 +40,25 @@ namespace Stocks.Controllers
         {
             CountryModel model = new CountryModel();
 
-            var count = unitOfWork.PartnerRepository.Count();
-            if(count>0)
+            var count = unitOfWork.CountryRepository.Count();
+            if (count > 0)
             {
 
-                model.LastCode = unitOfWork.PartnerRepository.Last().Code;
-                model.Count = count;
+                model.LastCode = unitOfWork.CountryRepository.Last().Code;
             }
+                //if (model.LastCode==null)
+                //{
+                //model.newCode = "1";
+                //}
+                //else
+                //{
+                //    var C = Convert.ToInt32(model.LastCode);
+                //    var newC = C + 1;
+                //    model.newCode = newC.ToString();
+                //    model.Count = count;
+                //}
+                
+            
 
             return Ok(model);
         }
@@ -173,7 +185,7 @@ namespace Stocks.Controllers
                 }
                 var Check = unitOfWork.CountryRepository.Get();
 
-                if (Check.Any(m => m.NameAR == countryModel.NameAR))
+                if (Check.Any(m => m.Code == countryModel.Code))
                 {
 
                     return Ok(2);
@@ -181,31 +193,15 @@ namespace Stocks.Controllers
                 else
                 {
                     unitOfWork.CountryRepository.Insert(model);
-                    try
-                    {
+                   
                         var result = unitOfWork.Save();
                         if (result == true)
                         {
                             return Ok(7);
                         }
-                    }
-                    catch (DbUpdateException ex)
-                    {
-                        var sqlException = ex.GetBaseException() as SqlException;
+                    
+                  
 
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
-                    }
 
                     return Ok(countryModel);
                 }
@@ -227,65 +223,52 @@ namespace Stocks.Controllers
 
             if (ModelState.IsValid)
             {
-                var checkCountry = unitOfWork.CountryRepository.Get(NoTrack: "NoTrack", filter: a => a.CountryID == id);
-                if (checkCountry != null)
+                var model = _mapper.Map<Country>(countryModel);
+                if (model == null)
                 {
-                    var model = _mapper.Map<Country>(countryModel);
-                    if (model == null)
-                    {
-                        return Ok(0);
+                    return Ok(0);
+                }
+                var Check = unitOfWork.CountryRepository.Get(NoTrack: "NoTrack");
 
+                if (Check.Any(m => m.Code == countryModel.Code))
+                {
+                    unitOfWork.CountryRepository.Update(model);
+
+                    var Result = unitOfWork.Save();
+                    if (Result == true)
+                    {
+                        return Ok(7);
                     }
 
-                    var Check = unitOfWork.CountryRepository.Get(NoTrack: "NoTrack");
 
-                    if (!Check.Any(m => m.NameAR == countryModel.NameAR && m.CountryID != id))
-                    {
+                    return Ok(countryModel);
 
-                        unitOfWork.CountryRepository.Update(model);
-
-                        try
-                        {
-                            var result = unitOfWork.Save();
-                            if (result == true)
-                            {
-                                return Ok(7);
-                            }
-                        }
-                        catch (DbUpdateException ex)
-                        {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
-                        }
-                        return Ok(countryModel);
-                    }
-                    else
-                    {
-                        return Ok(2);
-                    }
 
                 }
                 else
-                    return Ok(1);
+                {
+                    if (Check.Any(m => m.Code != countryModel.Code && m.CountryID == countryModel.CountryID))
+                    {
+                        unitOfWork.CountryRepository.Update(model);
+
+                        var Result = unitOfWork.Save();
+                        if (Result == true)
+                        {
+                            return Ok(7);
+                        }
 
 
+                        return Ok(countryModel);
+                    }
+
+
+                }
             }
             else
             {
                 return Ok(3);
             }
+            return Ok(countryModel);
         }
 
         #endregion
@@ -306,31 +289,14 @@ namespace Stocks.Controllers
                 {
 
                     unitOfWork.CountryRepository.Delete(id);
-                    try
-                    {
+                   
                     var result=    unitOfWork.Save(); 
                         if (result== true)
                         {
                             return Ok(7);
                         }
-                    }
-                    catch (DbUpdateException ex)
-                    {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
-                    }
+                    
+                
                     return Ok(4);
 
                 }

@@ -22,7 +22,11 @@ namespace BAL.Model
         public string EmployeeCode { get; set; }
         public string EmployeeNameAR { get; set; }
         public string EmployeeNameEN { get; set; }
-
+        public int CurrencyID { get; set; }
+        public string CurrencyCode { get; set; }
+        public string CurrencyNameAR { get; set; }
+        public string CurrencyNameEN { get; set; }
+        public string LastCode { get; set; }
         public int Count { get; set; }
         public IEnumerable<NoticeDetailModel> NoticeModelDetails { get; set; }
         public SettingModel SettingModel { get; set; }

@@ -336,6 +336,23 @@ namespace BAL.Repositories
         #endregion
 
 
+
+        #region PortfolioTransactions Repository
+        private GenericRepository<PortfolioTransaction> portfolioTransactionsRepository;
+        public GenericRepository<PortfolioTransaction> PortfolioTransactionsRepository
+        {
+            get
+            {
+                if (this.portfolioTransactionsRepository == null)
+                {
+                    this.portfolioTransactionsRepository = new GenericRepository<PortfolioTransaction>(Context);
+                }
+                return portfolioTransactionsRepository;
+            }
+        }
+        #endregion
+
+
         public virtual bool Save()
         {
             bool returnValue = true;
