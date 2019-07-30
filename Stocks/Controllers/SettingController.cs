@@ -31,6 +31,7 @@ namespace Stocks.Controllers
         #endregion
 
         #region Get Method
+        [HttpGet]
         [Route("~/api/Setting/GetSelected/{type}")]
         public SettingModel GetSpecificSetting(int type)
         {
@@ -76,6 +77,7 @@ namespace Stocks.Controllers
             return model;
         }
 
+        [HttpGet]
         [Route("~/api/Setting/Get")]
         public IActionResult GetSetting()
         {
@@ -185,30 +187,40 @@ namespace Stocks.Controllers
 
                     }
 
-                    bool CheckSave = unitOfWork.Save();
-
-
-
-                    if (CheckSave == true)
+                      try
                     {
-                        return Ok(model);
+                        unitOfWork.Save();
                     }
-                    else
+                    catch (DbUpdateException ex)
                     {
-                        return Ok("توجد مشكله ...");
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
                     }
+                    return Ok(settingModel);
 
 
                 }
                 #endregion
-                #region Update exist data
+                #region Update exist data as remove old and add new setting
                 else
                 {
                     var oldSetting = unitOfWork.SettingRepository.Get(NoTrack: "NoTrack");
                     var oldAccounts = unitOfWork.SettingAccountRepository.Get(NoTrack: "NoTrack");
 
 
-                    #region Remove old data
+                    #region Remove old accounts related to setting
 
                     if (oldAccounts.Count() > 0 && oldAccounts != null)
                     {
@@ -217,26 +229,39 @@ namespace Stocks.Controllers
                     }
                     #endregion
 
-                    #region Update data
-                    for (int i = 0; i < oldSetting.Count(); i++)
+                    #region Remove old setting and add new one
+                    unitOfWork.SettingRepository.RemovRange(oldSetting);
+                    #endregion
+                    #region insert new setting
+                    foreach (var item in settingModel)
                     {
-                        for (int j = i; j == i; j++)
+                        item.Code = "0";
+                        var setting = _mapper.Map<Setting>(item);
+                        unitOfWork.SettingRepository.Insert(setting);
+
+
+                        // add accounts related to each setting 
+                        #region account related to  setting
+                        var accounts = _mapper.Map<IEnumerable<SettingAccount>>(item.SettingAccs);
+                        if (accounts != null)
                         {
-                            var set = _mapper.Map<Setting>(settingModel[i]);
-                            var accs = settingModel[i].SettingAccs;
-                            unitOfWork.SettingRepository.Update(set);
-
-                            foreach (var item in accs)
+                            foreach (var acc in item.SettingAccs)
                             {
-                                item.SettingID = set.SettingID;
-                                item.SettingAccountID = 0;
-                                var newAcc = _mapper.Map<SettingAccount>(item);
+                                var obj = _mapper.Map<SettingAccount>(acc);
 
-                                unitOfWork.SettingAccountRepository.Insert(newAcc);
+                                obj.SettingID = setting.SettingID;
+
+                                unitOfWork.SettingAccountRepository.Insert(obj);
+
 
                             }
                         }
+
+
+                        #endregion
+
                     }
+
                     #endregion
 
                     try
@@ -260,20 +285,9 @@ namespace Stocks.Controllers
                                 return Ok(6);
                         }
                     }
-                    return Ok(4);
+                    return Ok(settingModel);
 
-                    //bool CheckSave = unitOfWork.Save();
-
-
-
-                    //if (CheckSave == true)
-                    //{
-                    //    return Ok(settingModel);
-                    //}
-                    //else
-                    //{
-                    //    return Ok("توجد مشكله ...");
-                    //}
+                  
                 }
 
 
@@ -288,25 +302,6 @@ namespace Stocks.Controllers
 
         #endregion
 
-        //#region Insert Method
-        //public SettingModel Save(SettingModel settingModel,Setting model)
-        //{
-        //    var settingAccounts = settingModel.SettingAccs;
-        //    var oldAccounts = unitOfWork.SettingAccountRepository
-
-        //     .Get(NoTrack: "NoTrack", filter: m => m.SettingID == model.SettingID);
-        //    unitOfWork.SettingAccountRepository.RemovRange(oldAccounts);
-
-
-        //    unitOfWork.SettingRepository.Insert(model);
-
-        //        var Result = unitOfWork.Save();
-        //        if (Result == true)
-        //            return settingModel;
-        //        else
-        //            return null;
-
-        //}
-
+    
     }
 }
