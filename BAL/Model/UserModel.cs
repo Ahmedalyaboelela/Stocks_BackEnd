@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BAL.Model
 {
-    public class ApplicationUserModel
+    public class UserModel
     {
 
         public string Id { get; set; }

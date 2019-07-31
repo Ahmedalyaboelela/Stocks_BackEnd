@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using BAL.Model;
 using DAL.Entities;
@@ -9,6 +12,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Stocks.Controllers
 {
@@ -20,12 +25,14 @@ namespace Stocks.Controllers
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
         private IPasswordHasher<ApplicationUser> passwordHasher;
+        private readonly ApplicationSettings _appSettings;
         public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-            IPasswordHasher<ApplicationUser> passwordHash)
+            IPasswordHasher<ApplicationUser> passwordHash,IOptions<ApplicationSettings>appSettings)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             passwordHasher = passwordHash;
+            _appSettings = appSettings.Value;
         }
         #endregion
 
@@ -34,7 +41,7 @@ namespace Stocks.Controllers
         [Route("~/api/ApplicationUser/FirstOpen")]
         public IActionResult FirstOpen()
         {
-            ApplicationUserModel model = new ApplicationUserModel();
+            UserModel model = new UserModel();
             if (_userManager.Users.Count() == 0)
                 return Ok(0);
             else
@@ -55,7 +62,7 @@ namespace Stocks.Controllers
                 return Ok(0);
             }
             var LastUser = _userManager.Users.OrderBy(m=> m.Creationdate).Last();
-            var model = new ApplicationUserModel();
+            var model = new UserModel();
             model.Id = LastUser.Id;
             model.UserName = LastUser.UserName;
             model.Email = LastUser.Email;
@@ -75,7 +82,7 @@ namespace Stocks.Controllers
                 {
                     return Ok(0);
                 }
-                var model = new ApplicationUserModel();
+                var model = new UserModel();
                 model.Id = User.Id;
                 model.UserName = User.UserName;
                 model.Email = User.Email;
@@ -95,7 +102,7 @@ namespace Stocks.Controllers
         [HttpPost]
         [Route("Register")]
         //Post: /api/ApplicationUser/Register
-        public async Task<object> PostApplicationUser(ApplicationUserModel model)
+        public async Task<object> PostApplicationUser(UserModel model)
         {
 
             var applicationuser = new ApplicationUser()
@@ -151,13 +158,41 @@ namespace Stocks.Controllers
 
             }
         }
+
+        [HttpPost]
+        [Route("Login")]
+        //Post: /api/ApplicationUser/Login
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+            var user = await _userManager.FindByNameAsync(model.LoginUserName);
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.LoginPassword))
+            {
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim("UserID",user.Id.ToString())
+                    }),
+                    Expires = DateTime.UtcNow.AddMinutes(5),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret)),
+                    SecurityAlgorithms.HmacSha256Signature)
+                };
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+                var token = tokenHandler.WriteToken(securityToken);
+                return Ok(new { token});
+            }
+            else
+                return BadRequest(new {message="Username or Password is incorrect."});
+        }
         #endregion
 
 
         #region Update Method
         [HttpPut]
         [Route("~/api/ApplicationUser/PutUser/{id}")]
-        public async Task<object> PutUser(string id, [FromBody] ApplicationUserModel model)
+        public async Task<object> PutUser(string id, [FromBody] UserModel model)
         {
             ApplicationUser user =await _userManager.FindByIdAsync(id);
 
