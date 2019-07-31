@@ -100,6 +100,7 @@ namespace Stocks.Controllers
 
             model.Count = unitOfWork.PortfolioRepository.Count();
             
+            
 
             return model;
         }

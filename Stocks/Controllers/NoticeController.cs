@@ -101,15 +101,20 @@ namespace Stocks.Controllers
                 NameAR = a.NameAR,
                 NameEN = a.NameEN,
                 TotalStocksCount = a.TotalStocksCount,
-                portfolioOpeningStocksArray = unitOfWork.PortfolioOpeningStocksRepository.Get(filter: s => s.PortfolioID == a.PortfolioID).Select(x => new PortfolioOpeningStocksModel
+                portfolioTransactionModels = unitOfWork.PortfolioTransactionsRepository.Get(filter: s => s.PortfolioID == a.PortfolioID).Select(q => new PortfolioTransactionModel
                 {
-                    PartnerID=x.PartnerID,
-                    PartnerCode=x.Partner.Code,
-                    PartnerNameAR=x.Partner.NameAR,
-                    PartnerNameEN=x.Partner.NameEN
+                    PartnerID = q.PartnerID,
+                    CurrentStocksCount = q.CurrentStocksCount,
+                    CurrentStockValue = q.CurrentStockValue,
+                    partenerCode = q.Partner.Code,
+                    partenerNameAR = q.Partner.NameAR,
+                    partenerNameEN = q.Partner.NameEN,
+                    PortfolioID = q.PortfolioID,
+                    PortTransID = q.PortTransID,
                 }),
+                
 
-            });
+        });
 
 
 
@@ -267,7 +272,7 @@ namespace Stocks.Controllers
             {
                 model.EntryModel = GetEntry(model.NoticeID);
             }
-           
+         
             return model;
         }
 
