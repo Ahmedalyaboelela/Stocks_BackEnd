@@ -218,9 +218,11 @@ namespace Stocks.Controllers
             }
 
             #region Date part
-
-            model.NoticeDate = notice.NoticeDate.Value.ToString("dd/MM/yyyy");
-            model.NoticeDateHijri = DateHelper.GetHijriDate(notice.NoticeDate);
+            if (notice.NoticeDate != null)
+            {
+                model.NoticeDate = notice.NoticeDate.Value.ToString("dd/MM/yyyy");
+                model.NoticeDateHijri = DateHelper.GetHijriDate(notice.NoticeDate);
+            }
             #endregion
 
             #region Details part
@@ -310,6 +312,7 @@ namespace Stocks.Controllers
 
                     model.LastCode = noti.Code;
                     model.SettingModel = GetSetting(4);
+                    model.Count = unitOfWork.NoticeRepository.Get(filter: x => x.Type == true).Count();
                 }
 
             }
@@ -326,10 +329,12 @@ namespace Stocks.Controllers
 
                     model.LastCode = noti.Code;
                     model.SettingModel = GetSetting(3);
+                    model.Count = unitOfWork.NoticeRepository.Get(filter: x => x.Type == false).Count();
                 }
 
                
             }
+
            
             
             return Ok(model);
@@ -647,53 +652,53 @@ namespace Stocks.Controllers
 
 
                     //==================================================لا تولد قيد ===================================
-                    if (noticeModel.SettingModel.DoNotGenerateEntry == true)
-                    {
-                        unitOfWork.Save();
+                    //if (noticeModel.SettingModel.DoNotGenerateEntry == true)
+                    //{
+                    //    unitOfWork.Save();
 
-                        return Ok(noticeModel);
-                    }
+                    //    return Ok(noticeModel);
+                    //}
 
                     //===============================================================توليد قيد مع ترحيل تلقائي============================
 
 
 
-                    else if (noticeModel.SettingModel.AutoGenerateEntry == true)
-                    {
-                        var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
-                        var Entry = _mapper.Map<Entry>(EntryMODEL);
-                        Entry.NoticeID = notice.NoticeID;
+                    //else if (noticeModel.SettingModel.AutoGenerateEntry == true)
+                    //{
+                    //    var lastEntry = unitOfWork.EntryRepository.Last();
+                    //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
+                    //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+                    //    Entry.NoticeID = notice.NoticeID;
 
-                        var DetailEnt = EntryMODEL.EntryDetailModel;
+                    //    var DetailEnt = EntryMODEL.EntryDetailModel;
 
-                        if (noticeModel.SettingModel.TransferToAccounts == true)
-                        {
-                            Entry.TransferedToAccounts = true;
-                            unitOfWork.EntryRepository.Insert(Entry);
-                            foreach (var item in DetailEnt)
-                            {
-                                item.EntryID = Entry.EntryID;
-                                item.EntryDetailID = 0;
-                                var details = _mapper.Map<EntryDetail>(item);
+                    //    if (noticeModel.SettingModel.TransferToAccounts == true)
+                    //    {
+                    //        Entry.TransferedToAccounts = true;
+                    //        unitOfWork.EntryRepository.Insert(Entry);
+                    //        foreach (var item in DetailEnt)
+                    //        {
+                    //            item.EntryID = Entry.EntryID;
+                    //            item.EntryDetailID = 0;
+                    //            var details = _mapper.Map<EntryDetail>(item);
 
-                                unitOfWork.EntryDetailRepository.Insert(details);
+                    //            unitOfWork.EntryDetailRepository.Insert(details);
 
-                            }
-                            accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
-                            {
-
-
-                                EntryDetailID = x.EntryDetailID,
-                                AccountID = x.AccountID,
-                                Credit = x.Credit,
-                                Debit = x.Debit,
-                                EntryID = x.EntryID
+                    //        }
+                    //        accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+                    //        {
 
 
-                            }).ToList());
-                        }
-                    }
+                    //            EntryDetailID = x.EntryDetailID,
+                    //            AccountID = x.AccountID,
+                    //            Credit = x.Credit,
+                    //            Debit = x.Debit,
+                    //            EntryID = x.EntryID
+
+
+                    //        }).ToList());
+                    //    }
+                    //}
 
                     //================================توليد قيد مع عدم الترحيل====================================== 
                     //if (noticeModel.SettingModel.GenerateEntry == true)
@@ -990,54 +995,54 @@ namespace Stocks.Controllers
                         }
 
 
-                        //==================================================لا تولد قيد ===================================
-                        if (noticeModel.SettingModel.DoNotGenerateEntry == true)
-                        {
+                        ////==================================================لا تولد قيد ===================================
+                        //if (noticeModel.SettingModel.DoNotGenerateEntry == true)
+                        //{
 
-                            unitOfWork.Save();
+                        //    unitOfWork.Save();
 
-                            return Ok(noticeModel);
-                        }
+                        //    return Ok(noticeModel);
+                        //}
                         //===============================================================توليد قيد مع ترحيل تلقائي============================
 
 
 
-                        else if (noticeModel.SettingModel.AutoGenerateEntry == true)
-                        {
-                            var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel, lastEntry);
-                            var Entry = _mapper.Map<Entry>(EntryMODEL);
-                            Entry.ReceiptID = notice.NoticeID;
+                        //else if (noticeModel.SettingModel.AutoGenerateEntry == true)
+                        //{
+                        //    var lastEntry = unitOfWork.EntryRepository.Last();
+                        //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel, lastEntry);
+                        //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+                        //    Entry.ReceiptID = notice.NoticeID;
 
-                            var DetailEnt = EntryMODEL.EntryDetailModel;
+                        //    var DetailEnt = EntryMODEL.EntryDetailModel;
 
-                            if (noticeModel.SettingModel.TransferToAccounts == true)
-                            {
-                                Entry.TransferedToAccounts = true;
-                                unitOfWork.EntryRepository.Insert(Entry);
-                                foreach (var item in DetailEnt)
-                                {
-                                    item.EntryID = Entry.EntryID;
-                                    item.EntryDetailID = 0;
-                                    var details = _mapper.Map<EntryDetail>(item);
+                        //    if (noticeModel.SettingModel.TransferToAccounts == true)
+                        //    {
+                        //        Entry.TransferedToAccounts = true;
+                        //        unitOfWork.EntryRepository.Insert(Entry);
+                        //        foreach (var item in DetailEnt)
+                        //        {
+                        //            item.EntryID = Entry.EntryID;
+                        //            item.EntryDetailID = 0;
+                        //            var details = _mapper.Map<EntryDetail>(item);
 
-                                    unitOfWork.EntryDetailRepository.Insert(details);
+                        //            unitOfWork.EntryDetailRepository.Insert(details);
 
-                                }
-                                accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
-                                {
-
-
-                                    EntryDetailID = x.EntryDetailID,
-                                    AccountID = x.AccountID,
-                                    Credit = x.Credit,
-                                    Debit = x.Debit,
-                                    EntryID = x.EntryID
+                        //        }
+                        //        accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+                        //        {
 
 
-                                }).ToList());
-                            }
-                        }
+                        //            EntryDetailID = x.EntryDetailID,
+                        //            AccountID = x.AccountID,
+                        //            Credit = x.Credit,
+                        //            Debit = x.Debit,
+                        //            EntryID = x.EntryID
+
+
+                        //        }).ToList());
+                        //    }
+                        //}
                         //================================توليد قيد مع عدم الترحيل====================================== 
                         //if (noticeModel.SettingModel.GenerateEntry == true)
 
