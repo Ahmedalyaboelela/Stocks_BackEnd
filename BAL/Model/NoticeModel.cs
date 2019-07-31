@@ -29,7 +29,7 @@ namespace BAL.Model
         public string LastCode { get; set; }
         public int Count { get; set; }
         public IEnumerable<NoticeDetailModel> NoticeModelDetails { get; set; }
-        
+        public IEnumerable<PortfolioTransactionModel> portfolioTransactionModels { get; set; }
         public SettingModel SettingModel { get; set; }
          
         public EntryModel EntryModel { get; set; }

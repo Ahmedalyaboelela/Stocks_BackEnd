@@ -185,11 +185,11 @@ namespace Stocks.Controllers
 
         }
 
-        [Route("~/api/PurchaseOrder/GetSetting")]
-        public SettingModel GetSetting(int flag)
+        [Route("~/api/Notice/GetSetting/{type}")]
+        public SettingModel GetSetting(int type)
         {
 
-            var setsetting = unitOfWork.SettingRepository.Get(filter: x => x.VoucherType == flag).Select(a => new SettingModel
+            var setsetting = unitOfWork.SettingRepository.Get(filter: x => x.VoucherType == type).Select(a => new SettingModel
             {
 
                 SettingID = a.SettingID,
@@ -264,8 +264,19 @@ namespace Stocks.Controllers
             {
                 model.SettingModel = GetSetting(3);
             }
-           
 
+            model.portfolioTransactionModels = unitOfWork.PortfolioTransactionsRepository.Get(z => z.PortfolioID == notice.PortfolioID).Select( q => new PortfolioTransactionModel
+            {
+                     PartnerID = q.PartnerID,
+                    CurrentStocksCount = q.CurrentStocksCount,
+                    CurrentStockValue = q.CurrentStockValue,
+                    partenerCode = q.Partner.Code,
+                    partenerNameAR = q.Partner.NameAR,
+                    partenerNameEN = q.Partner.NameEN,
+                    PortfolioID = q.PortfolioID,
+                    PortTransID = q.PortTransID,
+
+            });
             #endregion
             var check = unitOfWork.EntryRepository.Get(x => x.NoticeID == notice.NoticeID).SingleOrDefault(); 
             if (check != null)
