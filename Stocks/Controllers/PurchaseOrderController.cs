@@ -928,7 +928,20 @@ namespace Stocks.Controllers
 
                                 }).ToList());
                             }
-                            
+                            else
+                            {
+                                Entry.TransferedToAccounts = true;
+                                unitOfWork.EntryRepository.Insert(Entry);
+                                foreach (var item in EntryDitails)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<EntryDetail>(item);
+
+                                    unitOfWork.EntryDetailRepository.Insert(details);
+                                }
+                            }
+
                         }
                         //===================================توليد قيد مع  عدم ترحيل=================================== 
                         if (purchaseOrderModel.SettingModel.GenerateEntry==true)
@@ -1257,7 +1270,6 @@ namespace Stocks.Controllers
 
                                 }).ToList());
                             }
-                            //================================توليد قيد مع عدم الترحيل======================================
                             else
                             {
                                 Entry.TransferedToAccounts = false;
@@ -1423,6 +1435,20 @@ namespace Stocks.Controllers
 
 
                                     }).ToList());
+                                }
+                                else
+                                {
+                                    Entry.TransferedToAccounts = false;
+                                    unitOfWork.EntryRepository.Insert(Entry);
+                                    foreach (var item in DetailEnt)
+                                    {
+                                        item.EntryID = Entry.EntryID;
+                                        item.EntryDetailID = 0;
+                                        var details = _mapper.Map<EntryDetail>(item);
+
+                                        unitOfWork.EntryDetailRepository.Insert(details);
+
+                                    }
                                 }
                             }
                             //================================توليد قيد مع عدم الترحيل====================================== 
