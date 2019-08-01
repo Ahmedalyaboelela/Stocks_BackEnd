@@ -18,6 +18,11 @@ namespace BAL.Model
         public string PortfolioNameAR { get; set; }
         public string PortfolioNameEN { get; set; }
 
+        public int? PortfolioAccountID { get; set; }
+        public string PortfolioAccountNameAR { get; set; }
+        public string PortfolioAccountNameEN { get; set; }
+        public string PortfolioAccountCode { get; set; }
+
         public int EmployeeID { get; set; }
         public string EmployeeCode { get; set; }
         public string EmployeeNameAR { get; set; }
