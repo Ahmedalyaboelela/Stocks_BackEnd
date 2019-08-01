@@ -75,6 +75,9 @@ namespace DAL.Entities
 
         public bool IsActive { get; set; }
 
+        public float? StocksDebit { get; set; }
+
+        public float? StocksCredit { get; set; }
 
         public int? AccoutnParentID { get; set; }
 

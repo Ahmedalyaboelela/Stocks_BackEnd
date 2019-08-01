@@ -22,7 +22,9 @@ namespace DAL.Entities
 
         public int AccountID { get; set; }
 
-       public int NoticeID { get; set; }
+        public int NoticeID { get; set; }
+
+        public int? PartnerID { get; set; }
 
 
         [ForeignKey("AccountID")]
@@ -31,5 +33,9 @@ namespace DAL.Entities
 
         [ForeignKey("NoticeID")]
         public virtual Notice Notice { get; set; }
+
+
+        [ForeignKey("PartnerID")]
+        public virtual Partner Partner { get; set; }
     }
 }

@@ -16,6 +16,8 @@ namespace DAL.Entities
         public DateTime? NoticeDate { get; set; }
         public bool Type { get; set; }
 
+        [Column(TypeName = "nvarchar(MAX)")]
+        public string Description { get; set; }
         public int PortfolioID { get; set; }
         public int EmployeeID { get; set; }
         public int? CurrencyID { get; set; }
