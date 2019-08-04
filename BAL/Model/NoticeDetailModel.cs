@@ -8,10 +8,9 @@ namespace BAL.Model
     {
         public int NoticeDetailID { get; set; }
 
-        public int NoticeID { get; set; }
-        
+      
         public decimal? Debit { get; set; }
-
+       
         public decimal? Credit { get; set; }
 
         public float? StocksDebit { get; set; }
@@ -20,6 +19,9 @@ namespace BAL.Model
 
         public int AccountID { get; set; }
 
+        public int NoticeID { get; set; }
+
+        public int? PartnerID { get; set; }
         public string AccNameAR { get; set; }
 
         public string AccNameEN { get; set; }
