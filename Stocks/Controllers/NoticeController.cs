@@ -91,7 +91,7 @@ namespace Stocks.Controllers
                 PortfolioID = a.PortfolioID,
                 Code = a.Code,
                 Description = a.Description,
-                EstablishDate = a.EstablishDate.ToString(),
+                EstablishDate = a.EstablishDate.Value.ToString("dd/MM/yyyy"),
                 EstablishDateHijri = DateHelper.GetHijriDate(a.EstablishDate),
                 AccountID = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).AccountID,
                 AccountCode = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.Code,
@@ -133,7 +133,7 @@ namespace Stocks.Controllers
                 EmployeeID=a.EmployeeID,
                 Age=a.Age,
                 BankAccNum=a.BankAccNum,
-                BirthDate=a.BirthDate.ToString(),
+                BirthDate=a.BirthDate.Value.ToString("dd/MM/yyyy"),
                 BirthDateHijri=DateHelper.GetHijriDate(a.BirthDate),
                 Code=a.Code,
                 Email=a.Email,
@@ -240,7 +240,8 @@ namespace Stocks.Controllers
                     AccountID=m.AccountID,
                     AccCode=m.Account.Code,
                     AccNameAR=m.Account.NameAR,
-                    AccNameEN=m.Account.NameEN
+                    AccNameEN=m.Account.NameEN,
+                    PartnerID=m.PartnerID
                 });
             if (Details != null)
                 model.NoticeModelDetails = Details;
@@ -474,7 +475,41 @@ namespace Stocks.Controllers
         #endregion
 
 
+        public EntryModel GetEntry(Entry Entry)
+        {
+            EntryModel entryModel = new EntryModel();
+            if (Entry != null)
+            {
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                entryModel.EntryID = Entry.EntryID;
+                entryModel.Code = Entry.Code;
+                entryModel.Date = Entry.Date.Value.ToString("dd/MM/yyyy");
+                entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
+                entryModel.NoticeID = Entry.NoticeID;
+                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.ReceiptID = Entry.ReceiptID;
+                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
+                {
+                    AccCode = m.Account.Code,
+                    AccNameAR = m.Account.NameAR,
+                    AccNameEN = m.Account.NameEN,
+                    AccountID = m.AccountID,
+                    ParentAccountID = m.Account.AccoutnParentID,
+                    ParentAccCode = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.Code).FirstOrDefault(),
+                    ParentAccNameAR = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.NameAR).FirstOrDefault(),
+                    Credit = m.Credit,
+                    Debit = m.Debit,
+                    EntryDetailID = m.EntryDetailID,
+                    EntryID = m.EntryID,
 
+
+                });
+                entryModel.TransferedToAccounts = Entry.TransferedToAccounts;
+
+            }
+            return entryModel;
+        }
 
         [HttpGet]//القيد
         [Route("~/api/Notice/GetEntry/{noticeID}")]
@@ -485,7 +520,7 @@ namespace Stocks.Controllers
             EntryModel entryModel = new EntryModel();
             entryModel.EntryID = Entry.EntryID;
             entryModel.Code = Entry.Code;
-            entryModel.Date = Entry.Date.ToString();
+            entryModel.Date = Entry.Date.Value.ToString("dd/MM/yyyy");
             entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
             entryModel.NoticeID = Entry.NoticeID;
             entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
@@ -497,6 +532,9 @@ namespace Stocks.Controllers
                 AccNameAR = m.Account.NameAR,
                 AccNameEN = m.Account.NameEN,
                 AccountID = m.AccountID,
+                ParentAccountID = m.Account.AccoutnParentID,
+                ParentAccCode = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.Code).FirstOrDefault(),
+                ParentAccNameAR = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.NameAR).FirstOrDefault(),
                 Credit = m.Credit,
                 Debit = m.Debit,
                 EntryDetailID = m.EntryDetailID,
@@ -504,25 +542,20 @@ namespace Stocks.Controllers
 
 
             });
+            entryModel.TransferedToAccounts = Entry.TransferedToAccounts;
 
             return entryModel;
         }
 
         [HttpPost]// ترحيل يدوي للقيد اليدوي والتلقائي
-        [Route("~/api/Notice/ManualmigrationNotice/EntryMODEL")]
+        [Route("~/api/Notice/ManualmigrationNotice")]
         public IActionResult ManualmigrationNotice([FromBody]EntryModel EntryMODEL)
         {
             var Entry = unitOfWork.EntryRepository.GetByID(EntryMODEL.EntryID);
             Entry.TransferedToAccounts = true;
             unitOfWork.EntryRepository.Update(Entry);
+
             var Details = EntryMODEL.EntryDetailModel;
-            foreach (var item in Details)
-            {
-                var detail = _mapper.Map<NoticeDetail>(item);
-
-                unitOfWork.NoticeDetailRepository.Update(detail);
-            }
-
             accountingHelper.TransferToAccounts(Details.Select(x => new EntryDetail
             {
                 EntryDetailID = x.EntryDetailID,
@@ -541,7 +574,7 @@ namespace Stocks.Controllers
 
 
 
-            return Ok("تم ترحيل القيد");
+            return Ok(GetEntry(Entry));
 
         }
 
@@ -656,6 +689,7 @@ namespace Stocks.Controllers
                         noticeDetailModel.Debit = item.Debit;
                         noticeDetailModel.StocksCredit = item.StocksCredit;
                         noticeDetailModel.StocksDebit = item.StocksDebit;
+                        noticeDetailModel.PartnerID = item.PartnerID;
 
                         var details = _mapper.Map<NoticeDetail>(noticeDetailModel);
                         unitOfWork.NoticeDetailRepository.Insert(details);

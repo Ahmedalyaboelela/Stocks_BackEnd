@@ -26,5 +26,7 @@ namespace BAL.Model
 
         public string AccCode { get; set; }
 
+        public int? PartnerID { get; set; }
+
     }
 }
