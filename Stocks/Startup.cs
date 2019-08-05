@@ -60,7 +60,8 @@ namespace Stocks
             options.UseLazyLoadingProxies()
             .UseSqlServer(Configuration.GetConnectionString("StocksConnection")));
             services.AddDefaultIdentity<ApplicationUser>()
-           .AddEntityFrameworkStores<StocksContext>();
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<StocksContext>();
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;

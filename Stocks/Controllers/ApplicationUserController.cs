@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BAL.Model;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,37 +27,62 @@ namespace Stocks.Controllers
         private SignInManager<ApplicationUser> _signInManager;
         private IPasswordHasher<ApplicationUser> passwordHasher;
         private readonly ApplicationSettings _appSettings;
+        private RoleManager<IdentityRole> _roleManager;
         public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-            IPasswordHasher<ApplicationUser> passwordHash,IOptions<ApplicationSettings>appSettings)
+            IPasswordHasher<ApplicationUser> passwordHash,IOptions<ApplicationSettings>appSettings,RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             passwordHasher = passwordHash;
             _appSettings = appSettings.Value;
+            _roleManager = roleManager;
         }
         #endregion
 
         #region GET Methods
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
+        [Route("~/api/ApplicationUser/GetAllRoles")]
+        public IEnumerable<RoleModel> GetAllRoles()
+        {
+            var roles = _roleManager.Roles.Where(m=> m.Name != "SuperAdmin").ToList();
+            var model = new List<RoleModel>();
+            roles.ForEach(item => model.Add(
+                new RoleModel
+                {
+                    Id=item.Id,
+                    Name=item.Name
+                }
+                ));
+            return (model);
+        }
+        [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
         [Route("~/api/ApplicationUser/FirstOpen")]
         public IActionResult FirstOpen()
         {
             UserModel model = new UserModel();
             if (_userManager.Users.Count() == 0)
-                return Ok(0);
+            {
+                model.RoleModels = GetAllRoles();
+                return Ok(model);
+            }
+            
             else
             {
                 model.Count = _userManager.Users.Count();
+                model.RoleModels = GetAllRoles();
                 return Ok(model);
             }  
         }
 
 
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
         [Route("~/api/ApplicationUser/GetLastUser")]
         public IActionResult GetLastUser()
         {
-
+            
             if (_userManager.Users.Last() == null)
             {
                 return Ok(0);
@@ -72,11 +98,13 @@ namespace Stocks.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
         [Route("~/api/ApplicationUser/Paging/{pageNumber}")]
-        public IActionResult Pagination(int pageNumber)
+        public async Task<IActionResult> Pagination(int pageNumber)
         {
             if (pageNumber > 0)
             {
+            
                 var User = _userManager.Users.OrderBy(m => m.Creationdate).Skip(pageNumber - 1).Take(1).FirstOrDefault();
                 if (User == null)
                 {
@@ -90,6 +118,10 @@ namespace Stocks.Controllers
                 model.Password = User.PasswordHash;
                 model.ConfirmPassword= User.PasswordHash;
                 model.Count = _userManager.Users.Count();
+                var UserRoles = await _userManager.GetRolesAsync(User);
+                model.Role = UserRoles[0];
+                model.RoleModels = GetAllRoles();
+         
                 return Ok(model);
             }
             else
@@ -100,11 +132,11 @@ namespace Stocks.Controllers
 
         #region Insert Method
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin")]
         [Route("Register")]
         //Post: /api/ApplicationUser/Register
         public async Task<object> PostApplicationUser(UserModel model)
         {
-
             var applicationuser = new ApplicationUser()
             {
                 UserName = model.UserName,
@@ -116,8 +148,10 @@ namespace Stocks.Controllers
             try
             {
                 var result = await _userManager.CreateAsync(applicationuser, model.Password);
+             
                 if(result.Succeeded)
                 {
+                       await _userManager.AddToRoleAsync(applicationuser, model.Role);
                     return Ok(result);
                 }
                 else
@@ -167,11 +201,15 @@ namespace Stocks.Controllers
             var user = await _userManager.FindByNameAsync(model.LoginUserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.LoginPassword))
             {
+                // Get Role assigned to the user 
+                var UserRoles = await _userManager.GetRolesAsync(user);
+                IdentityOptions _options = new IdentityOptions();
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                        new Claim("UserID",user.Id.ToString())
+                        new Claim("UserID",user.Id.ToString()),
+                        new Claim(_options.ClaimsIdentity.RoleClaimType,UserRoles.FirstOrDefault())
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(5),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret)),
@@ -191,12 +229,14 @@ namespace Stocks.Controllers
 
         #region Update Method
         [HttpPut]
+        [Authorize(Roles = "SuperAdmin")]
         [Route("~/api/ApplicationUser/PutUser/{id}")]
         public async Task<object> PutUser(string id, [FromBody] UserModel model)
         {
             ApplicationUser user =await _userManager.FindByIdAsync(id);
-
-            if(user !=null)
+            var UserRoles = await _userManager.GetRolesAsync(user);
+            string OldRole = UserRoles[0];
+            if (user !=null)
             {
                 user.UserName = model.UserName;
                 user.Email = model.Email;
@@ -207,6 +247,8 @@ namespace Stocks.Controllers
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
+                        await _userManager.RemoveFromRoleAsync(user, OldRole);
+                        await _userManager.AddToRoleAsync(user, model.Role);
                         return Ok(result);
                     }
                     else
@@ -259,16 +301,19 @@ namespace Stocks.Controllers
 
         #region Delete Method
         [HttpDelete]
+        [Authorize(Roles = "SuperAdmin")]
         [Route("~/api/ApplicationUser/DeleteUser/{id}")]
 
         public async Task<object> DeleteUser(string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
-
-            if(user !=null)
+            var UserRoles = await _userManager.GetRolesAsync(user);
+            string UserRole = UserRoles[0];
+            if (user !=null)
             {
                 try
                 {
+                    await _userManager.RemoveFromRoleAsync(user, UserRole);
                     var result = await _userManager.DeleteAsync(user);
                         return Ok(result);
                     
