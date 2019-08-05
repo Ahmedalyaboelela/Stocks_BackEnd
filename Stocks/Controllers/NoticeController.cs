@@ -133,8 +133,8 @@ namespace Stocks.Controllers
                 EmployeeID=a.EmployeeID,
                 Age=a.Age,
                 BankAccNum=a.BankAccNum,
-                BirthDate=a.BirthDate.Value.ToString("dd/MM/yyyy"),
-                BirthDateHijri=DateHelper.GetHijriDate(a.BirthDate),
+                BirthDate= a.BirthDate!=null?a.BirthDate.Value.ToString("dd/MM/yyyy"):null,
+                BirthDateHijri= a.BirthDate != null ? DateHelper.GetHijriDate(a.BirthDate):null,
                 Code=a.Code,
                 Email=a.Email,
                 ImagePath=a.ImagePath,
@@ -241,7 +241,8 @@ namespace Stocks.Controllers
                     AccCode=m.Account.Code,
                     AccNameAR=m.Account.NameAR,
                     AccNameEN=m.Account.NameEN,
-                    PartnerID=m.PartnerID
+                    PartnerID= m.PartnerID != null && m.PartnerID >0 ?m.PartnerID:0,
+                    PartnerName =m.PartnerID!=null && m.PartnerID > 0 ? m.Partner.NameAR:null
                 });
             if (Details != null)
                 model.NoticeModelDetails = Details;
@@ -325,9 +326,9 @@ namespace Stocks.Controllers
 
 
                     model.LastCode = noti.Code;
-                    model.SettingModel = GetSetting(4);
                     model.Count = unitOfWork.NoticeRepository.Get(filter: x => x.Type == true).Count();
                 }
+                model.SettingModel = GetSetting(4);
 
             }
             else
@@ -342,15 +343,15 @@ namespace Stocks.Controllers
                     var noti = unitOfWork.NoticeRepository.Get(filter: x => x.Type == false).Last();
 
                     model.LastCode = noti.Code;
-                    model.SettingModel = GetSetting(3);
                     model.Count = unitOfWork.NoticeRepository.Get(filter: x => x.Type == false).Count();
                 }
 
-               
+                    model.SettingModel = GetSetting(3);
+
             }
 
-           
-            
+
+
             return Ok(model);
         }
 
@@ -569,9 +570,27 @@ namespace Stocks.Controllers
             }).ToList());
 
 
+            try
+            {
+                unitOfWork.Save();
+            }
+            catch (DbUpdateException ex)
+            {
+                var sqlException = ex.GetBaseException() as SqlException;
 
+                if (sqlException != null)
+                {
+                    var number = sqlException.Number;
 
-            unitOfWork.Save();
+                    if (number == 547)
+                    {
+                        return Ok(5);
+
+                    }
+                    else
+                        return Ok(6);
+                }
+            }
 
 
 
@@ -690,7 +709,7 @@ namespace Stocks.Controllers
                         noticeDetailModel.Debit = item.Debit;
                         noticeDetailModel.StocksCredit = item.StocksCredit;
                         noticeDetailModel.StocksDebit = item.StocksDebit;
-                        noticeDetailModel.PartnerID = item.PartnerID;
+                        noticeDetailModel.PartnerID = item.PartnerID !=null && item.PartnerID >0?item.PartnerID : null;
 
                         var details = _mapper.Map<NoticeDetail>(noticeDetailModel);
                         unitOfWork.NoticeDetailRepository.Insert(details);
@@ -757,12 +776,31 @@ namespace Stocks.Controllers
                                 unitOfWork.EntryDetailRepository.Insert(details);
                             }
                         }
-                    
 
 
 
 
-                    unitOfWork.Save();
+                    try
+                    {
+                        unitOfWork.Save();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        var sqlException = ex.GetBaseException() as SqlException;
+
+                        if (sqlException != null)
+                        {
+                            var number = sqlException.Number;
+
+                            if (number == 547)
+                            {
+                                return Ok(5);
+
+                            }
+                            else
+                                return Ok(6);
+                        }
+                    }
 
 
 
@@ -819,7 +857,7 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.NoticeDetailRepository.RemovRange(OldDetails);
-                            unitOfWork.Save();
+                            //unitOfWork.Save();
                         }
 
 
@@ -829,6 +867,10 @@ namespace Stocks.Controllers
                             {
                                 item.NoticeID = notice.NoticeID;
                                 item.NoticeDetailID = 0;
+                                if (item.PartnerID == 0)
+                                {
+                                    item.PartnerID = null;
+                                }
                                 var details = _mapper.Map<NoticeDetail>(item);
 
                                 unitOfWork.NoticeDetailRepository.Insert(details);
@@ -840,7 +882,7 @@ namespace Stocks.Controllers
                         //===================================توليد قيد مع ترحيل تلقائي===================================
                         if (noticeModel.SettingModel.AutoGenerateEntry == true)
                         {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, null, null, noticeModel);
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount, Entry.EntryID, null, null, null, noticeModel);
 
                             if (noticeModel.SettingModel.TransferToAccounts == true)
                             {
@@ -882,11 +924,29 @@ namespace Stocks.Controllers
                                 }
                             }
                         }
-                   
-
-                        unitOfWork.Save();
 
 
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
 
                         return Ok(noticeModel);
 
@@ -904,7 +964,7 @@ namespace Stocks.Controllers
                             if (OldDetails != null)
                             {
                                 unitOfWork.NoticeDetailRepository.RemovRange(OldDetails);
-                                unitOfWork.Save();
+                                //unitOfWork.Save();
                             }
 
 
@@ -922,11 +982,11 @@ namespace Stocks.Controllers
                             }
 
 
-                           
+
                             //===================================توليد قيد مع ترحيل تلقائي===================================
                             if (noticeModel.SettingModel.AutoGenerateEntry == true)
                             {
-                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, null, null, noticeModel);
+                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount, Entry.EntryID, null, null, null, noticeModel);
 
                                 if (noticeModel.SettingModel.TransferToAccounts == true)
                                 {
@@ -968,9 +1028,28 @@ namespace Stocks.Controllers
                                     }
                                 }
                             }
-                      
 
-                            unitOfWork.Save();
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
+
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
 
 
 
@@ -994,7 +1073,7 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.NoticeDetailRepository.RemovRange(OldDetails);
-                            unitOfWork.Save();
+                            //unitOfWork.Save();
                         }
 
 
@@ -1016,8 +1095,8 @@ namespace Stocks.Controllers
 
 
 
-                       if (noticeModel.SettingModel.AutoGenerateEntry == true)
-                       {
+                        if (noticeModel.SettingModel.AutoGenerateEntry == true)
+                        {
                             var lastEntry = unitOfWork.EntryRepository.Last();
                             var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
@@ -1066,10 +1145,29 @@ namespace Stocks.Controllers
                                 }
                             }
                         }
-                     
 
 
-                        unitOfWork.Save();
+                        try
+                        {
+                            unitOfWork.Save();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            var sqlException = ex.GetBaseException() as SqlException;
+
+                            if (sqlException != null)
+                            {
+                                var number = sqlException.Number;
+
+                                if (number == 547)
+                                {
+                                    return Ok(5);
+
+                                }
+                                else
+                                    return Ok(6);
+                            }
+                        }
 
 
 
@@ -1089,7 +1187,7 @@ namespace Stocks.Controllers
                             if (OldDetails != null)
                             {
                                 unitOfWork.NoticeDetailRepository.RemovRange(OldDetails);
-                                unitOfWork.Save();
+                                //unitOfWork.Save();
                             }
 
 
@@ -1107,7 +1205,7 @@ namespace Stocks.Controllers
                             }
 
 
-                          
+
                             //===============================================================توليد قيد مع ترحيل تلقائي============================
 
 
@@ -1115,7 +1213,7 @@ namespace Stocks.Controllers
                             if (noticeModel.SettingModel.AutoGenerateEntry == true)
                             {
                                 var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, null, null, noticeModel, lastEntry);
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
                                 var Entry = _mapper.Map<Entry>(EntryMODEL);
                                 Entry.NoticeID = notice.NoticeID;
 
@@ -1162,10 +1260,28 @@ namespace Stocks.Controllers
                                     }
                                 }
                             }
-                         
 
+                            try
+                            {
+                                unitOfWork.Save();
+                            }
+                            catch (DbUpdateException ex)
+                            {
+                                var sqlException = ex.GetBaseException() as SqlException;
 
-                            unitOfWork.Save();
+                                if (sqlException != null)
+                                {
+                                    var number = sqlException.Number;
+
+                                    if (number == 547)
+                                    {
+                                        return Ok(5);
+
+                                    }
+                                    else
+                                        return Ok(6);
+                                }
+                            }
 
 
 
@@ -1215,9 +1331,28 @@ namespace Stocks.Controllers
                 unitOfWork.EntryDetailRepository.RemovRange(entryDitails);
                 unitOfWork.EntryRepository.Delete(entry.EntryID);
                 unitOfWork.NoticeRepository.Delete(notice);
-               
+                try
+                {
                     unitOfWork.Save();
-             
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        var number = sqlException.Number;
+
+                        if (number == 547)
+                        {
+                            return Ok(5);
+
+                        }
+                        else
+                            return Ok(6);
+                    }
+                }
+
                 return Ok(4);
 
             }
