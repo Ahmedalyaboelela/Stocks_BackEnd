@@ -185,6 +185,7 @@ namespace Stocks.Controllers
 
             return Ok(model);
         }
+
         #endregion
 
         #region Insert Method

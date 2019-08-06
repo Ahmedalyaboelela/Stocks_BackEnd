@@ -18,8 +18,12 @@ namespace BAL.Model
 
         public string FullName { get; set; }
 
+        public string Role { get; set; }
+
         public DateTime CreationDate { get; set; }
 
         public int Count { get; set; }
+
+        public IEnumerable<RoleModel> RoleModels { get; set; }
     }
 }

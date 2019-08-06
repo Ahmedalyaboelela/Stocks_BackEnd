@@ -504,12 +504,12 @@ namespace Stocks.Controllers
 
         //                    }).ToList());
         //                }
-                        
-                       
+
+
 
         //            }
         //            //================================توليد قيد مع عدم الترحيل======================================
-        //            if (recExcModel.SettingModel.GenerateEntry==true)
+        //            if (recExcModel.SettingModel.GenerateEntry == true)
 
         //            {
         //                var lastEntry = unitOfWork.EntryRepository.Last();
@@ -547,13 +547,14 @@ namespace Stocks.Controllers
         //        return Ok(3);
         //    }
         //}
+
         #endregion
 
 
         #region Update Methods
         //[HttpPut]
         //[Route("~/api/ReceiptExchange/Update/{id}/{type}")]
-        //public IActionResult Update(int id,bool type, [FromBody] ReceiptExchangeModel receiptExchangeModel)
+        //public IActionResult Update(int id, bool type, [FromBody] ReceiptExchangeModel receiptExchangeModel)
         //{
         //    if (id != receiptExchangeModel.ReceiptID)
         //    {
@@ -645,11 +646,11 @@ namespace Stocks.Controllers
 
         //                        }).ToList());
         //                    }
-                            
+
         //                }
         //                //===================================توليد قيد مع  عدم ترحيل===================================
-        //                if (receiptExchangeModel.SettingModel.GenerateEntry==true)
-                        
+        //                if (receiptExchangeModel.SettingModel.GenerateEntry == true)
+
         //                {
         //                    var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, receiptExchangeModel, null);
         //                    Entry.TransferedToAccounts = false;
@@ -741,7 +742,7 @@ namespace Stocks.Controllers
 
         //                            }).ToList());
         //                        }
-                                
+
         //                    }
         //                    //===================================توليد قيد مع  عدم ترحيل===================================
         //                    if (receiptExchangeModel.SettingModel.GenerateEntry == true)
@@ -851,8 +852,8 @@ namespace Stocks.Controllers
         //                    }
         //                }
         //                //================================توليد قيد مع عدم الترحيل====================================== 
-        //                if (receiptExchangeModel.SettingModel.GenerateEntry==true)
-                        
+        //                if (receiptExchangeModel.SettingModel.GenerateEntry == true)
+
         //                {
         //                    var lastEntry = unitOfWork.EntryRepository.Last();
         //                    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, receiptExchangeModel, null, lastEntry);
@@ -1001,6 +1002,7 @@ namespace Stocks.Controllers
         //        return Ok(3);
         //    }
         //}
+
         #endregion
 
 
