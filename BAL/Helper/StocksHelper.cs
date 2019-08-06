@@ -91,5 +91,50 @@ namespace BAL.Helper
 
         }
 
+        // Add Purchase Order Stocks Count To Portofolio
+        public void TransferPurchaseToStocks(PurchaseOrderModel purchaseOrderModel)
+        {
+            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID);
+            var Details = purchaseOrderModel.DetailsModels;
+            foreach (var detail in Details)
+            {
+                foreach (var item in PortofolioStocks)
+                {
+                    if (detail.PartnerID == item.PartnerID)
+                    {
+                        item.CurrentStocksCount = item.CurrentStocksCount + detail.StockCount;
+                        item.CurrentStockValue = (((decimal)item.CurrentStocksCount *  item.CurrentStockValue) + 
+                        ((decimal)detail.StockCount *  detail.PurchaseValue))
+                         /(decimal) (item.CurrentStocksCount + detail.StockCount);
+                        unitOfWork.PortfolioTransactionsRepository.Update(item);
+                    }
+
+                }
+            }
+        }
+
+        //Cancel Purchase Order From Portofolio Stocks
+        public void CancelPurchaseFromStocks(int PortofolioId, IEnumerable<PurchaseOrderDetail> oldDetils)
+        {
+            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == PortofolioId);
+            foreach (var detail in oldDetils)
+            {
+                foreach (var item in PortofolioStocks)
+                {
+                    if (detail.PartnerID == item.PartnerID)
+                    {
+                        item.CurrentStocksCount = item.CurrentStocksCount - detail.StockCount;
+                        item.CurrentStockValue = ((item.CurrentStockValue * (decimal)(item.CurrentStocksCount + detail.StockCount))
+                            - ((decimal)detail.StockCount * detail.PurchaseValue))
+                            / (decimal)item.CurrentStocksCount;
+                        unitOfWork.PortfolioTransactionsRepository.Update(item);
+                    }
+
+                }
+            }
+
+        }
+
+
     }
 }

@@ -665,12 +665,15 @@ namespace Stocks.Controllers
                         }
 
                     }
+                    #region Warehouse
                     //Check Stocks Count Allowed For Selling 
                     var Chk = _stocksHelper.CheckStockCount(sellingOrderModel);
                     if (!Chk)
                         return Ok(7);
+                    // Transfer From Portofolio Stocks
                     else
                         _stocksHelper.TransferSellingFromStocks(sellingOrderModel);
+                    #endregion
 
 
                     //==================================================لا تولد قيد ===================================
@@ -816,11 +819,18 @@ namespace Stocks.Controllers
                 var NewdDetails = sellingOrderModel.DetailsModels;
                 var Newdetails = _mapper.Map<IEnumerable<SellingOrderDetail>>(NewdDetails);
                 var OldDetails = unitOfWork.SellingOrderDetailRepository.Get(filter: m => m.SellingOrderID == sellingOrder.SellingOrderID);
-
+                #region Warehouse
                 //Cancel Selling Order From Stocks 
                 _stocksHelper.CancelSellingFromStocks(sellingOrderModel.PortfolioID, OldDetails);
-
-              var EntryCheck = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == sellingOrder.SellingOrderID).SingleOrDefault();
+                //Check Stocks Count Allowed For Selling 
+                var Chk = _stocksHelper.CheckStockCount(sellingOrderModel);
+                if (!Chk)
+                    return Ok(7);
+                //Transfer From Portofolio Stocks
+                else
+                 _stocksHelper.TransferSellingFromStocks(sellingOrderModel);
+                #endregion
+                var EntryCheck = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == sellingOrder.SellingOrderID).SingleOrDefault();
               if (EntryCheck != null)
               {
 
@@ -1549,7 +1559,10 @@ namespace Stocks.Controllers
 
             }
             var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: m => m.SellingOrderID == id);
-           
+            #region Warehouse
+            //Cancel Selling Order From Stocks 
+            _stocksHelper.CancelSellingFromStocks(modelSelling.PortfolioID, Details);
+            #endregion
             unitOfWork.SellingOrderDetailRepository.RemovRange(Details);
             //var Entry = unitOfWork.EntryRepository.Get(filter: x=> x.SellingOrderID==id).SingleOrDefault();
             //var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a=> a.EntryID==Entry.EntryID); 

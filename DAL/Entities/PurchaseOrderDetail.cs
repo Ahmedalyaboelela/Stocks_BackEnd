@@ -11,7 +11,7 @@ namespace DAL.Entities
         [Key]
         public int PurchaseOrderDetailID { get; set; }
 
-        public int StockCount { get; set; }
+        public float StockCount { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal PurchasePrice { get; set; }

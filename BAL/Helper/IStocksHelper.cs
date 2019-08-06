@@ -13,5 +13,9 @@ namespace BAL.Helper
 
         void CancelSellingFromStocks(int PortofolioId, IEnumerable<SellingOrderDetail> oldDetils);
 
+        void TransferPurchaseToStocks(PurchaseOrderModel purchaseOrderModel);
+
+        void CancelPurchaseFromStocks(int PortofolioId, IEnumerable<PurchaseOrderDetail> oldDetils);
+
     }
 }
