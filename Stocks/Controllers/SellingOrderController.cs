@@ -21,11 +21,13 @@ namespace Stocks.Controllers
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
         private readonly IAccountingHelper accountingHelper;
-        public SellingOrderController(StocksContext context, IMapper mapper)
+        private readonly IStocksHelper _stocksHelper;
+        public SellingOrderController(StocksContext context, IMapper mapper, IStocksHelper stocksHelper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
             accountingHelper = new AccountingHelper(context,mapper);
+            _stocksHelper = stocksHelper;
         }
         [Route("~/api/SellingOrder/GetSettingAccounts/{id}")]
         public IEnumerable<SettingAccountModel> SettingAccounts(int id)
@@ -663,6 +665,12 @@ namespace Stocks.Controllers
                         }
 
                     }
+                    //Check Stocks Count Allowed For Selling 
+                    var Chk = _stocksHelper.CheckStockCount(sellingOrderModel);
+                    if (!Chk)
+                        return Ok(7);
+                    else
+                        _stocksHelper.TransferSellingFromStocks(sellingOrderModel);
 
 
                     //==================================================لا تولد قيد ===================================
@@ -808,6 +816,10 @@ namespace Stocks.Controllers
                 var NewdDetails = sellingOrderModel.DetailsModels;
                 var Newdetails = _mapper.Map<IEnumerable<SellingOrderDetail>>(NewdDetails);
                 var OldDetails = unitOfWork.SellingOrderDetailRepository.Get(filter: m => m.SellingOrderID == sellingOrder.SellingOrderID);
+
+                //Cancel Selling Order From Stocks 
+                _stocksHelper.CancelSellingFromStocks(sellingOrderModel.PortfolioID, OldDetails);
+
               var EntryCheck = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == sellingOrder.SellingOrderID).SingleOrDefault();
               if (EntryCheck != null)
               {
@@ -826,7 +838,6 @@ namespace Stocks.Controllers
                       if (OldDetails != null)
                       {
                           unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                          unitOfWork.Save();
                       }
 
 
@@ -1089,23 +1100,6 @@ namespace Stocks.Controllers
                                     }
                                 }
                             }
-                          //===================================توليد قيد مع  عدم ترحيل=================================== 
-                            //if (sellingOrderModel.SettingModel.GenerateEntry == true)
-
-                            //{
-                            //    var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
-                            //    Entry.TransferedToAccounts = false;
-                            //    unitOfWork.EntryRepository.Update(Entry);
-                            //    foreach (var item in EntryDitails)
-                            //    {
-                            //        item.EntryID = Entry.EntryID;
-                            //        item.EntryDetailID = 0;
-                            //        var details = _mapper.Map<EntryDetail>(item);
-
-                            //        unitOfWork.EntryDetailRepository.Insert(details);
-
-                            //    }
-                            //}
 
 
                             try
