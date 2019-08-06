@@ -157,7 +157,7 @@ namespace Stocks.Controllers
             return Ok(model);
         }
 
-        [Route("~/api/Account/GetAll")]
+        [Route("~/api/Account/GetAllAccounts")]
         public IActionResult GetAllAccount()
         {
             var account = unitOfWork.AccountRepository.Get();
@@ -170,6 +170,21 @@ namespace Stocks.Controllers
 
             return Ok(model);
         }
+
+        [Route("~/api/Account/GetAll")]
+        public IActionResult GetAllSubAccount()
+        {
+            var account = unitOfWork.AccountRepository.Get(filter: a => a.AccountType == false);
+            var model = _mapper.Map<IEnumerable<AccountModel>>(account);
+
+            if (model == null)
+            {
+                return Ok(0);
+            }
+
+            return Ok(model);
+        }
+
         #endregion
 
         #region Insert Method

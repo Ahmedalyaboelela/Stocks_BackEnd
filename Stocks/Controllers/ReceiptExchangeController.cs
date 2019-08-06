@@ -35,7 +35,7 @@ namespace Stocks.Controllers
 
         #endregion
 
-        [Route("~/api/PurchaseOrder/GetSettingAccounts/{id}")]
+        [Route("~/api/ReceiptExchange/GetSettingAccounts/{id}")]
         public IEnumerable<SettingAccountModel> SettingAccounts(int id)
         {
 
@@ -62,7 +62,7 @@ namespace Stocks.Controllers
 
         }
 
-        [Route("~/api/PurchaseOrder/GetSetting")]
+        [Route("~/api/ReceiptExchange/GetSetting")]
         public SettingModel GetSetting(int flag)
         {
 
@@ -158,7 +158,7 @@ namespace Stocks.Controllers
 
 
         [HttpPost]// ترحيل يدوي للقيد اليدوي والتلقائي
-        [Route("~/api/SellingOrder/Manualmigration")]
+        [Route("~/api/ReceiptExchange/Manualmigration")]
         public IActionResult Manualmigration(EntryModel EntryMODEL)
         {
             var Entry = unitOfWork.EntryRepository.GetByID(EntryMODEL.EntryID);
@@ -196,7 +196,7 @@ namespace Stocks.Controllers
 
 
         [HttpGet]//القيد
-        [Route("~/api/SellingOrder/GetEntry")]
+        [Route("~/api/ReceiptExchange/GetEntry")]
         public EntryModel GetEntry(int receiptID)
         {
             var Entry = unitOfWork.EntryRepository.Get(x => x.ReceiptID == receiptID).SingleOrDefault();
@@ -504,12 +504,12 @@ namespace Stocks.Controllers
 
         //                    }).ToList());
         //                }
-                        
-                       
+
+
 
         //            }
         //            //================================توليد قيد مع عدم الترحيل======================================
-        //            if (recExcModel.SettingModel.GenerateEntry==true)
+        //            if (recExcModel.SettingModel.GenerateEntry == true)
 
         //            {
         //                var lastEntry = unitOfWork.EntryRepository.Last();
@@ -547,13 +547,14 @@ namespace Stocks.Controllers
         //        return Ok(3);
         //    }
         //}
+
         #endregion
 
 
         #region Update Methods
         //[HttpPut]
         //[Route("~/api/ReceiptExchange/Update/{id}/{type}")]
-        //public IActionResult Update(int id,bool type, [FromBody] ReceiptExchangeModel receiptExchangeModel)
+        //public IActionResult Update(int id, bool type, [FromBody] ReceiptExchangeModel receiptExchangeModel)
         //{
         //    if (id != receiptExchangeModel.ReceiptID)
         //    {
@@ -645,11 +646,11 @@ namespace Stocks.Controllers
 
         //                        }).ToList());
         //                    }
-                            
+
         //                }
         //                //===================================توليد قيد مع  عدم ترحيل===================================
-        //                if (receiptExchangeModel.SettingModel.GenerateEntry==true)
-                        
+        //                if (receiptExchangeModel.SettingModel.GenerateEntry == true)
+
         //                {
         //                    var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, receiptExchangeModel, null);
         //                    Entry.TransferedToAccounts = false;
@@ -741,7 +742,7 @@ namespace Stocks.Controllers
 
         //                            }).ToList());
         //                        }
-                                
+
         //                    }
         //                    //===================================توليد قيد مع  عدم ترحيل===================================
         //                    if (receiptExchangeModel.SettingModel.GenerateEntry == true)
@@ -851,8 +852,8 @@ namespace Stocks.Controllers
         //                    }
         //                }
         //                //================================توليد قيد مع عدم الترحيل====================================== 
-        //                if (receiptExchangeModel.SettingModel.GenerateEntry==true)
-                        
+        //                if (receiptExchangeModel.SettingModel.GenerateEntry == true)
+
         //                {
         //                    var lastEntry = unitOfWork.EntryRepository.Last();
         //                    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(null, null, receiptExchangeModel, null, lastEntry);
@@ -1001,6 +1002,7 @@ namespace Stocks.Controllers
         //        return Ok(3);
         //    }
         //}
+
         #endregion
 
 
