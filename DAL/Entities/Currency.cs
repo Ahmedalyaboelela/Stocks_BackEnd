@@ -28,7 +28,6 @@ namespace DAL.Entities
         public string PartName { get; set; }
         public float CurrencyValue { get; set; }
 
-        public virtual ICollection<ReceiptExchange> ReceiptExchanges { get; set; }
 
         
     }

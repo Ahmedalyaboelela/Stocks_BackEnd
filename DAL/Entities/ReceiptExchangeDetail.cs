@@ -15,8 +15,9 @@ namespace DAL.Entities
         [Column(TypeName = "decimal(10,2)")]
         public decimal? Credit { get; set; }
         public int AccountID { get; set; }
-        public int? ChiqueNumber { get; set; }
-       
+
+        public bool? DetailType { get; set; }
+
         public int ReceiptID { get; set; }
 
         [ForeignKey("ReceiptID")]
