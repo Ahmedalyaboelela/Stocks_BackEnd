@@ -72,6 +72,7 @@ namespace Stocks
             });
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddTransient<IAccountingHelper, AccountingHelper>();
+            services.AddTransient<IStocksHelper, StocksHelper>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
             services.AddCors();

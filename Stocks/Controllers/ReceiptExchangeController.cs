@@ -260,8 +260,7 @@ namespace Stocks.Controllers
                     ReceiptID = m.ReceiptID,
                     AccountID = m.AccountID,
                     AccNameAR = m.Account.Code,
-                    AccNameEN=m.Account.NameEN,
-                    ChiqueNumber = m.ChiqueNumber
+                    AccNameEN=m.Account.NameEN
                     //Type = m.Type
                 });
             if (RecExcDetails != null)
@@ -270,9 +269,6 @@ namespace Stocks.Controllers
             #endregion
 
             model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter:m=>m.Type==type).Count();
-            model.CurrencyNameAR = RecExc.Currency.NameAR;
-            model.CurrencyNameEN= RecExc.Currency.NameEN;
-            model.CurrencyCode = RecExc.Currency.Code;
 
             #region Setting part
 
@@ -392,8 +388,7 @@ namespace Stocks.Controllers
                                 ReceiptID = m.ReceiptID,
                                 AccountID = m.AccountID,
                                 AccNameAR = m.Account.Code,
-                                AccNameEN = m.Account.NameEN,
-                                ChiqueNumber = m.ChiqueNumber
+                                AccNameEN = m.Account.NameEN
                               //  Type = m.Type
 
                             });

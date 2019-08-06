@@ -14,17 +14,25 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(100)")]
         public string Code { get; set; }
         public DateTime? Date { get; set; }
-        public int? CurrencyID { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
+        public string Handling { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? RecieptValue { get; set; }
+
+        [Column(TypeName = "nvarchar(150)")]
+        public string BankName { get; set; }
         public bool Type { get; set; }
+
+        public bool ReceiptExchangeType { get; set; }
         public int? ChiqueNumber { get; set; }
         public DateTime? ChiqueDate { get; set; }
+
+        [Column(TypeName = "nvarchar(150)")]
+        public string TaxNumber { get; set; }
 
         [Column(TypeName = "nvarchar(MAX)")]
         public string Description { get; set; }
 
-
-        [ForeignKey("CurrencyID")]
-        public virtual Currency Currency { get; set; }
 
         public virtual Entry Entry { get; set; }
     }
