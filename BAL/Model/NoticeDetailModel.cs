@@ -22,11 +22,15 @@ namespace BAL.Model
         public int NoticeID { get; set; }
 
         public int? PartnerID { get; set; }
+
+        public string PartnerName { get; set; }
+
         public string AccNameAR { get; set; }
 
         public string AccNameEN { get; set; }
 
         public string AccCode { get; set; }
+        
 
     }
 }
