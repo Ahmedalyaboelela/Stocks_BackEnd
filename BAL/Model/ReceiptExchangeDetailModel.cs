@@ -13,7 +13,7 @@ namespace BAL.Model
         public string AccNameAR { get; set; }
         public string AccNameEN { get; set; }
         public int? ChiqueNumber { get; set; }
-        public bool Type { get; set; }
+        public bool? DetailType { get; set; }
         public int ReceiptID { get; set; }
         
     }

@@ -364,6 +364,7 @@ namespace BAL.Repositories
                     dbContextTransaction.Commit();
                 }
                 catch (Exception ex)
+
                 {
                     //Log Exception Handling message                      
                     returnValue = false;
