@@ -232,75 +232,203 @@ namespace Stocks.Controllers
 
         #region GET Methods
 
-        public ReceiptExchangeModel GetReceiptExchange(ReceiptExchange RecExc,bool type)
+        public ReceiptExchangeModel GetReceiptExchange(ReceiptExchange RecExc, bool ReceiptExchangeType, bool type, int num)
         {
-            var model = _mapper.Map<ReceiptExchangeModel>(RecExc);
-            if (model == null)
-            {
-                return model;
-            }
 
-            #region Date part
 
-            model.Date = RecExc.Date.Value.ToString("dd/MM/yyyy");
-            model.DateHijri = DateHelper.GetHijriDate(RecExc.Date);
+            var model = unitOfWork.ReceiptExchangeRepository.Get(x => x.ReceiptExchangeType == ReceiptExchangeType && x.Type == type).Select(a => new ReceiptExchangeModel {
+                BankName = a.BankName,
+                ChiqueDate = a.ChiqueDate.Value.ToString("dd/MM/yyyy"),
+                ChiqueDateHijri = DateHelper.GetHijriDate(a.ChiqueDate),
+                ChiqueNumber = a.ChiqueNumber,
+                Code = a.Code,
+                Count = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).Count(),
+                Date = a.Date.Value.ToString("dd/MM/yyyy"),
+                DateHijri = DateHelper.GetHijriDate(a.Date),
+                Description = a.Description,
+                EntryModel = GetEntry(a.ReceiptID),
+                Handling = a.Handling,
+                ReceiptExchangeType = a.ReceiptExchangeType,
+                ReceiptID = a.ReceiptID,
+                Type = a.Type,
+                RecieptValue = a.RecieptValue,
+                TaxNumber = a.TaxNumber,
+                RecExcDetails = unitOfWork.ReceiptExchangeDetailRepository
 
-            model.ChiqueDate = RecExc.ChiqueDate.Value.ToString("dd/MM/yyyy");
-            model.ChiqueDateHijri = DateHelper.GetHijriDate(RecExc.ChiqueDate);
-            #endregion
+                    .Get(filter: m => m.ReceiptID == RecExc.ReceiptID)
+                    .Select(m => new ReceiptExchangeDetailModel
+                    {
+                        ReceiptExchangeID = m.ReceiptExchangeID,
+                        ReceiptID = m.ReceiptID,
+                        AccountID = m.AccountID,
+                        AccNameAR = m.Account.Code,
+                        AccNameEN = m.Account.NameEN,
+                        DetailType = m.DetailType,
+                        Debit = m.Debit,
+                        Credit = m.Credit,
 
-            #region Details part
-            var RecExcDetails = unitOfWork.ReceiptExchangeDetailRepository
 
-                .Get(filter: m => m.ReceiptID == RecExc.ReceiptID)
-                .Select(m => new ReceiptExchangeDetailModel
-                {
-                    ReceiptExchangeID = m.ReceiptExchangeID,
-                  //  ReceiptExchangeAmount=m.ReceiptExchangeAmount,
-                    ReceiptID = m.ReceiptID,
-                    AccountID = m.AccountID,
-                    AccNameAR = m.Account.Code,
-                    AccNameEN=m.Account.NameEN
-                    //Type = m.Type
-                });
-            if (RecExcDetails != null)
-                model.RecExcDetails = RecExcDetails;
+                    }),
+                LastCode = unitOfWork.ReceiptExchangeRepository.GetEntity(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).Code,
+                SettingModel = GetSetting(num),
+                
 
-            #endregion
 
-            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter:m=>m.Type==type).Count();
 
-            #region Setting part
+        }).SingleOrDefault();
+            //if (model == null)
+            //{
+            //    return model;
+            //}
 
-            model.SettingModel = GetSetting(4);
-            #endregion
-            var check = unitOfWork.EntryRepository.Get(x => x.ReceiptID == RecExc.ReceiptID).SingleOrDefault();
-            if (check != null)
-            {
-                model.EntryModel = GetEntry(model.ReceiptID);
-            }
+            //#region Date part
+
+            
+
+            //model.ChiqueDate = RecExc.ChiqueDate.Value.ToString("dd/MM/yyyy");
+            //model.ChiqueDateHijri = DateHelper.GetHijriDate(RecExc.ChiqueDate);
+            //#endregion
+
+            //#region Details part
+            //var RecExcDetails = unitOfWork.ReceiptExchangeDetailRepository
+
+            //    .Get(filter: m => m.ReceiptID == RecExc.ReceiptID)
+            //    .Select(m => new ReceiptExchangeDetailModel
+            //    {
+            //        ReceiptExchangeID = m.ReceiptExchangeID,
+            //      //  ReceiptExchangeAmount=m.ReceiptExchangeAmount,
+            //        ReceiptID = m.ReceiptID,
+            //        AccountID = m.AccountID,
+            //        AccNameAR = m.Account.Code,
+            //        AccNameEN=m.Account.NameEN
+            //        //Type = m.Type
+            //    });
+            //if (RecExcDetails != null)
+            //    model.RecExcDetails = RecExcDetails;
+
+            //#endregion
+
+            //model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter:m=>m.Type==type &&m.ReceiptExchangeType==ReceiptExchangeType).Count();
+
+            //#region Setting part
+
+            //model.SettingModel = GetSetting(4);
+            //#endregion
+            //var check = unitOfWork.EntryRepository.Get(x => x.ReceiptID == RecExc.ReceiptID).SingleOrDefault();
+            //if (check != null)
+            //{
+            //    model.EntryModel = GetEntry(model.ReceiptID);
+            //}
             return model;
         }
 
         [HttpGet]
-        [Route("~/api/ReceiptExchange/FirstOpen/{type}")]
-        public IActionResult FirstOpen(bool type)
+        [Route("~/api/ReceiptExchange/FirstOpen/{ReceiptExchangeType}/{type}")]
+        public IActionResult FirstOpen(bool ReceiptExchangeType, bool type)
         {
-            DefaultSettingModel model = new DefaultSettingModel();
-            model.ScreenSetting = GetSetting(4);
-            model.LastCode = unitOfWork.EntryRepository.Last().Code;
+            ReceiptExchangeModel model = new ReceiptExchangeModel();
+            //RS
+            if (ReceiptExchangeType==true)
+            {
+                //صرف
+                if (type == true)
+                {
+                    if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType==true).Count() > 0)
+                    {
+                        if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == true).Last() == null)
+                        {
+                            return Ok(0);
+                        }
+                        var noti = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == true).Last();
+
+
+                        model.LastCode = noti.Code;
+                        model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == true ).Count();
+                    }
+                    model.SettingModel = GetSetting(6);
+
+                }
+                else
+                {
+                    //قبض
+                    if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == true).Count() > 0)
+                    {
+                        if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == true).Last() == null)
+                        {
+                            return Ok(0);
+                        }
+
+                        var noti = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == true).Last();
+
+                        model.LastCode = noti.Code;
+                        model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == true).Count();
+                    }
+
+                    model.SettingModel = GetSetting(5);
+
+                }
+
+            }
+            else
+            {
+                //شيك
+                if (ReceiptExchangeType==false)
+                {
+                    //صرف
+                    if (type == true)
+                    {
+                        if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true &&ReceiptExchangeType == false).Count() > 0)
+                        {
+                            if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && ReceiptExchangeType == false).Last() == null)
+                            {
+                                return Ok(0);
+                            }
+                            var noti = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && ReceiptExchangeType == false).Last();
+
+
+                            model.LastCode = noti.Code;
+                            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && ReceiptExchangeType == false).Count();
+                        }
+                        model.SettingModel = GetSetting(6);
+
+                    }
+                    else
+                    {
+                        //قبض
+                        if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && ReceiptExchangeType == false).Count() > 0)
+                        {
+                            if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && ReceiptExchangeType == false).Last() == null)
+                            {
+                                return Ok(0);
+                            }
+
+                            var noti = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && ReceiptExchangeType == false).Last();
+
+                            model.LastCode = noti.Code;
+                            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && ReceiptExchangeType == false).Count();
+                        }
+
+                        model.SettingModel = GetSetting(5);
+
+                    }
+
+                }
+            }
+
+
+
             return Ok(model);
         }
 
         [HttpGet]
-        [Route("~/api/ReceiptExchange/GetLast/{type}")]
-        public IActionResult GetLast(bool type)
+        [Route("~/api/ReceiptExchange/GetLast/{ReceiptExchangeType}/{type}/{numSetting}")]
+        public IActionResult GetLast(bool ReceiptExchangeType, bool type,int numSetting)
         {
            
             // get last Receipt or Exchange
             var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter:m=>m.Type==type).Last();
             if(RecExc !=null)
-                return Ok(GetReceiptExchange(RecExc,type));
+                return Ok(GetReceiptExchange(RecExc,ReceiptExchangeType, type, numSetting));
             else
                 return Ok(0);
 
@@ -308,15 +436,15 @@ namespace Stocks.Controllers
 
 
         [HttpGet]
-        [Route("~/api/ReceiptExchange/Paging/{pageNumber}/{type}")]
-        public IActionResult Pagination(int pageNumber,bool type)
+        [Route("~/api/ReceiptExchange/Paging/{pageNumber}/{ReceiptExchangeType}/{type}/{numSetting}")]
+        public IActionResult Pagination(int pageNumber, bool ReceiptExchangeType, bool type, int numSetting)
         {
             if (pageNumber > 0)
             {
 
                 var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type, page: pageNumber).FirstOrDefault();
                 if(RecExc != null)
-                    return Ok(GetReceiptExchange(RecExc,type));
+                    return Ok(GetReceiptExchange(RecExc,ReceiptExchangeType, type, numSetting));
                 else
                     return Ok(0);
 
@@ -327,9 +455,9 @@ namespace Stocks.Controllers
 
 
         [HttpGet]
-        [Route("~/api/ReceiptExchange/Get/{id}/{type}")]
+        [Route("~/api/ReceiptExchange/Get/{id}/{ReceiptExchangeType}/{type}/{numSetting}")]
 
-        public IActionResult GetById(int id,bool type)
+        public IActionResult GetById(int id, bool ReceiptExchangeType, bool type, int numSetting)
         {
 
             if (id > 0)
@@ -337,7 +465,7 @@ namespace Stocks.Controllers
 
                 var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type &&m.ReceiptID==id).FirstOrDefault();
                 if (RecExc != null)
-                    return Ok(GetReceiptExchange(RecExc, type));
+                    return Ok(GetReceiptExchange(RecExc,ReceiptExchangeType, type, numSetting));
                 else
                     return Ok(0);
 
@@ -451,6 +579,7 @@ namespace Stocks.Controllers
 
                     }
 
+
                 
                     //==================================================لا تولد قيد ===================================
                     //if (recExcModel.SettingModel.DoNotGenerateEntry == true)
@@ -464,10 +593,10 @@ namespace Stocks.Controllers
 
 
 
-                    else if (recExcModel.SettingModel.AutoGenerateEntry == true)
+                     if (recExcModel.SettingModel.AutoGenerateEntry == true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0,null, null, recExcModel, null, lastEntry);
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0, null, null, recExcModel, null, lastEntry);
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.ReceiptID = receipt.ReceiptID;
 
@@ -503,7 +632,7 @@ namespace Stocks.Controllers
 
 
                     }
-                    
+
 
                     unitOfWork.Save();
 
@@ -514,6 +643,7 @@ namespace Stocks.Controllers
 
 
                 }
+            
             }
             else
             {
