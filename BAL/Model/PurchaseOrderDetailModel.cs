@@ -8,7 +8,7 @@ namespace BAL.Model
     {
         public int PurchaseOrderDetailID { get; set; }
 
-        public int StockCount { get; set; }
+        public float StockCount { get; set; }
 
         
         public decimal PurchasePrice { get; set; }

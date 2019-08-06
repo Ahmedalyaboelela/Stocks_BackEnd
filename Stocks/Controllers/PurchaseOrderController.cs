@@ -22,11 +22,13 @@ namespace Stocks.Controllers
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
         private readonly IAccountingHelper accountingHelper;
-        public PurchaseOrderController(StocksContext context, IMapper mapper)
+        private readonly IStocksHelper _stocksHelper;
+        public PurchaseOrderController(StocksContext context, IMapper mapper, IStocksHelper stocksHelper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
             accountingHelper = new AccountingHelper(context, mapper);
+            _stocksHelper = stocksHelper;
         }
 
         public EntryModel GetEntry(Entry Entry)
@@ -676,6 +678,10 @@ namespace Stocks.Controllers
                     }
 
 
+                    #region Warehouse
+                    // Add Purchase Order Stocks Count To Portofolio
+                    _stocksHelper.TransferPurchaseToStocks(purchaseOrderModel);
+                    #endregion
                     //==================================================لا تولد قيد ===================================
                     if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                     {
@@ -835,6 +841,13 @@ namespace Stocks.Controllers
                 var Newdetails = _mapper.Map<IEnumerable<PurchaseOrderDetail>>(NewdDetails);
                 var OldDetails = unitOfWork.PurchaseOrderDetailRepository.Get(filter: m => m.PurchaseID == purchaseOrder.PurchaseOrderID);
                 var EntryCheck = unitOfWork.EntryRepository.Get(x => x.PurchaseOrderID == purchaseOrder.PurchaseOrderID).SingleOrDefault();
+
+                #region Warehouse
+                //Cancel Purchase Order From Portofolio Stocks
+                _stocksHelper.CancelPurchaseFromStocks(purchaseOrderModel.PortfolioID, OldDetails);
+                // Add Purchase Order Stocks Count To Portofolio
+                _stocksHelper.TransferPurchaseToStocks(purchaseOrderModel);
+                #endregion
                 if (EntryCheck != null)
                 {
                     
@@ -1539,7 +1552,10 @@ namespace Stocks.Controllers
                 return Ok(0);
             }
             var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: m => m.PurchaseID == id);
-
+            #region
+            //Cancel Purchase Order From Portofolio Stocks
+            _stocksHelper.CancelPurchaseFromStocks(modelPurchase.PortfolioID, Details);
+            #endregion
             unitOfWork.PurchaseOrderDetailRepository.RemovRange(Details);
             var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == id).SingleOrDefault();
             var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
