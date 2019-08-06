@@ -21,6 +21,7 @@ namespace BAL.Model
         public string ChiqueDateHijri { get; set; }
 
         public string Description { get; set; }
+        public string LastCode { get; set; }
 
         public int Count { get; set; }
         public IEnumerable<ReceiptExchangeDetailModel> RecExcDetails { get; set; }

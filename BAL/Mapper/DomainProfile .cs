@@ -144,7 +144,7 @@ namespace BAL.Mapper
             CreateMap<Entry, EntryModel>();
             CreateMap<EntryModel, Entry>()
                  .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                 .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                 .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture)));
 
 
             // Entry Details
