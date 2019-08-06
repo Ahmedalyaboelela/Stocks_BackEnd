@@ -171,6 +171,7 @@ namespace Stocks.Controllers
             return Ok(model);
         }
 
+
         [Route("~/api/Account/GetAll")]
         public IActionResult GetAllSubAccount()
         {
