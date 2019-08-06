@@ -35,7 +35,7 @@ namespace Stocks.Controllers
 
         #endregion
 
-        [Route("~/api/PurchaseOrder/GetSettingAccounts/{id}")]
+        [Route("~/api/ReceiptExchange/GetSettingAccounts/{id}")]
         public IEnumerable<SettingAccountModel> SettingAccounts(int id)
         {
 
@@ -62,7 +62,7 @@ namespace Stocks.Controllers
 
         }
 
-        [Route("~/api/PurchaseOrder/GetSetting")]
+        [Route("~/api/ReceiptExchange/GetSetting")]
         public SettingModel GetSetting(int flag)
         {
 
@@ -158,7 +158,7 @@ namespace Stocks.Controllers
 
 
         [HttpPost]// ترحيل يدوي للقيد اليدوي والتلقائي
-        [Route("~/api/SellingOrder/Manualmigration")]
+        [Route("~/api/ReceiptExchange/Manualmigration")]
         public IActionResult Manualmigration(EntryModel EntryMODEL)
         {
             var Entry = unitOfWork.EntryRepository.GetByID(EntryMODEL.EntryID);
@@ -196,7 +196,7 @@ namespace Stocks.Controllers
 
 
         [HttpGet]//القيد
-        [Route("~/api/SellingOrder/GetEntry")]
+        [Route("~/api/ReceiptExchange/GetEntry")]
         public EntryModel GetEntry(int receiptID)
         {
             var Entry = unitOfWork.EntryRepository.Get(x => x.ReceiptID == receiptID).SingleOrDefault();
