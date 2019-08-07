@@ -12,6 +12,7 @@ namespace BAL.Model
         public int AccountID { get; set; }
         public string AccNameAR { get; set; }
         public string AccNameEN { get; set; }
+        public string AccCode { get; set; }
         public int? ChiqueNumber { get; set; }
         public bool? DetailType { get; set; }
         public int ReceiptID { get; set; }
