@@ -584,6 +584,19 @@ namespace Stocks.Controllers
 
                             }).ToList());
                         }
+                        else
+                        {
+                            Entry.TransferedToAccounts = false;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
+
+                                unitOfWork.EntryDetailRepository.Insert(details);
+                            }
+                        }
 
 
 
@@ -648,7 +661,7 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.ReceiptExchangeDetailRepository.RemovRange(OldDetails);
-                            unitOfWork.Save();
+                           
                         }
 
 
@@ -696,6 +709,19 @@ namespace Stocks.Controllers
 
 
                                 }).ToList());
+                            }
+                            else
+                            {
+                                Entry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Update(Entry);
+                                foreach (var item in EntryDitails)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<EntryDetail>(item);
+
+                                    unitOfWork.EntryDetailRepository.Insert(details);
+                                }
                             }
 
                         }
@@ -768,6 +794,19 @@ namespace Stocks.Controllers
 
 
                                     }).ToList());
+                                }
+                                else
+                                {
+                                    Entry.TransferedToAccounts = false;
+                                    unitOfWork.EntryRepository.Insert(Entry);
+                                    foreach (var item in EntryDitails)
+                                    {
+                                        item.EntryID = Entry.EntryID;
+                                        item.EntryDetailID = 0;
+                                        var details = _mapper.Map<EntryDetail>(item);
+
+                                        unitOfWork.EntryDetailRepository.Insert(details);
+                                    }
                                 }
 
                             }
@@ -854,6 +893,19 @@ namespace Stocks.Controllers
 
                                 }).ToList());
                             }
+                            else
+                            {
+                                Entry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Insert(Entry);
+                                foreach (var item in DetailEnt)
+                                {
+                                    item.EntryID = Entry.EntryID;
+                                    item.EntryDetailID = 0;
+                                    var details = _mapper.Map<EntryDetail>(item);
+
+                                    unitOfWork.EntryDetailRepository.Insert(details);
+                                }
+                            }
                         }
                         
                         unitOfWork.Save();
@@ -932,6 +984,19 @@ namespace Stocks.Controllers
 
 
                                     }).ToList());
+                                }
+                                else
+                                {
+                                    Entry.TransferedToAccounts = false;
+                                    unitOfWork.EntryRepository.Insert(Entry);
+                                    foreach (var item in DetailEnt)
+                                    {
+                                        item.EntryID = Entry.EntryID;
+                                        item.EntryDetailID = 0;
+                                        var details = _mapper.Map<EntryDetail>(item);
+
+                                        unitOfWork.EntryDetailRepository.Insert(details);
+                                    }
                                 }
                             }
                             
