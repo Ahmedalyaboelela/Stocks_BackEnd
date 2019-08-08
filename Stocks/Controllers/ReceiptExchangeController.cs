@@ -339,17 +339,17 @@ namespace Stocks.Controllers
                     //صرف
                     if (type == true)
                     {
-                        if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true &&ReceiptExchangeType == false).Count() > 0)
+                        if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true &&x.ReceiptExchangeType == false).Count() > 0)
                         {
-                            if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && ReceiptExchangeType == false).Last() == null)
+                            if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == false).Last() == null)
                             {
                                 return Ok(0);
                             }
-                            var noti = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && ReceiptExchangeType == false).Last();
+                            var noti = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == false).Last();
 
 
                             model.LastCode = noti.Code;
-                            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && ReceiptExchangeType == false).Count();
+                            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == false).Count();
                         }
                         model.SettingModel = GetSetting(6);
 
@@ -357,17 +357,17 @@ namespace Stocks.Controllers
                     else
                     {
                         //قبض
-                        if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && ReceiptExchangeType == false).Count() > 0)
+                        if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == false).Count() > 0)
                         {
-                            if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && ReceiptExchangeType == false).Last() == null)
+                            if (unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == false).Last() == null)
                             {
                                 return Ok(0);
                             }
 
-                            var noti = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && ReceiptExchangeType == false).Last();
+                            var noti = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == false).Last();
 
                             model.LastCode = noti.Code;
-                            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && ReceiptExchangeType == false).Count();
+                            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == false).Count();
                         }
 
                         model.SettingModel = GetSetting(5);
@@ -518,7 +518,7 @@ namespace Stocks.Controllers
                 if (Check.Any(m => m.Code == recExcModel.Code))
                 {
 
-                    return Ok("كود امر بيع مكرر");
+                    return Ok("كود  مكرر");
                 }
                 else
                 {
