@@ -113,8 +113,8 @@ namespace BAL.Mapper
             CreateMap<ReceiptExchange, ReceiptExchangeModel>();
             CreateMap<ReceiptExchangeModel, ReceiptExchange>()
                  .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
-                .ForMember(t => t.ChiqueDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.ChiqueDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture)))
+                .ForMember(t => t.ChiqueDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.ChiqueDate, "yyyy-MM-dd", CultureInfo.InvariantCulture)));
 
 
             // Reciept & Exchange Details

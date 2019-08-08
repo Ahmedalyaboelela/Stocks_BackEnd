@@ -432,9 +432,12 @@ namespace Stocks.Controllers
         {
            
             // get last Receipt or Exchange
-            var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter:m=>m.Type==type).Last();
-            if(RecExc !=null)
-                return Ok(GetReceiptExchange(RecExc,ReceiptExchangeType, type, numSetting));
+            var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter:m=>m.Type==type && m.ReceiptExchangeType==ReceiptExchangeType).Last();
+            if (RecExc != null) {
+                var model = GetReceiptExchange(RecExc, ReceiptExchangeType, type, numSetting);
+                return Ok(model);
+            }
+               
             else
                 return Ok(0);
 
@@ -662,8 +665,8 @@ namespace Stocks.Controllers
 
         #region Update Methods
         [HttpPut]
-        [Route("~/api/ReceiptExchange/Update/{id}/{type}")]
-        public IActionResult Update(int id, bool type, [FromBody] ReceiptExchangeModel receiptExchangeModel)
+        [Route("~/api/ReceiptExchange/Update/{id}")]
+        public IActionResult Update(int id, [FromBody] ReceiptExchangeModel receiptExchangeModel)
         {
             if (id != receiptExchangeModel.ReceiptID)
             {

@@ -9,7 +9,7 @@ namespace BAL.Model
         public int ReceiptID { get; set; }
        
         public string Code { get; set; }
-        // public DateTime? Date { get; set; }
+      //   public DateTime? Date { get; set; }
         public string Date { get; set; }
         public string DateHijri { get; set; }
 
@@ -23,7 +23,7 @@ namespace BAL.Model
 
         public bool ReceiptExchangeType { get; set; }
         public int? ChiqueNumber { get; set; }
-        // public DateTime? ChiqueDate { get; set; }
+         //public DateTime? ChiqueDate { get; set; }
 
         public string ChiqueDate { get; set; }
         public string ChiqueDateHijri { get; set; }
