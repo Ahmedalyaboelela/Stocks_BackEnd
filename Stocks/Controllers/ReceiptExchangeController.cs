@@ -238,93 +238,49 @@ namespace Stocks.Controllers
 
         public ReceiptExchangeModel GetReceiptExchange(ReceiptExchange RecExc, bool ReceiptExchangeType, bool type, int num)
        {
+            var model = _mapper.Map<ReceiptExchangeModel>(RecExc);
+            if (model == null)
+            {
+                return model;
+            }
+            model.BankName = RecExc.BankName;
+            model.ChiqueDate = RecExc.ChiqueDate != null ? RecExc.ChiqueDate.Value.ToString("dd/MM/yyyy") : null;
+            model.ChiqueDateHijri = RecExc.ChiqueDate != null ? DateHelper.GetHijriDate(RecExc.ChiqueDate) : null;
+            model.ChiqueNumber = RecExc.ChiqueNumber;
+            model.Code = RecExc.Code;
+            model.Date = RecExc.Date != null ? RecExc.Date.Value.ToString("dd/MM/yyyy") : null;
+            model.DateHijri = RecExc.Date != null ? DateHelper.GetHijriDate(RecExc.Date) : null;
+            model.Description = RecExc.Description;
+            model.Handling = RecExc.Handling;
+            model.ReceiptExchangeType = RecExc.ReceiptExchangeType;
+            model.ReceiptID = RecExc.ReceiptID;
+            model.Type = RecExc.Type;
+            model.RecieptValue = RecExc.RecieptValue;
+            model.TaxNumber = RecExc.TaxNumber;
+            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).Count();
+            model.EntryModel = GetEntry(RecExc.ReceiptID);
+            model.RecExcDetails = unitOfWork.ReceiptExchangeDetailRepository
+
+                   .Get(filter: m => m.ReceiptID == RecExc.ReceiptID) != null ? unitOfWork.ReceiptExchangeDetailRepository.Get(filter: m => m.ReceiptID == RecExc.ReceiptID)
+                   .Select(m => new ReceiptExchangeDetailModel
+                   {
+                       ReceiptExchangeID = m.ReceiptExchangeID,
+                       ReceiptID = m.ReceiptID,
+                       AccountID = m.AccountID,
+                       AccNameAR = m.Account.NameAR,
+                       AccNameEN = m.Account.NameEN,
+                       AccCode = m.Account.Code,
+                       DetailType = m.DetailType,
+                       Debit = m.Debit,
+                       Credit = m.Credit,
 
 
-            var model = unitOfWork.ReceiptExchangeRepository.Get(x => x.ReceiptExchangeType == ReceiptExchangeType && x.Type == type).Select(a => new ReceiptExchangeModel {
-                BankName = a.BankName,
-                ChiqueDate = a.ChiqueDate!=null?a.ChiqueDate.Value.ToString("dd/MM/yyyy"):null,
-                ChiqueDateHijri =a.ChiqueDate!=null? DateHelper.GetHijriDate(a.ChiqueDate):null,
-                ChiqueNumber = a.ChiqueNumber,
-                Code = a.Code,
-                Date = a.Date!=null?a.Date.Value.ToString("dd/MM/yyyy"):null,
-                DateHijri = a.Date!=null? DateHelper.GetHijriDate(a.Date):null,
-                Description = a.Description,
-                Handling = a.Handling,
-                ReceiptExchangeType = a.ReceiptExchangeType,
-                ReceiptID = a.ReceiptID,
-                Type = a.Type,
-                RecieptValue = a.RecieptValue,
-                TaxNumber = a.TaxNumber,
-                Count = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).Count() ,
-                EntryModel = GetEntry(a.ReceiptID),
-
-                RecExcDetails = unitOfWork.ReceiptExchangeDetailRepository
-
-                    .Get(filter: m => m.ReceiptID == RecExc.ReceiptID)!=null? unitOfWork.ReceiptExchangeDetailRepository.Get(filter: m => m.ReceiptID == RecExc.ReceiptID)
-                    .Select(m => new ReceiptExchangeDetailModel
-                    {
-                        ReceiptExchangeID = m.ReceiptExchangeID,
-                        ReceiptID = m.ReceiptID,
-                        AccountID = m.AccountID,
-                        AccNameAR = m.Account.Code,
-                        AccNameEN = m.Account.NameEN,
-                        AccCode=m.Account.Code,
-                        DetailType = m.DetailType,
-                        Debit = m.Debit,
-                        Credit = m.Credit,
-
-
-                    }):null,
-                LastCode = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType) !=null? unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).FirstOrDefault().Code:null,
-                SettingModel = GetSetting(num),
+                   }) : null;
+            model.LastCode = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType) != null ? unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).FirstOrDefault().Code : null;
+            model.SettingModel = GetSetting(num);
                 
 
-
-
-        }).FirstOrDefault();
-            //if (model == null)
-            //{
-            //    return model;
-            //}
-
-            //#region Date part
-
-            
-
-            //model.ChiqueDate = RecExc.ChiqueDate.Value.ToString("dd/MM/yyyy");
-            //model.ChiqueDateHijri = DateHelper.GetHijriDate(RecExc.ChiqueDate);
-            //#endregion
-
-            //#region Details part
-            //var RecExcDetails = unitOfWork.ReceiptExchangeDetailRepository
-
-            //    .Get(filter: m => m.ReceiptID == RecExc.ReceiptID)
-            //    .Select(m => new ReceiptExchangeDetailModel
-            //    {
-            //        ReceiptExchangeID = m.ReceiptExchangeID,
-            //      //  ReceiptExchangeAmount=m.ReceiptExchangeAmount,
-            //        ReceiptID = m.ReceiptID,
-            //        AccountID = m.AccountID,
-            //        AccNameAR = m.Account.Code,
-            //        AccNameEN=m.Account.NameEN
-            //        //Type = m.Type
-            //    });
-            //if (RecExcDetails != null)
-            //    model.RecExcDetails = RecExcDetails;
-
-            //#endregion
-
-            //model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter:m=>m.Type==type &&m.ReceiptExchangeType==ReceiptExchangeType).Count();
-
-            //#region Setting part
-
-            //model.SettingModel = GetSetting(4);
-            //#endregion
-            //var check = unitOfWork.EntryRepository.Get(x => x.ReceiptID == RecExc.ReceiptID).SingleOrDefault();
-            //if (check != null)
-            //{
-            //    model.EntryModel = GetEntry(model.ReceiptID);
-            //}
+           
             return model;
         }
 
@@ -448,7 +404,7 @@ namespace Stocks.Controllers
             if (pageNumber > 0)
             {
 
-                var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type, page: pageNumber).FirstOrDefault();
+                var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type&&m.ReceiptExchangeType==ReceiptExchangeType, page: pageNumber).FirstOrDefault();
                 if(RecExc != null)
                     return Ok(GetReceiptExchange(RecExc,ReceiptExchangeType, type, numSetting));
                 else
@@ -585,16 +541,7 @@ namespace Stocks.Controllers
 
                     }
 
-
-                
-                    //==================================================لا تولد قيد ===================================
-                    //if (recExcModel.SettingModel.DoNotGenerateEntry == true)
-                    //{
-                    //    unitOfWork.Save();
-
-                    //    return Ok(recExcModel);
-                    //}
-
+                    
                     //===============================================================توليد قيد مع ترحيل تلقائي============================
 
 
@@ -715,15 +662,7 @@ namespace Stocks.Controllers
                             }
                         }
 
-
-                        //==================================================لا تولد قيد ===================================
-                        //if (receiptExchangeModel.SettingModel.DoNotGenerateEntry == true)
-                        //{
-                        //    unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                        //    unitOfWork.Save();
-
-                        //    return Ok(receiptExchangeModel);
-                        //}
+                        
                         //===================================توليد قيد مع ترحيل تلقائي===================================
                         if (receiptExchangeModel.SettingModel.AutoGenerateEntry == true)
                         {
@@ -796,14 +735,6 @@ namespace Stocks.Controllers
                             }
 
 
-                            //==================================================لا تولد قيد ===================================
-                            //if (receiptExchangeModel.SettingModel.DoNotGenerateEntry == true)
-                            //{
-                            //    unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                            //    unitOfWork.Save();
-
-                            //    return Ok(receiptExchangeModel);
-                            //}
                             //===================================توليد قيد مع ترحيل تلقائي===================================
                             if (receiptExchangeModel.SettingModel.AutoGenerateEntry == true)
                             {
@@ -837,22 +768,7 @@ namespace Stocks.Controllers
                                 }
 
                             }
-                            //===================================توليد قيد مع  عدم ترحيل===================================
-                            //if (receiptExchangeModel.SettingModel.GenerateEntry == true)
-
-                            //{
-                            //    var EntryDitails = EntriesHelper.UpdateCalculateEntries(Entry.EntryID, null, null, receiptExchangeModel, null);
-                            //    Entry.TransferedToAccounts = false;
-                            //    unitOfWork.EntryRepository.Update(Entry);
-                            //    foreach (var item in EntryDitails)
-                            //    {
-                            //        item.EntryID = Entry.EntryID;
-                            //        item.EntryDetailID = 0;
-                            //        var details = _mapper.Map<EntryDetail>(item);
-
-                            //        unitOfWork.EntryDetailRepository.Insert(details);
-
-                            //    }
+                            
                             }
                             unitOfWork.Save();
 
@@ -878,7 +794,7 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.ReceiptExchangeDetailRepository.RemovRange(OldDetails);
-                            unitOfWork.Save();
+                            //unitOfWork.Save();
                         }
 
 
@@ -896,19 +812,11 @@ namespace Stocks.Controllers
                         }
 
 
-                        //==================================================لا تولد قيد ===================================
-                        //if (receiptExchangeModel.SettingModel.DoNotGenerateEntry == true)
-                        //{
-
-                        //    unitOfWork.Save();
-
-                        //    return Ok(receiptExchangeModel);
-                        //}
                         //===============================================================توليد قيد مع ترحيل تلقائي============================
 
 
 
-                        else if (receiptExchangeModel.SettingModel.AutoGenerateEntry == true)
+                        if (receiptExchangeModel.SettingModel.AutoGenerateEntry == true)
                         {
                             var lastEntry = unitOfWork.EntryRepository.Last();
                             var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0,null, null, receiptExchangeModel, null, lastEntry);
@@ -983,14 +891,6 @@ namespace Stocks.Controllers
                             }
 
 
-                            //==================================================لا تولد قيد ===================================
-                            //if (receiptExchangeModel.SettingModel.DoNotGenerateEntry == true)
-                            //{
-
-                            //    unitOfWork.Save();
-
-                            //    return Ok(receiptExchangeModel);
-                            //}
                             //===============================================================توليد قيد مع ترحيل تلقائي============================
 
 
@@ -1074,14 +974,18 @@ namespace Stocks.Controllers
 
 
                 unitOfWork.ReceiptExchangeDetailRepository.RemovRange(recDetails);
-                var entry = unitOfWork.EntryRepository.Get(x=> x.ReceiptID==id).SingleOrDefault();
-                var entryDitails = unitOfWork.EntryDetailRepository.Get(a=> a.EntryID==entry.EntryID);
-                if (entry.TransferedToAccounts == true)
+                var entry = unitOfWork.EntryRepository.Get(x=> x.ReceiptID==id).FirstOrDefault();
+                if(entry != null)
                 {
-                    accountingHelper.CancelTransferToAccounts(entryDitails.ToList());
+                    var entryDitails = unitOfWork.EntryDetailRepository.Get(a => a.EntryID == entry.EntryID);
+                    if (entry.TransferedToAccounts == true)
+                    {
+                        accountingHelper.CancelTransferToAccounts(entryDitails.ToList());
+                    }
+                    unitOfWork.EntryDetailRepository.RemovRange(entryDitails);
+                    unitOfWork.EntryRepository.Delete(entry.EntryID);
                 }
-                unitOfWork.EntryDetailRepository.RemovRange(entryDitails);
-                unitOfWork.EntryRepository.Delete(entry.EntryID);
+                
                 unitOfWork.ReceiptExchangeRepository.Delete(RecExc);
                 try
                 {
