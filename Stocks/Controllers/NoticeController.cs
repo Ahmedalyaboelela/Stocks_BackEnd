@@ -24,12 +24,14 @@ namespace Stocks.Controllers
         private readonly IMapper _mapper;
         private SettingController setting;
         private readonly IAccountingHelper accountingHelper;
-        public NoticeController(StocksContext context, IMapper mapper)
+        private readonly IStocksHelper _stocksHelper;
+        public NoticeController(StocksContext context, IMapper mapper, IStocksHelper stocksHelper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
             this.setting = new SettingController(context, mapper);
             accountingHelper = new AccountingHelper(context, mapper);
+            _stocksHelper = stocksHelper;
         }
 
         #endregion
@@ -715,6 +717,26 @@ namespace Stocks.Controllers
                         unitOfWork.NoticeDetailRepository.Insert(details);
 
                     }
+                    #region Warehouse
+                    //Notice Credit
+                    if(noticeModel.Type==false)
+                    {
+                        //Check Stocks Count Allowed For Selling 
+                        var Chk=  _stocksHelper.CheckStockCountForNCredit(noticeModel);
+                        if (!Chk)
+                            return Ok(7);
+                        // Transfer From Portofolio Stocks
+                        else
+                            _stocksHelper.TransferNCreditFromStocks(noticeModel);
+                    }
+                    //Notice Debit
+                    else
+                    {
+                        // Add Notice Debit Stocks Count To Portofolio
+                        _stocksHelper.TransferNDebitToStocks(noticeModel);
+              
+                    }
+                    #endregion
 
 
                     //==================================================لا تولد قيد ===================================
@@ -729,7 +751,7 @@ namespace Stocks.Controllers
 
 
 
-                      var lastEntry = unitOfWork.EntryRepository.Last();
+                    var lastEntry = unitOfWork.EntryRepository.Last();
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.NoticeID = notice.NoticeID;
@@ -840,6 +862,30 @@ namespace Stocks.Controllers
                 var Newdetails = _mapper.Map<IEnumerable<NoticeDetail>>(NewdDetails);
                 var OldDetails = unitOfWork.NoticeDetailRepository.Get(filter: m => m.NoticeID == notice.NoticeID);
                 var EntryCheck = unitOfWork.EntryRepository.Get(x => x.NoticeID == notice.NoticeID).SingleOrDefault();
+                #region Warehouse
+                if(noticeModel.Type==false)
+                {
+                    //Cancel Notice Credit From Stocks 
+                    _stocksHelper.CancelNCreditFromStocks(noticeModel.PortfolioID, OldDetails);
+                    //Check Stocks Count Allowed For Selling 
+                    var Chk = _stocksHelper.CheckStockCountForNCredit(noticeModel);
+                    if (!Chk)
+                        return Ok(7);
+                    //Transfer From Portofolio Stocks
+                    else
+                        _stocksHelper.TransferNCreditFromStocks(noticeModel);
+                }
+                else
+                {
+                    //Cancel Purchase Order From Portofolio Stocks
+                    _stocksHelper.CancelNDebitFromStocks(noticeModel.PortfolioID, OldDetails);
+                    // Add Purchase Order Stocks Count To Portofolio
+                    _stocksHelper.TransferNDebitToStocks(noticeModel);
+         
+                }
+
+
+                #endregion
                 if (EntryCheck != null)
                 {
 
@@ -1324,6 +1370,19 @@ namespace Stocks.Controllers
                 unitOfWork.NoticeDetailRepository.RemovRange(noticeDetails);
                 var entry = unitOfWork.EntryRepository.Get(x => x.NoticeID == id).SingleOrDefault();
                 var entryDitails = unitOfWork.EntryDetailRepository.Get(a => a.EntryID == entry.EntryID);
+                #region Warehouse
+                if(notice.Type==false)
+                {
+                    //Cancel Notice Credit From Stocks 
+                    _stocksHelper.CancelNCreditFromStocks(notice.PortfolioID, noticeDetails);
+                }
+                else
+                {
+                    //Cancel Notice Debit From Stocks 
+                    _stocksHelper.CancelNDebitFromStocks(notice.PortfolioID, noticeDetails);
+                }
+
+                #endregion
                 if (entry.TransferedToAccounts == true)
                 {
                     accountingHelper.CancelTransferToAccounts(entryDitails.ToList());

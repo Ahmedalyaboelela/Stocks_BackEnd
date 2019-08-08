@@ -669,9 +669,6 @@ namespace Stocks.Controllers
                         purchaseOrderDetailModel.PurchaseValue = item.PurchaseValue;
                         purchaseOrderDetailModel.PurchasePrice = item.PurchasePrice;
                         purchaseOrderDetailModel.PartnerID = item.PartnerID;
-
-
-
                         var details = _mapper.Map<PurchaseOrderDetail>(purchaseOrderDetailModel);
                         unitOfWork.PurchaseOrderDetailRepository.Insert(details);
 

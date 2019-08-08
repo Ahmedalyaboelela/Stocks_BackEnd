@@ -8,7 +8,7 @@ namespace BAL.Helper
 {
     public interface IStocksHelper
     {
-        bool CheckStockCount(SellingOrderModel sellingOrderModel);
+        bool CheckStockCountForSelling(SellingOrderModel sellingOrderModel);
         void TransferSellingFromStocks(SellingOrderModel sellingOrderModel);
 
         void CancelSellingFromStocks(int PortofolioId, IEnumerable<SellingOrderDetail> oldDetils);
@@ -16,6 +16,16 @@ namespace BAL.Helper
         void TransferPurchaseToStocks(PurchaseOrderModel purchaseOrderModel);
 
         void CancelPurchaseFromStocks(int PortofolioId, IEnumerable<PurchaseOrderDetail> oldDetils);
+
+        bool CheckStockCountForNCredit(NoticeModel noticeModel);
+
+        void TransferNCreditFromStocks(NoticeModel noticeModel);
+
+        void CancelNCreditFromStocks(int PortofolioId, IEnumerable<NoticeDetail> oldDetils);
+
+        void TransferNDebitToStocks(NoticeModel noticeModel);
+
+        void CancelNDebitFromStocks(int PortofolioId, IEnumerable<NoticeDetail> oldDetils);
 
     }
 }
