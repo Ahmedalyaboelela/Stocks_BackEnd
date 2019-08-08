@@ -199,30 +199,34 @@ namespace Stocks.Controllers
         [Route("~/api/ReceiptExchange/GetEntry")]
         public EntryModel GetEntry(int receiptID)
         {
-            var Entry = unitOfWork.EntryRepository.Get(x => x.ReceiptID == receiptID).SingleOrDefault();
-            var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+            var Entry = unitOfWork.EntryRepository.Get(x => x.ReceiptID == receiptID).FirstOrDefault();
+            //var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
             EntryModel entryModel = new EntryModel();
-            entryModel.EntryID = Entry.EntryID;
-            entryModel.Code = Entry.Code;
-            entryModel.Date = Entry.Date.ToString();
-            entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
-            entryModel.NoticeID = Entry.NoticeID;
-            entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
-            entryModel.ReceiptID = Entry.ReceiptID;
-            entryModel.SellingOrderID = Entry.SellingOrderID;
-            entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
+            if(Entry != null)
             {
-                AccCode = m.Account.Code,
-                AccNameAR = m.Account.NameAR,
-                AccNameEN = m.Account.NameEN,
-                AccountID = m.AccountID,
-                Credit = m.Credit,
-                Debit = m.Debit,
-                EntryDetailID = m.EntryDetailID,
-                EntryID = m.EntryID,
+                entryModel.EntryID = Entry.EntryID;
+                entryModel.Code = Entry.Code;
+                entryModel.Date = Entry.Date != null ? Entry.Date.Value.ToString("dd/MM/yyyy") : null;
+                entryModel.DateHijri = Entry.Date != null ? DateHelper.GetHijriDate(Entry.Date) : null;
+                entryModel.NoticeID = Entry.NoticeID;
+                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.ReceiptID = Entry.ReceiptID;
+                entryModel.SellingOrderID = Entry.SellingOrderID;
+                entryModel.EntryDetailModel = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID) != null ? unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
+                {
+                    AccCode = m.Account.Code,
+                    AccNameAR = m.Account.NameAR,
+                    AccNameEN = m.Account.NameEN,
+                    AccountID = m.AccountID,
+                    Credit = m.Credit,
+                    Debit = m.Debit,
+                    EntryDetailID = m.EntryDetailID,
+                    EntryID = m.EntryID,
 
 
-            });
+                }) : null;
+
+            }
 
             return entryModel;
         }
@@ -233,7 +237,7 @@ namespace Stocks.Controllers
         #region GET Methods
 
         public ReceiptExchangeModel GetReceiptExchange(ReceiptExchange RecExc, bool ReceiptExchangeType, bool type, int num)
-        {
+       {
 
 
             var model = unitOfWork.ReceiptExchangeRepository.Get(x => x.ReceiptExchangeType == ReceiptExchangeType && x.Type == type).Select(a => new ReceiptExchangeModel {
@@ -242,17 +246,18 @@ namespace Stocks.Controllers
                 ChiqueDateHijri =a.ChiqueDate!=null? DateHelper.GetHijriDate(a.ChiqueDate):null,
                 ChiqueNumber = a.ChiqueNumber,
                 Code = a.Code,
-                Count = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).Count() >0? unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).Count():0,
                 Date = a.Date!=null?a.Date.Value.ToString("dd/MM/yyyy"):null,
                 DateHijri = a.Date!=null? DateHelper.GetHijriDate(a.Date):null,
                 Description = a.Description,
-                EntryModel = GetEntry(a.ReceiptID),
                 Handling = a.Handling,
                 ReceiptExchangeType = a.ReceiptExchangeType,
                 ReceiptID = a.ReceiptID,
                 Type = a.Type,
                 RecieptValue = a.RecieptValue,
                 TaxNumber = a.TaxNumber,
+                Count = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).Count() ,
+                EntryModel = GetEntry(a.ReceiptID),
+
                 RecExcDetails = unitOfWork.ReceiptExchangeDetailRepository
 
                     .Get(filter: m => m.ReceiptID == RecExc.ReceiptID)!=null? unitOfWork.ReceiptExchangeDetailRepository.Get(filter: m => m.ReceiptID == RecExc.ReceiptID)
@@ -270,13 +275,13 @@ namespace Stocks.Controllers
 
 
                     }):null,
-                LastCode = unitOfWork.ReceiptExchangeRepository.GetEntity(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType) !=null? unitOfWork.ReceiptExchangeRepository.GetEntity(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).Code:null,
+                LastCode = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType) !=null? unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).FirstOrDefault().Code:null,
                 SettingModel = GetSetting(num),
                 
 
 
 
-        }).SingleOrDefault();
+        }).FirstOrDefault();
             //if (model == null)
             //{
             //    return model;
