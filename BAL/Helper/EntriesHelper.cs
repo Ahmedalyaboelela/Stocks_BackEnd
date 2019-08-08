@@ -243,7 +243,7 @@ namespace BAL.Helper
             #region NoticeDebitCredit
             if (noticeModel != null)
             {
-                #region ReceiptExchange
+                #region DebitCredit
 
 
                 var NoticeDetails = noticeModel.NoticeModelDetails;
@@ -517,7 +517,7 @@ namespace BAL.Helper
             #region NoticeDebitCredit
             if (noticeModel != null)
             {
-                #region ReceiptExchange
+                #region DebitCredit
 
 
                 var NoticeDetails = noticeModel.NoticeModelDetails;

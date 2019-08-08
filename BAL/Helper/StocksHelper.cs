@@ -23,7 +23,7 @@ namespace BAL.Helper
 
 
         //Check Stocks Count Allowed For Selling 
-        public bool CheckStockCount(SellingOrderModel sellingOrderModel)
+        public bool CheckStockCountForSelling(SellingOrderModel sellingOrderModel)
         {
             var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter:m=> m.PortfolioID== sellingOrderModel.PortfolioID);
             var Details = sellingOrderModel.DetailsModels;
@@ -134,6 +134,116 @@ namespace BAL.Helper
             }
 
         }
+
+        //Check Stocks Count Allowed For Notice Credit 
+        public bool CheckStockCountForNCredit(NoticeModel noticeModel)
+        {
+            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == noticeModel.PortfolioID);
+            var Details = noticeModel.NoticeModelDetails;
+            foreach (var detail in Details)
+            {
+                if (!PortofolioStocks.Any(m => m.PartnerID == detail.PartnerID))
+                {
+                    return false;
+                }
+                else
+                {
+                    foreach (var item in PortofolioStocks)
+                    {
+                        if (detail.PartnerID == item.PartnerID)
+                        {
+                            if (detail.StocksCredit > item.CurrentStocksCount)
+                            {
+                                return false;
+                            }
+
+
+                        }
+                    }
+
+                }
+            }
+            return true;
+        }
+
+
+        // Discount Notice Credit Stocks Count From Portofolio
+        public void TransferNCreditFromStocks(NoticeModel noticeModel)
+        {
+            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == noticeModel.PortfolioID);
+            var Details = noticeModel.NoticeModelDetails;
+            foreach (var detail in Details)
+            {
+                foreach (var item in PortofolioStocks)
+                {
+                    if (detail.PartnerID == item.PartnerID)
+                    {
+                        item.CurrentStocksCount = (float)(item.CurrentStocksCount - detail.StocksCredit);
+                        unitOfWork.PortfolioTransactionsRepository.Update(item);
+                    }
+
+                }
+            }
+        }
+
+        //Cancel Notice Credit  From Portofolio Stocks
+        public void CancelNCreditFromStocks(int PortofolioId, IEnumerable<NoticeDetail> oldDetils)
+        {
+            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == PortofolioId);
+            foreach (var detail in oldDetils)
+            {
+                foreach (var item in PortofolioStocks)
+                {
+                    if (detail.PartnerID == item.PartnerID)
+                    {
+                        item.CurrentStocksCount = (float)(item.CurrentStocksCount + detail.StocksCredit);
+                        unitOfWork.PortfolioTransactionsRepository.Update(item);
+                    }
+
+                }
+            }
+
+        }
+
+        // Add Purchase Notice Debit Stocks Count To Portofolio
+        public void TransferNDebitToStocks(NoticeModel noticeModel)
+        {
+            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == noticeModel.PortfolioID);
+            var Details = noticeModel.NoticeModelDetails;
+            foreach (var detail in Details)
+            {
+                foreach (var item in PortofolioStocks)
+                {
+                    if (detail.PartnerID == item.PartnerID)
+                    {
+                        item.CurrentStocksCount = (float)(item.CurrentStocksCount + detail.StocksDebit);
+                        unitOfWork.PortfolioTransactionsRepository.Update(item);
+                    }
+
+                }
+            }
+        }
+
+        //Cancel Notice Debit From Portofolio Stocks
+        public void CancelNDebitFromStocks(int PortofolioId, IEnumerable<NoticeDetail> oldDetils)
+        {
+            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == PortofolioId);
+            foreach (var detail in oldDetils)
+            {
+                foreach (var item in PortofolioStocks)
+                {
+                    if (detail.PartnerID == item.PartnerID)
+                    {
+                        item.CurrentStocksCount = (float)(item.CurrentStocksCount - detail.StocksDebit);
+                        unitOfWork.PortfolioTransactionsRepository.Update(item);
+                    }
+
+                }
+            }
+
+        }
+
+
 
 
     }

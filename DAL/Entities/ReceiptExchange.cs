@@ -35,5 +35,7 @@ namespace DAL.Entities
 
 
         public virtual Entry Entry { get; set; }
+
+        public virtual ICollection<ReceiptExchangeDetail> ReceiptExchangeDetails { get; set; }
     }
 }

@@ -667,7 +667,7 @@ namespace Stocks.Controllers
                     }
                     #region Warehouse
                     //Check Stocks Count Allowed For Selling 
-                    var Chk = _stocksHelper.CheckStockCount(sellingOrderModel);
+                    var Chk = _stocksHelper.CheckStockCountForSelling(sellingOrderModel);
                     if (!Chk)
                         return Ok(7);
                     // Transfer From Portofolio Stocks
@@ -823,7 +823,7 @@ namespace Stocks.Controllers
                 //Cancel Selling Order From Stocks 
                 _stocksHelper.CancelSellingFromStocks(sellingOrderModel.PortfolioID, OldDetails);
                 //Check Stocks Count Allowed For Selling 
-                var Chk = _stocksHelper.CheckStockCount(sellingOrderModel);
+                var Chk = _stocksHelper.CheckStockCountForSelling(sellingOrderModel);
                 if (!Chk)
                     return Ok(7);
                 //Transfer From Portofolio Stocks
