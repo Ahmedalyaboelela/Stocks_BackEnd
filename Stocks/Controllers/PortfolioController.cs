@@ -258,28 +258,17 @@ namespace Stocks.Controllers
                     
                  
 
-                        try
-                        {
+                        
                             unitOfWork.Save();
-                        }
-                        catch (DbUpdateException ex)
-                        {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
-                        }
-                        return Ok(7);
+                    if (unitOfWork.Save()== true)
+                    {
+                        return Ok(portModel);
+                    }
+                    else
+                    {
+                        return Ok(6);
+                    }
+                        
 
                    
 
@@ -386,9 +375,17 @@ namespace Stocks.Controllers
                             }
                         }
 
-                        unitOfWork.Save();
+                  var result=unitOfWork.Save(); 
+                    if (result ==true)
+                    {
+                        return Ok(portModel);
+                    }
+                    else
+                    {
+                        return Ok(6);
+                    }
 
-                        return Ok(7);
+                       
                     }
                     else
                     {
@@ -396,7 +393,7 @@ namespace Stocks.Controllers
                         {
 
                             unitOfWork.PortfolioRepository.Update(model);
-                            unitOfWork.Save();
+                            
                             var oldAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == model.PortfolioID);
                             unitOfWork.PortfolioAccountRepository.Delete(oldAccount.PortfolioAccountID);
                             // portfolio accounts
@@ -455,9 +452,17 @@ namespace Stocks.Controllers
                                 }
                             }
 
-                            unitOfWork.Save();
+                     var result=unitOfWork.Save();
+                        if (result==true)
+                        {
+                            return Ok(portModel);
+                        }
+                        else
+                        {
+                            return Ok(6);
+                        }
 
-                            return Ok(7);
+                           
                         }
                         else
                         {
@@ -513,8 +518,12 @@ namespace Stocks.Controllers
 
 
                 unitOfWork.PortfolioRepository.Delete(portfolio);
-                  unitOfWork.Save();
-                    return Ok(7);
+                var result = unitOfWork.Save();
+                if (result == true)
+                    return Ok(portfolio);
+                else
+                    return Ok(6);
+
             }
             else
                 return Ok(1);

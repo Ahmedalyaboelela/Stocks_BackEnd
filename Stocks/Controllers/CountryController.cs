@@ -40,26 +40,12 @@ namespace Stocks.Controllers
         {
             CountryModel model = new CountryModel();
 
-            var count = unitOfWork.CountryRepository.Count();
-            if (count > 0)
+            model.Count = unitOfWork.CountryRepository.Count();
+            if (model.Count > 0)
             {
 
                 model.LastCode = unitOfWork.CountryRepository.Last().Code;
             }
-                //if (model.LastCode==null)
-                //{
-                //model.newCode = "1";
-                //}
-                //else
-                //{
-                //    var C = Convert.ToInt32(model.LastCode);
-                //    var newC = C + 1;
-                //    model.newCode = newC.ToString();
-                //    model.Count = count;
-                //}
-                
-            
-
             return Ok(model);
         }
 
@@ -154,19 +140,19 @@ namespace Stocks.Controllers
 
 
 
-        [Route("~/api/Country/GetAll")]
-        public IActionResult GetAllCountries()
-        {
-            var country = unitOfWork.CountryRepository.Get();
-            var model = _mapper.Map<IEnumerable<CountryModel>>(country);
+        //[Route("~/api/Country/GetAll")]
+        //public IActionResult GetAllCountries()
+        //{
+        //    var country = unitOfWork.CountryRepository.Get();
+        //    var model = _mapper.Map<IEnumerable<CountryModel>>(country);
 
-            if (model == null)
-            {
-                return Ok(0);
-            }
+        //    if (model == null)
+        //    {
+        //        return Ok(0);
+        //    }
 
-            return Ok(model);
-        }
+        //    return Ok(model);
+        //}
 
         #endregion
 
@@ -193,17 +179,12 @@ namespace Stocks.Controllers
                 else
                 {
                     unitOfWork.CountryRepository.Insert(model);
-                   
-                        var result = unitOfWork.Save();
-                        if (result == true)
-                        {
-                            return Ok(7);
-                        }
-                    
-                  
-
-
-                    return Ok(countryModel);
+                    var result = unitOfWork.Save();
+                    if (result == true)
+                        return Ok(countryModel);
+                    else
+                        return Ok(6);
+                        
                 }
             }
             else
@@ -233,16 +214,11 @@ namespace Stocks.Controllers
                 if (Check.Any(m => m.Code == countryModel.Code))
                 {
                     unitOfWork.CountryRepository.Update(model);
-
                     var Result = unitOfWork.Save();
                     if (Result == true)
-                    {
-                        return Ok(7);
-                    }
-
-
-                    return Ok(countryModel);
-
+                        return Ok(countryModel);
+                    else
+                        return Ok(6);
 
                 }
                 else
@@ -250,18 +226,12 @@ namespace Stocks.Controllers
                     if (Check.Any(m => m.Code != countryModel.Code && m.CountryID == countryModel.CountryID))
                     {
                         unitOfWork.CountryRepository.Update(model);
-
                         var Result = unitOfWork.Save();
                         if (Result == true)
-                        {
-                            return Ok(7);
-                        }
-
-
-                        return Ok(countryModel);
+                            return Ok(countryModel);
+                        else
+                            return Ok(6);
                     }
-
-
                 }
             }
             else
@@ -290,14 +260,14 @@ namespace Stocks.Controllers
 
                     unitOfWork.CountryRepository.Delete(id);
                    
-                    var result=    unitOfWork.Save(); 
-                        if (result== true)
-                        {
-                            return Ok(7);
-                        }
+                    var result=   unitOfWork.Save();
+                    if (result == true)
+                        return Ok(country);
+                    else
+                        return Ok(6);
+                        
                     
-                
-                    return Ok(4);
+      
 
                 }
             }
