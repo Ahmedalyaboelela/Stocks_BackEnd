@@ -41,8 +41,8 @@ namespace Stocks.Controllers
             }
             #region Date part
           
-            model.EstablishDate = portfolio.EstablishDate.Value.ToString("MM/dd/yyyy");
-            model.EstablishDateHijri = DateHelper.GetHijriDate(portfolio.EstablishDate);
+            model.EstablishDate = portfolio.EstablishDate.Value.ToString("yyyy/MM/dd");
+          //  model.EstablishDateHijri = DateHelper.GetHijriDate(portfolio.EstablishDate);
 
             #endregion
 
@@ -70,7 +70,8 @@ namespace Stocks.Controllers
                 .Select(m => new PortfolioOpeningStocksModel
                 {
                     PortOPenStockID = m.PortOPenStockID,
-                    OpeningStocksCount = m.OpeningStocksCount,
+                    OpeningStocksCount = m.OpeningStocksCount, 
+                    OpeningStockValue=m.OpeningStockValue,
                     PartnerID = m.PartnerID,
                     PartnerCode = m.Partner.Code,
                     PartnerNameAR = m.Partner.NameAR,
@@ -78,17 +79,26 @@ namespace Stocks.Controllers
                     PortfolioID = m.PortfolioID,
                     PortfolioCode = m.Portfolio.Code,
                     PortfolioNameAR = m.Portfolio.NameAR,
-                    PortfolioNameEN = m.Portfolio.NameEN
+                    PortfolioNameEN = m.Portfolio.NameEN,
+                    
 
                 });
             if (OpeningStocks != null) {
                 model.portfolioOpeningStocksArray = OpeningStocks;
                 model.TotalStocksCount = 0;
+                model.RSBalance = 0;
                 foreach (var item in OpeningStocks)
                 {
-                    model.TotalStocksCount  += item.OpeningStocksCount;
+                   
+                    model.TotalStocksCount += item.OpeningStocksCount;
                 }
-               
+              
+                foreach (var item2 in OpeningStocks)
+                {
+                    model.RSBalance += item2.OpeningStockValue;
+                    
+                }
+
             }
                
             
