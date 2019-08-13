@@ -45,7 +45,7 @@ namespace Stocks.Controllers
         [Route("~/api/ApplicationUser/GetAllRoles")]
         public IEnumerable<RoleModel> GetAllRoles()
         {
-            var roles = _roleManager.Roles.Where(m=> m.Name != "SuperAdmin").ToList();
+            var roles = _roleManager.Roles.ToList();
             var model = new List<RoleModel>();
             roles.ForEach(item => model.Add(
                 new RoleModel
