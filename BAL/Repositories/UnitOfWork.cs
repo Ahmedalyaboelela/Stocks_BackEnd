@@ -1,8 +1,10 @@
 ﻿using BAL.Interfaces;
 using DAL.Context;
 using DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -353,9 +355,9 @@ namespace BAL.Repositories
         #endregion
 
 
-        public virtual bool Save()
+        public virtual int Save()
         {
-            bool returnValue = true;
+            int returnValue = 200;
             using (var dbContextTransaction = Context.Database.BeginTransaction())
                 //  {
                 try
@@ -363,11 +365,27 @@ namespace BAL.Repositories
                     Context.SaveChanges();
                     dbContextTransaction.Commit();
                 }
-                catch (Exception ex)
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
 
+                    if (sqlException != null)
+                    {
+                        var number = sqlException.Number;
+
+                        if (number == 547)
+                        {
+                            returnValue = 501;
+
+                        }
+                        else
+                            returnValue = 500;
+                    }
+                }
+                catch (Exception ex)
                 {
                     //Log Exception Handling message                      
-                    returnValue = false;
+                    returnValue = 500;
                     dbContextTransaction.Rollback();
                 }
             //    }
@@ -375,9 +393,9 @@ namespace BAL.Repositories
             return returnValue;
         }
 
-        public virtual async Task<bool> SaveAsync()
+        public virtual async Task<int> SaveAsync()
         {
-            bool returnValue = true;
+            int returnValue = 200;
             using (var dbContextTransaction = Context.Database.BeginTransaction())
             {
                 try
@@ -385,10 +403,27 @@ namespace BAL.Repositories
                     await Context.SaveChangesAsync();
                     dbContextTransaction.Commit();
                 }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        var number = sqlException.Number;
+
+                        if (number == 547)
+                        {
+                            returnValue = 501;
+
+                        }
+                        else
+                            returnValue = 500;
+                    }
+                }
                 catch (Exception)
                 {
                     //Log Exception Handling message                      
-                    returnValue = false;
+                    returnValue = 500;
                     dbContextTransaction.Rollback();
                 }
             }

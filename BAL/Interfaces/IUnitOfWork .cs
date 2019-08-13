@@ -9,11 +9,11 @@ namespace BAL.Interfaces
     public interface IUnitOfWork : IDisposable
     {
 
-        bool Save();
+        int Save();
 
         GenericRepository<T> Repository<T>() where T : class, new();
 
-        Task<bool> SaveAsync();
+        Task<int> SaveAsync();
 
     }
 }

@@ -299,6 +299,7 @@ namespace Stocks.Controllers
                                     return Ok(6);
                             }
                         }
+                        accountModel.Count = unitOfWork.AccountRepository.Count();
                         return Ok(accountModel);
                     }
                     else
@@ -328,7 +329,7 @@ namespace Stocks.Controllers
                                         return Ok(6);
                                 }
                             }
-
+                            accountModel.Count = unitOfWork.AccountRepository.Count();
                             return Ok(accountModel);
                         }
                         else
