@@ -35,3 +35,7 @@
 [2]- pocket money account
 [3]- stock account
 
+//..................... Db Save Return Codes ...................//
+[200] - data saved successfully.
+[500] - exception occurred.
+[501] - FK Conflict Exception.

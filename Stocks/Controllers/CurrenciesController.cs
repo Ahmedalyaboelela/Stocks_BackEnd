@@ -149,7 +149,7 @@ namespace Stocks.Controllers
                     unitOfWork.CurrencyRepository.Insert(model);
                    
                         var result = unitOfWork.Save();
-                        if (result == true)
+                        if (result == 200)
                         {
                             return Ok(7);
                         }
@@ -197,7 +197,7 @@ namespace Stocks.Controllers
                     unitOfWork.CurrencyRepository.Update(model);
 
                     var Result = unitOfWork.Save();
-                    if (Result == true)
+                    if (Result == 200)
                     {
                         return Ok(7);
                     }
@@ -214,7 +214,7 @@ namespace Stocks.Controllers
                         unitOfWork.CurrencyRepository.Update(model);
 
                         var Result = unitOfWork.Save();
-                        if (Result == true)
+                        if (Result == 200)
                         {
                             return Ok(7);
                         }
@@ -261,7 +261,7 @@ namespace Stocks.Controllers
                     try
                     {
                     var result= unitOfWork.Save();
-                        if (result == true)
+                        if (result == 200)
                         {
                             return Ok(7);
                         }
