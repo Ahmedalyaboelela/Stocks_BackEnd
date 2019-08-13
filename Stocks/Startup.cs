@@ -28,6 +28,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using BAL.Model;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace Stocks
 {
@@ -75,7 +77,16 @@ namespace Stocks
             services.AddTransient<IStocksHelper, StocksHelper>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
-            services.AddCors();
+            // Add service and create Policy with options
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
 
             // JWT Authentication 
 
@@ -110,9 +121,8 @@ namespace Stocks
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseCors(options => options.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
-               .AllowAnyMethod()
-               .AllowAnyHeader());
+
+            app.UseCors("CorsPolicy");
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
             {
@@ -120,7 +130,8 @@ namespace Stocks
                 RequestPath = new PathString("/UploadFiles")
             });
 
-            //app.ConfigureExceptionHandler(logger);
+      
+            app.ConfigureExceptionHandler(logger);
             app.ConfigureCustomExceptionMiddleware();
             app.UseAuthentication();
             app.UseMvc();
