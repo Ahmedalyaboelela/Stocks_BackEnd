@@ -41,20 +41,20 @@ namespace Stocks.Controllers
             {
                 model.LastCode = unitOfWork.PartnerRepository.Last().Code;
                 model.Count = count;
-                var countries = unitOfWork.CountryRepository.Get();
-                if (countries.Count()>0)
-                {
-                    model.Countries = countries.Select(m => new CountryModel
-                    {
-                        CountryID = m.CountryID,
-                        NameAR = m.NameAR,
-                        NameEN = m.NameEN
-
-                    });
-                }
                
             }
-           
+            var countries = unitOfWork.CountryRepository.Get();
+            if (countries.Count() > 0)
+            {
+                model.Countries = countries.Select(m => new CountryModel
+                {
+                    CountryID = m.CountryID,
+                    NameAR = m.NameAR,
+                    NameEN = m.NameEN
+
+                });
+            }
+
             return Ok(model);
         }
 
@@ -386,28 +386,13 @@ namespace Stocks.Controllers
                     else
                     {
                         unitOfWork.PartnerRepository.Insert(model);
-                        try
-                        {
-                            unitOfWork.Save();
-                        }
-                        catch (DbUpdateException ex)
-                        {
-                            var sqlException = ex.GetBaseException() as SqlException;
 
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
+                        var result = unitOfWork.Save();
+                        if (result == 200)
+                            return Ok(partnerModel);
+                        else
+                            return Ok(6);
 
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
-                        }
-                        return Ok(partnerModel);
                     }
                 }
 
