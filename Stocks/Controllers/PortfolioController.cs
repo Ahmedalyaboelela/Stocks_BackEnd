@@ -530,7 +530,7 @@ namespace Stocks.Controllers
                 unitOfWork.PortfolioRepository.Delete(portfolio);
                 var result = unitOfWork.Save();
                 if (result == true)
-                    return Ok(portfolio);
+                    return Ok(4);
                 else
                     return Ok(6);
 
