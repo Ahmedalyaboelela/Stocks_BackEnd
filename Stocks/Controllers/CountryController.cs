@@ -180,7 +180,7 @@ namespace Stocks.Controllers
                 {
                     unitOfWork.CountryRepository.Insert(model);
                     var result = unitOfWork.Save();
-                    if (result == true)
+                    if (result == 200)
                         return Ok(countryModel);
                     else
                         return Ok(6);
@@ -215,7 +215,7 @@ namespace Stocks.Controllers
                 {
                     unitOfWork.CountryRepository.Update(model);
                     var Result = unitOfWork.Save();
-                    if (Result == true)
+                    if (Result == 200)
                         return Ok(countryModel);
                     else
                         return Ok(6);
@@ -227,7 +227,7 @@ namespace Stocks.Controllers
                     {
                         unitOfWork.CountryRepository.Update(model);
                         var Result = unitOfWork.Save();
-                        if (Result == true)
+                        if (Result == 200)
                             return Ok(countryModel);
                         else
                             return Ok(6);
@@ -259,16 +259,19 @@ namespace Stocks.Controllers
                 {
 
                     unitOfWork.CountryRepository.Delete(id);
-                   
-                    var result=   unitOfWork.Save();
-                    if (result == true)
-                        return Ok(country);
-                    else
-                        return Ok(6);
-                        
-                    
-      
 
+                    var Result = unitOfWork.Save();
+                    if(Result == 200)
+                    {
+                        return Ok(4);
+                    }else if(Result == 501)
+                    {
+                        return Ok(5);
+                    }
+                    else
+                    {
+                        return Ok(6);
+                    }
                 }
             }
 

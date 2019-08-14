@@ -270,7 +270,7 @@ namespace Stocks.Controllers
 
                         
                             unitOfWork.Save();
-                    if (unitOfWork.Save()== true)
+                    if (unitOfWork.Save()== 200)
                     {
                         return Ok(portModel);
                     }
@@ -386,7 +386,7 @@ namespace Stocks.Controllers
                         }
 
                   var result=unitOfWork.Save(); 
-                    if (result ==true)
+                    if (result ==200)
                     {
                         return Ok(portModel);
                     }
@@ -463,7 +463,7 @@ namespace Stocks.Controllers
                             }
 
                      var result=unitOfWork.Save();
-                        if (result==true)
+                        if (result==200)
                         {
                             return Ok(portModel);
                         }
@@ -529,8 +529,8 @@ namespace Stocks.Controllers
 
                 unitOfWork.PortfolioRepository.Delete(portfolio);
                 var result = unitOfWork.Save();
-                if (result == true)
-                    return Ok(4);
+                if (result == 200)
+                    return Ok(portfolio);
                 else
                     return Ok(6);
 

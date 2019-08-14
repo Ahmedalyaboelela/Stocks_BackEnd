@@ -472,6 +472,7 @@ namespace Stocks.Controllers
                                     return Ok(6);
                             }
                         }
+                        partnerModel.Count = unitOfWork.PartnerRepository.Count();
                         return Ok(partnerModel);
                     }
                     else
@@ -501,6 +502,7 @@ namespace Stocks.Controllers
                                         return Ok(6);
                                 }
                             }
+                            partnerModel.Count = unitOfWork.PartnerRepository.Count();
                             return Ok(partnerModel);
                         }
                         else
