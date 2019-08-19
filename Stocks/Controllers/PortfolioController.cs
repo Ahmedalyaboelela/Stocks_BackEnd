@@ -265,22 +265,22 @@ namespace Stocks.Controllers
                                 unitOfWork.PortfolioTransactionsRepository.Insert(ob);
                             }
                         }
-                    
-                 
 
-                        
-                            unitOfWork.Save();
-                    if (unitOfWork.Save()== 200)
+
+
+                    var result = unitOfWork.Save();
+                    if (result == 200)
                     {
-                        return Ok(portModel);
+                        return Ok("Succeeded");
                     }
                     else
                     {
                         return Ok(6);
                     }
-                        
 
-                   
+
+
+
 
                 }
 
@@ -385,19 +385,20 @@ namespace Stocks.Controllers
                             }
                         }
 
-                  var result=unitOfWork.Save(); 
-                    if (result ==200)
+                    var result = unitOfWork.Save();
+                    if (result == 200)
                     {
-                        return Ok(portModel);
+                        return Ok("Succeeded");
                     }
                     else
                     {
                         return Ok(6);
                     }
 
-                       
-                    }
-                    else
+
+
+                }
+                else
                     {
                         if (Check.Any(m => m.Code == portModel.Code && m.PortfolioID == id))
                         {
@@ -462,19 +463,20 @@ namespace Stocks.Controllers
                                 }
                             }
 
-                     var result=unitOfWork.Save();
-                        if (result==200)
+                        var result = unitOfWork.Save();
+                        if (result == 200)
                         {
-                            return Ok(portModel);
+                            return Ok("Succeeded");
                         }
                         else
                         {
                             return Ok(6);
                         }
 
-                           
-                        }
-                        else
+
+
+                    }
+                    else
                         {
                             return Ok(2);
                         }
@@ -528,11 +530,19 @@ namespace Stocks.Controllers
 
 
                 unitOfWork.PortfolioRepository.Delete(portfolio);
-                var result = unitOfWork.Save();
-                if (result == 200)
-                    return Ok(portfolio);
+                var Result = unitOfWork.Save();
+                if (Result == 200)
+                {
+                    return Ok("Succeeded");
+                }
+                else if (Result == 501)
+                {
+                    return Ok(5);
+                }
                 else
+                {
                     return Ok(6);
+                }
 
             }
             else

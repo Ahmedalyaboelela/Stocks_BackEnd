@@ -766,38 +766,16 @@ namespace Stocks.Controllers
                     //} 
                     #endregion
 
-
-                    try
+                    var result = unitOfWork.Save();
+                    if (result == 200)
                     {
-                        unitOfWork.Save();
-
+                        return Ok("Succeeded");
                     }
-
-                    catch (DbUpdateException ex)
-                    {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
-                    }
-                    catch(Exception ex)
+                    else
                     {
                         return Ok(6);
                     }
 
-
-
-                    return Ok(purchaseOrderModel);
 
 
 
@@ -970,32 +948,16 @@ namespace Stocks.Controllers
 
                             }
                         }
-
-                        try
+                        var result = unitOfWork.Save();
+                        if (result == 200)
                         {
-                            unitOfWork.Save();
+                            return Ok("Succeeded");
                         }
-                        catch (DbUpdateException ex)
+                        else
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
+                            return Ok(6);
                         }
 
-
-
-                        return Ok(purchaseOrderModel);
 
 
                     }
@@ -1129,31 +1091,16 @@ namespace Stocks.Controllers
                                 }
                             }
 
-                            try
+                            var result = unitOfWork.Save();
+                            if (result == 200)
                             {
-                                unitOfWork.Save();
+                                return Ok("Succeeded");
                             }
-                            catch (DbUpdateException ex)
+                            else
                             {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
+                                return Ok(6);
                             }
 
-
-
-                            return Ok(purchaseOrderModel);
 
                         }
 
@@ -1173,27 +1120,7 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
-                            try
-                            {
-                                unitOfWork.Save();
-                            }
-                            catch (DbUpdateException ex)
-                            {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
-                            }
+                           
                         }
 
 
@@ -1214,30 +1141,16 @@ namespace Stocks.Controllers
                         //==================================================لا تولد قيد ===================================
                         if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                         {
-
-                            try
+                            var result = unitOfWork.Save();
+                            if (result == 200)
                             {
-                                unitOfWork.Save();
+                                return Ok("Succeeded");
                             }
-                            catch (DbUpdateException ex)
+                            else
                             {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
+                                return Ok(6);
                             }
 
-                            return Ok(purchaseOrderModel);
                         }
                         //===============================================================توليد قيد مع ترحيل تلقائي============================
 
@@ -1297,32 +1210,16 @@ namespace Stocks.Controllers
 
                         }
 
-
-                        try
+                        var result = unitOfWork.Save();
+                        if (result == 200)
                         {
-                            unitOfWork.Save();
+                            return Ok("Succeeded");
                         }
-                        catch (DbUpdateException ex)
+                        else
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
+                            return Ok(6);
                         }
 
-
-
-                        return Ok(purchaseOrderModel);
 
 
                     }
@@ -1338,27 +1235,7 @@ namespace Stocks.Controllers
                             if (OldDetails != null)
                             {
                                 unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
-                                try
-                                {
-                                    unitOfWork.Save();
-                                }
-                                catch (DbUpdateException ex)
-                                {
-                                    var sqlException = ex.GetBaseException() as SqlException;
-
-                                    if (sqlException != null)
-                                    {
-                                        var number = sqlException.Number;
-
-                                        if (number == 547)
-                                        {
-                                            return Ok(5);
-
-                                        }
-                                        else
-                                            return Ok(6);
-                                    }
-                                }
+                               
                             }
 
 
@@ -1380,29 +1257,16 @@ namespace Stocks.Controllers
                             if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                             {
 
-                                try
+                                var result = unitOfWork.Save();
+                                if (result == 200)
                                 {
-                                    unitOfWork.Save();
+                                    return Ok("Succeeded");
                                 }
-                                catch (DbUpdateException ex)
+                                else
                                 {
-                                    var sqlException = ex.GetBaseException() as SqlException;
-
-                                    if (sqlException != null)
-                                    {
-                                        var number = sqlException.Number;
-
-                                        if (number == 547)
-                                        {
-                                            return Ok(5);
-
-                                        }
-                                        else
-                                            return Ok(6);
-                                    }
+                                    return Ok(6);
                                 }
 
-                                return Ok(purchaseOrderModel);
                             }
                             //===============================================================توليد قيد مع ترحيل تلقائي============================
 
@@ -1485,31 +1349,16 @@ namespace Stocks.Controllers
                             }
 
 
-                            try
+                            var result = unitOfWork.Save();
+                            if (result == 200)
                             {
-                                unitOfWork.Save();
+                                return Ok("Succeeded");
                             }
-                            catch (DbUpdateException ex)
+                            else
                             {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
+                                return Ok(6);
                             }
 
-
-
-                            return Ok(purchaseOrderModel);
                         }
 
 
@@ -1565,28 +1414,19 @@ namespace Stocks.Controllers
             unitOfWork.EntryRepository.Delete(Entry.EntryID);
 
             unitOfWork.PurchaseOrderRepository.Delete(id);
-            try
+            var Result = unitOfWork.Save();
+            if (Result == 200)
             {
-                unitOfWork.Save();
+                return Ok("Succeeded");
             }
-            catch (DbUpdateException ex)
+            else if (Result == 501)
             {
-                var sqlException = ex.GetBaseException() as SqlException;
-
-                if (sqlException != null)
-                {
-                    var number = sqlException.Number;
-
-                    if (number == 547)
-                    {
-                        return Ok(5);
-
-                    }
-                    else
-                        return Ok(6);
-                }
+                return Ok(5);
             }
-            return Ok(4);
+            else
+            {
+                return Ok(6);
+            }
 
 
         }
