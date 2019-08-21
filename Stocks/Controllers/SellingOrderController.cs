@@ -754,30 +754,15 @@ namespace Stocks.Controllers
                     //    }
                     //}
 
-                    try
+                    var result = unitOfWork.Save();
+                    if (result == 200)
                     {
-                        unitOfWork.Save();
-
+                        return Ok("Succeeded");
                     }
-
-                    catch (DbUpdateException ex)
+                    else
                     {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
+                        return Ok(6);
                     }
-                    return Ok(sellingOrderModel);
 
 
 
@@ -869,6 +854,7 @@ namespace Stocks.Controllers
                       if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                       {
                           unitOfWork.EntryRepository.Delete(Entry.EntryID);
+
                             var reslt = unitOfWork.Save();
                             if (reslt == 200)
                             {
@@ -883,6 +869,7 @@ namespace Stocks.Controllers
                             {
                                 return Ok(6);
                             }
+
                         }
                         //===================================توليد قيد مع ترحيل تلقائي===================================
                         if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
@@ -936,22 +923,25 @@ namespace Stocks.Controllers
                         if (res == 200)
                         {
 
+
                             return Ok(4);
                         }
                         else if (res == 501)
                         {
                             return Ok(5);
+
                         }
                         else
                         {
                             return Ok(6);
                         }
+
                     }
 
 
-                  //==========================================Second Case OF Code Of Purchase=======================================
+                    //==========================================Second Case OF Code Of Purchase=======================================
 
-                  else
+                    else
                   {
                       if (Check.Any(m => m.Code == sellingOrder.Code && m.SellingOrderID == id))
                       {
@@ -959,6 +949,7 @@ namespace Stocks.Controllers
                           if (OldDetails != null)
                           {
                               unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
+
                                 var res = unitOfWork.Save();
                                 if (res == 200)
                                 {
@@ -973,6 +964,7 @@ namespace Stocks.Controllers
                                 {
                                     return Ok(6);
                                 }
+
                             }
 
 
@@ -994,6 +986,7 @@ namespace Stocks.Controllers
                           if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                           {
                               unitOfWork.EntryRepository.Delete(Entry.EntryID);
+
                             var res = unitOfWork.Save();
                             if (res == 200)
                             {
@@ -1009,6 +1002,7 @@ namespace Stocks.Controllers
                                 return Ok(6);
                             }
                             }
+
                           //===================================توليد قيد مع ترحيل تلقائي===================================
                           if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                           {
@@ -1061,22 +1055,25 @@ namespace Stocks.Controllers
                             if (Result == 200)
                             {
 
+
                                 return Ok(4);
                             }
                             else if (Result == 501)
                             {
                                 return Ok(5);
+
                             }
                             else
                             {
                                 return Ok(6);
                             }
 
+
                         }
 
 
-                  }
-                  return Ok(sellingOrderModel);
+                    }
+                  return Ok();
               }
 
             // now We Will Create new Entry As Insert
@@ -1088,6 +1085,7 @@ namespace Stocks.Controllers
                     if (OldDetails != null)
                     {
                         unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
+
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
@@ -1102,6 +1100,7 @@ namespace Stocks.Controllers
                         {
                             return Ok(6);
                         }
+
                         }
 
 
@@ -1123,6 +1122,7 @@ namespace Stocks.Controllers
                     if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                     {
 
+
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
@@ -1142,7 +1142,8 @@ namespace Stocks.Controllers
 
 
 
-                    else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
+
+                        else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
@@ -1202,6 +1203,7 @@ namespace Stocks.Controllers
 
                         //if (sellingOrderModel.SettingModel.GenerateEntry == true)
 
+
                         // {
                         //     var lastEntry = unitOfWork.EntryRepository.Last();
                         //     var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
@@ -1227,11 +1229,13 @@ namespace Stocks.Controllers
                         if (Res == 200)
                         {
 
+
                             return Ok(4);
                         }
                         else if (Res == 501)
                         {
                             return Ok(5);
+
                         }
                         else
                         {
@@ -1241,9 +1245,9 @@ namespace Stocks.Controllers
                     }
 
 
-                //==========================================Second Case OF Code Of Purchase=======================================
+                    //==========================================Second Case OF Code Of Purchase=======================================
 
-                else
+                    else
                 {
                     if (Check.Any(m => m.Code == sellingOrder.Code && m.SellingOrderID == id))
                     {
@@ -1251,6 +1255,7 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
+
                                 var Result = unitOfWork.Save();
                                 if (Result == 200)
                                 {
@@ -1265,6 +1270,7 @@ namespace Stocks.Controllers
                                 {
                                     return Ok(6);
                                 }
+
                             }
 
 
@@ -1289,22 +1295,26 @@ namespace Stocks.Controllers
                                 if (Result == 200)
                                 {
 
+
                                     return Ok(4);
                                 }
                                 else if (Result == 501)
                                 {
                                     return Ok(5);
+
                                 }
                                 else
                                 {
                                     return Ok(6);
                                 }
+
                             }
                         //===============================================================توليد قيد مع ترحيل تلقائي============================
 
 
 
-                        else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
+
+                            else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                         {
                             var lastEntry = unitOfWork.EntryRepository.Last();
                             var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
@@ -1357,6 +1367,7 @@ namespace Stocks.Controllers
                             }
 
                             }
+
                             
                             var Res = unitOfWork.Save();
                             if (Res == 200)
@@ -1367,15 +1378,18 @@ namespace Stocks.Controllers
                             else if (Res == 501)
                             {
                                 return Ok(5);
+
                             }
                             else
                             {
                                 return Ok(6);
                             }
+
                         }
 
 
                 }
+
 
 
                 return Ok(sellingOrderModel);
@@ -1420,6 +1434,7 @@ namespace Stocks.Controllers
             _stocksHelper.CancelSellingFromStocks(modelSelling.PortfolioID, Details);
             #endregion
             unitOfWork.SellingOrderDetailRepository.RemovRange(Details);
+
             var Entry = unitOfWork.EntryRepository.Get(filter: x => x.SellingOrderID == id).SingleOrDefault();
             if(Entry != null)
             {
@@ -1440,6 +1455,7 @@ namespace Stocks.Controllers
                 return Ok(4);
             else
                 return Ok(returnVal);
+
 
 
 

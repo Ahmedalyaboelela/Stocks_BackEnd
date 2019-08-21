@@ -217,6 +217,7 @@ namespace Stocks.Controllers
                     else
                     {
                         unitOfWork.AccountRepository.Insert(model);
+
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
@@ -232,6 +233,7 @@ namespace Stocks.Controllers
                         {
                             return Ok(6);
                         }
+
                     }
                 }
 
@@ -271,6 +273,7 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.AccountRepository.Update(model);
+
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
@@ -281,11 +284,13 @@ namespace Stocks.Controllers
                         else if (Result == 501)
                         {
                             return Ok(5);
+
                         }
                         else
                         {
                             return Ok(6);
                         }
+
                     }
                     else
                     {
@@ -293,6 +298,7 @@ namespace Stocks.Controllers
                         {
 
                             unitOfWork.AccountRepository.Update(model);
+
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
@@ -308,6 +314,7 @@ namespace Stocks.Controllers
                             {
                                 return Ok(6);
                             }
+
                         }
                         else
                         {
@@ -364,9 +371,10 @@ namespace Stocks.Controllers
                         return Ok(6);
                     }
 
+
                 }
-            }
-        }
+            
+        
         #endregion
 
     }

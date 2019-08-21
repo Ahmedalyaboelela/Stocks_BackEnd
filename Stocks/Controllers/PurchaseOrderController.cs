@@ -776,6 +776,7 @@ namespace Stocks.Controllers
                     else if (Result == 501)
                     {
                         return Ok(5);
+
                     }
                     else
                     {
@@ -945,6 +946,7 @@ namespace Stocks.Controllers
                             }
                         }
 
+
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
@@ -957,8 +959,10 @@ namespace Stocks.Controllers
                         }
                         else
                         {
+
                             return Ok(6);
                         }
+
 
 
                     }
@@ -1076,6 +1080,7 @@ namespace Stocks.Controllers
                                 }
                             }
 
+
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
@@ -1090,6 +1095,7 @@ namespace Stocks.Controllers
                             {
                                 return Ok(6);
                             }
+
 
                         }
 
@@ -1109,6 +1115,7 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
+
                             var Rest = unitOfWork.Save();
                             if (Rest == 200)
                             {
@@ -1123,6 +1130,7 @@ namespace Stocks.Controllers
                             {
                                 return Ok(6);
                             }
+
                         }
 
 
@@ -1144,6 +1152,7 @@ namespace Stocks.Controllers
                         if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                         {
 
+
                             var Rest = unitOfWork.Save();
                             if (Rest == 200)
                             {
@@ -1158,6 +1167,7 @@ namespace Stocks.Controllers
                             {
                                 return Ok(6);
                             }
+
                         }
                         //===============================================================توليد قيد مع ترحيل تلقائي============================
 
@@ -1217,6 +1227,7 @@ namespace Stocks.Controllers
 
                         }
 
+
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
@@ -1226,11 +1237,13 @@ namespace Stocks.Controllers
                         else if (Res == 501)
                         {
                             return Ok(5);
+
                         }
                         else
                         {
                             return Ok(6);
                         }
+
                     }
 
 
@@ -1244,6 +1257,7 @@ namespace Stocks.Controllers
                             if (OldDetails != null)
                             {
                                 unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
+
                                 var Rest = unitOfWork.Save();
                                 if (Rest == 200)
                                 {
@@ -1258,6 +1272,7 @@ namespace Stocks.Controllers
                                 {
                                     return Ok(6);
                                 }
+
                             }
 
 
@@ -1279,6 +1294,7 @@ namespace Stocks.Controllers
                             if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                             {
 
+
                                 var Rest = unitOfWork.Save();
                                 if (Rest == 200)
                                 {
@@ -1293,6 +1309,7 @@ namespace Stocks.Controllers
                                 {
                                     return Ok(6);
                                 }
+
                             }
                             //===============================================================توليد قيد مع ترحيل تلقائي============================
 
@@ -1378,16 +1395,19 @@ namespace Stocks.Controllers
                             if (Res == 200)
                             {
 
+
                                 return Ok(4);
                             }
                             else if (Res == 501)
                             {
                                 return Ok(5);
+
                             }
                             else
                             {
                                 return Ok(6);
                             }
+
                         }
 
 
@@ -1450,7 +1470,9 @@ namespace Stocks.Controllers
             var Result = unitOfWork.Save();
             if (Result == 200)
             {
+
                 return Ok(4);
+
             }
             else if (Result == 501)
             {

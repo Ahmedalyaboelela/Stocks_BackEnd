@@ -410,15 +410,7 @@ namespace Stocks.Controllers
                 }
 
 
-                //var Result = unitOfWork.Save();
-                //if (Result == true)
-                //{
-                //    return Ok(4);
-                //}
-                //else
-                //{
-                //    return NotFound("Not found !");
-                //} 
+                
             }
             else
                 return Ok(1);

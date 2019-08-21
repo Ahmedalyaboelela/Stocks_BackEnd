@@ -1,3 +1,4 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -33,12 +34,31 @@ namespace Stocks.Controllers
         #region GET Methods
         [HttpGet]
         [Route("~/api/Partner/FirstOpen")]
-        public IActionResult FirstOpen()        {            PartenerModel model = new PartenerModel();            var count = unitOfWork.PartnerRepository.Count();
+        public IActionResult FirstOpen()
+        {
+            PartenerModel model = new PartenerModel();
+            var count = unitOfWork.PartnerRepository.Count();
             // Edited By Ahmed Ayman
-            if (count > 0)            {                model.LastCode = unitOfWork.PartnerRepository.Last().Code;                model.Count = count;
+            if (count > 0)
+            {
+                model.LastCode = unitOfWork.PartnerRepository.Last().Code;
+                model.Count = count;
 
 
-            }            var countries = unitOfWork.CountryRepository.Get();            if (countries.Count() > 0)            {                model.Countries = countries.Select(m => new CountryModel                {                    CountryID = m.CountryID,                    NameAR = m.NameAR,                    NameEN = m.NameEN                });            }            return Ok(model);        }
+            }
+            var countries = unitOfWork.CountryRepository.Get();
+            if (countries.Count() > 0)
+            {
+                model.Countries = countries.Select(m => new CountryModel
+                {
+                    CountryID = m.CountryID,
+                    NameAR = m.NameAR,
+                    NameEN = m.NameEN
+
+                });
+            }
+            return Ok(model);
+        }
 
         [Route("~/api/Partner/GetLast")]
         public IActionResult GetLastPartner()
@@ -578,4 +598,6 @@ namespace Stocks.Controllers
         #endregion
 
     }
+
+               
 }

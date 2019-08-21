@@ -602,6 +602,7 @@ namespace Stocks.Controllers
 
                     }
 
+
                     var Res = unitOfWork.Save();
                     if (Res == 200)
                     {
@@ -617,8 +618,9 @@ namespace Stocks.Controllers
                         return Ok(6);
                     }
 
+
                 }
-            
+
             }
             else
             {
@@ -732,6 +734,7 @@ namespace Stocks.Controllers
 
                         }
 
+
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
@@ -746,6 +749,7 @@ namespace Stocks.Controllers
                         {
                             return Ok(6);
                         }
+
 
 
                     }
@@ -827,6 +831,7 @@ namespace Stocks.Controllers
                             }
                             
                             }
+
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
@@ -845,6 +850,7 @@ namespace Stocks.Controllers
                     }
 
                    
+
                 }
                     
                 
@@ -932,6 +938,7 @@ namespace Stocks.Controllers
                             }
                         }
 
+
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
@@ -946,6 +953,7 @@ namespace Stocks.Controllers
                         {
                             return Ok(6);
                         }
+
 
                     }
 
@@ -1032,6 +1040,7 @@ namespace Stocks.Controllers
                                 }
                             }
 
+
                             var Res = unitOfWork.Save();
                             if (Res == 200)
                             {
@@ -1046,11 +1055,14 @@ namespace Stocks.Controllers
                             {
                                 return Ok(6);
                             }
+
                         }
 
 
                     }
+
                     return Ok(4);
+
                 }
             }
             else
@@ -1099,7 +1111,9 @@ namespace Stocks.Controllers
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
+
                     return Ok(4);
+
                 }
                 else if (Result == 501)
                 {
@@ -1109,6 +1123,7 @@ namespace Stocks.Controllers
                 {
                     return Ok(6);
                 }
+
             }
             else
                 return Ok(1);

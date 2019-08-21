@@ -267,14 +267,11 @@ namespace Stocks.Controllers
 
                     var model = _mapper.Map<Employee>(empModel);
                     
-
                     var empolyeeCard = empModel.emplCards;
-
-                    var EmpolyeeCard = _mapper.Map<IEnumerable<EmployeeCard>>(empolyeeCard);
-                  
+                    
                     unitOfWork.EmployeeRepository.Insert(model);
                         
-                    if (EmpolyeeCard != null)
+                    if (empolyeeCard != null)
                     {
                         foreach (var item in empolyeeCard)
                         {
@@ -288,19 +285,19 @@ namespace Stocks.Controllers
                         }
                     }
 
-                    var Result = unitOfWork.Save();
-                    if (Result == 200)
+
+                  
+               var result=unitOfWork.Save(); 
+                    if (result==200)
                     {
-                        return Ok(4);
-                    }
-                    else if (Result == 501)
-                    {
-                        return Ok(5);
+                        return Ok("Succeeded");
                     }
                     else
                     {
                         return Ok(6);
                     }
+                   
+
 
 
 
@@ -332,96 +329,103 @@ namespace Stocks.Controllers
             {
                 var model = _mapper.Map<Employee>(empModel);
 
-                var empolyeeCard = empModel.emplCards;
-                //var EmpolyeeCard = _mapper.Map<IEnumerable<EmployeeCard>>(empolyeeCard);
-
+                
+                var newCards = empModel.emplCards;
 
                 var Check = unitOfWork.EmployeeRepository.Get(NoTrack: "NoTrack");
-                var oldcard = unitOfWork.EmployeeCardRepository
 
-                    .Get(NoTrack: "NoTrack", filter: m => m.EmployeeID == model.EmployeeID);
-
-
-                if (oldcard.Count()>0)
-                {
-                    unitOfWork.EmployeeCardRepository.RemovRange(oldcard);
-
-                }
-           
-
-                if (Check.Any(m => m.Code != empModel.Code))
+                if (!Check.Any(m => m.Code == empModel.Code))
                 {
                     unitOfWork.EmployeeRepository.Update(model);
+
                     
-                    if(empolyeeCard!= null)
+
+                    // cards
+                    var oldcards = unitOfWork.EmployeeCardRepository
+
+
+                    .Get(filter: m => m.EmployeeID == model.EmployeeID);
+
+                    if (oldcards != null)
                     {
-                        foreach (var item in empolyeeCard)
+
+                        unitOfWork.EmployeeCardRepository.RemovRange(oldcards);
+
+
+                    } 
+                    if (newCards != null)
+                    {
+                        foreach (var item in newCards)
                         {
                             item.EmployeeID = model.EmployeeID;
-                            item.EmpCardId = 0;
-                            var newcard = _mapper.Map<EmployeeCard>(item);
+                            var obj = _mapper.Map<EmployeeCard>(item);
 
-                            unitOfWork.EmployeeCardRepository.Insert(newcard);
-
+                            unitOfWork.EmployeeCardRepository.Insert(obj);
                         }
                     }
 
-
-                    var Result = unitOfWork.Save();
-                    if (Result == 200)
+                    var result = unitOfWork.Save();
+                    if (result == 200)
                     {
-                        return Ok(4);
-                    }
-                    else if (Result == 501)
-                    {
-                        return Ok(5);
+                        return Ok("Succeeded");
                     }
                     else
                     {
                         return Ok(6);
                     }
+
+
+
                 }
                 else
                 {
-                    if (Check.Any(m => m.Code == empModel.Code && m.EmployeeID == id))
+                     
+                    if (Check.Any(m => m.Code == empModel.Code && m.EmployeeID==id))
                     {
-
                         unitOfWork.EmployeeRepository.Update(model);
 
-                        if (empolyeeCard != null || empolyeeCard.Count()>0)
+
+
+                        // cards
+                        var oldcards = unitOfWork.EmployeeCardRepository
+
+
+                        .Get(filter: m => m.EmployeeID == model.EmployeeID);
+
+                        if (oldcards != null)
                         {
-                            foreach (var item in empolyeeCard)
+
+                            unitOfWork.EmployeeCardRepository.RemovRange(oldcards);
+
+                        }
+                        if (newCards != null)
+                        {
+                            foreach (var item in newCards)
                             {
                                 item.EmployeeID = model.EmployeeID;
-                                item.EmpCardId = 0;
-                                var newcard = _mapper.Map<EmployeeCard>(item);
+                                var obj = _mapper.Map<EmployeeCard>(item);
 
-                                unitOfWork.EmployeeCardRepository.Insert(newcard);
-
-                            } 
+                                unitOfWork.EmployeeCardRepository.Insert(obj);
+                            }
                         }
 
-                        var Result = unitOfWork.Save();
-                        if (Result == 200)
+                        var result = unitOfWork.Save();
+                        if (result == 200)
                         {
-                            return Ok(4);
-                        }
-                        else if (Result == 501)
-                        {
-                            return Ok(5);
+                            return Ok("Succeeded");
                         }
                         else
                         {
                             return Ok(6);
                         }
+
                     }
-                    else
-                    {
-                        return Ok(2);
+
                     }
+                return Ok();
+                  
                 }
 
-            }
             else
             {
                 return Ok(3);
@@ -456,20 +460,29 @@ namespace Stocks.Controllers
 
             }
             unitOfWork.EmployeeRepository.Delete(employee);
-            var Result = unitOfWork.Save();
-            if (Result == 200)
+
+
+
+
+
+            var result = unitOfWork.Save();
+            if (result == 200)
             {
-                return Ok(4);
+                return Ok("Succeeded");
             }
-            else if (Result == 501)
+            else if (result == 501)
             {
                 return Ok(5);
             }
+
             else
             {
                 return Ok(6);
             }
-            
+
+           
+
+
         }
 
         #endregion
