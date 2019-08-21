@@ -41,20 +41,20 @@ namespace Stocks.Controllers
             {
                 model.LastCode = unitOfWork.PartnerRepository.Last().Code;
                 model.Count = count;
-                var countries = unitOfWork.CountryRepository.Get();
-                if (countries.Count()>0)
-                {
-                    model.Countries = countries.Select(m => new CountryModel
-                    {
-                        CountryID = m.CountryID,
-                        NameAR = m.NameAR,
-                        NameEN = m.NameEN
-
-                    });
-                }
                
             }
-           
+            var countries = unitOfWork.CountryRepository.Get();
+            if (countries.Count() > 0)
+            {
+                model.Countries = countries.Select(m => new CountryModel
+                {
+                    CountryID = m.CountryID,
+                    NameAR = m.NameAR,
+                    NameEN = m.NameEN
+
+                });
+            }
+
             return Ok(model);
         }
 
@@ -386,6 +386,7 @@ namespace Stocks.Controllers
                     else
                     {
                         unitOfWork.PartnerRepository.Insert(model);
+
                         var result = unitOfWork.Save();
                         if (result == 200)
                         {
@@ -395,6 +396,7 @@ namespace Stocks.Controllers
                         {
                             return Ok(6);
                         }
+
 
                     }
                 }
