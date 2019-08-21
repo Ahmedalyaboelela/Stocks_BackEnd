@@ -179,12 +179,18 @@ namespace Stocks.Controllers
                 else
                 {
                     unitOfWork.CountryRepository.Insert(model);
+                   
                     var result = unitOfWork.Save();
                     if (result == 200)
-                        return Ok(countryModel);
+                    {
+                        return Ok("Succeeded");
+                    }
                     else
+                    {
                         return Ok(6);
-                        
+                    }
+
+
                 }
             }
             else
@@ -214,11 +220,16 @@ namespace Stocks.Controllers
                 if (Check.Any(m => m.Code == countryModel.Code))
                 {
                     unitOfWork.CountryRepository.Update(model);
-                    var Result = unitOfWork.Save();
-                    if (Result == 200)
-                        return Ok(countryModel);
+                    var result = unitOfWork.Save();
+                    if (result == 200)
+                    {
+                        return Ok("Succeeded");
+                    }
                     else
+                    {
                         return Ok(6);
+                    }
+
 
                 }
                 else
@@ -227,10 +238,16 @@ namespace Stocks.Controllers
                     {
                         unitOfWork.CountryRepository.Update(model);
                         var Result = unitOfWork.Save();
-                        if (Result == 200)
-                            return Ok(countryModel);
+                        var result = unitOfWork.Save();
+                        if (result == 200)
+                        {
+                            return Ok("Succeeded");
+                        }
                         else
+                        {
                             return Ok(6);
+                        }
+
                     }
                 }
             }
@@ -261,10 +278,11 @@ namespace Stocks.Controllers
                     unitOfWork.CountryRepository.Delete(id);
 
                     var Result = unitOfWork.Save();
-                    if(Result == 200)
+                    if (Result == 200)
                     {
-                        return Ok(4);
-                    }else if(Result == 501)
+                        return Ok("Succeeded");
+                    }
+                    else if (Result == 501)
                     {
                         return Ok(5);
                     }

@@ -754,30 +754,15 @@ namespace Stocks.Controllers
                     //    }
                     //}
 
-                    try
+                    var result = unitOfWork.Save();
+                    if (result == 200)
                     {
-                        unitOfWork.Save();
-
+                        return Ok("Succeeded");
                     }
-
-                    catch (DbUpdateException ex)
+                    else
                     {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
+                        return Ok(6);
                     }
-                    return Ok(sellingOrderModel);
 
 
 
@@ -869,30 +854,17 @@ namespace Stocks.Controllers
                       if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                       {
                           unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                            try
+                            var result2 = unitOfWork.Save();
+                            if (result2 == 200)
                             {
-                                unitOfWork.Save();
+                                return Ok("Succeeded");
                             }
-                            catch (DbUpdateException ex)
+                            else
                             {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
+                                return Ok(6);
                             }
 
-                            return Ok(sellingOrderModel);
-                      }
+                        }
                         //===================================توليد قيد مع ترحيل تلقائي===================================
                         if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                         {
@@ -958,38 +930,24 @@ namespace Stocks.Controllers
                         //    }
                         //}
 
-                        try
+                        var result = unitOfWork.Save();
+                        if (result == 200)
                         {
-                            unitOfWork.Save();
+                            return Ok("Succeeded");
                         }
-                        catch (DbUpdateException ex)
+                        else
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
+                            return Ok(6);
                         }
 
 
-                        return Ok(sellingOrderModel);
+
+                    }
 
 
-                  }
+                    //==========================================Second Case OF Code Of Purchase=======================================
 
-
-                  //==========================================Second Case OF Code Of Purchase=======================================
-
-                  else
+                    else
                   {
                       if (Check.Any(m => m.Code == sellingOrder.Code && m.SellingOrderID == id))
                       {
@@ -997,27 +955,7 @@ namespace Stocks.Controllers
                           if (OldDetails != null)
                           {
                               unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                                try
-                                {
-                                    unitOfWork.Save();
-                                }
-                                catch (DbUpdateException ex)
-                                {
-                                    var sqlException = ex.GetBaseException() as SqlException;
-
-                                    if (sqlException != null)
-                                    {
-                                        var number = sqlException.Number;
-
-                                        if (number == 547)
-                                        {
-                                            return Ok(5);
-
-                                        }
-                                        else
-                                            return Ok(6);
-                                    }
-                                }
+                              
                             }
 
 
@@ -1039,29 +977,7 @@ namespace Stocks.Controllers
                           if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                           {
                               unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                                try
-                                {
-                                    unitOfWork.Save();
-                                }
-                                catch (DbUpdateException ex)
-                                {
-                                    var sqlException = ex.GetBaseException() as SqlException;
-
-                                    if (sqlException != null)
-                                    {
-                                        var number = sqlException.Number;
-
-                                        if (number == 547)
-                                        {
-                                            return Ok(5);
-
-                                        }
-                                        else
-                                            return Ok(6);
-                                    }
-                                }
-
-                                return Ok(sellingOrderModel);
+                             
                           }
                           //===================================توليد قيد مع ترحيل تلقائي===================================
                           if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
@@ -1112,36 +1028,22 @@ namespace Stocks.Controllers
                             }
 
 
-                            try
+                            var result = unitOfWork.Save();
+                            if (result == 200)
                             {
-                                unitOfWork.Save();
+                                return Ok("Succeeded");
                             }
-                            catch (DbUpdateException ex)
+                            else
                             {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
+                                return Ok(6);
                             }
 
 
-                            return Ok(sellingOrderModel);
-
-                      }
+                        }
 
 
-                  }
-                  return Ok(sellingOrderModel);
+                    }
+                  return Ok();
               }
 
             // now We Will Create new Entry As Insert
@@ -1153,27 +1055,7 @@ namespace Stocks.Controllers
                     if (OldDetails != null)
                     {
                         unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                            try
-                            {
-                                unitOfWork.Save();
-                            }
-                            catch (DbUpdateException ex)
-                            {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
-                            }
+                           
                         }
 
 
@@ -1195,35 +1077,22 @@ namespace Stocks.Controllers
                     if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                     {
 
-                            try
+                            var result = unitOfWork.Save();
+                            if (result == 200)
                             {
-                                unitOfWork.Save();
+                                return Ok("Succeeded");
                             }
-                            catch (DbUpdateException ex)
+                            else
                             {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
+                                return Ok(6);
                             }
 
-                            return Ok(sellingOrderModel);
-                    }
-                    //===============================================================توليد قيد مع ترحيل تلقائي============================
+                        }
+                        //===============================================================توليد قيد مع ترحيل تلقائي============================
 
 
 
-                    else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
+                        else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
@@ -1279,64 +1148,50 @@ namespace Stocks.Controllers
 
                         }
 
-                    //================================توليد قيد مع عدم الترحيل======================================
+                        //================================توليد قيد مع عدم الترحيل======================================
 
-                   //if (sellingOrderModel.SettingModel.GenerateEntry == true)
+                        //if (sellingOrderModel.SettingModel.GenerateEntry == true)
 
-                   // {
-                   //     var lastEntry = unitOfWork.EntryRepository.Last();
-                   //     var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
-                   //     EntryMODEL.SellingOrderID = sellingOrder.SellingOrderID;
-                   //     var Entry = _mapper.Map<Entry>(EntryMODEL);
-                   //     Entry.SellingOrderID = sellingOrder.SellingOrderID;
+                        // {
+                        //     var lastEntry = unitOfWork.EntryRepository.Last();
+                        //     var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
+                        //     EntryMODEL.SellingOrderID = sellingOrder.SellingOrderID;
+                        //     var Entry = _mapper.Map<Entry>(EntryMODEL);
+                        //     Entry.SellingOrderID = sellingOrder.SellingOrderID;
 
-                   //     var DetailEnt = EntryMODEL.EntryDetailModel;
-                   //     Entry.TransferedToAccounts = false;
-                   //     unitOfWork.EntryRepository.Insert(Entry);
-                   //     foreach (var item in DetailEnt)
-                   //     {
-                   //         item.EntryID = Entry.EntryID;
-                   //         item.EntryDetailID = 0;
-                   //         var details = _mapper.Map<EntryDetail>(item);
+                        //     var DetailEnt = EntryMODEL.EntryDetailModel;
+                        //     Entry.TransferedToAccounts = false;
+                        //     unitOfWork.EntryRepository.Insert(Entry);
+                        //     foreach (var item in DetailEnt)
+                        //     {
+                        //         item.EntryID = Entry.EntryID;
+                        //         item.EntryDetailID = 0;
+                        //         var details = _mapper.Map<EntryDetail>(item);
 
-                   //         unitOfWork.EntryDetailRepository.Insert(details);
+                        //         unitOfWork.EntryDetailRepository.Insert(details);
 
-                   //     }
-                   // }
+                        //     }
+                        // }
 
 
-                        try
+                        var result = unitOfWork.Save();
+                        if (result == 200)
                         {
-                            unitOfWork.Save();
+                            return Ok("Succeeded");
                         }
-                        catch (DbUpdateException ex)
+                        else
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
+                            return Ok(6);
                         }
 
 
-                        return Ok(sellingOrderModel);
+
+                    }
 
 
-                }
+                    //==========================================Second Case OF Code Of Purchase=======================================
 
-
-                //==========================================Second Case OF Code Of Purchase=======================================
-
-                else
+                    else
                 {
                     if (Check.Any(m => m.Code == sellingOrder.Code && m.SellingOrderID == id))
                     {
@@ -1344,27 +1199,7 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                                try
-                                {
-                                    unitOfWork.Save();
-                                }
-                                catch (DbUpdateException ex)
-                                {
-                                    var sqlException = ex.GetBaseException() as SqlException;
-
-                                    if (sqlException != null)
-                                    {
-                                        var number = sqlException.Number;
-
-                                        if (number == 547)
-                                        {
-                                            return Ok(5);
-
-                                        }
-                                        else
-                                            return Ok(6);
-                                    }
-                                }
+                              
                             }
 
 
@@ -1386,35 +1221,22 @@ namespace Stocks.Controllers
                         if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                         {
 
-                                try
+                                var result = unitOfWork.Save();
+                                if (result == 200)
                                 {
-                                    unitOfWork.Save();
+                                    return Ok("Succeeded");
                                 }
-                                catch (DbUpdateException ex)
+                                else
                                 {
-                                    var sqlException = ex.GetBaseException() as SqlException;
-
-                                    if (sqlException != null)
-                                    {
-                                        var number = sqlException.Number;
-
-                                        if (number == 547)
-                                        {
-                                            return Ok(5);
-
-                                        }
-                                        else
-                                            return Ok(6);
-                                    }
+                                    return Ok(6);
                                 }
 
-                                return Ok(sellingOrderModel);
-                        }
-                        //===============================================================توليد قيد مع ترحيل تلقائي============================
+                            }
+                            //===============================================================توليد قيد مع ترحيل تلقائي============================
 
 
 
-                        else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
+                            else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                         {
                             var lastEntry = unitOfWork.EntryRepository.Last();
                             var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
@@ -1467,59 +1289,43 @@ namespace Stocks.Controllers
                             }
 
                             }
-                        ////================================توليد قيد مع عدم الترحيل====================================== 
-                        //if (sellingOrderModel.SettingModel.GenerateEntry == true)
+                            ////================================توليد قيد مع عدم الترحيل====================================== 
+                            //if (sellingOrderModel.SettingModel.GenerateEntry == true)
 
-                        //{
-                        //    var lastEntry = unitOfWork.EntryRepository.Last();
-                        //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
-                        //    var Entry = _mapper.Map<Entry>(EntryMODEL);
-                        //    Entry.SellingOrderID = sellingOrder.SellingOrderID;
+                            //{
+                            //    var lastEntry = unitOfWork.EntryRepository.Last();
+                            //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
+                            //    var Entry = _mapper.Map<Entry>(EntryMODEL);
+                            //    Entry.SellingOrderID = sellingOrder.SellingOrderID;
 
-                        //    var DetailEnt = EntryMODEL.EntryDetailModel;
-                        //    Entry.TransferedToAccounts = false;
-                        //    unitOfWork.EntryRepository.Insert(Entry);
-                        //    foreach (var item in DetailEnt)
-                        //    {
-                        //        item.EntryID = Entry.EntryID;
-                        //        item.EntryDetailID = 0;
-                        //        var details = _mapper.Map<EntryDetail>(item);
+                            //    var DetailEnt = EntryMODEL.EntryDetailModel;
+                            //    Entry.TransferedToAccounts = false;
+                            //    unitOfWork.EntryRepository.Insert(Entry);
+                            //    foreach (var item in DetailEnt)
+                            //    {
+                            //        item.EntryID = Entry.EntryID;
+                            //        item.EntryDetailID = 0;
+                            //        var details = _mapper.Map<EntryDetail>(item);
 
-                        //        unitOfWork.EntryDetailRepository.Insert(details);
+                            //        unitOfWork.EntryDetailRepository.Insert(details);
 
-                        //    }
-                        //}
+                            //    }
+                            //}
 
-
-                        try
-                        {
-                            unitOfWork.Save();
-                        }
-                        catch (DbUpdateException ex)
-                        {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
+                            var result = unitOfWork.Save();
+                            if (result == 200)
                             {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
+                                return Ok("Succeeded");
                             }
+                            else
+                            {
+                                return Ok(6);
+                            }
+
                         }
 
 
-
-                            return Ok(sellingOrderModel);
                     }
-
-
-                }
 
 
                 return Ok(sellingOrderModel);
@@ -1574,29 +1380,19 @@ namespace Stocks.Controllers
             //unitOfWork.EntryRepository.Delete(Entry.EntryID);
 
             unitOfWork.SellingOrderReposetory.Delete(id);
-            try
+            var Result = unitOfWork.Save();
+            if (Result == 200)
             {
-                unitOfWork.Save();
+                return Ok("Succeeded");
             }
-            catch (DbUpdateException ex)
+            else if (Result == 501)
             {
-                var sqlException = ex.GetBaseException() as SqlException;
-
-                if (sqlException != null)
-                {
-                    var number = sqlException.Number;
-
-                    if (number == 547)
-                    {
-                        return Ok(5);
-
-                    }
-                    else
-                        return Ok(6);
-                }
+                return Ok(5);
             }
-            return Ok(4);
-
+            else
+            {
+                return Ok(6);
+            }
         }
 
     }

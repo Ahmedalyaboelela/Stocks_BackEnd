@@ -802,31 +802,20 @@ namespace Stocks.Controllers
 
 
 
-                    try
+                    var result = unitOfWork.Save();
+                    if (result == 200)
                     {
-                        unitOfWork.Save();
+                        return Ok("Succeeded");
                     }
-                    catch (DbUpdateException ex)
+                    else
                     {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
+                        return Ok(6);
                     }
 
 
 
-                    return Ok(noticeModel);
+
+                  
 
 
 
@@ -972,29 +961,16 @@ namespace Stocks.Controllers
                         }
 
 
-                        try
+                        var result = unitOfWork.Save();
+                        if (result == 200)
                         {
-                            unitOfWork.Save();
+                            return Ok("Succeeded");
                         }
-                        catch (DbUpdateException ex)
+                        else
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
+                            return Ok(6);
                         }
 
-                        return Ok(noticeModel);
 
 
                     }
@@ -1074,38 +1050,22 @@ namespace Stocks.Controllers
                                     }
                                 }
                             }
-
-                            try
+                            var result = unitOfWork.Save();
+                            if (result == 200)
                             {
-                                unitOfWork.Save();
+                                return Ok("Succeeded");
                             }
-                            catch (DbUpdateException ex)
+                            else
                             {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
+                                return Ok(6);
                             }
 
-
-
-                            return Ok(noticeModel);
 
                         }
 
 
                     }
-                    return Ok(noticeModel);
+                    return Ok();
                 }
 
                 // now We Will Create new Entry As Insert
@@ -1193,31 +1153,16 @@ namespace Stocks.Controllers
                         }
 
 
-                        try
+                        var result = unitOfWork.Save();
+                        if (result == 200)
                         {
-                            unitOfWork.Save();
+                            return Ok("Succeeded");
                         }
-                        catch (DbUpdateException ex)
+                        else
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
+                            return Ok(6);
                         }
 
-
-
-                        return Ok(noticeModel);
 
 
                     }
@@ -1307,31 +1252,16 @@ namespace Stocks.Controllers
                                 }
                             }
 
-                            try
+                            var result = unitOfWork.Save();
+                            if (result == 200)
                             {
-                                unitOfWork.Save();
+                                return Ok("Succeeded");
                             }
-                            catch (DbUpdateException ex)
+                            else
                             {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
+                                return Ok(6);
                             }
 
-
-
-                            return Ok(noticeModel);
                         }
 
 
@@ -1390,29 +1320,19 @@ namespace Stocks.Controllers
                 unitOfWork.EntryDetailRepository.RemovRange(entryDitails);
                 unitOfWork.EntryRepository.Delete(entry.EntryID);
                 unitOfWork.NoticeRepository.Delete(notice);
-                try
+                var Result = unitOfWork.Save();
+                if (Result == 200)
                 {
-                    unitOfWork.Save();
+                    return Ok("Succeeded");
                 }
-                catch (DbUpdateException ex)
+                else if (Result == 501)
                 {
-                    var sqlException = ex.GetBaseException() as SqlException;
-
-                    if (sqlException != null)
-                    {
-                        var number = sqlException.Number;
-
-                        if (number == 547)
-                        {
-                            return Ok(5);
-
-                        }
-                        else
-                            return Ok(6);
-                    }
+                    return Ok(5);
                 }
-
-                return Ok(4);
+                else
+                {
+                    return Ok(6);
+                }
 
             }
             else

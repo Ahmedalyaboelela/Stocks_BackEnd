@@ -267,14 +267,11 @@ namespace Stocks.Controllers
 
                     var model = _mapper.Map<Employee>(empModel);
                     
-
                     var empolyeeCard = empModel.emplCards;
-
-                    var EmpolyeeCard = _mapper.Map<IEnumerable<EmployeeCard>>(empolyeeCard);
-                  
+                    
                     unitOfWork.EmployeeRepository.Insert(model);
                         
-                    if (EmpolyeeCard != null)
+                    if (empolyeeCard != null)
                     {
                         foreach (var item in empolyeeCard)
                         {
@@ -288,28 +285,18 @@ namespace Stocks.Controllers
                         }
                     }
 
-                    try
+                  
+               var result=unitOfWork.Save(); 
+                    if (result==200)
                     {
-                        unitOfWork.Save();
+                        return Ok("Succeeded");
                     }
-                    catch (DbUpdateException ex)
+                    else
                     {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
+                        return Ok(6);
                     }
-                    return Ok(model);
+                   
+
 
 
 
@@ -374,7 +361,7 @@ namespace Stocks.Controllers
                     var result = unitOfWork.Save();
                     if (result == 200)
                     {
-                        return Ok(empModel);
+                        return Ok("Succeeded");
                     }
                     else
                     {
@@ -413,10 +400,15 @@ namespace Stocks.Controllers
                                 unitOfWork.EmployeeCardRepository.Insert(obj);
                             }
                         }
+
                         var result = unitOfWork.Save();
                         if (result == 200)
                         {
-                            return Ok(empModel);
+                            return Ok("Succeeded");
+                        }
+                        else
+                        {
+                            return Ok(6);
                         }
                     }
 
@@ -462,13 +454,23 @@ namespace Stocks.Controllers
 
 
 
-            var Result = unitOfWork.Save();
-            if (Result==200)
+
+            var result = unitOfWork.Save();
+            if (result == 200)
             {
-                return Ok(4);
+                return Ok("Succeeded");
+            }
+            else if (result == 501)
+            {
+                return Ok(5);
             }
 
-            return Ok(6);
+            else
+            {
+                return Ok(6);
+            }
+
+           
 
         }
 

@@ -389,9 +389,14 @@ namespace Stocks.Controllers
 
                         var result = unitOfWork.Save();
                         if (result == 200)
-                            return Ok(partnerModel);
+                        {
+                            return Ok("Succeeded");
+                        }
                         else
+                        {
                             return Ok(6);
+                        }
+
 
                     }
                 }
@@ -436,29 +441,16 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.PartnerRepository.Update(model);
-                        try
+                        var result = unitOfWork.Save();
+                        if (result == 200)
                         {
-                            unitOfWork.Save();
+                            return Ok("Succeeded");
                         }
-                        catch (DbUpdateException ex)
+                        else
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
+                            return Ok(6);
                         }
-                        partnerModel.Count = unitOfWork.PartnerRepository.Count();
-                        return Ok(partnerModel);
+
                     }
                     else
                     {
@@ -466,29 +458,16 @@ namespace Stocks.Controllers
                         {
 
                             unitOfWork.PartnerRepository.Update(model);
-                            try
+                            var result = unitOfWork.Save();
+                            if (result == 200)
                             {
-                                unitOfWork.Save();
+                                return Ok("Succeeded");
                             }
-                            catch (DbUpdateException ex)
+                            else
                             {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
+                                return Ok(6);
                             }
-                            partnerModel.Count = unitOfWork.PartnerRepository.Count();
-                            return Ok(partnerModel);
+
                         }
                         else
                         {
@@ -531,28 +510,19 @@ namespace Stocks.Controllers
                 {
 
                     unitOfWork.PartnerRepository.Delete(id);
-                    try
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        unitOfWork.Save();
+                        return Ok("Succeeded");
                     }
-                    catch (DbUpdateException ex)
+                    else if (Result == 501)
                     {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
+                        return Ok(5);
                     }
-                    return Ok(4);
+                    else
+                    {
+                        return Ok(6);
+                    }
 
                 }
             }
