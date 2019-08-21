@@ -854,10 +854,16 @@ namespace Stocks.Controllers
                       if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                       {
                           unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                            var result2 = unitOfWork.Save();
-                            if (result2 == 200)
+
+                            var reslt = unitOfWork.Save();
+                            if (reslt == 200)
                             {
-                                return Ok("Succeeded");
+
+                                return Ok(4);
+                            }
+                            else if (reslt == 501)
+                            {
+                                return Ok(5);
                             }
                             else
                             {
@@ -912,35 +918,23 @@ namespace Stocks.Controllers
                                 }
                             }
                         }
-                        //===================================توليد قيد مع  عدم ترحيل=================================== 
-                        //if (sellingOrderModel.SettingModel.GenerateEntry == true)
-
-                        //{
-                        //    var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
-                        //    Entry.TransferedToAccounts = false;
-                        //    unitOfWork.EntryRepository.Update(Entry);
-                        //    foreach (var item in EntryDitails)
-                        //    {
-                        //        item.EntryID = Entry.EntryID;
-                        //        item.EntryDetailID = 0;
-                        //        var details = _mapper.Map<EntryDetail>(item);
-
-                        //        unitOfWork.EntryDetailRepository.Insert(details);
-
-                        //    }
-                        //}
-
-                        var result = unitOfWork.Save();
-                        if (result == 200)
+                      
+                        var res = unitOfWork.Save();
+                        if (res == 200)
                         {
-                            return Ok("Succeeded");
+
+
+                            return Ok(4);
+                        }
+                        else if (res == 501)
+                        {
+                            return Ok(5);
+
                         }
                         else
                         {
                             return Ok(6);
                         }
-
-
 
                     }
 
@@ -955,7 +949,22 @@ namespace Stocks.Controllers
                           if (OldDetails != null)
                           {
                               unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                              
+
+                                var res = unitOfWork.Save();
+                                if (res == 200)
+                                {
+
+                                    return Ok(4);
+                                }
+                                else if (res == 501)
+                                {
+                                    return Ok(5);
+                                }
+                                else
+                                {
+                                    return Ok(6);
+                                }
+
                             }
 
 
@@ -977,8 +986,23 @@ namespace Stocks.Controllers
                           if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                           {
                               unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                             
-                          }
+
+                            var res = unitOfWork.Save();
+                            if (res == 200)
+                            {
+
+                                return Ok(4);
+                            }
+                            else if (res == 501)
+                            {
+                                return Ok(5);
+                            }
+                            else
+                            {
+                                return Ok(6);
+                            }
+                            }
+
                           //===================================توليد قيد مع ترحيل تلقائي===================================
                           if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                           {
@@ -1027,11 +1051,17 @@ namespace Stocks.Controllers
                                 }
                             }
 
-
-                            var result = unitOfWork.Save();
-                            if (result == 200)
+                            var Result = unitOfWork.Save();
+                            if (Result == 200)
                             {
-                                return Ok("Succeeded");
+
+
+                                return Ok(4);
+                            }
+                            else if (Result == 501)
+                            {
+                                return Ok(5);
+
                             }
                             else
                             {
@@ -1055,7 +1085,22 @@ namespace Stocks.Controllers
                     if (OldDetails != null)
                     {
                         unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                           
+
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
+                        {
+
+                            return Ok(4);
+                        }
+                        else if (Result == 501)
+                        {
+                            return Ok(5);
+                        }
+                        else
+                        {
+                            return Ok(6);
+                        }
+
                         }
 
 
@@ -1077,18 +1122,24 @@ namespace Stocks.Controllers
                     if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                     {
 
-                            var result = unitOfWork.Save();
-                            if (result == 200)
+
+                            var Result = unitOfWork.Save();
+                            if (Result == 200)
                             {
-                                return Ok("Succeeded");
+
+                                return Ok(4);
+                            }
+                            else if (Result == 501)
+                            {
+                                return Ok(5);
                             }
                             else
                             {
                                 return Ok(6);
                             }
-
                         }
-                        //===============================================================توليد قيد مع ترحيل تلقائي============================
+                    //===============================================================توليد قيد مع ترحيل تلقائي============================
+
 
 
 
@@ -1152,6 +1203,7 @@ namespace Stocks.Controllers
 
                         //if (sellingOrderModel.SettingModel.GenerateEntry == true)
 
+
                         // {
                         //     var lastEntry = unitOfWork.EntryRepository.Last();
                         //     var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
@@ -1173,18 +1225,22 @@ namespace Stocks.Controllers
                         //     }
                         // }
 
-
-                        var result = unitOfWork.Save();
-                        if (result == 200)
+                        var Res = unitOfWork.Save();
+                        if (Res == 200)
                         {
-                            return Ok("Succeeded");
+
+
+                            return Ok(4);
+                        }
+                        else if (Res == 501)
+                        {
+                            return Ok(5);
+
                         }
                         else
                         {
                             return Ok(6);
                         }
-
-
 
                     }
 
@@ -1199,7 +1255,22 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
-                              
+
+                                var Result = unitOfWork.Save();
+                                if (Result == 200)
+                                {
+
+                                    return Ok(4);
+                                }
+                                else if (Result == 501)
+                                {
+                                    return Ok(5);
+                                }
+                                else
+                                {
+                                    return Ok(6);
+                                }
+
                             }
 
 
@@ -1220,11 +1291,17 @@ namespace Stocks.Controllers
                         //==================================================لا تولد قيد ===================================
                         if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                         {
-
-                                var result = unitOfWork.Save();
-                                if (result == 200)
+                                var Result = unitOfWork.Save();
+                                if (Result == 200)
                                 {
-                                    return Ok("Succeeded");
+
+
+                                    return Ok(4);
+                                }
+                                else if (Result == 501)
+                                {
+                                    return Ok(5);
+
                                 }
                                 else
                                 {
@@ -1232,7 +1309,8 @@ namespace Stocks.Controllers
                                 }
 
                             }
-                            //===============================================================توليد قيد مع ترحيل تلقائي============================
+                        //===============================================================توليد قيد مع ترحيل تلقائي============================
+
 
 
 
@@ -1289,33 +1367,18 @@ namespace Stocks.Controllers
                             }
 
                             }
-                            ////================================توليد قيد مع عدم الترحيل====================================== 
-                            //if (sellingOrderModel.SettingModel.GenerateEntry == true)
 
-                            //{
-                            //    var lastEntry = unitOfWork.EntryRepository.Last();
-                            //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
-                            //    var Entry = _mapper.Map<Entry>(EntryMODEL);
-                            //    Entry.SellingOrderID = sellingOrder.SellingOrderID;
-
-                            //    var DetailEnt = EntryMODEL.EntryDetailModel;
-                            //    Entry.TransferedToAccounts = false;
-                            //    unitOfWork.EntryRepository.Insert(Entry);
-                            //    foreach (var item in DetailEnt)
-                            //    {
-                            //        item.EntryID = Entry.EntryID;
-                            //        item.EntryDetailID = 0;
-                            //        var details = _mapper.Map<EntryDetail>(item);
-
-                            //        unitOfWork.EntryDetailRepository.Insert(details);
-
-                            //    }
-                            //}
-
-                            var result = unitOfWork.Save();
-                            if (result == 200)
+                            
+                            var Res = unitOfWork.Save();
+                            if (Res == 200)
                             {
-                                return Ok("Succeeded");
+
+                                return Ok(4);
+                            }
+                            else if (Res == 501)
+                            {
+                                return Ok(5);
+
                             }
                             else
                             {
@@ -1325,7 +1388,8 @@ namespace Stocks.Controllers
                         }
 
 
-                    }
+                }
+
 
 
                 return Ok(sellingOrderModel);
@@ -1370,29 +1434,31 @@ namespace Stocks.Controllers
             _stocksHelper.CancelSellingFromStocks(modelSelling.PortfolioID, Details);
             #endregion
             unitOfWork.SellingOrderDetailRepository.RemovRange(Details);
-            //var Entry = unitOfWork.EntryRepository.Get(filter: x=> x.SellingOrderID==id).SingleOrDefault();
-            //var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a=> a.EntryID==Entry.EntryID); 
-            //if (Entry.TransferedToAccounts==true)
-            //{
-            //    accountingHelper.CancelTransferToAccounts(EntryDetails.ToList());
-            //}
-            //unitOfWork.EntryDetailRepository.RemovRange(EntryDetails);
-            //unitOfWork.EntryRepository.Delete(Entry.EntryID);
+
+            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.SellingOrderID == id).SingleOrDefault();
+            if(Entry != null)
+            {
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                if (Entry.TransferedToAccounts == true)
+                {
+                    accountingHelper.CancelTransferToAccounts(EntryDetails.ToList());
+                }
+                unitOfWork.EntryDetailRepository.RemovRange(EntryDetails);
+                unitOfWork.EntryRepository.Delete(Entry.EntryID);
+            }
+          
 
             unitOfWork.SellingOrderReposetory.Delete(id);
-            var Result = unitOfWork.Save();
-            if (Result == 200)
-            {
-                return Ok("Succeeded");
-            }
-            else if (Result == 501)
-            {
-                return Ok(5);
-            }
+            
+            var returnVal=unitOfWork.Save();
+            if (returnVal == 200)
+                return Ok(4);
             else
-            {
-                return Ok(6);
-            }
+                return Ok(returnVal);
+
+
+
+
         }
 
     }

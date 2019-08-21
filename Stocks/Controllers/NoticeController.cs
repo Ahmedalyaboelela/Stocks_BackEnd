@@ -524,8 +524,8 @@ namespace Stocks.Controllers
             EntryModel entryModel = new EntryModel();
             entryModel.EntryID = Entry.EntryID;
             entryModel.Code = Entry.Code;
-            entryModel.Date = Entry.Date.Value.ToString("dd/MM/yyyy");
-            entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
+            entryModel.Date = Entry.Date!=null? Entry.Date.Value.ToString("dd/MM/yyyy"):null;
+            entryModel.DateHijri = Entry.Date!=null?DateHelper.GetHijriDate(Entry.Date):null;
             entryModel.NoticeID = Entry.NoticeID;
             entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
             entryModel.ReceiptID = Entry.ReceiptID;
@@ -690,7 +690,7 @@ namespace Stocks.Controllers
                 if (Check.Any(m => m.Code == noticeModel.Code))
                 {
 
-                    return Ok("كود امر بيع مكرر");
+                    return Ok(2);
                 }
                 else
                 {
@@ -738,14 +738,6 @@ namespace Stocks.Controllers
                     }
                     #endregion
 
-
-                    //==================================================لا تولد قيد ===================================
-                    //if (noticeModel.SettingModel.DoNotGenerateEntry == true)
-                    //{
-                    //    unitOfWork.Save();
-
-                    //    return Ok(noticeModel);
-                    //}
 
                     //===============================================================توليد قيد مع ترحيل تلقائي============================
 
@@ -801,21 +793,19 @@ namespace Stocks.Controllers
 
 
 
-
-                    var result = unitOfWork.Save();
-                    if (result == 200)
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        return Ok("Succeeded");
+                        return Ok(4);
+                    }
+                    else if (Result == 501)
+                    {
+                        return Ok(5);
                     }
                     else
                     {
                         return Ok(6);
                     }
-
-
-
-
-                  
 
 
 
@@ -892,7 +882,6 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.NoticeDetailRepository.RemovRange(OldDetails);
-                            //unitOfWork.Save();
                         }
 
 
@@ -961,10 +950,15 @@ namespace Stocks.Controllers
                         }
 
 
-                        var result = unitOfWork.Save();
-                        if (result == 200)
+
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
                         {
-                            return Ok("Succeeded");
+                            return Ok(4);
+                        }
+                        else if (Result == 501)
+                        {
+                            return Ok(5);
                         }
                         else
                         {
@@ -1050,10 +1044,16 @@ namespace Stocks.Controllers
                                     }
                                 }
                             }
-                            var result = unitOfWork.Save();
-                            if (result == 200)
+
+
+                            var Result = unitOfWork.Save();
+                            if (Result == 200)
                             {
-                                return Ok("Succeeded");
+                                return Ok(4);
+                            }
+                            else if (Result == 501)
+                            {
+                                return Ok(5);
                             }
                             else
                             {
@@ -1153,16 +1153,20 @@ namespace Stocks.Controllers
                         }
 
 
-                        var result = unitOfWork.Save();
-                        if (result == 200)
+
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
                         {
-                            return Ok("Succeeded");
+                            return Ok(4);
+                        }
+                        else if (Result == 501)
+                        {
+                            return Ok(5);
                         }
                         else
                         {
                             return Ok(6);
                         }
-
 
 
                     }
@@ -1252,10 +1256,15 @@ namespace Stocks.Controllers
                                 }
                             }
 
-                            var result = unitOfWork.Save();
-                            if (result == 200)
+
+                            var Result = unitOfWork.Save();
+                            if (Result == 200)
                             {
-                                return Ok("Succeeded");
+                                return Ok(4);
+                            }
+                            else if (Result == 501)
+                            {
+                                return Ok(5);
                             }
                             else
                             {
@@ -1266,7 +1275,7 @@ namespace Stocks.Controllers
 
 
                     }
-                    return Ok(noticeModel);
+                    return Ok(4);
                 }
             }
             else

@@ -142,6 +142,49 @@ namespace Stocks.Controllers
             return Ok(GetPortfolio(portfolio));
         }
 
+        [Route("~/api/Portfolio/GetAll")]
+        public IEnumerable<PortfolioModel> GetPortfolio()
+        {
+
+            var Portfoli = unitOfWork.PortfolioRepository.Get().Select(a => new PortfolioModel
+            {
+                PortfolioID = a.PortfolioID,
+                Code = a.Code,
+                Description = a.Description,
+                EstablishDate = a.EstablishDate.Value.ToString("dd/MM/yyyy"),
+                EstablishDateHijri = DateHelper.GetHijriDate(a.EstablishDate),
+                AccountID = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).AccountID,
+                AccountCode = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.Code,
+                AccountNameAR = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.NameAR,
+                AccountNameEN = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.NameEN,
+                PortfolioAccountDebit = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.Debit,
+                NameAR = a.NameAR,
+                NameEN = a.NameEN,
+                TotalStocksCount = a.TotalStocksCount,
+                portfolioTransactionModels = unitOfWork.PortfolioTransactionsRepository.Get(filter: s => s.PortfolioID == a.PortfolioID).Select(q => new PortfolioTransactionModel
+                {
+                    PartnerID = q.PartnerID,
+                    CurrentStocksCount = q.CurrentStocksCount,
+                    CurrentStockValue = q.CurrentStockValue,
+                    partenerCode = q.Partner.Code,
+                    partenerNameAR = q.Partner.NameAR,
+                    partenerNameEN = q.Partner.NameEN,
+                    PortfolioID = q.PortfolioID,
+                    PortTransID = q.PortTransID,
+                }),
+
+
+            });
+
+
+
+            return Portfoli;
+
+
+        }
+
+
+
 
         [HttpGet]
         [Route("~/api/Portfolio/Paging/{pageNumber}")]
@@ -268,17 +311,21 @@ namespace Stocks.Controllers
 
 
 
-                    var result = unitOfWork.Save();
-                    if (result == 200)
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        return Ok("Succeeded");
+
+                        return Ok(4);
+                    }
+                    else if (Result == 501)
+                    {
+                        return Ok(5);
+
                     }
                     else
                     {
                         return Ok(6);
                     }
-
-
 
 
 
@@ -318,20 +365,87 @@ namespace Stocks.Controllers
                     }
 
                 }
-                 
 
-                    var OpeningStocks = portModel.portfolioOpeningStocksArray;
-                    var Check = unitOfWork.PortfolioRepository.Get(NoTrack: "NoTrack");
 
-                    if (!Check.Any(m => m.Code == portModel.Code))
+                var OpeningStocks = portModel.portfolioOpeningStocksArray;
+                var Check = unitOfWork.PortfolioRepository.Get(NoTrack: "NoTrack");
+
+                if (!Check.Any(m => m.Code == portModel.Code))
+                {
+                    unitOfWork.PortfolioRepository.Update(model);
+
+                    // portfolio accounts
+                    unitOfWork.PortfolioRepository.Update(model);
+                    unitOfWork.Save();
+                    var oldAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == model.PortfolioID);
+                    unitOfWork.PortfolioAccountRepository.Delete(oldAccount.PortfolioAccountID);
+                    if (portModel.AccountID != null)
                     {
+                        PortfolioAccountModel portfolioAccountModel = new PortfolioAccountModel();
+                        portfolioAccountModel.AccountID = portModel.AccountID;
+                        portfolioAccountModel.PortfolioID = model.PortfolioID;
+                        portfolioAccountModel.Type = true;
+                        var portfolioAccount = _mapper.Map<PortfolioAccount>(portfolioAccountModel);
+                        unitOfWork.PortfolioAccountRepository.Insert(portfolioAccount);
+
+
+                    }
+
+                    // shareholders
+                    var oldHolders = unitOfWork.PortfolioOpeningStocksRepository
+
+                    .Get(filter: m => m.PortfolioID == model.PortfolioID);
+
+                    if (oldHolders != null)
+                    {
+
+                        unitOfWork.PortfolioOpeningStocksRepository.RemovRange(oldHolders);
+
+                    }
+                    if (OpeningStocks != null)
+                    {
+
+                        foreach (var item5 in OpeningStocks)
+                        {
+                            item5.PortfolioID = model.PortfolioID;
+                            var newHolder = _mapper.Map<PortfolioOpeningStocks>(item5);
+
+                            unitOfWork.PortfolioOpeningStocksRepository.Insert(newHolder);
+
+                        }
+
+                        //CurrentStocks
+
+                        if (currentStocks != null)
+                        {
+                            unitOfWork.PortfolioTransactionsRepository.RemovRange(currentStocks);
+                        }
+                        foreach (var item6 in OpeningStocks)
+                        {
+                            PortfolioTransactionModel portfolioTransaction = new PortfolioTransactionModel();
+                            portfolioTransaction.PortfolioID = model.PortfolioID;
+                            portfolioTransaction.PartnerID = item6.PartnerID;
+                            portfolioTransaction.CurrentStockValue = item6.OpeningStockValue;
+                            portfolioTransaction.CurrentStocksCount = item6.OpeningStocksCount;
+                            var obj = _mapper.Map<PortfolioTransaction>(portfolioTransaction);
+                            unitOfWork.PortfolioTransactionsRepository.Insert(obj);
+                        }
+                    }
+
+
+
+
+                }
+                else
+                {
+                    if (Check.Any(m => m.Code == portModel.Code && m.PortfolioID == id))
+                    {
+
                         unitOfWork.PortfolioRepository.Update(model);
 
-                        // portfolio accounts
-                        unitOfWork.PortfolioRepository.Update(model);
-                        unitOfWork.Save();
                         var oldAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == model.PortfolioID);
                         unitOfWork.PortfolioAccountRepository.Delete(oldAccount.PortfolioAccountID);
+                        // portfolio accounts
                         if (portModel.AccountID != null)
                         {
                             PortfolioAccountModel portfolioAccountModel = new PortfolioAccountModel();
@@ -344,6 +458,8 @@ namespace Stocks.Controllers
 
                         }
 
+
+
                         // shareholders
                         var oldHolders = unitOfWork.PortfolioOpeningStocksRepository
 
@@ -354,36 +470,37 @@ namespace Stocks.Controllers
 
                             unitOfWork.PortfolioOpeningStocksRepository.RemovRange(oldHolders);
 
+
                         }
                         if (OpeningStocks != null)
                         {
 
-                            foreach (var item5 in OpeningStocks)
+                            foreach (var item2 in OpeningStocks)
                             {
-                                item5.PortfolioID = model.PortfolioID;
-                                var newHolder = _mapper.Map<PortfolioOpeningStocks>(item5);
+                                item2.PortfolioID = model.PortfolioID;
+                                var newHolder = _mapper.Map<PortfolioOpeningStocks>(item2);
 
                                 unitOfWork.PortfolioOpeningStocksRepository.Insert(newHolder);
 
                             }
 
-                            //CurrentStocks
-
+                            //CurrentStocks                           
                             if (currentStocks != null)
                             {
                                 unitOfWork.PortfolioTransactionsRepository.RemovRange(currentStocks);
                             }
-                            foreach (var item6 in OpeningStocks)
+                            foreach (var item3 in OpeningStocks)
                             {
                                 PortfolioTransactionModel portfolioTransaction = new PortfolioTransactionModel();
                                 portfolioTransaction.PortfolioID = model.PortfolioID;
-                                portfolioTransaction.PartnerID = item6.PartnerID;
-                                portfolioTransaction.CurrentStockValue = item6.OpeningStockValue;
-                                portfolioTransaction.CurrentStocksCount = item6.OpeningStocksCount;
+                                portfolioTransaction.PartnerID = item3.PartnerID;
+                                portfolioTransaction.CurrentStockValue = item3.OpeningStockValue;
+                                portfolioTransaction.CurrentStocksCount = item3.OpeningStocksCount;
                                 var obj = _mapper.Map<PortfolioTransaction>(portfolioTransaction);
                                 unitOfWork.PortfolioTransactionsRepository.Insert(obj);
                             }
                         }
+
 
                     var result = unitOfWork.Save();
                     if (result == 200)
@@ -485,6 +602,21 @@ namespace Stocks.Controllers
 
 
 
+                }
+                var Result = unitOfWork.Save();
+                if (Result == 200)
+                {
+
+                    return Ok(4);
+                }
+                else if (Result == 501)
+                {
+                    return Ok(5);
+                }
+                else
+                {
+                    return Ok(6);
+                }
             }
             else
             {
@@ -533,7 +665,9 @@ namespace Stocks.Controllers
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
-                    return Ok("Succeeded");
+
+                    return Ok(4);
+
                 }
                 else if (Result == 501)
                 {

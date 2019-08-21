@@ -161,25 +161,30 @@ namespace Stocks.Controllers
                     // add each setting
                     foreach (var item in settingModel)
                     {
-                        var setting = _mapper.Map<Setting>(item);
-                        unitOfWork.SettingRepository.Insert(setting);
-
-
-                        // add accounts related to each setting 
-                        #region account related to  setting
-                        var accounts = _mapper.Map<IEnumerable<SettingAccount>>(item.SettingAccs);
-                        if (accounts != null)
+                        if(item.VoucherType != 0)
                         {
-                            foreach (var acc in item.SettingAccs)
+                            var setting = _mapper.Map<Setting>(item);
+                            setting.Code = "0";
+                            unitOfWork.SettingRepository.Insert(setting);
+
+
+                            // add accounts related to each setting 
+                            #region account related to  setting
+                            var accounts = _mapper.Map<IEnumerable<SettingAccount>>(item.SettingAccs);
+                            if (accounts != null)
                             {
-                                var obj = _mapper.Map<SettingAccount>(acc);
+                                foreach (var acc in item.SettingAccs)
+                                {
+                                    var obj = _mapper.Map<SettingAccount>(acc);
 
-                                obj.SettingID = setting.SettingID;
+                                    obj.SettingID = setting.SettingID;
 
-                                unitOfWork.SettingAccountRepository.Insert(obj);
+                                    unitOfWork.SettingAccountRepository.Insert(obj);
 
 
+                                }
                             }
+
                         }
 
 
@@ -187,29 +192,21 @@ namespace Stocks.Controllers
 
                     }
 
-                      try
+
+                    var reslt = unitOfWork.Save();
+                    if (reslt == 200)
                     {
-                        unitOfWork.Save();
+
+                        return Ok(4);
                     }
-                    catch (DbUpdateException ex)
+                    else if (reslt == 501)
                     {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
+                        return Ok(5);
                     }
-                    return Ok(settingModel);
-
+                    else
+                    {
+                        return Ok(6);
+                    }
 
                 }
                 #endregion
@@ -235,59 +232,51 @@ namespace Stocks.Controllers
                     #region insert new setting
                     foreach (var item in settingModel)
                     {
-                        item.Code = "0";
-                        var setting = _mapper.Map<Setting>(item);
-                        unitOfWork.SettingRepository.Insert(setting);
-
-
-                        // add accounts related to each setting 
-                        #region account related to  setting
-                        var accounts = _mapper.Map<IEnumerable<SettingAccount>>(item.SettingAccs);
-                        if (accounts != null)
+                        if (item.VoucherType != 0)
                         {
-                            foreach (var acc in item.SettingAccs)
+                            item.Code = "0";
+                            var setting = _mapper.Map<Setting>(item);
+                            unitOfWork.SettingRepository.Insert(setting);
+
+
+                            // add accounts related to each setting 
+                            #region account related to  setting
+                            var accounts = _mapper.Map<IEnumerable<SettingAccount>>(item.SettingAccs);
+                            if (accounts != null)
                             {
-                                var obj = _mapper.Map<SettingAccount>(acc);
+                                foreach (var acc in item.SettingAccs)
+                                {
+                                    var obj = _mapper.Map<SettingAccount>(acc);
 
-                                obj.SettingID = setting.SettingID;
+                                    obj.SettingID = setting.SettingID;
 
-                                unitOfWork.SettingAccountRepository.Insert(obj);
+                                    unitOfWork.SettingAccountRepository.Insert(obj);
 
 
+                                }
                             }
+
                         }
-
-
                         #endregion
 
                     }
 
                     #endregion
-
-                    try
+                    var reslt = unitOfWork.Save();
+                    if (reslt == 200)
                     {
-                        unitOfWork.Save();
+
+                        return Ok(4);
                     }
-                    catch (DbUpdateException ex)
+                    else if (reslt == 501)
                     {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
+                        return Ok(5);
                     }
-                    return Ok(settingModel);
+                    else
+                    {
+                        return Ok(6);
+                    }
 
-                  
                 }
 
 

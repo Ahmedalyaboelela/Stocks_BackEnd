@@ -179,11 +179,16 @@ namespace Stocks.Controllers
                 else
                 {
                     unitOfWork.CountryRepository.Insert(model);
-                   
-                    var result = unitOfWork.Save();
-                    if (result == 200)
+
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        return Ok("Succeeded");
+                        return Ok(4);
+                    }
+                    else if (Result == 501)
+                    {
+                        return Ok(5);
+
                     }
                     else
                     {
@@ -280,9 +285,11 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
-                        return Ok("Succeeded");
+
+                        return Ok(4);
                     }
-                    else if (Result == 501)
+                    else if(Result == 501)
+
                     {
                         return Ok(5);
                     }

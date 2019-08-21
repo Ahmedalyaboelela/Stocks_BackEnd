@@ -6,7 +6,7 @@
 [4]- transaction done successfully .
 [5]- data related to another tables to delete .
 [6]- save transaction failed .
-[7]- the amount of stockscount is less than sell order   
+[7]- the amount of stockscount is less than sell order  
 
 // .................... flag of 2 identical screen .............//
 [false]- receipt voucher .

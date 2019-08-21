@@ -285,6 +285,7 @@ namespace Stocks.Controllers
                         }
                     }
 
+
                   
                var result=unitOfWork.Save(); 
                     if (result==200)
@@ -327,8 +328,10 @@ namespace Stocks.Controllers
             if (ModelState.IsValid)
             {
                 var model = _mapper.Map<Employee>(empModel);
+
                 
                 var newCards = empModel.emplCards;
+
                 var Check = unitOfWork.EmployeeRepository.Get(NoTrack: "NoTrack");
 
                 if (!Check.Any(m => m.Code == empModel.Code))
@@ -340,12 +343,14 @@ namespace Stocks.Controllers
                     // cards
                     var oldcards = unitOfWork.EmployeeCardRepository
 
+
                     .Get(filter: m => m.EmployeeID == model.EmployeeID);
 
                     if (oldcards != null)
                     {
 
                         unitOfWork.EmployeeCardRepository.RemovRange(oldcards);
+
 
                     } 
                     if (newCards != null)
@@ -358,6 +363,7 @@ namespace Stocks.Controllers
                             unitOfWork.EmployeeCardRepository.Insert(obj);
                         }
                     }
+
                     var result = unitOfWork.Save();
                     if (result == 200)
                     {
@@ -367,6 +373,7 @@ namespace Stocks.Controllers
                     {
                         return Ok(6);
                     }
+
 
 
                 }
@@ -381,6 +388,7 @@ namespace Stocks.Controllers
 
                         // cards
                         var oldcards = unitOfWork.EmployeeCardRepository
+
 
                         .Get(filter: m => m.EmployeeID == model.EmployeeID);
 
@@ -410,6 +418,7 @@ namespace Stocks.Controllers
                         {
                             return Ok(6);
                         }
+
                     }
 
                     }
@@ -455,6 +464,7 @@ namespace Stocks.Controllers
 
 
 
+
             var result = unitOfWork.Save();
             if (result == 200)
             {
@@ -471,6 +481,7 @@ namespace Stocks.Controllers
             }
 
            
+
 
         }
 

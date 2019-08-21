@@ -40,4 +40,14 @@ namespace BAL.Model
 
 
     }
+    public class PortfolioPartners
+    {
+        public int PartnerID { get; set; }
+        public string Code { get; set; }
+        public string NameAR { get; set; }
+        public string NameEN { get; set; }
+        public float? StocksCount { get; set; }
+        public decimal? StocksValue { get; set; }
+
+    }
 }

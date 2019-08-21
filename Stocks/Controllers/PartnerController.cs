@@ -1,3 +1,4 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -37,11 +38,13 @@ namespace Stocks.Controllers
         {
             PartenerModel model = new PartenerModel();
             var count = unitOfWork.PartnerRepository.Count();
-            if (count>0)
+            // Edited By Ahmed Ayman
+            if (count > 0)
             {
                 model.LastCode = unitOfWork.PartnerRepository.Last().Code;
                 model.Count = count;
-               
+
+
             }
             var countries = unitOfWork.CountryRepository.Get();
             if (countries.Count() > 0)
@@ -54,10 +57,8 @@ namespace Stocks.Controllers
 
                 });
             }
-
             return Ok(model);
         }
-
 
         [Route("~/api/Partner/GetLast")]
         public IActionResult GetLastPartner()
@@ -355,6 +356,60 @@ namespace Stocks.Controllers
 
             return Ok(model);
         }
+
+
+
+        [Route("~/api/Partner/GetAllPortfolioPartners/{id}")]
+        public IActionResult GetAllPortfolioPartners(int id)
+        {
+            // partners in portfolio openingstocks
+            var openingPartner = unitOfWork.PortfolioOpeningStocksRepository.Get(filter:a=>a.PortfolioID==id).Select(p=>new PortfolioPartners {
+                PartnerID=p.PartnerID,
+                Code=p.Partner.Code,
+                NameAR=p.Partner.NameAR,
+                NameEN=p.Partner.NameEN,
+                StocksCount=p.OpeningStocksCount,
+                StocksValue=p.OpeningStockValue
+
+
+            }).ToList();
+            //var openingPartnerModel= _mapper.Map<IEnumerable<PartenerModel>>(openingPartner).ToList();
+
+            // partners in portfolio transactions
+            var transPartners = unitOfWork.PortfolioTransactionsRepository.Get(filter: a => a.PortfolioID == id).Select(p => new PortfolioPartners
+            {
+                PartnerID = p.PartnerID,
+                Code = p.Partner.Code,
+                NameAR = p.Partner.NameAR,
+                NameEN = p.Partner.NameEN,
+                StocksCount = p.CurrentStocksCount,
+                StocksValue = p.CurrentStockValue
+
+
+
+            }).ToList();
+            //var transPartnersModel = _mapper.Map<IEnumerable<PartenerModel>>(transPartners).ToList();
+
+            // concat 2 lists
+            if(openingPartner!=null && openingPartner.Count() > 0 && transPartners != null && transPartners.Count() > 0)
+            {
+                var allPartners = openingPartner.Concat(transPartners).ToList();
+
+                return Ok(allPartners);
+            }
+            else if(openingPartner != null && openingPartner.Count() > 0)
+            {
+                return Ok(openingPartner);
+
+            }
+            else 
+            {
+                return Ok(transPartners);
+
+            }
+            
+      
+        }
         #endregion
 
         #region Insert Method
@@ -386,18 +441,21 @@ namespace Stocks.Controllers
                     else
                     {
                         unitOfWork.PartnerRepository.Insert(model);
-
-                        var result = unitOfWork.Save();
-                        if (result == 200)
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
                         {
-                            return Ok("Succeeded");
+                            partnerModel.Count = unitOfWork.PartnerRepository.Count();
+
+                            return Ok(4);
+                        }
+                        else if (Result == 501)
+                        {
+                            return Ok(5);
                         }
                         else
                         {
                             return Ok(6);
                         }
-
-
                     }
                 }
 
@@ -441,16 +499,21 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.PartnerRepository.Update(model);
-                        var result = unitOfWork.Save();
-                        if (result == 200)
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
                         {
-                            return Ok("Succeeded");
+                            partnerModel.Count = unitOfWork.PartnerRepository.Count();
+
+                            return Ok(4);
+                        }
+                        else if (Result == 501)
+                        {
+                            return Ok(5);
                         }
                         else
                         {
                             return Ok(6);
                         }
-
                     }
                     else
                     {
@@ -458,16 +521,21 @@ namespace Stocks.Controllers
                         {
 
                             unitOfWork.PartnerRepository.Update(model);
-                            var result = unitOfWork.Save();
-                            if (result == 200)
+                            var Result = unitOfWork.Save();
+                            if (Result == 200)
                             {
-                                return Ok("Succeeded");
+                                partnerModel.Count = unitOfWork.PartnerRepository.Count();
+
+                                return Ok(4);
+                            }
+                            else if (Result == 501)
+                            {
+                                return Ok(5);
                             }
                             else
                             {
                                 return Ok(6);
                             }
-
                         }
                         else
                         {
@@ -513,7 +581,7 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
-                        return Ok("Succeeded");
+                        return Ok(4);
                     }
                     else if (Result == 501)
                     {
@@ -530,4 +598,6 @@ namespace Stocks.Controllers
         #endregion
 
     }
+
+               
 }

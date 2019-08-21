@@ -766,16 +766,22 @@ namespace Stocks.Controllers
                     //} 
                     #endregion
 
-                    var result = unitOfWork.Save();
-                    if (result == 200)
+
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        return Ok("Succeeded");
+
+                        return Ok(4);
+                    }
+                    else if (Result == 501)
+                    {
+                        return Ok(5);
+
                     }
                     else
                     {
                         return Ok(6);
                     }
-
 
 
 
@@ -840,7 +846,7 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
-                            unitOfWork.Save();
+                            //unitOfWork.Save();
                         }
 
 
@@ -862,29 +868,20 @@ namespace Stocks.Controllers
                         if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                         {
                             unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                            try
+                            var Res = unitOfWork.Save();
+                            if (Res == 200)
                             {
-                                unitOfWork.Save();
+
+                                return Ok(4);
                             }
-                            catch (DbUpdateException ex)
+                            else if (Res == 501)
                             {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
+                                return Ok(5);
                             }
-
-                            return Ok(purchaseOrderModel);
+                            else
+                            {
+                                return Ok(6);
+                            }
                         }
                         //===================================توليد قيد مع ترحيل تلقائي===================================
                         if (purchaseOrderModel.SettingModel.AutoGenerateEntry == true)
@@ -948,13 +945,21 @@ namespace Stocks.Controllers
 
                             }
                         }
-                        var result = unitOfWork.Save();
-                        if (result == 200)
+
+
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
                         {
-                            return Ok("Succeeded");
+
+                            return Ok(4);
+                        }
+                        else if (Result == 501)
+                        {
+                            return Ok(5);
                         }
                         else
                         {
+
                             return Ok(6);
                         }
 
@@ -973,26 +978,19 @@ namespace Stocks.Controllers
                             if (OldDetails != null)
                             {
                                 unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
-                                try
+                                var Res = unitOfWork.Save();
+                                if (Res == 200)
                                 {
-                                    unitOfWork.Save();
+
+                                    return Ok(4);
                                 }
-                                catch (DbUpdateException ex)
+                                else if (Res == 501)
                                 {
-                                    var sqlException = ex.GetBaseException() as SqlException;
-
-                                    if (sqlException != null)
-                                    {
-                                        var number = sqlException.Number;
-
-                                        if (number == 547)
-                                        {
-                                            return Ok(5);
-
-                                        }
-                                        else
-                                            return Ok(6);
-                                    }
+                                    return Ok(5);
+                                }
+                                else
+                                {
+                                    return Ok(6);
                                 }
                             }
 
@@ -1015,29 +1013,20 @@ namespace Stocks.Controllers
                             if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                             {
                                 unitOfWork.EntryRepository.Delete(Entry.EntryID);
-                                try
+                                var Res = unitOfWork.Save();
+                                if (Res == 200)
                                 {
-                                    unitOfWork.Save();
+
+                                    return Ok(4);
                                 }
-                                catch (DbUpdateException ex)
+                                else if (Res == 501)
                                 {
-                                    var sqlException = ex.GetBaseException() as SqlException;
-
-                                    if (sqlException != null)
-                                    {
-                                        var number = sqlException.Number;
-
-                                        if (number == 547)
-                                        {
-                                            return Ok(5);
-
-                                        }
-                                        else
-                                            return Ok(6);
-                                    }
+                                    return Ok(5);
                                 }
-
-                                return Ok(purchaseOrderModel);
+                                else
+                                {
+                                    return Ok(6);
+                                }
                             }
                             //===================================توليد قيد مع ترحيل تلقائي===================================
                             if (purchaseOrderModel.SettingModel.AutoGenerateEntry == true)
@@ -1091,10 +1080,16 @@ namespace Stocks.Controllers
                                 }
                             }
 
-                            var result = unitOfWork.Save();
-                            if (result == 200)
+
+                            var Result = unitOfWork.Save();
+                            if (Result == 200)
                             {
-                                return Ok("Succeeded");
+
+                                return Ok(4);
+                            }
+                            else if (Result == 501)
+                            {
+                                return Ok(5);
                             }
                             else
                             {
@@ -1106,7 +1101,7 @@ namespace Stocks.Controllers
 
 
                     }
-                    return Ok(purchaseOrderModel);
+                    return Ok(4);
                 }
 
                 // now We Will Create new Entry As Insert
@@ -1120,7 +1115,22 @@ namespace Stocks.Controllers
                         if (OldDetails != null)
                         {
                             unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
-                           
+
+                            var Rest = unitOfWork.Save();
+                            if (Rest == 200)
+                            {
+
+                                return Ok(4);
+                            }
+                            else if (Rest == 501)
+                            {
+                                return Ok(5);
+                            }
+                            else
+                            {
+                                return Ok(6);
+                            }
+
                         }
 
 
@@ -1141,10 +1151,17 @@ namespace Stocks.Controllers
                         //==================================================لا تولد قيد ===================================
                         if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                         {
-                            var result = unitOfWork.Save();
-                            if (result == 200)
+
+
+                            var Rest = unitOfWork.Save();
+                            if (Rest == 200)
                             {
-                                return Ok("Succeeded");
+
+                                return Ok(4);
+                            }
+                            else if (Rest == 501)
+                            {
+                                return Ok(5);
                             }
                             else
                             {
@@ -1210,17 +1227,22 @@ namespace Stocks.Controllers
 
                         }
 
-                        var result = unitOfWork.Save();
-                        if (result == 200)
+
+                        var Res = unitOfWork.Save();
+                        if (Res == 200)
                         {
-                            return Ok("Succeeded");
+
+                            return Ok(4);
+                        }
+                        else if (Res == 501)
+                        {
+                            return Ok(5);
+
                         }
                         else
                         {
                             return Ok(6);
                         }
-
-
 
                     }
 
@@ -1235,7 +1257,22 @@ namespace Stocks.Controllers
                             if (OldDetails != null)
                             {
                                 unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
-                               
+
+                                var Rest = unitOfWork.Save();
+                                if (Rest == 200)
+                                {
+
+                                    return Ok(4);
+                                }
+                                else if (Rest == 501)
+                                {
+                                    return Ok(5);
+                                }
+                                else
+                                {
+                                    return Ok(6);
+                                }
+
                             }
 
 
@@ -1257,10 +1294,16 @@ namespace Stocks.Controllers
                             if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                             {
 
-                                var result = unitOfWork.Save();
-                                if (result == 200)
+
+                                var Rest = unitOfWork.Save();
+                                if (Rest == 200)
                                 {
-                                    return Ok("Succeeded");
+
+                                    return Ok(4);
+                                }
+                                else if (Rest == 501)
+                                {
+                                    return Ok(5);
                                 }
                                 else
                                 {
@@ -1348,11 +1391,17 @@ namespace Stocks.Controllers
                                 }
                             }
 
-
-                            var result = unitOfWork.Save();
-                            if (result == 200)
+                            var Res = unitOfWork.Save();
+                            if (Res == 200)
                             {
-                                return Ok("Succeeded");
+
+
+                                return Ok(4);
+                            }
+                            else if (Res == 501)
+                            {
+                                return Ok(5);
+
                             }
                             else
                             {
@@ -1403,21 +1452,27 @@ namespace Stocks.Controllers
             _stocksHelper.CancelPurchaseFromStocks(modelPurchase.PortfolioID, Details);
             #endregion
             unitOfWork.PurchaseOrderDetailRepository.RemovRange(Details);
-            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == id).SingleOrDefault();
-            var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
-            if (Entry.TransferedToAccounts == true)
+            var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseOrderID == id).FirstOrDefault();
+            if(Entry != null)
             {
-                accountingHelper.CancelTransferToAccounts(EntryDetails.ToList());
+                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                if (Entry.TransferedToAccounts == true)
+                {
+                    accountingHelper.CancelTransferToAccounts(EntryDetails.ToList());
+                }
+                unitOfWork.EntryDetailRepository.RemovRange(EntryDetails);
+
+                unitOfWork.EntryRepository.Delete(Entry.EntryID);
             }
-            unitOfWork.EntryDetailRepository.RemovRange(EntryDetails); 
-            
-            unitOfWork.EntryRepository.Delete(Entry.EntryID);
+           
 
             unitOfWork.PurchaseOrderRepository.Delete(id);
             var Result = unitOfWork.Save();
             if (Result == 200)
             {
-                return Ok("Succeeded");
+
+                return Ok(4);
+
             }
             else if (Result == 501)
             {

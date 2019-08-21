@@ -218,17 +218,21 @@ namespace Stocks.Controllers
                     {
                         unitOfWork.AccountRepository.Insert(model);
 
-
-                        var result = unitOfWork.Save();
-                        if (result == 200)
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
                         {
-                            return Ok("Succeeded");
+                            accountModel.Count = unitOfWork.AccountRepository.Count();
+
+                            return Ok(4);
+                        }
+                        else if (Result == 501)
+                        {
+                            return Ok(5);
                         }
                         else
                         {
                             return Ok(6);
                         }
-
 
                     }
                 }
@@ -270,20 +274,23 @@ namespace Stocks.Controllers
 
                         unitOfWork.AccountRepository.Update(model);
 
-
-                        var result = unitOfWork.Save();
-                        if (result == 200)
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
                         {
-                            return Ok("Succeeded");
+                            accountModel.Count = unitOfWork.AccountRepository.Count();
+
+                            return Ok(4);
+                        }
+                        else if (Result == 501)
+                        {
+                            return Ok(5);
+
                         }
                         else
                         {
                             return Ok(6);
                         }
 
-
-                        
-                      
                     }
                     else
                     {
@@ -292,18 +299,21 @@ namespace Stocks.Controllers
 
                             unitOfWork.AccountRepository.Update(model);
 
-
-                            var result = unitOfWork.Save();
-                            if (result == 200)
+                            var Result = unitOfWork.Save();
+                            if (Result == 200)
                             {
-                                return Ok("Succeeded");
+                                accountModel.Count = unitOfWork.AccountRepository.Count();
+
+                                return Ok(4);
+                            }
+                            else if (Result == 501)
+                            {
+                                return Ok(5);
                             }
                             else
                             {
                                 return Ok(6);
                             }
-
-
 
                         }
                         else
@@ -347,24 +357,20 @@ namespace Stocks.Controllers
                 {
 
                     unitOfWork.AccountRepository.Delete(id);
-
-                    var result = unitOfWork.Save();
-                    if (result == 200)
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        return Ok("Succeeded");
-                    } 
-                    else if (result==501)
+                        return Ok(4);
+                    }
+                    else if (Result == 501)
                     {
                         return Ok(5);
                     }
-                  
                     else
                     {
                         return Ok(6);
                     }
-                }
-                    }
-               
+
 
                 }
             
