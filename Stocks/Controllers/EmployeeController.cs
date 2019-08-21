@@ -335,6 +335,7 @@ namespace Stocks.Controllers
                 var empolyeeCard = empModel.emplCards;
                 //var EmpolyeeCard = _mapper.Map<IEnumerable<EmployeeCard>>(empolyeeCard);
 
+
                 var Check = unitOfWork.EmployeeRepository.Get(NoTrack: "NoTrack");
                 var oldcard = unitOfWork.EmployeeCardRepository
 
