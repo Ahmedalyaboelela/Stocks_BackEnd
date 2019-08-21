@@ -217,28 +217,21 @@ namespace Stocks.Controllers
                     else
                     {
                         unitOfWork.AccountRepository.Insert(model);
-                        try
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
                         {
-                            unitOfWork.Save();
+                            accountModel.Count = unitOfWork.AccountRepository.Count();
+
+                            return Ok(4);
                         }
-                        catch (DbUpdateException ex)
+                        else if (Result == 501)
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
+                            return Ok(5);
                         }
-                        return Ok(accountModel);
+                        else
+                        {
+                            return Ok(6);
+                        }
                     }
                 }
 
@@ -278,29 +271,21 @@ namespace Stocks.Controllers
                     {
 
                         unitOfWork.AccountRepository.Update(model);
-                        try
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
                         {
-                            unitOfWork.Save();
+                            accountModel.Count = unitOfWork.AccountRepository.Count();
+
+                            return Ok(4);
                         }
-                        catch (DbUpdateException ex)
+                        else if (Result == 501)
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
+                            return Ok(5);
                         }
-                        accountModel.Count = unitOfWork.AccountRepository.Count();
-                        return Ok(accountModel);
+                        else
+                        {
+                            return Ok(6);
+                        }
                     }
                     else
                     {
@@ -308,29 +293,21 @@ namespace Stocks.Controllers
                         {
 
                             unitOfWork.AccountRepository.Update(model);
-                            try
+                            var Result = unitOfWork.Save();
+                            if (Result == 200)
                             {
-                                unitOfWork.Save();
+                                accountModel.Count = unitOfWork.AccountRepository.Count();
+
+                                return Ok(4);
                             }
-                            catch (DbUpdateException ex)
+                            else if (Result == 501)
                             {
-                                var sqlException = ex.GetBaseException() as SqlException;
-
-                                if (sqlException != null)
-                                {
-                                    var number = sqlException.Number;
-
-                                    if (number == 547)
-                                    {
-                                        return Ok(5);
-
-                                    }
-                                    else
-                                        return Ok(6);
-                                }
+                                return Ok(5);
                             }
-                            accountModel.Count = unitOfWork.AccountRepository.Count();
-                            return Ok(accountModel);
+                            else
+                            {
+                                return Ok(6);
+                            }
                         }
                         else
                         {
@@ -373,28 +350,19 @@ namespace Stocks.Controllers
                 {
 
                     unitOfWork.AccountRepository.Delete(id);
-                    try
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        unitOfWork.Save();
+                        return Ok(4);
                     }
-                    catch (DbUpdateException ex)
+                    else if (Result == 501)
                     {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
+                        return Ok(5);
                     }
-                    return Ok(4);
+                    else
+                    {
+                        return Ok(6);
+                    }
 
                 }
             }

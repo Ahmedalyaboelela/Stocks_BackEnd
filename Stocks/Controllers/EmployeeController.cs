@@ -288,28 +288,19 @@ namespace Stocks.Controllers
                         }
                     }
 
-                    try
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        unitOfWork.Save();
+                        return Ok(4);
                     }
-                    catch (DbUpdateException ex)
+                    else if (Result == 501)
                     {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
+                        return Ok(5);
                     }
-                    return Ok(model);
+                    else
+                    {
+                        return Ok(6);
+                    }
 
 
 
@@ -355,27 +346,7 @@ namespace Stocks.Controllers
                     unitOfWork.EmployeeCardRepository.RemovRange(oldcard);
 
                 }
-                try
-                {
-                    unitOfWork.Save();
-                }
-                catch (DbUpdateException ex)
-                {
-                    var sqlException = ex.GetBaseException() as SqlException;
-
-                    if (sqlException != null)
-                    {
-                        var number = sqlException.Number;
-
-                        if (number == 547)
-                        {
-                            return Ok(5);
-
-                        }
-                        else
-                            return Ok(6);
-                    }
-                }
+           
 
                 if (Check.Any(m => m.Code != empModel.Code))
                 {
@@ -393,31 +364,21 @@ namespace Stocks.Controllers
 
                         }
                     }
-                   
 
-                    try
+
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        unitOfWork.Save();
+                        return Ok(4);
                     }
-                    catch (DbUpdateException ex)
+                    else if (Result == 501)
                     {
-                        var sqlException = ex.GetBaseException() as SqlException;
-
-                        if (sqlException != null)
-                        {
-                            var number = sqlException.Number;
-
-                            if (number == 547)
-                            {
-                                return Ok(5);
-
-                            }
-                            else
-                                return Ok(6);
-                        }
+                        return Ok(5);
                     }
-                    return Ok(model);
-
+                    else
+                    {
+                        return Ok(6);
+                    }
                 }
                 else
                 {
@@ -439,29 +400,19 @@ namespace Stocks.Controllers
                             } 
                         }
 
-                        try
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
                         {
-                            unitOfWork.Save();
+                            return Ok(4);
                         }
-                        catch (DbUpdateException ex)
+                        else if (Result == 501)
                         {
-                            var sqlException = ex.GetBaseException() as SqlException;
-
-                            if (sqlException != null)
-                            {
-                                var number = sqlException.Number;
-
-                                if (number == 547)
-                                {
-                                    return Ok(5);
-
-                                }
-                                else
-                                    return Ok(6);
-                            }
+                            return Ok(5);
                         }
-
-                        return Ok(model);
+                        else
+                        {
+                            return Ok(6);
+                        }
                     }
                     else
                     {
@@ -504,39 +455,20 @@ namespace Stocks.Controllers
 
             }
             unitOfWork.EmployeeRepository.Delete(employee);
-            try
+            var Result = unitOfWork.Save();
+            if (Result == 200)
             {
-                unitOfWork.Save();
+                return Ok(4);
             }
-            catch (DbUpdateException ex)
+            else if (Result == 501)
             {
-                var sqlException = ex.GetBaseException() as SqlException;
-
-                if (sqlException != null)
-                {
-                    var number = sqlException.Number;
-
-                    if (number == 547)
-                    {
-                        return Ok(5);
-
-                    }
-                    else
-                        return Ok(6);
-                }
+                return Ok(5);
             }
-            return Ok(4);
-
-            //var Result = unitOfWork.Save();
-            //if (Result == true)
-            //{
-            //    return Ok(4);
-            //}
-            //else
-            //{
-            //    return Ok("not deleted");
-            //}
-
+            else
+            {
+                return Ok(6);
+            }
+            
         }
 
         #endregion

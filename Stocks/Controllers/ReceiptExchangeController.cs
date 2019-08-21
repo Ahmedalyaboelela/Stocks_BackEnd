@@ -602,14 +602,20 @@ namespace Stocks.Controllers
 
                     }
 
+                    var Res = unitOfWork.Save();
+                    if (Res == 200)
+                    {
 
-                    unitOfWork.Save();
-
-
-
-                    return Ok(recExcModel);
-
-
+                        return Ok(4);
+                    }
+                    else if (Res == 501)
+                    {
+                        return Ok(5);
+                    }
+                    else
+                    {
+                        return Ok(6);
+                    }
 
                 }
             
@@ -725,12 +731,21 @@ namespace Stocks.Controllers
                             }
 
                         }
-                        
-                        unitOfWork.Save();
 
+                        var Res = unitOfWork.Save();
+                        if (Res == 200)
+                        {
 
-
-                        return Ok(receiptExchangeModel);
+                            return Ok(4);
+                        }
+                        else if (Res == 501)
+                        {
+                            return Ok(5);
+                        }
+                        else
+                        {
+                            return Ok(6);
+                        }
 
 
                     }
@@ -746,7 +761,7 @@ namespace Stocks.Controllers
                             if (OldDetails != null)
                             {
                                 unitOfWork.ReceiptExchangeDetailRepository.RemovRange(OldDetails);
-                                unitOfWork.Save();
+                                //unitOfWork.Save();
                             }
 
 
@@ -812,13 +827,22 @@ namespace Stocks.Controllers
                             }
                             
                             }
-                            unitOfWork.Save();
+                        var Res = unitOfWork.Save();
+                        if (Res == 200)
+                        {
 
-
-
-                            return Ok(receiptExchangeModel);
-
+                            return Ok(4);
                         }
+                        else if (Res == 501)
+                        {
+                            return Ok(5);
+                        }
+                        else
+                        {
+                            return Ok(6);
+                        }
+
+                    }
 
                    
                 }
@@ -907,13 +931,21 @@ namespace Stocks.Controllers
                                 }
                             }
                         }
-                        
-                        unitOfWork.Save();
 
+                        var Res = unitOfWork.Save();
+                        if (Res == 200)
+                        {
 
-
-                        return Ok(receiptExchangeModel);
-
+                            return Ok(4);
+                        }
+                        else if (Res == 501)
+                        {
+                            return Ok(5);
+                        }
+                        else
+                        {
+                            return Ok(6);
+                        }
 
                     }
 
@@ -999,17 +1031,26 @@ namespace Stocks.Controllers
                                     }
                                 }
                             }
-                            
-                            unitOfWork.Save();
 
+                            var Res = unitOfWork.Save();
+                            if (Res == 200)
+                            {
 
-
-                            return Ok(receiptExchangeModel);
+                                return Ok(4);
+                            }
+                            else if (Res == 501)
+                            {
+                                return Ok(5);
+                            }
+                            else
+                            {
+                                return Ok(6);
+                            }
                         }
 
 
                     }
-                    return Ok(receiptExchangeModel);
+                    return Ok(4);
                 }
             }
             else
@@ -1055,38 +1096,19 @@ namespace Stocks.Controllers
                 }
                 
                 unitOfWork.ReceiptExchangeRepository.Delete(RecExc);
-                try
+                var Result = unitOfWork.Save();
+                if (Result == 200)
                 {
-                    unitOfWork.Save();
+                    return Ok(4);
                 }
-                catch (DbUpdateException ex)
+                else if (Result == 501)
                 {
-                    var sqlException = ex.GetBaseException() as SqlException;
-
-                    if (sqlException != null)
-                    {
-                        var number = sqlException.Number;
-
-                        if (number == 547)
-                        {
-                            return Ok(5);
-
-                        }
-                        else
-                            return Ok(6);
-                    }
+                    return Ok(5);
                 }
-                return Ok(4);
-
-                //var Result = unitOfWork.Save();
-                //if (Result == true)
-                //{
-                //    return Ok(4);
-                //}
-                //else
-                //{
-                //    return NotFound();
-                //} 
+                else
+                {
+                    return Ok(6);
+                }
             }
             else
                 return Ok(1);
