@@ -36,12 +36,12 @@ namespace Stocks.Controllers
         {
             AccountModel model = new AccountModel();
             var count = unitOfWork.AccountRepository.Count();
-            if(count>0)
+            if (count > 0)
             {
                 model.LastCode = unitOfWork.AccountRepository.Last().Code;
                 model.Count = count;
             }
-           
+
             return Ok(model);
         }
 
@@ -67,7 +67,7 @@ namespace Stocks.Controllers
 
 
             model.Count = unitOfWork.AccountRepository.Count();
-           
+
             return Ok(model);
 
 
@@ -98,13 +98,13 @@ namespace Stocks.Controllers
 
 
                 model.Count = unitOfWork.AccountRepository.Count();
-               
+
                 return Ok(model);
 
             }
             else
                 return Ok(1);
-           
+
         }
 
         [HttpGet]
@@ -254,7 +254,7 @@ namespace Stocks.Controllers
 
         public IActionResult PutAccount(int id, [FromBody] AccountModel accountModel)
         {
-          
+
 
             if (ModelState.IsValid)
             {
@@ -324,7 +324,7 @@ namespace Stocks.Controllers
                 }
                 else
                     return Ok(0);
-               
+
 
             }
             else
@@ -373,9 +373,11 @@ namespace Stocks.Controllers
 
 
                 }
-            
-        
-        #endregion
 
+
+                #endregion
+
+            }
+        }
     }
 }
