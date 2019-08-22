@@ -604,7 +604,10 @@ namespace Stocks.Controllers
                                     PartnerID = m.PartnerID,
                                     PartnerCode = m.Partner.Code,
                                     PartnerNameAR = m.Partner.NameAR,
-                                    PartnerNameEN = m.Partner.NameEN
+                                    PartnerNameEN = m.Partner.NameEN,
+                                    StocksCount = unitOfWork.PortfolioTransactionsRepository.Get(filter: a => a.PartnerID == m.PartnerID).Select(p => p.CurrentStocksCount).FirstOrDefault(),
+                                    StocksValue = unitOfWork.PortfolioTransactionsRepository.Get(filter: a => a.PartnerID == m.PartnerID).Select(p => p.CurrentStockValue).FirstOrDefault()
+
                                 });
                 if (Details != null)
                 {
@@ -655,23 +658,25 @@ namespace Stocks.Controllers
                     var Details = purchaseOrderModel.DetailsModels;
 
                     unitOfWork.PurchaseOrderRepository.Insert(purchaseOrder);
-
-                    foreach (var item in Details)
+                    if (Details != null && Details.Count() > 0)
                     {
-                        PurchaseOrderDetailModel purchaseOrderDetailModel = new PurchaseOrderDetailModel();
-                        purchaseOrderDetailModel.PurchaseID = purchaseOrder.PurchaseOrderID;
-                        purchaseOrderDetailModel.NetAmmount = item.NetAmmount;
-                        purchaseOrderDetailModel.StockCount = item.StockCount;
-                        purchaseOrderDetailModel.TaxOnCommission = item.TaxOnCommission;
-                        purchaseOrderDetailModel.TaxRateOnCommission = item.TaxRateOnCommission;
-                        purchaseOrderDetailModel.BankCommission = item.BankCommission;
-                        purchaseOrderDetailModel.BankCommissionRate = item.BankCommissionRate;
-                        purchaseOrderDetailModel.PurchaseValue = item.PurchaseValue;
-                        purchaseOrderDetailModel.PurchasePrice = item.PurchasePrice;
-                        purchaseOrderDetailModel.PartnerID = item.PartnerID;
-                        var details = _mapper.Map<PurchaseOrderDetail>(purchaseOrderDetailModel);
-                        unitOfWork.PurchaseOrderDetailRepository.Insert(details);
+                        foreach (var item in Details)
+                        {
+                            PurchaseOrderDetailModel purchaseOrderDetailModel = new PurchaseOrderDetailModel();
+                            purchaseOrderDetailModel.PurchaseID = purchaseOrder.PurchaseOrderID;
+                            purchaseOrderDetailModel.NetAmmount = item.NetAmmount;
+                            purchaseOrderDetailModel.StockCount = item.StockCount;
+                            purchaseOrderDetailModel.TaxOnCommission = item.TaxOnCommission;
+                            purchaseOrderDetailModel.TaxRateOnCommission = item.TaxRateOnCommission;
+                            purchaseOrderDetailModel.BankCommission = item.BankCommission;
+                            purchaseOrderDetailModel.BankCommissionRate = item.BankCommissionRate;
+                            purchaseOrderDetailModel.PurchaseValue = item.PurchaseValue;
+                            purchaseOrderDetailModel.PurchasePrice = item.PurchasePrice;
+                            purchaseOrderDetailModel.PartnerID = item.PartnerID;
+                            var details = _mapper.Map<PurchaseOrderDetail>(purchaseOrderDetailModel);
+                            unitOfWork.PurchaseOrderDetailRepository.Insert(details);
 
+                        }
                     }
 
 
@@ -1112,7 +1117,7 @@ namespace Stocks.Controllers
                     if (Check.Any(m => m.Code != purchaseOrder.Code))
                     {
                         unitOfWork.PurchaseOrderRepository.Update(purchaseOrder);
-                        if (OldDetails != null)
+                        if (OldDetails != null && OldDetails.Count()>0)
                         {
                             unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
 
@@ -1134,7 +1139,7 @@ namespace Stocks.Controllers
                         }
 
 
-                        if (Newdetails != null)
+                        if (Newdetails != null && Newdetails.Count()>0)
                         {
                             foreach (var item in Newdetails)
                             {
@@ -1254,7 +1259,7 @@ namespace Stocks.Controllers
                         if (Check.Any(m => m.Code == purchaseOrder.Code && m.PurchaseOrderID == id))
                         {
                             unitOfWork.PurchaseOrderRepository.Update(purchaseOrder);
-                            if (OldDetails != null)
+                            if (OldDetails != null && OldDetails.Count()>0)
                             {
                                 unitOfWork.PurchaseOrderDetailRepository.RemovRange(OldDetails);
 
@@ -1276,7 +1281,7 @@ namespace Stocks.Controllers
                             }
 
 
-                            if (Newdetails != null)
+                            if (Newdetails != null && Newdetails.Count()>0)
                             {
                                 foreach (var item in Newdetails)
                                 {

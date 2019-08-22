@@ -590,7 +590,10 @@ namespace Stocks.Controllers
                                 PartnerID = m.PartnerID,
                                 PartnerCode = m.Partner.Code,
                                 PartnerNameAR = m.Partner.NameAR,
-                                PartnerNameEN = m.Partner.NameEN
+                                PartnerNameEN = m.Partner.NameEN,
+                                StocksCount = unitOfWork.PortfolioTransactionsRepository.Get(filter: a => a.PartnerID == m.PartnerID).Select(p => p.CurrentStocksCount).FirstOrDefault(),
+                                StocksValue = unitOfWork.PortfolioTransactionsRepository.Get(filter: a => a.PartnerID == m.PartnerID).Select(p => p.CurrentStockValue).FirstOrDefault()
+
                             });
                 if (Details != null)
                 {
@@ -643,7 +646,7 @@ namespace Stocks.Controllers
                     var Details = sellingOrderModel.DetailsModels;
                    
                         unitOfWork.SellingOrderReposetory.Insert(modelselling);
-                    if(Details != null)
+                    if(Details != null && Details.Count()>0)
                     {
                         foreach (var item in Details)
                         {
@@ -830,13 +833,13 @@ namespace Stocks.Controllers
                   if (Check.Any(m => m.Code != sellingOrder.Code))
                   {
                       unitOfWork.SellingOrderReposetory.Update(sellingOrder);
-                      if (OldDetails != null)
+                      if (OldDetails.Count()>0 && OldDetails!=null)
                       {
                           unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
                       }
 
 
-                      if (Newdetails != null)
+                      if (Newdetails != null && Newdetails.Count()>0)
                       {
                           foreach (var item in Newdetails)
                           {
@@ -968,7 +971,7 @@ namespace Stocks.Controllers
                             }
 
 
-                          if (Newdetails != null)
+                          if (Newdetails != null && Newdetails.Count()>0)
                           {
                               foreach (var item in Newdetails)
                               {
@@ -1082,7 +1085,7 @@ namespace Stocks.Controllers
                 if (Check.Any(m => m.Code != sellingOrder.Code))
                 {
                     unitOfWork.SellingOrderReposetory.Update(sellingOrder);
-                    if (OldDetails != null)
+                    if (OldDetails.Count()>0 && OldDetails!=null)
                     {
                         unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
 
@@ -1104,7 +1107,7 @@ namespace Stocks.Controllers
                         }
 
 
-                    if (Newdetails != null)
+                    if (Newdetails != null && Newdetails.Count()>0)
                     {
                         foreach (var item in Newdetails)
                         {
@@ -1252,7 +1255,7 @@ namespace Stocks.Controllers
                     if (Check.Any(m => m.Code == sellingOrder.Code && m.SellingOrderID == id))
                     {
                         unitOfWork.SellingOrderReposetory.Update(sellingOrder);
-                        if (OldDetails != null)
+                        if (OldDetails != null  && OldDetails.Count()>0)
                         {
                             unitOfWork.SellingOrderDetailRepository.RemovRange(OldDetails);
 
@@ -1274,7 +1277,7 @@ namespace Stocks.Controllers
                             }
 
 
-                        if (Newdetails != null)
+                        if (Newdetails != null && Newdetails.Count()>0)
                         {
                             foreach (var item in Newdetails)
                             {
