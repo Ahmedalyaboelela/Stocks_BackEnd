@@ -228,7 +228,11 @@ namespace Stocks.Controllers
                     var result = unitOfWork.Save();
                     if (result == 200)
                     {
-                        return Ok("Succeeded");
+                        return Ok(4);
+                    }
+                    else if (result == 501)
+                    {
+                        return Ok(5);
                     }
                     else
                     {
@@ -242,11 +246,14 @@ namespace Stocks.Controllers
                     if (Check.Any(m => m.Code != countryModel.Code && m.CountryID == countryModel.CountryID))
                     {
                         unitOfWork.CountryRepository.Update(model);
-                        var Result = unitOfWork.Save();
                         var result = unitOfWork.Save();
                         if (result == 200)
                         {
-                            return Ok("Succeeded");
+                            return Ok(4);
+                        }
+                        else if (result == 501)
+                        {
+                            return Ok(5);
                         }
                         else
                         {
@@ -254,13 +261,17 @@ namespace Stocks.Controllers
                         }
 
                     }
+                    else
+                    {
+                        return Ok(2);
+                    }
                 }
             }
             else
             {
                 return Ok(3);
             }
-            return Ok(countryModel);
+          
         }
 
         #endregion
