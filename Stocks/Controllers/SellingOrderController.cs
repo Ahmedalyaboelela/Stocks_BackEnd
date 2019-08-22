@@ -241,12 +241,22 @@ namespace Stocks.Controllers
 
             }
 
+            var Result = unitOfWork.Save();
+            if (Result == 200)
+            {
 
-            unitOfWork.Save();
+                return Ok(4);
+            }
+            else if (Result == 501)
+            {
+                return Ok(5);
 
+            }
+            else
+            {
+                return Ok(6);
+            }
 
-
-            return Ok(sellingOrderModel);
 
         }
 
@@ -286,11 +296,22 @@ namespace Stocks.Controllers
             unitOfWork.EntryRepository.Update(Entry);
 
 
-            unitOfWork.Save();
+            var Result = unitOfWork.Save();
+            if (Result == 200)
+            {
 
+                return Ok(4);
+            }
+            else if (Result == 501)
+            {
+                return Ok(5);
 
+            }
+            else
+            {
+                return Ok(6);
+            }
 
-            return Ok(GetEntry(Entry));
 
         }
 
@@ -757,10 +778,16 @@ namespace Stocks.Controllers
                     //    }
                     //}
 
-                    var result = unitOfWork.Save();
-                    if (result == 200)
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        return Ok("Succeeded");
+
+                        return Ok(4);
+                    }
+                    else if (Result == 501)
+                    {
+                        return Ok(5);
+
                     }
                     else
                     {
@@ -1452,12 +1479,22 @@ namespace Stocks.Controllers
           
 
             unitOfWork.SellingOrderReposetory.Delete(id);
-            
-            var returnVal=unitOfWork.Save();
-            if (returnVal == 200)
+
+            var Result = unitOfWork.Save();
+            if (Result == 200)
+            {
+
                 return Ok(4);
+            }
+            else if (Result == 501)
+            {
+                return Ok(5);
+
+            }
             else
-                return Ok(returnVal);
+            {
+                return Ok(6);
+            }
 
 
 

@@ -244,7 +244,21 @@ namespace Stocks.Controllers
                     }
                 }
 
-                unitOfWork.Save();
+                var Result = unitOfWork.Save();
+                if (Result == 200)
+                {
+
+                    return Ok(4);
+                }
+                else if (Result == 501)
+                {
+                    return Ok(5);
+
+                }
+                else
+                {
+                    return Ok(6);
+                }
                 //purchaseOrderModel.EntryModel = GetEntryPurchaseOrderModel(purchaseOrderModel.PurchaseOrderID);
 
             }
@@ -286,12 +300,23 @@ namespace Stocks.Controllers
             unitOfWork.EntryRepository.Update(Entry);
 
 
+            var Res = unitOfWork.Save();
+            if (Res == 200)
+            {
 
-            unitOfWork.Save();
+                return Ok(4);
+            }
+            else if (Res == 501)
+            {
+                return Ok(5);
 
+            }
+            else
+            {
+                return Ok(6);
+            }
 
-
-            return Ok(GetEntry(Entry));
+            //return Ok(GetEntry(Entry));
 
         }
 
@@ -687,9 +712,21 @@ namespace Stocks.Controllers
                     //==================================================لا تولد قيد ===================================
                     if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
                     {
-                        unitOfWork.Save();
-                       
-                        return Ok(purchaseOrderModel);
+                        var Res = unitOfWork.Save();
+                        if (Res == 200)
+                        {
+
+                            return Ok(4);
+                        }
+                        else if (Res == 501)
+                        {
+                            return Ok(5);
+
+                        }
+                        else
+                        {
+                            return Ok(6);
+                        }
                     }
 
                     //===============================================================توليد قيد مع ترحيل تلقائي============================
@@ -920,8 +957,8 @@ namespace Stocks.Controllers
                             }
                             else
                             {
-                                Entry.TransferedToAccounts = true;
-                                unitOfWork.EntryRepository.Insert(Entry);
+                                Entry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Update(Entry);
                                 foreach (var item in EntryDitails)
                                 {
                                     item.EntryID = Entry.EntryID;

@@ -178,7 +178,11 @@ namespace BAL.Helper
                 {
                     if (detail.PartnerID == item.PartnerID)
                     {
-                        item.CurrentStocksCount = (float)(item.CurrentStocksCount - detail.StocksCredit);
+                        if(item.CurrentStocksCount !=null && detail.StocksCredit != null)
+                        {
+                            item.CurrentStocksCount = (float)(item.CurrentStocksCount - detail.StocksCredit);
+
+                        }
                         unitOfWork.PortfolioTransactionsRepository.Update(item);
                     }
 
