@@ -330,9 +330,9 @@ namespace Stocks.Controllers
 
 
                     model.LastCode = noti.Code;
-                    model.Count = unitOfWork.NoticeRepository.Get(filter: x => x.Type == true).Count();
                 }
                 model.SettingModel = GetSetting(4);
+                model.Count = unitOfWork.NoticeRepository.Get(filter: x => x.Type == true).Count();
 
             }
             else
@@ -347,10 +347,10 @@ namespace Stocks.Controllers
                     var noti = unitOfWork.NoticeRepository.Get(filter: x => x.Type == false).Last();
 
                     model.LastCode = noti.Code;
-                    model.Count = unitOfWork.NoticeRepository.Get(filter: x => x.Type == false).Count();
                 }
 
-                    model.SettingModel = GetSetting(3);
+                model.SettingModel = GetSetting(3);
+                model.Count = unitOfWork.NoticeRepository.Get(filter: x => x.Type == false).Count();
 
             }
 
@@ -574,32 +574,21 @@ namespace Stocks.Controllers
             }).ToList());
 
 
-            try
+            var Result = unitOfWork.Save();
+            if (Result == 200)
             {
-                unitOfWork.Save();
+
+                return Ok(4);
             }
-            catch (DbUpdateException ex)
+            else if (Result == 501)
             {
-                var sqlException = ex.GetBaseException() as SqlException;
+                return Ok(5);
 
-                if (sqlException != null)
-                {
-                    var number = sqlException.Number;
-
-                    if (number == 547)
-                    {
-                        return Ok(5);
-
-                    }
-                    else
-                        return Ok(6);
-                }
             }
-
-
-
-            return Ok(GetEntry(Entry));
-
+            else
+            {
+                return Ok(6);
+            }
         }
 
 
