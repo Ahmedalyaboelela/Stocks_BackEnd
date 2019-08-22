@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
-   
+    [Authorize(Roles = "SuperAdmin,Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CountryController : ControllerBase

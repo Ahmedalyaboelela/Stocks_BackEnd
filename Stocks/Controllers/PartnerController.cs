@@ -10,12 +10,14 @@ using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
-{//
+{
+    [Authorize(Roles = "SuperAdmin,Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class PartnerController : ControllerBase
