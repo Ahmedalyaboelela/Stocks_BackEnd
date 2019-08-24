@@ -43,7 +43,11 @@ namespace Stocks.Controllers
             }
             #region Date part
           
-            model.EstablishDate = portfolio.EstablishDate.Value.ToString("yyyy/MM/dd");
+            if(portfolio.EstablishDate != null)
+            {
+                model.EstablishDate = portfolio.EstablishDate.Value.ToString("yyyy/MM/dd");
+            }
+           
           //  model.EstablishDateHijri = DateHelper.GetHijriDate(portfolio.EstablishDate);
 
             #endregion
@@ -128,10 +132,10 @@ namespace Stocks.Controllers
                 model.LastCode = unitOfWork.PortfolioRepository.Last().Code;
                 model.Count = count;
             }
-            else
-            {
+        /*    else
+            {              
                 return Ok(0);
-            }
+            }*/
             
             return Ok(model);
         }
@@ -507,7 +511,7 @@ namespace Stocks.Controllers
                     var result = unitOfWork.Save();
                     if (result == 200)
                     {
-                        return Ok("Succeeded");
+                        return Ok(4);
                     }
                     else
                     {
