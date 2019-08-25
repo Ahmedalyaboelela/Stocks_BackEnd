@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Stocks.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController]  
     public class ValuesController : ControllerBase
     {
         private ILoggerManager _logger;
