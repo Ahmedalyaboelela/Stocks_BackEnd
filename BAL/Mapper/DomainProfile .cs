@@ -25,7 +25,7 @@ namespace BAL.Mapper
                .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
                .ForSourceMember(t => t.AccountNameAr, opt => opt.DoNotValidate())
                .ForSourceMember(t => t.AccountNameEn, opt => opt.DoNotValidate())
-               .ForMember(t => t.IssueDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.IssueDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+               .ForMember(t => t.IssueDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.IssueDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
             #endregion
 
             #region Map Country
