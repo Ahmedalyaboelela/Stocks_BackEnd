@@ -289,16 +289,22 @@ namespace Stocks.Controllers
 
 
                   
-               var result=unitOfWork.Save(); 
-                    if (result==200)
+               var result=unitOfWork.Save();
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        return Ok("Succeeded");
+                        return Ok(4);
+                    }
+                    else if (Result == 501)
+                    {
+                        return Ok(5);
+
                     }
                     else
                     {
                         return Ok(6);
                     }
-                   
+
 
 
 
@@ -367,9 +373,15 @@ namespace Stocks.Controllers
                     }
 
                     var result = unitOfWork.Save();
-                    if (result == 200)
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
                     {
-                        return Ok("Succeeded");
+                        return Ok(4);
+                    }
+                    else if (Result == 501)
+                    {
+                        return Ok(5);
+
                     }
                     else
                     {
@@ -410,11 +422,16 @@ namespace Stocks.Controllers
                                 unitOfWork.EmployeeCardRepository.Insert(obj);
                             }
                         }
-
                         var result = unitOfWork.Save();
-                        if (result == 200)
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
                         {
-                            return Ok("Succeeded");
+                            return Ok(4);
+                        }
+                        else if (Result == 501)
+                        {
+                            return Ok(5);
+
                         }
                         else
                         {
@@ -468,20 +485,22 @@ namespace Stocks.Controllers
 
 
             var result = unitOfWork.Save();
-            if (result == 200)
+            var Result = unitOfWork.Save();
+            if (Result == 200)
             {
-                return Ok("Succeeded");
+                return Ok(4);
             }
-            else if (result == 501)
+            else if (Result == 501)
             {
                 return Ok(5);
-            }
 
+            }
             else
             {
                 return Ok(6);
             }
 
+          
            
 
 
