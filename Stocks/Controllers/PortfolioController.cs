@@ -45,7 +45,7 @@ namespace Stocks.Controllers
           
             if(portfolio.EstablishDate != null)
             {
-                model.EstablishDate = portfolio.EstablishDate.Value.ToString("yyyy/MM/dd");
+                model.EstablishDate = portfolio.EstablishDate.Value.ToString("d/M/yyyy");
             }
            
           //  model.EstablishDateHijri = DateHelper.GetHijriDate(portfolio.EstablishDate);
