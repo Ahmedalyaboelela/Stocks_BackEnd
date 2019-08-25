@@ -859,8 +859,8 @@ namespace Stocks.Controllers
                 if (EntryCheck != null)
                 {
 
-                    var Entry = unitOfWork.EntryRepository.Get(filter: x => x.NoticeID == notice.NoticeID).SingleOrDefault();
-                    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                    var Entry = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack",filter: x => x.NoticeID == notice.NoticeID).SingleOrDefault();
+                    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(NoTrack: "NoTrack", filter: a => a.EntryID == Entry.EntryID);
                     if (Entry.TransferedToAccounts == true)
                     {
                         accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
