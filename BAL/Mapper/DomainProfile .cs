@@ -38,15 +38,15 @@ namespace BAL.Mapper
             CreateMap<Employee, EmployeeModel>();
             CreateMap<EmployeeModel, Employee>()
                  .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                .ForMember(t => t.BirthDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.BirthDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                .ForMember(t => t.BirthDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.BirthDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
             // employee card
             CreateMap<EmployeeCard, EmployeeCardModel>();
             CreateMap<EmployeeCardModel, EmployeeCard>()
                  .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                .ForMember(t => t.IssueDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.IssueDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
-                .ForMember(t => t.EndDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.EndDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
-                .ForMember(t => t.RenewalDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.RenewalDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                .ForMember(t => t.IssueDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.IssueDate, "d/M/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(t => t.EndDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.EndDate, "d/M/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(t => t.RenewalDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.RenewalDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
             ;
 
@@ -94,7 +94,7 @@ namespace BAL.Mapper
             CreateMap<Portfolio, PortfolioModel>();
             CreateMap<PortfolioModel, Portfolio>()
                  .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                .ForMember(t => t.EstablishDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.EstablishDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(t => t.EstablishDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.EstablishDate, "d/M/yyyy", CultureInfo.InvariantCulture)))
                  .ForSourceMember(t => t.RSBalance, opt => opt.DoNotValidate());
                
 
