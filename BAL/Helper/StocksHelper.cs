@@ -152,9 +152,13 @@ namespace BAL.Helper
                     {
                         if (detail.PartnerID == item.PartnerID)
                         {
-                            if (detail.StocksCredit > item.CurrentStocksCount)
+                            if(detail.StocksCredit != null)
                             {
-                                return false;
+                                if (detail.StocksCredit > item.CurrentStocksCount)
+                                {
+                                    return false;
+                                }
+
                             }
 
 
@@ -178,7 +182,7 @@ namespace BAL.Helper
                 {
                     if (detail.PartnerID == item.PartnerID)
                     {
-                        if(item.CurrentStocksCount !=null && detail.StocksCredit != null)
+                        if( detail.StocksCredit != null)
                         {
                             item.CurrentStocksCount = (float)(item.CurrentStocksCount - detail.StocksCredit);
 
@@ -200,8 +204,12 @@ namespace BAL.Helper
                 {
                     if (detail.PartnerID == item.PartnerID)
                     {
-                        item.CurrentStocksCount = (float)(item.CurrentStocksCount + detail.StocksCredit);
-                        unitOfWork.PortfolioTransactionsRepository.Update(item);
+                        if (detail.StocksCredit != null)
+                        {
+
+                            item.CurrentStocksCount = (float)(item.CurrentStocksCount + detail.StocksCredit);
+                            unitOfWork.PortfolioTransactionsRepository.Update(item);
+                        }
                     }
 
                 }
@@ -220,8 +228,12 @@ namespace BAL.Helper
                 {
                     if (detail.PartnerID == item.PartnerID)
                     {
-                        item.CurrentStocksCount = (float)(item.CurrentStocksCount + detail.StocksDebit);
-                        unitOfWork.PortfolioTransactionsRepository.Update(item);
+                        if (detail.StocksDebit != null)
+                        {
+
+                            item.CurrentStocksCount = (float)(item.CurrentStocksCount + detail.StocksDebit);
+                            unitOfWork.PortfolioTransactionsRepository.Update(item);
+                        }
                     }
 
                 }
@@ -238,8 +250,12 @@ namespace BAL.Helper
                 {
                     if (detail.PartnerID == item.PartnerID)
                     {
-                        item.CurrentStocksCount = (float)(item.CurrentStocksCount - detail.StocksDebit);
-                        unitOfWork.PortfolioTransactionsRepository.Update(item);
+                        if (detail.StocksDebit != null)
+                        {
+
+                            item.CurrentStocksCount = (float)(item.CurrentStocksCount - detail.StocksDebit);
+                            unitOfWork.PortfolioTransactionsRepository.Update(item);
+                        }
                     }
 
                 }
