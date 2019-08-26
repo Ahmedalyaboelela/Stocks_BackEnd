@@ -678,7 +678,7 @@ namespace Stocks.Controllers
                 int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == noticeModel.PortfolioID && m.Type == true).Select(m => m.PortfolioAccountID).SingleOrDefault();
 
                 var Check = unitOfWork.NoticeRepository.Get();
-                if (Check.Any(m => m.Code == noticeModel.Code))
+                if (Check.Any(m => m.Code == noticeModel.Code && m.Type==noticeModel.Type))
                 {
 
                     return Ok(2);
