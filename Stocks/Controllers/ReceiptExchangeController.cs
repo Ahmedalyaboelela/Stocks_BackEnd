@@ -542,27 +542,31 @@ namespace Stocks.Controllers
                     var Details = recExcModel.RecExcDetails;
 
                     unitOfWork.ReceiptExchangeRepository.Insert(receipt);
-
-                    foreach (var item in Details)
+                    if (Details.Count() > 0)
                     {
-                        ReceiptExchangeDetailModel receiptExchangeDetailModel = new ReceiptExchangeDetailModel();
-                        receiptExchangeDetailModel.ReceiptID = receipt.ReceiptID;
-                        receiptExchangeDetailModel.AccountID = item.AccountID;
-                        receiptExchangeDetailModel.ChiqueNumber = item.ChiqueNumber;
-                        receiptExchangeDetailModel.Credit = item.Credit;
-                        receiptExchangeDetailModel.Debit = item.Debit;
-                        receiptExchangeDetailModel.DetailType = item.DetailType;
-                        var details = _mapper.Map<ReceiptExchangeDetail>(receiptExchangeDetailModel);
-                        unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
+                        foreach (var item in Details)
+                        {
+                            ReceiptExchangeDetailModel receiptExchangeDetailModel = new ReceiptExchangeDetailModel();
+                            receiptExchangeDetailModel.ReceiptID = receipt.ReceiptID;
+                            receiptExchangeDetailModel.AccountID = item.AccountID;
+                            receiptExchangeDetailModel.ChiqueNumber = item.ChiqueNumber;
+                            receiptExchangeDetailModel.Credit = item.Credit;
+                            receiptExchangeDetailModel.Debit = item.Debit;
+                            receiptExchangeDetailModel.DetailType = item.DetailType;
+                            var details = _mapper.Map<ReceiptExchangeDetail>(receiptExchangeDetailModel);
+                            unitOfWork.ReceiptExchangeDetailRepository.Insert(details);
+
+                        }
 
                     }
 
-                    
+
+
                     //===============================================================توليد قيد مع ترحيل تلقائي============================
 
 
 
-                     if (recExcModel.SettingModel.AutoGenerateEntry == true)
+                    if (recExcModel.SettingModel.AutoGenerateEntry == true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0, null, null, recExcModel, null, lastEntry);
