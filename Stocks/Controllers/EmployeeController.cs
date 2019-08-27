@@ -177,7 +177,7 @@ namespace Stocks.Controllers
         [Route("~/api/Employee/GetAll")]
         public IActionResult GetAllEmployees()
         {
-            var employees = unitOfWork.EmployeeRepository.Get().ToList();
+            var employees = unitOfWork.EmployeeRepository.Get(filter: x=> x.IsActive==true).ToList();
             var model = _mapper.Map<IEnumerable<EmployeeModel>>(employees).ToList();
 
             if (model == null)

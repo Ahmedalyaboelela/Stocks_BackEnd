@@ -89,32 +89,37 @@ namespace Stocks.Controllers
                     
 
                 });
+
+         
+
+
             if (OpeningStocks != null) {
                 model.portfolioOpeningStocksArray = OpeningStocks;
-                model.TotalStocksCount = 0;
-                model.RSBalance = 0;
-                foreach (var item in OpeningStocks)
-                {
-                   
-                    model.TotalStocksCount += item.OpeningStocksCount;
-                }
-              
-                foreach (var item2 in OpeningStocks)
-                {
-                    model.RSBalance += item2.OpeningStockValue;
-                    
-                }
-
-            }
                
-            
+            } 
+            //if (currentstocks != null)
+            //{
+            //    model.TotalStocksCount = 0;
+               
+            //    foreach (var item in currentstocks)
+            //    {
+
+            //        model.TotalStocksCount += item.CurrentStocksCount;
+            //    }
+
+               
+
+            //}
+
+
 
             #endregion
 
 
 
-
+            
             model.Count = unitOfWork.PortfolioRepository.Count();
+        
             
             
 
@@ -253,6 +258,20 @@ namespace Stocks.Controllers
                 }
                 else
                 {
+                    // عدد الاسهم الحاليه
+                    if (portModel.portfolioTransactionModels != null)
+                    {
+                        portModel.TotalStocksCount = 0;
+
+                        foreach (var item in portModel.portfolioTransactionModels)
+                        {
+
+                            portModel.TotalStocksCount += item.CurrentStocksCount;
+                        }
+
+
+
+                    }
 
                     var model = _mapper.Map<Portfolio>(portModel);
 
@@ -371,7 +390,20 @@ namespace Stocks.Controllers
                     }
 
                 }
+                // عدد الاسهم الحاليه
+                if (portModel.portfolioTransactionModels != null)
+                {
+                    portModel.TotalStocksCount = 0;
 
+                    foreach (var item in portModel.portfolioTransactionModels)
+                    {
+
+                        portModel.TotalStocksCount += item.CurrentStocksCount;
+                    }
+
+
+
+                }
 
                 var OpeningStocks = portModel.portfolioOpeningStocksArray;
                 var Check = unitOfWork.PortfolioRepository.Get(NoTrack: "NoTrack");
