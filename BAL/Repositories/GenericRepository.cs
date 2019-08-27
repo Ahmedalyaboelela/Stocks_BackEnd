@@ -157,7 +157,8 @@ namespace BAL.Repositories
                 // Paging
                 if (page > 0)
                 {
-                    return query.ToList().Skip(5).Take(5);
+                    page = page * 5;
+                    return query.ToList().Skip(page - 5).Take(5);
                 }
                 else
                     return query.ToList();

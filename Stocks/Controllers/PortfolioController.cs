@@ -381,15 +381,29 @@ namespace Stocks.Controllers
             if (ModelState.IsValid)
             {
                 var model = _mapper.Map<Portfolio>(portModel);
-                var currentStocks = unitOfWork.PortfolioTransactionsRepository.Get(x => x.PortfolioID == model.PortfolioID);
-                foreach (var item in currentStocks)
-                {
-                    if (item.HasTransaction == true)
-                    {
-                        return Ok(5);
-                    }
+                var currentstocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == model.PortfolioID);
 
+                var Checkselles = unitOfWork.SellingOrderReposetory.Get(filter: q => q.PortfolioID == model.PortfolioID);
+                if (Checkselles.Any(m => m.PortfolioID == model.PortfolioID))
+                {
+                    return Ok(5);
                 }
+
+                var Checkpurches = unitOfWork.PurchaseOrderRepository.Get(filter: q => q.PortfolioID == model.PortfolioID);
+                if (Checkpurches.Any(m => m.PortfolioID == model.PortfolioID))
+                {
+                    return Ok(5);
+                }
+
+                var currentStocks = unitOfWork.PortfolioTransactionsRepository.Get(x => x.PortfolioID == model.PortfolioID);
+                //foreach (var item in currentStocks)
+                //{
+                //    if (item.HasTransaction == true)
+                //    {
+                //        return Ok(5);
+                //    }
+
+                //}
                 // عدد الاسهم الحاليه
                 if (portModel.portfolioTransactionModels != null)
                 {
@@ -678,14 +692,23 @@ namespace Stocks.Controllers
                 {
                     return BadRequest();
                 }
-                var currentstocks = unitOfWork.PortfolioTransactionsRepository.Get(x=> x.PortfolioID==portfolio.PortfolioID);
-                foreach (var item in currentstocks)
+
+
+
+                var currentstocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID==portfolio.PortfolioID);
+              
+                var Checkselles = unitOfWork.SellingOrderReposetory.Get(filter: q=> q.PortfolioID==portfolio.PortfolioID);
+                if (Checkselles.Any(m => m.PortfolioID == portfolio.PortfolioID))
                 {
-                    if (item.HasTransaction==true)
-                    {
-                        return Ok(5);
-                    }
+                    return Ok(5);
                 }
+
+                var Checkpurches = unitOfWork.PurchaseOrderRepository.Get(filter: q => q.PortfolioID == portfolio.PortfolioID);
+                if (Checkpurches.Any(m => m.PortfolioID == portfolio.PortfolioID))
+                {
+                    return Ok(5);
+                }
+
                 unitOfWork.PortfolioTransactionsRepository.RemovRange(currentstocks);
                 var PortAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: m => m.PortfolioID == id);
                 unitOfWork.PortfolioAccountRepository.Delete(PortAccount.PortfolioAccountID);

@@ -98,7 +98,9 @@ namespace BAL.Helper
                 #endregion
                 Entrymodel.EntryDetailModel = DetailListModel;
                 #endregion
-        
+
+               
+
             }
             #endregion
             #region PurchaseOrder  
