@@ -63,7 +63,7 @@ namespace BAL.Mapper
             CreateMap<SellingOrder, SellingOrderModel>();
             CreateMap<SellingOrderModel, SellingOrder>()
                 .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                 .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.SellDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                 .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.SellDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
 
             CreateMap<SellingOrderDetail, SelingOrderDetailsModel>();
@@ -75,7 +75,7 @@ namespace BAL.Mapper
             CreateMap<PurchaseOrder, PurchaseOrderModel>();
             CreateMap<PurchaseOrderModel, PurchaseOrder>()
                 .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                 .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.PurchaseDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                 .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.PurchaseDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
 
             CreateMap<PurchaseOrderDetail, PurchaseOrderDetailModel>();
@@ -116,8 +116,8 @@ namespace BAL.Mapper
             CreateMap<ReceiptExchange, ReceiptExchangeModel>();
             CreateMap<ReceiptExchangeModel, ReceiptExchange>()
                  .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
-                .ForMember(t => t.ChiqueDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.ChiqueDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.Date, "d/M/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(t => t.ChiqueDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.ChiqueDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
 
             // Reciept & Exchange Details
@@ -132,7 +132,7 @@ namespace BAL.Mapper
             CreateMap<Notice, NoticeModel>();
             CreateMap<NoticeModel, Notice>()
                  .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                .ForMember(t => t.NoticeDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.NoticeDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                .ForMember(t => t.NoticeDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.NoticeDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
 
             // Notice Details
@@ -147,7 +147,7 @@ namespace BAL.Mapper
             CreateMap<Entry, EntryModel>();
             CreateMap<EntryModel, Entry>()
                  .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                 .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                 .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.Date, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
 
             // Entry Details

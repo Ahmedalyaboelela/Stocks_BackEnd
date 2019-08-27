@@ -43,7 +43,7 @@ namespace Stocks.Controllers
             }
             #region Date part
 
-            model.Date = entry.Date.Value.ToString("dd/MM/yyyy");
+            model.Date = entry.Date.Value.ToString("d/M/yyyy");
             model.DateHijri = DateHelper.GetHijriDate(entry.Date);
             #endregion
 
@@ -153,7 +153,7 @@ namespace Stocks.Controllers
                     {
                         #region Date part
 
-                        model[j].Date = vouchers[i].Date.Value.ToString("dd/MM/yyyy");
+                        model[j].Date = vouchers[i].Date.Value.ToString("d/M/yyyy");
                         model[j].DateHijri = DateHelper.GetHijriDate(vouchers[i].Date);
                         #endregion
 
