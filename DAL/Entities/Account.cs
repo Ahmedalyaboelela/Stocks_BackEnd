@@ -73,7 +73,7 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(250)")]
         public string TaxNum { get; set; }
 
-        public bool IsActive { get; set; }
+   //     public bool IsActive { get; set; }
 
         public float? StocksDebit { get; set; }
 

@@ -68,7 +68,7 @@ namespace BAL.Model
        
         public string TaxNum { get; set; }
 
-        public bool IsActive { get; set; }
+      //  public bool IsActive { get; set; }
 
 
         public int? AccoutnParentID { get; set; }

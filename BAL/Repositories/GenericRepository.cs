@@ -125,5 +125,44 @@ namespace BAL.Repositories
         {
             Context.Set<T>().RemoveRange(entities);
         }
+
+
+
+        public virtual IEnumerable<T> GetMobilApp(Expression<Func<T, bool>> filter = null,
+         Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+         string includeProperties = "", int page = 0, string NoTrack = "")
+        {
+            IQueryable<T> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (NoTrack != "")
+            {
+                query = query.AsNoTracking();
+            }
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).ToList();
+            }
+            else
+            {
+                // Paging
+                if (page > 0)
+                {
+                    return query.ToList().Skip(5).Take(5);
+                }
+                else
+                    return query.ToList();
+            }
+        }
+
     }
 }
