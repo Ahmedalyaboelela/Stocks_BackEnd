@@ -76,7 +76,7 @@ namespace Stocks.Controllers
             if(employee.BirthDate!=null)
             {
 
-                model.BirthDate = employee.BirthDate.Value.ToString("dd/MM/yyyy");
+                model.BirthDate = employee.BirthDate.Value.ToString("d/M/yyyy");
                 model.BirthDateHijri = DateHelper.GetHijriDate(employee.BirthDate);
             }
             #endregion
@@ -93,11 +93,11 @@ namespace Stocks.Controllers
                         CardType = m.CardType,
                         IssuePlace = m.IssuePlace,
                         Code = m.Code,
-                        IssueDate = m.IssueDate!=null? m.IssueDate.Value.ToString("dd/MM/yyyy"):null,
+                        IssueDate = m.IssueDate!=null? m.IssueDate.Value.ToString("d/M/yyyy"):null,
                         IssueDateHigri = m.IssueDate != null ? DateHelper.GetHijriDate(m.IssueDate): null,
-                        EndDate = m.EndDate!=null? m.EndDate.Value.ToString("dd/MM/yyyy"): null,
+                        EndDate = m.EndDate!=null? m.EndDate.Value.ToString("d/M/yyyy"): null,
                         EndDateHigri = m.EndDate != null ? DateHelper.GetHijriDate(m.EndDate): null,
-                        RenewalDate = m.RenewalDate !=null? m.RenewalDate.Value.ToString("dd/MM/yyyy"): null,
+                        RenewalDate = m.RenewalDate !=null? m.RenewalDate.Value.ToString("d/M/yyyy"): null,
                         RenewalDateHigri = m.RenewalDate != null ? DateHelper.GetHijriDate(m.RenewalDate): null,
                         Notes = m.Notes,
                         EmployeeID = m.EmployeeID,
@@ -195,7 +195,7 @@ namespace Stocks.Controllers
                         if(employees[i].BirthDate!=null)
                         {
 
-                            model[j].BirthDate = employees[i].BirthDate.Value.ToString("dd/MM/yyyy");
+                            model[j].BirthDate = employees[i].BirthDate.Value.ToString("d/M/yyyy");
                             model[j].BirthDateHijri = DateHelper.GetHijriDate(employees[i].BirthDate);
                         }
                         #endregion
@@ -212,11 +212,11 @@ namespace Stocks.Controllers
                                CardType = m.CardType,
                                IssuePlace = m.IssuePlace,
                                Code = m.Code,
-                               IssueDate = m.IssueDate != null ? m.IssueDate.Value.ToString("dd/MM/yyyy") : null,
+                               IssueDate = m.IssueDate != null ? m.IssueDate.Value.ToString("d/M/yyyy") : null,
                                IssueDateHigri = m.IssueDate != null ? DateHelper.GetHijriDate(m.IssueDate) : null,
-                               EndDate = m.EndDate != null ? m.EndDate.Value.ToString("dd/MM/yyyy") : null,
+                               EndDate = m.EndDate != null ? m.EndDate.Value.ToString("d/M/yyyy") : null,
                                EndDateHigri = m.EndDate != null ? DateHelper.GetHijriDate(m.EndDate) : null,
-                               RenewalDate = m.RenewalDate != null ? m.RenewalDate.Value.ToString("dd/MM/yyyy") : null,
+                               RenewalDate = m.RenewalDate != null ? m.RenewalDate.Value.ToString("d/M/yyyy") : null,
                                RenewalDateHigri = m.RenewalDate != null ? DateHelper.GetHijriDate(m.RenewalDate) : null,
                                Notes = m.Notes,
                                EmployeeID = m.EmployeeID,

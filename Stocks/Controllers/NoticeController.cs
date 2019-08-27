@@ -95,7 +95,7 @@ namespace Stocks.Controllers
                 PortfolioID = a.PortfolioID,
                 Code = a.Code,
                 Description = a.Description,
-                EstablishDate = a.EstablishDate.Value.ToString("dd/MM/yyyy"),
+                EstablishDate = a.EstablishDate.Value.ToString("d/M/yyyy"),
                 EstablishDateHijri = DateHelper.GetHijriDate(a.EstablishDate),
                 AccountID = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).AccountID,
                 AccountCode = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.Code,
@@ -137,7 +137,7 @@ namespace Stocks.Controllers
                 EmployeeID=a.EmployeeID,
                 Age=a.Age,
                 BankAccNum=a.BankAccNum,
-                BirthDate= a.BirthDate!=null?a.BirthDate.Value.ToString("dd/MM/yyyy"):null,
+                BirthDate= a.BirthDate!=null?a.BirthDate.Value.ToString("d/M/yyyy"):null,
                 BirthDateHijri= a.BirthDate != null ? DateHelper.GetHijriDate(a.BirthDate):null,
                 Code=a.Code,
                 Email=a.Email,
@@ -224,7 +224,7 @@ namespace Stocks.Controllers
             #region Date part
             if (notice.NoticeDate != null)
             {
-                model.NoticeDate = notice.NoticeDate.Value.ToString("dd/MM/yyyy");
+                model.NoticeDate = notice.NoticeDate.Value.ToString("d/M/yyyy");
                 model.NoticeDateHijri = DateHelper.GetHijriDate(notice.NoticeDate);
             }
             #endregion
@@ -435,7 +435,7 @@ namespace Stocks.Controllers
                     {
                         #region Date part
 
-                        model[j].NoticeDate = notices[i].NoticeDate.Value.ToString("dd/MM/yyyy");
+                        model[j].NoticeDate = notices[i].NoticeDate.Value.ToString("d/M/yyyy");
                         model[j].NoticeDateHijri = DateHelper.GetHijriDate(notices[i].NoticeDate);
                         #endregion
 
@@ -489,7 +489,7 @@ namespace Stocks.Controllers
                 var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
                 entryModel.EntryID = Entry.EntryID;
                 entryModel.Code = Entry.Code;
-                entryModel.Date = Entry.Date.Value.ToString("dd/MM/yyyy");
+                entryModel.Date = Entry.Date.Value.ToString("d/M/yyyy");
                 entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
                 entryModel.NoticeID = Entry.NoticeID;
                 entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
@@ -526,7 +526,7 @@ namespace Stocks.Controllers
             EntryModel entryModel = new EntryModel();
             entryModel.EntryID = Entry.EntryID;
             entryModel.Code = Entry.Code;
-            entryModel.Date = Entry.Date!=null? Entry.Date.Value.ToString("dd/MM/yyyy"):null;
+            entryModel.Date = Entry.Date!=null? Entry.Date.Value.ToString("d/M/yyyy"):null;
             entryModel.DateHijri = Entry.Date!=null?DateHelper.GetHijriDate(Entry.Date):null;
             entryModel.NoticeID = Entry.NoticeID;
             entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
