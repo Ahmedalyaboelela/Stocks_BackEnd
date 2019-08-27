@@ -80,7 +80,7 @@ namespace Stocks.Controllers
                 if (partner.IssueDate != null)
                 {
 
-                    model.IssueDate = partner.IssueDate.Value.ToString("dd/MM/yyyy");
+                    model.IssueDate = partner.IssueDate.Value.ToString("d/M/yyyy");
                     model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
 
                 }
@@ -161,7 +161,7 @@ namespace Stocks.Controllers
                     if(partner.IssueDate!=null)
                     {
 
-                        model.IssueDate = partner.IssueDate.Value.ToString("dd/MM/yyyy");
+                        model.IssueDate = partner.IssueDate.Value.ToString("d/M/yyyy");
                         model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
 
                     }
@@ -244,7 +244,7 @@ namespace Stocks.Controllers
                     if (partner.IssueDate != null)
                     {
 
-                        model.IssueDate = partner.IssueDate.Value.ToString("dd/MM/yyyy");
+                        model.IssueDate = partner.IssueDate.Value.ToString("d/M/yyyy");
                         model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
 
                     }
@@ -306,14 +306,14 @@ namespace Stocks.Controllers
                         // deal with date
 
 
-                        //model[j].IssueDate = partner[i].IssueDate.Value.ToString("dd/MM/yyyy");
+                        //model[j].IssueDate = partner[i].IssueDate.Value.ToString("d/M/yyyy");
                         //model[j].IssueDateHijri = DateHelper.GetHijriDate(partner[i].IssueDate);
 
 
                         if (partner[i].IssueDate != null)
                         {
 
-                            model[j].IssueDate = partner[i].IssueDate.Value.ToString("dd/MM/yyyy");
+                            model[j].IssueDate = partner[i].IssueDate.Value.ToString("d/M/yyyy");
                             model[j].IssueDateHijri = DateHelper.GetHijriDate(partner[i].IssueDate);
 
                         }

@@ -196,7 +196,7 @@ namespace BAL.Helper
                     {
                         Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
                     }
-                    Entrymodel.Date = DateTime.Now.ToString("yyyy-MM-dd");
+                    Entrymodel.Date = DateTime.Now.ToString("dd/MM/yyyy");
                     Entrymodel.ReceiptID = receiptExchangeModel.ReceiptID;
                     #endregion
 

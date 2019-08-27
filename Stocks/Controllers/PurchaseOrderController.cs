@@ -42,7 +42,7 @@ namespace Stocks.Controllers
                 var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
                 entryModel.EntryID = Entry.EntryID;
                 entryModel.Code = Entry.Code;
-                entryModel.Date = Entry.Date.Value.ToString("dd/MM/yyyy");
+                entryModel.Date = Entry.Date.Value.ToString("d/M/yyyy");
                 entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
                 entryModel.NoticeID = Entry.NoticeID;
                 entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
@@ -83,7 +83,7 @@ namespace Stocks.Controllers
                 var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
                 entryModel.EntryID = Entry.EntryID;
                 entryModel.Code = Entry.Code;
-                entryModel.Date = Entry.Date.Value.ToString("dd/MM/yyyy");
+                entryModel.Date = Entry.Date.Value.ToString("d/M/yyyy");
                 entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
                 entryModel.NoticeID = Entry.NoticeID;
                 entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
@@ -373,7 +373,7 @@ namespace Stocks.Controllers
             if (purchase.Date != null)
             {
 
-                model.PurchaseDate = purchase.Date.Value.ToString("dd/MM/yyyy");
+                model.PurchaseDate = purchase.Date.Value.ToString("d/M/yyyy");
                 model.PurchaseDateHijri = DateHelper.GetHijriDate(purchase.Date);
             }
 
@@ -486,7 +486,7 @@ namespace Stocks.Controllers
                 if (purchase.Date != null)
                 {
 
-                    model.PurchaseDate = purchase.Date.Value.ToString("dd/MM/yyyy");
+                    model.PurchaseDate = purchase.Date.Value.ToString("d/M/yyyy");
                     model.PurchaseDateHijri = DateHelper.GetHijriDate(purchase.Date);
                 }
 
@@ -591,7 +591,7 @@ namespace Stocks.Controllers
                 if (purchase.Date != null)
                 {
 
-                    model.PurchaseDate = purchase.Date.Value.ToString("dd/MM/yyyy");
+                    model.PurchaseDate = purchase.Date.Value.ToString("d/M/yyyy");
                     model.PurchaseDateHijri = DateHelper.GetHijriDate(purchase.Date);
                 }
 

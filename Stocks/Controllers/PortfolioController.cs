@@ -157,7 +157,7 @@ namespace Stocks.Controllers
                 PortfolioID = a.PortfolioID,
                 Code = a.Code,
                 Description = a.Description,
-                EstablishDate = a.EstablishDate.Value.ToString("dd/MM/yyyy"),
+                EstablishDate = a.EstablishDate.Value.ToString("d/M/yyyy"),
                 EstablishDateHijri = DateHelper.GetHijriDate(a.EstablishDate),
                 AccountID = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).AccountID,
                 AccountCode = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == a.PortfolioID).Account.Code,

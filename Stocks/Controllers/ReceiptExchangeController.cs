@@ -167,12 +167,12 @@ namespace Stocks.Controllers
             Entry.TransferedToAccounts = true;
             unitOfWork.EntryRepository.Update(Entry);
             var Details = EntryMODEL.EntryDetailModel;
-            foreach (var item in Details)
-            {
-                var detail = _mapper.Map<ReceiptExchangeDetail>(item);
+            //foreach (var item in Details)
+            //{
+            //    var detail = _mapper.Map<EntryDetail>(item);
 
-                unitOfWork.ReceiptExchangeDetailRepository.Update(detail);
-            }
+            //    unitOfWork.ReceiptExchangeDetailRepository.Update(detail);
+            //}
 
             accountingHelper.TransferToAccounts(Details.Select(x => new EntryDetail
             {
@@ -188,11 +188,21 @@ namespace Stocks.Controllers
 
 
 
-            unitOfWork.Save();
+            var Result = unitOfWork.Save();
+            if (Result == 200)
+            {
 
+                return Ok(4);
+            }
+            else if (Result == 501)
+            {
+                return Ok(5);
 
-
-            return Ok("تم ترحيل القيد");
+            }
+            else
+            {
+                return Ok(6);
+            }
 
         }
 
@@ -208,7 +218,7 @@ namespace Stocks.Controllers
             {
                 entryModel.EntryID = Entry.EntryID;
                 entryModel.Code = Entry.Code;
-                entryModel.Date = Entry.Date != null ? Entry.Date.Value.ToString("dd/MM/yyyy") : null;
+                entryModel.Date = Entry.Date != null ? Entry.Date.Value.ToString("d/M/yyyy") : null;
                 entryModel.DateHijri = Entry.Date != null ? DateHelper.GetHijriDate(Entry.Date) : null;
                 entryModel.NoticeID = Entry.NoticeID;
                 entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
@@ -227,6 +237,7 @@ namespace Stocks.Controllers
 
 
                 }) : null;
+                entryModel.TransferedToAccounts = Entry.TransferedToAccounts;
 
             }
 
@@ -246,11 +257,11 @@ namespace Stocks.Controllers
                 return model;
             }
             model.BankName = RecExc.BankName;
-            model.ChiqueDate = RecExc.ChiqueDate != null ? RecExc.ChiqueDate.Value.ToString("dd/MM/yyyy") : null;
+            model.ChiqueDate = RecExc.ChiqueDate != null ? RecExc.ChiqueDate.Value.ToString("d/M/yyyy") : null;
             model.ChiqueDateHijri = RecExc.ChiqueDate != null ? DateHelper.GetHijriDate(RecExc.ChiqueDate) : null;
             model.ChiqueNumber = RecExc.ChiqueNumber;
             model.Code = RecExc.Code;
-            model.Date = RecExc.Date != null ? RecExc.Date.Value.ToString("dd/MM/yyyy") : null;
+            model.Date = RecExc.Date != null ? RecExc.Date.Value.ToString("d/M/yyyy") : null;
             model.DateHijri = RecExc.Date != null ? DateHelper.GetHijriDate(RecExc.Date) : null;
             model.Description = RecExc.Description;
             model.Handling = RecExc.Handling;
@@ -307,9 +318,9 @@ namespace Stocks.Controllers
 
 
                         model.LastCode = noti.Code;
-                        model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == true ).Count();
                     }
                     model.SettingModel = GetSetting(6);
+                    model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == true).Count();
 
                 }
                 else
@@ -325,10 +336,10 @@ namespace Stocks.Controllers
                         var noti = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == true).Last();
 
                         model.LastCode = noti.Code;
-                        model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == true).Count();
                     }
 
                     model.SettingModel = GetSetting(5);
+                    model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == true).Count();
 
                 }
 
@@ -351,9 +362,9 @@ namespace Stocks.Controllers
 
 
                             model.LastCode = noti.Code;
-                            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == false).Count();
                         }
                         model.SettingModel = GetSetting(6);
+                        model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == false).Count();
 
                     }
                     else
@@ -369,10 +380,10 @@ namespace Stocks.Controllers
                             var noti = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == false).Last();
 
                             model.LastCode = noti.Code;
-                            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == false).Count();
                         }
 
                         model.SettingModel = GetSetting(5);
+                        model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == false).Count();
 
                     }
 
@@ -463,10 +474,10 @@ namespace Stocks.Controllers
                     {
                         #region Date part
 
-                        model[j].Date = RecExcs[i].Date.Value.ToString("dd/MM/yyyy");
+                        model[j].Date = RecExcs[i].Date.Value.ToString("d/M/yyyy");
                         model[j].DateHijri = DateHelper.GetHijriDate(RecExcs[i].Date);
 
-                        model[j].ChiqueDate = RecExcs[i].ChiqueDate.Value.ToString("dd/MM/yyyy");
+                        model[j].ChiqueDate = RecExcs[i].ChiqueDate.Value.ToString("d/M/yyyy");
                         model[j].ChiqueDateHijri = DateHelper.GetHijriDate(RecExcs[i].ChiqueDate);
                         #endregion
 
@@ -520,7 +531,7 @@ namespace Stocks.Controllers
                 if (Check.Any(m => m.Code == recExcModel.Code))
                 {
 
-                    return Ok("كود  مكرر");
+                    return Ok(2);
                 }
                 else
                 {
@@ -652,7 +663,7 @@ namespace Stocks.Controllers
                 var ReceiptExchange = _mapper.Map<ReceiptExchange>(receiptExchangeModel);
                 var NewdDetails = receiptExchangeModel.RecExcDetails;
                 var Newdetails = _mapper.Map<IEnumerable<ReceiptExchangeDetail>>(NewdDetails);
-                var OldDetails = unitOfWork.ReceiptExchangeDetailRepository.Get(filter: m => m.ReceiptExchangeID == ReceiptExchange.ReceiptID);
+                var OldDetails = unitOfWork.ReceiptExchangeDetailRepository.Get(filter: m => m.ReceiptID == ReceiptExchange.ReceiptID);
                 var EntryCheck = unitOfWork.EntryRepository.Get(x => x.ReceiptID == ReceiptExchange.ReceiptID).SingleOrDefault();
                 if (EntryCheck != null)
                 {
