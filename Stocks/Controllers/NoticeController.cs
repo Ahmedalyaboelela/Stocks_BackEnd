@@ -859,9 +859,9 @@ namespace Stocks.Controllers
                 if (EntryCheck != null)
                 {
 
-                    var Entry = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack",filter: x => x.NoticeID == notice.NoticeID).SingleOrDefault();
-                    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(NoTrack: "NoTrack", filter: a => a.EntryID == Entry.EntryID);
-                    if (Entry.TransferedToAccounts == true)
+                    //var Entry = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack",filter: x => x.NoticeID == notice.NoticeID).SingleOrDefault();
+                    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == EntryCheck.EntryID);
+                    if (EntryCheck.TransferedToAccounts == true)
                     {
                         accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
                     }
@@ -897,15 +897,15 @@ namespace Stocks.Controllers
                         //===================================توليد قيد مع ترحيل تلقائي===================================
                         if (noticeModel.SettingModel.AutoGenerateEntry == true)
                         {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount, Entry.EntryID, null, null, null, noticeModel);
+                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount, EntryCheck.EntryID, null, null, null, noticeModel);
 
                             if (noticeModel.SettingModel.TransferToAccounts == true)
                             {
-                                Entry.TransferedToAccounts = true;
-                                unitOfWork.EntryRepository.Update(Entry);
+                                EntryCheck.TransferedToAccounts = true;
+                                unitOfWork.EntryRepository.Update(EntryCheck);
                                 foreach (var item in EntryDitails)
                                 {
-                                    item.EntryID = Entry.EntryID;
+                                    item.EntryID = EntryCheck.EntryID;
                                     item.EntryDetailID = 0;
                                     var details = _mapper.Map<EntryDetail>(item);
 
@@ -927,11 +927,11 @@ namespace Stocks.Controllers
                             }
                             else
                             {
-                                Entry.TransferedToAccounts = false;
-                                unitOfWork.EntryRepository.Insert(Entry);
+                                EntryCheck.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Update(EntryCheck);
                                 foreach (var item in EntryDitails)
                                 {
-                                    item.EntryID = Entry.EntryID;
+                                    item.EntryID = EntryCheck.EntryID;
                                     item.EntryDetailID = 0;
                                     var details = _mapper.Map<EntryDetail>(item);
 
@@ -993,15 +993,15 @@ namespace Stocks.Controllers
                             //===================================توليد قيد مع ترحيل تلقائي===================================
                             if (noticeModel.SettingModel.AutoGenerateEntry == true)
                             {
-                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount, Entry.EntryID, null, null, null, noticeModel);
+                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount, EntryCheck.EntryID, null, null, null, noticeModel);
 
                                 if (noticeModel.SettingModel.TransferToAccounts == true)
                                 {
-                                    Entry.TransferedToAccounts = true;
-                                    unitOfWork.EntryRepository.Update(Entry);
+                                    EntryCheck.TransferedToAccounts = true;
+                                    unitOfWork.EntryRepository.Update(EntryCheck);
                                     foreach (var item in EntryDitails)
                                     {
-                                        item.EntryID = Entry.EntryID;
+                                        item.EntryID = EntryCheck.EntryID;
                                         item.EntryDetailID = 0;
                                         var details = _mapper.Map<EntryDetail>(item);
 
@@ -1023,11 +1023,11 @@ namespace Stocks.Controllers
                                 }
                                 else
                                 {
-                                    Entry.TransferedToAccounts = false;
-                                    unitOfWork.EntryRepository.Insert(Entry);
+                                    EntryCheck.TransferedToAccounts = false;
+                                    unitOfWork.EntryRepository.Insert(EntryCheck);
                                     foreach (var item in EntryDitails)
                                     {
-                                        item.EntryID = Entry.EntryID;
+                                        item.EntryID = EntryCheck.EntryID;
                                         item.EntryDetailID = 0;
                                         var details = _mapper.Map<EntryDetail>(item);
 
