@@ -35,6 +35,8 @@ namespace DAL.Entities
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual ICollection<Notice> Notices { get; set; }
 
+        public virtual ICollection<ReportSetting> ReportSettings { get; set; }
+
 
     }
 }

@@ -52,6 +52,8 @@ namespace DAL.Context
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+        public DbSet<ReportSetting> ReportSettings { get; set; }
+
 
     }
 }
