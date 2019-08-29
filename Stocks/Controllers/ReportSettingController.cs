@@ -37,7 +37,7 @@ namespace Stocks.Controllers
 
 
 
-            if (Check != null || Check.Count()>0)
+            if (Check != null && Check.Count()>0)
             {
                 var model = Check.Select(m => new ReportSettingModel
                 {
@@ -113,6 +113,19 @@ namespace Stocks.Controllers
                     }
                    
                 }
+                var result = unitOfWork.Save();
+                if (result == 200)
+                {
+                    return Ok(4);
+                }
+                else if (result == 501)
+                {
+                    return Ok(5);
+                }
+                else
+                {
+                    return Ok(6);
+                }
             }
             else
             {
@@ -130,9 +143,22 @@ namespace Stocks.Controllers
                     }
 
                 }
+                var result = unitOfWork.Save();
+                if (result == 200)
+                {
+                    return Ok(4);
+                }
+                else if (result == 501)
+                {
+                    return Ok(5);
+                }
+                else
+                {
+                    return Ok(6);
+                }
             }
 
-                return Ok(reportSettingModels);
+                
 
         }
             #endregion
