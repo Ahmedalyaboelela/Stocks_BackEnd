@@ -354,6 +354,22 @@ namespace BAL.Repositories
         }
         #endregion
 
+       
+        #region ReportSetting Repository
+        private GenericRepository<ReportSetting> reportSettingRepository;
+        public GenericRepository<ReportSetting> ReportSettingRepository
+        {
+            get
+            {
+                if (this.reportSettingRepository == null)
+                {
+                    this.reportSettingRepository = new GenericRepository<ReportSetting>(Context);
+                }
+                return reportSettingRepository;
+            }
+        }
+        #endregion
+
 
         public virtual int Save()
         {

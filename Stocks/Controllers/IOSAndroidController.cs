@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
-    public class IOSAndroidController : Controller
+    public class IOSAndroidController : ControllerBase
     {
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
