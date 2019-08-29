@@ -8,6 +8,7 @@ using BAL.Helper;
 using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
+using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Stocks.Controllers
@@ -88,15 +89,47 @@ namespace Stocks.Controllers
 
         [HttpPost]
         [Route("~/api/ReportSetting/AddReportSetting/{portID}/{DayDate}")]
-        public IActionResult PostReportSetting(ReportSettingModel[] reportSettingModels, int portID, string DayDate)
+        public IActionResult PostReportSetting([FromBody] ReportSettingModel [] reportSettingModels, int portID, string DayDate)
         {
             DateTime date = DateTime.Parse(DayDate);
 
             var Check = unitOfWork.ReportSettingRepository.Get(NoTrack: "NoTrack");
 
-            if (Check.Any(m => m.PortfolioID == portID && m.CurrentDate==date))
+            if((Check.Any(m => m.PortfolioID == portID && m.CurrentDate==date))==true)
             {
+                unitOfWork.ReportSettingRepository.RemovRange(Check);
+               
+                if (reportSettingModels != null)
+                {
+                    foreach (var item in reportSettingModels)
+                    {
+                        ReportSetting reportSetting = new ReportSetting();
+                        reportSetting.CurrentDate = DateTime.Parse(item.CurrentDate);
+                        reportSetting.DailyStockValue = item.DailyStockValue;
+                        reportSetting.PartnerID = item.PartnerID;
+                        reportSetting.PortfolioID = item.PortfolioID;
+                        reportSetting.ReportSettingID = item.ReportSettingID;
+                        unitOfWork.ReportSettingRepository.Insert(reportSetting);
+                    }
+                   
+                }
+            }
+            else
+            {
+                if (reportSettingModels != null)
+                {
+                    foreach (var item in reportSettingModels)
+                    {
+                        ReportSetting reportSetting = new ReportSetting();
+                        reportSetting.CurrentDate = DateTime.Parse(item.CurrentDate);
+                        reportSetting.DailyStockValue = item.DailyStockValue;
+                        reportSetting.PartnerID = item.PartnerID;
+                        reportSetting.PortfolioID = item.PortfolioID;
+                        reportSetting.ReportSettingID = item.ReportSettingID;
+                        unitOfWork.ReportSettingRepository.Insert(reportSetting);
+                    }
 
+                }
             }
 
                 return Ok(reportSettingModels);
