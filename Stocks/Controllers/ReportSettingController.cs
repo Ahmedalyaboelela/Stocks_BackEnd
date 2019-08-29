@@ -8,6 +8,7 @@ using BAL.Helper;
 using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
+using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Stocks.Controllers
@@ -36,7 +37,7 @@ namespace Stocks.Controllers
 
 
 
-            if (Check != null || Check.Count()>0)
+            if (Check != null && Check.Count()>0)
             {
                 var model = Check.Select(m => new ReportSettingModel
                 {
@@ -88,18 +89,76 @@ namespace Stocks.Controllers
 
         [HttpPost]
         [Route("~/api/ReportSetting/AddReportSetting/{portID}/{DayDate}")]
-        public IActionResult PostReportSetting(ReportSettingModel[] reportSettingModels, int portID, string DayDate)
+        public IActionResult PostReportSetting([FromBody] ReportSettingModel [] reportSettingModels, int portID, string DayDate)
         {
             DateTime date = DateTime.Parse(DayDate);
 
             var Check = unitOfWork.ReportSettingRepository.Get(NoTrack: "NoTrack");
 
-            if (Check.Any(m => m.PortfolioID == portID && m.CurrentDate==date))
+            if((Check.Any(m => m.PortfolioID == portID && m.CurrentDate==date))==true)
             {
+                unitOfWork.ReportSettingRepository.RemovRange(Check);
+               
+                if (reportSettingModels != null)
+                {
+                    foreach (var item in reportSettingModels)
+                    {
+                        ReportSetting reportSetting = new ReportSetting();
+                        reportSetting.CurrentDate = DateTime.Parse(item.CurrentDate);
+                        reportSetting.DailyStockValue = item.DailyStockValue;
+                        reportSetting.PartnerID = item.PartnerID;
+                        reportSetting.PortfolioID = item.PortfolioID;
+                        reportSetting.ReportSettingID = item.ReportSettingID;
+                        unitOfWork.ReportSettingRepository.Insert(reportSetting);
+                    }
+                   
+                }
+                var result = unitOfWork.Save();
+                if (result == 200)
+                {
+                    return Ok(4);
+                }
+                else if (result == 501)
+                {
+                    return Ok(5);
+                }
+                else
+                {
+                    return Ok(6);
+                }
+            }
+            else
+            {
+                if (reportSettingModels != null)
+                {
+                    foreach (var item in reportSettingModels)
+                    {
+                        ReportSetting reportSetting = new ReportSetting();
+                        reportSetting.CurrentDate = DateTime.Parse(item.CurrentDate);
+                        reportSetting.DailyStockValue = item.DailyStockValue;
+                        reportSetting.PartnerID = item.PartnerID;
+                        reportSetting.PortfolioID = item.PortfolioID;
+                        reportSetting.ReportSettingID = item.ReportSettingID;
+                        unitOfWork.ReportSettingRepository.Insert(reportSetting);
+                    }
 
+                }
+                var result = unitOfWork.Save();
+                if (result == 200)
+                {
+                    return Ok(4);
+                }
+                else if (result == 501)
+                {
+                    return Ok(5);
+                }
+                else
+                {
+                    return Ok(6);
+                }
             }
 
-                return Ok(reportSettingModels);
+                
 
         }
             #endregion
