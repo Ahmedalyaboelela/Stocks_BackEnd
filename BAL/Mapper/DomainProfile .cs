@@ -175,6 +175,12 @@ namespace BAL.Mapper
             CreateMap<PortfolioTransactionModel, PortfolioTransaction>();
             #endregion
 
+
+            #region ReportSetting
+            CreateMap<ReportSetting, ReportSettingModel>();
+            CreateMap<ReportSettingModel, ReportSetting>();
+            #endregion
+
         }
     }
 }
