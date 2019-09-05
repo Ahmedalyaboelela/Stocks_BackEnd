@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Reports\" />
     <Folder Include="UploadFiles\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>

@@ -29,7 +29,6 @@ namespace Stocks.Controllers
 
 
 
-
         // Retrieve Resultofportofolio Report after sending parameters
         [HttpPost]
         [Route("~/api/ReportViewer/ResultOfPortofolio")]
@@ -41,6 +40,31 @@ namespace Stocks.Controllers
             report["@name"] = 1;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = "@" +_appSettings.Report_Connection;
+            report.Render(false);
+            return report.SaveDocumentJsonToString();
+
+        }
+        #endregion
+
+
+
+
+        #region   portfolio Evaluateport
+
+
+        //RPT_Evaluateport
+
+        // Retrieve Resultofportofolio Report after sending parameters
+        [HttpPost]
+        [Route("~/api/ReportViewer/portfolioEvaluateport")]
+        public string portfolioEvaluateport()
+        {
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport");
+            report.Load(path);
+            report["@name"] = 1;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = "@" + _appSettings.Report_Connection;
             report.Render(false);
             return report.SaveDocumentJsonToString();
 
