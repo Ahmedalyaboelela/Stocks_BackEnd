@@ -14,5 +14,13 @@ namespace BAL.Helper
             cultureInfo.DateTimeFormat.Calendar = new UmAlQuraCalendar();
             return String.Format(cultureInfo, "{0:dd/MM/yyyy}", GDate);
         }
+
+        // Change Date Format To Work With Reports
+        public static DateTime ChangeDateFormat(string FromDate)
+        {
+            DateTime date = DateTime.Parse(FromDate);
+            string fdate = date.ToString("yyyy-dd-MM");
+            return Convert.ToDateTime(fdate);
+        }
     }
 }
