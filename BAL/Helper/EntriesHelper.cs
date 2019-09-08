@@ -250,7 +250,7 @@ namespace BAL.Helper
 
                 var NoticeDetails = noticeModel.NoticeModelDetails;
                 #region EntryMaster
-                if (LastEntry.Code == null)
+                if (LastEntry == null)
                 {
                     Entrymodel.Code = "1";
                 }
