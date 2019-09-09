@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using Stimulsoft.Report;
 using Stimulsoft.Report.Dictionary;
 using Stimulsoft.Report.Mvc;
@@ -75,21 +76,27 @@ namespace Stocks.Controllers
         //RPT_Evaluateport
 
         // Retrieve Resultofportofolio Report after sending parameters
-        [HttpGet]
-        [Route("~/api/ReportViewer/portfolioEvaluateport/{endDate}/{portID}")]
-        public string portfolioEvaluateport(int portID,string endDate)
+        [HttpPost]
+        [Route("~/api/ReportViewer/portfolioEvaluateport")]
+        public string portfolioEvaluateport([FromBody] JObject data)
         {
-            DateTime EndDate = DateTime.Parse(endDate);
-           
-        decimal Balance = 756876;
+            string ToDate = data.GetValue("todate").ToString();            DateTime todate = DateHelper.ChangeDateFormat(ToDate);            int portID = Convert.ToInt32(data.GetValue("portfolioId"));
+            int accid = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == portID)
+               .Select(m => m.AccountID).SingleOrDefault();
+            decimal? debit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+                .Select(m => m.Debit).SingleOrDefault() ?? 0;
+            decimal? credit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+                .Select(m => m.Credit).SingleOrDefault() ?? 0;
+            decimal? RiyalBalance = debit - credit;
+
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport");
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport.mrt");
             report.Load(path);
-            report["@enddate"] =EndDate;
+            report["@enddate"] = todate;
             report["@portID"] = portID;
-            report["@Balance"] = Balance;
+            report["@RiyalBalance"] = RiyalBalance;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
-            dbMS_SQL.ConnectionString = "@" + _appSettings.Report_Connection;
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
             report.Render(false);
             return report.SaveDocumentJsonToString();
 
