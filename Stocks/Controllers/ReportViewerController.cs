@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using Stimulsoft.Report;
 using Stimulsoft.Report.Dictionary;
 using Stimulsoft.Report.Mvc;
@@ -40,25 +41,48 @@ namespace Stocks.Controllers
         // Retrieve Resultofportofolio Report after sending parameters
         [HttpPost]
         [Route("~/api/ReportViewer/ResultOfPortofolio")]
-        public string ResultOfPortofolioWork(string todate ,int portofolioid)
+        public string ResultOfPortofolioWork([FromBody] JObject data)
         {
+            #region ReportCalculation
+            DateTime ToDate;
+            string todate = data.GetValue("todate").ToString();
+            int portofolioid = Convert.ToInt32(data.GetValue("portofolioid"));
             int accid = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == portofolioid)
-                .Select(m => m.AccountID).SingleOrDefault();
+           .Select(m => m.AccountID).SingleOrDefault();
             decimal? debit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
-                .Select(m => m.Debit).SingleOrDefault()??0;
+                .Select(m => m.Debit).SingleOrDefault() ?? 0;
             decimal? credit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
-                .Select(m => m.Credit).SingleOrDefault()??0;
+                .Select(m => m.Credit).SingleOrDefault() ?? 0;
+            decimal? opendebit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+           .Select(m => m.DebitOpenningBalance).SingleOrDefault() ?? 0;
+            decimal? opencredit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+                .Select(m => m.CreditOpenningBalance).SingleOrDefault() ?? 0;
             decimal? RiyalBalance = debit - credit;
-            todate = "06/09/2019";
-            portofolioid = 1008;
-            DateTime ToDate = DateHelper.ChangeDateFormat(todate);
+            decimal? RiyalOpenBalance = opendebit - opencredit;
+            decimal? StocksOpenVal = 0;
+            var openstocks = unitOfWork.PortfolioOpeningStocksRepository.Get(filter: m => m.PortfolioID == portofolioid).ToList();
+            foreach (var item in openstocks)
+            {
+                StocksOpenVal += item.OpeningStockValue;
+            }
+            if (todate != string.Empty)
+            {
+                ToDate = DateHelper.ChangeDateFormat(todate);
+            }
+            else
+            {
+                ToDate = DateTime.Now;
+            }
+            #endregion
+
             StiReport report = new StiReport();
             var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_ResultOfPortofolioWork.mrt");
             report.Load(path);
             report["@ToDate"] = ToDate;
             report["@PortofolioID"] = portofolioid;
             report["RiyalBalance"] = RiyalBalance;
-
+            report["RiyalOpenBalance"] = RiyalOpenBalance;
+            report["StocksValue"] = StocksOpenVal;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString =  _appSettings.Report_Connection;
             report.Render(false);

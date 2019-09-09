@@ -18,8 +18,8 @@ namespace BAL.Helper
         // Change Date Format To Work With Reports
         public static DateTime ChangeDateFormat(string FromDate)
         {
-            DateTime date = DateTime.Parse(FromDate);
-            string fdate = date.ToString("yyyy-dd-MM");
+            DateTime date = DateTime.ParseExact(FromDate,"d/M/yyyy",CultureInfo.InvariantCulture);
+            string fdate = date.ToString("yyyy-M-d");
             return Convert.ToDateTime(fdate);
         }
     }
