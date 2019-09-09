@@ -64,6 +64,7 @@ namespace Stocks.Controllers
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString =  _appSettings.Report_Connection;
             report.Render(false);
+
             return report.SaveDocumentJsonToString();
 
         }
