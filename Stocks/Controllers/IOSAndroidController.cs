@@ -7,6 +7,7 @@ using BAL.Helper;
 using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
+using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,12 +18,16 @@ namespace Stocks.Controllers
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
         internal StocksContext Context;
+        private readonly IAccountingHelper accountingHelper;
+        private readonly IStocksHelper _stocksHelper;
 
-        public IOSAndroidController(StocksContext context, IMapper mapper)
+        public IOSAndroidController(StocksContext context, IMapper mapper, IStocksHelper stocksHelper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
             Context = context;
+            accountingHelper = new AccountingHelper(context, mapper);
+            _stocksHelper = stocksHelper;
 
 
         }
@@ -280,6 +285,372 @@ namespace Stocks.Controllers
 
 
 
+
+
+
+        [Route("~/api/IOSAndroid/GetAllEmps")]
+        public IActionResult GetAllEmps()
+        {
+            var Emps = unitOfWork.EmployeeRepository.Get(filter: x => x.IsInternal == true).Select(m => new EmployeeModel {
+
+                EmployeeID=m.EmployeeID,
+                Code=m.Code,
+                NameAR=m.NameAR,
+                NameEN=m.NameEN,
+
+
+            });
+            
+            if (Emps == null)
+            {
+                return Ok(0);
+            }
+
+            return Ok(Emps);
+        }
+
+
+
+
+        [HttpPost]
+        [Route("~/api/IOSAndroid/PostPurchaseOrder")]
+        public IActionResult PostPurchaseOrder([FromBody] PurchaseOrderModel purchaseOrderModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var Check = unitOfWork.PurchaseOrderRepository.Get();
+                if (Check.Any(m => m.Code == purchaseOrderModel.Code))
+                {
+
+                    return Ok(2);
+                }
+                else
+                {
+
+                    var purchaseOrder = _mapper.Map<PurchaseOrder>(purchaseOrderModel);
+                    int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
+
+
+                    var Details = purchaseOrderModel.DetailsModels;
+
+                    unitOfWork.PurchaseOrderRepository.Insert(purchaseOrder);
+                    if (Details != null && Details.Count() > 0)
+                    {
+                        foreach (var item in Details)
+                        {
+                            PurchaseOrderDetailModel purchaseOrderDetailModel = new PurchaseOrderDetailModel();
+                            purchaseOrderDetailModel.PurchaseID = purchaseOrder.PurchaseOrderID;
+                            purchaseOrderDetailModel.NetAmmount = item.NetAmmount;
+                            purchaseOrderDetailModel.StockCount = item.StockCount;
+                            purchaseOrderDetailModel.TaxOnCommission = item.TaxOnCommission;
+                            purchaseOrderDetailModel.TaxRateOnCommission = item.TaxRateOnCommission;
+                            purchaseOrderDetailModel.BankCommission = item.BankCommission;
+                            purchaseOrderDetailModel.BankCommissionRate = item.BankCommissionRate;
+                            purchaseOrderDetailModel.PurchaseValue = item.PurchaseValue;
+                            purchaseOrderDetailModel.PurchasePrice = item.PurchasePrice;
+                            purchaseOrderDetailModel.PartnerID = item.PartnerID;
+                            var details = _mapper.Map<PurchaseOrderDetail>(purchaseOrderDetailModel);
+                            unitOfWork.PurchaseOrderDetailRepository.Insert(details);
+
+                        }
+                    }
+
+
+                    #region Warehouse
+                    // Add Purchase Order Stocks Count To Portofolio
+                    _stocksHelper.TransferPurchaseToStocks(purchaseOrderModel);
+                    #endregion
+                    //==================================================لا تولد قيد ===================================
+                    if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
+                    {
+                        var Res = unitOfWork.Save();
+                        if (Res == 200)
+                        {
+
+                            return Ok(4);
+                        }
+                        else if (Res == 501)
+                        {
+                            return Ok(5);
+
+                        }
+                        else
+                        {
+                            return Ok(6);
+                        }
+                    }
+
+                    //===============================================================توليد قيد مع ترحيل تلقائي============================
+
+
+
+                    else if (purchaseOrderModel.SettingModel.AutoGenerateEntry == true)
+                    {
+                        var lastEntry = unitOfWork.EntryRepository.Last();
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, purchaseOrderModel, null, null, lastEntry);
+                        EntryMODEL.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
+                        var Entry = _mapper.Map<Entry>(EntryMODEL);
+                        var DetailEnt = EntryMODEL.EntryDetailModel;
+
+                        if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
+                        {
+                            Entry.TransferedToAccounts = true;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
+
+                                unitOfWork.EntryDetailRepository.Insert(details);
+
+                            }
+                            accountingHelper.TransferToAccounts(DetailEnt.Select(x => new EntryDetail
+                            {
+                                EntryDetailID = x.EntryDetailID,
+                                AccountID = x.AccountID,
+                                Credit = x.Credit,
+                                Debit = x.Debit,
+                                EntryID = x.EntryID,
+                                StocksCredit = x.StocksCredit,
+                                StocksDebit = x.StocksDebit,
+
+                            }).ToList());
+                        }
+
+                        else
+                        {
+                            Entry.TransferedToAccounts = false;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
+
+                                unitOfWork.EntryDetailRepository.Insert(details);
+                            }
+                        }
+
+                    }
+                
+
+
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
+                    {
+
+                        return Ok(4);
+                    }
+                    else if (Result == 501)
+                    {
+                        return Ok(5);
+
+                    }
+                    else
+                    {
+                        return Ok(6);
+                    }
+
+
+
+                }
+            }
+            else
+            {
+                return Ok(3);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("~/api/IOSAndroid/PostSellingOrder")]
+        public IActionResult PostSellingOrder([FromBody] SellingOrderModel sellingOrderModel)
+        {
+            if (ModelState.IsValid)
+            {
+                int portofolioaccount = 0;
+                var Check = unitOfWork.SellingOrderReposetory.Get();
+                if (Check.Any(m => m.Code == sellingOrderModel.Code))
+                {
+
+                    return Ok(2);
+
+                }
+                else
+                {
+                    portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
+                    var modelselling = _mapper.Map<SellingOrder>(sellingOrderModel);
+
+
+                    var Details = sellingOrderModel.DetailsModels;
+
+                    unitOfWork.SellingOrderReposetory.Insert(modelselling);
+                    if (Details != null && Details.Count() > 0)
+                    {
+                        foreach (var item in Details)
+                        {
+                            SelingOrderDetailsModel selingOrderDetailsModel = new SelingOrderDetailsModel();
+                            selingOrderDetailsModel.SellingOrderID = modelselling.SellingOrderID;
+                            selingOrderDetailsModel.NetAmmount = item.NetAmmount;
+                            selingOrderDetailsModel.SelingValue = item.SelingValue;
+                            selingOrderDetailsModel.SellingPrice = item.SellingPrice;
+                            selingOrderDetailsModel.StockCount = item.StockCount;
+                            selingOrderDetailsModel.TaxOnCommission = item.TaxOnCommission;
+                            selingOrderDetailsModel.TaxRateOnCommission = item.TaxRateOnCommission;
+                            selingOrderDetailsModel.BankCommission = item.BankCommission;
+                            selingOrderDetailsModel.BankCommissionRate = item.BankCommissionRate;
+                            selingOrderDetailsModel.PartnerID = item.PartnerID;
+
+                            var details = _mapper.Map<SellingOrderDetail>(selingOrderDetailsModel);
+                            unitOfWork.SellingOrderDetailRepository.Insert(details);
+
+                        }
+
+                    }
+                    #region Warehouse
+                    //Check Stocks Count Allowed For Selling 
+                    var Chk = _stocksHelper.CheckStockCountForSelling(sellingOrderModel);
+                    if (!Chk)
+                        return Ok(7);
+                    // Transfer From Portofolio Stocks
+                    else
+                        _stocksHelper.TransferSellingFromStocks(sellingOrderModel);
+                    #endregion
+
+
+                    //==================================================لا تولد قيد ===================================
+                    if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
+                    {
+                        unitOfWork.Save();
+
+                        return Ok(sellingOrderModel);
+                    }
+
+                    //===============================================================توليد قيد مع ترحيل تلقائي============================
+                    else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
+                    {
+                        var lastEntry = unitOfWork.EntryRepository.Last();
+
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, sellingOrderModel, null, null, null, lastEntry);
+                        EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
+                        var Entry = _mapper.Map<Entry>(EntryMODEL);
+                        var DetailEnt = EntryMODEL.EntryDetailModel;
+
+                        if (sellingOrderModel.SettingModel.TransferToAccounts == true)
+                        {
+                            Entry.TransferedToAccounts = true;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
+
+                                unitOfWork.EntryDetailRepository.Insert(details);
+                            }
+                            accountingHelper.TransferToAccounts(DetailEnt.Select(a => new EntryDetail
+                            {
+
+                                Credit = a.Credit,
+                                Debit = a.Debit,
+                                EntryDetailID = a.EntryDetailID,
+                                EntryID = a.EntryID,
+                                StocksCredit = a.StocksCredit,
+                                StocksDebit = a.StocksDebit,
+                                AccountID = a.AccountID
+
+                            }).ToList());
+                        }
+                        else
+                        {
+                            Entry.TransferedToAccounts = true;
+                            unitOfWork.EntryRepository.Insert(Entry);
+                            foreach (var item in DetailEnt)
+                            {
+                                item.EntryID = Entry.EntryID;
+                                item.EntryDetailID = 0;
+                                var details = _mapper.Map<EntryDetail>(item);
+
+                                unitOfWork.EntryDetailRepository.Insert(details);
+                            }
+                        }
+                    }
+                   
+                    var Result = unitOfWork.Save();
+                    if (Result == 200)
+                    {
+
+                        return Ok(4);
+                    }
+                    else if (Result == 501)
+                    {
+                        return Ok(5);
+
+                    }
+                    else
+                    {
+                        return Ok(6);
+                    }
+
+
+
+                }
+            }
+            else
+            {
+                return Ok(3);
+
+            }
+        }
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("~/api/IOSAndroid/CodePur")]
+        public IActionResult CodePur()
+        {
+            PurchaseOrderModel model = new PurchaseOrderModel();
+          
+                model.LastCode = unitOfWork.PurchaseOrderRepository.Last().Code; 
+
+            if (model.LastCode==null)
+            {
+                model.LastCode = "1";
+            }
+               
+            
+          
+        
+
+            return Ok(model);
+        }
+
+
+        [HttpGet]
+        [Route("~/api/IOSAndroid/CodeSell")]
+        public IActionResult CodeSell()
+        {
+            SellingOrderModel model = new SellingOrderModel();
+
+            model.LastCode = unitOfWork.SellingOrderReposetory.Last().Code;
+
+            if (model.LastCode == null)
+            {
+                model.LastCode = "1";
+            }
+
+
+
+
+
+            return Ok(model);
+        }
 
 
 
