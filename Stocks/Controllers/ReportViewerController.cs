@@ -118,6 +118,28 @@ namespace Stocks.Controllers
             return report.SaveDocumentJsonToString();
 
         }
-        #endregion 
+        #endregion
+
+        #region Selling & Purchase Stocks 
+        [HttpGet]
+        [Route("~/api/ReportViewer/SellPurchase/{portId}/{partId}/{startDate}/{endDate}")]
+        public string SellPurchase(int portId,int partId,string startDate,string endDate)
+        {
+            
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Report1.mrt");
+            report.Load(path);
+            report["@portfolioId"] = portId;
+            report["@partnerId"] = partId;
+            report["@startdate"] = DateTime.Parse(startDate).ToString("yyyy-MM-dd");
+            report["@enddate"] = DateTime.Parse(endDate).ToString("yyyy-MM-dd") ;
+
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString =  _appSettings.Report_Connection;
+            report.Render(false);
+            return report.SaveDocumentJsonToString();
+
+        }
+        #endregion
     }
 }
