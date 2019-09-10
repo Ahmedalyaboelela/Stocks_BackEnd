@@ -128,13 +128,13 @@ namespace Stocks.Controllers
             }
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_ResultOfPortofolioWork.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport.mrt");
             report.Load(path);
-            report["@ToDate"] = ToDate;
-            report["@PortofolioID"] = portofolioid;
+            report["@enddate"] = ToDate;
+            report["@portID"] = portID;
             report["RiyalBalance"] = RiyalBalance;
-            report["RiyalOpenBalance"] = RiyalOpenBalance;
-            report["StocksValue"] = StocksOpenVal;
+           
+          
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
             report.Render(false);
