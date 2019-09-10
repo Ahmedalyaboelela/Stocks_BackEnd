@@ -733,10 +733,10 @@ Sum(DataSource2.ReyalDebit)-RiyalOpenBalance
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>9/9/2019 12:42:29 PM</ReportChanged>
+  <ReportChanged>9/9/2019 5:00:29 PM</ReportChanged>
   <ReportCreated>9/8/2019 12:02:27 PM</ReportCreated>
   <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\RPT_ResultOfPortofolioWork.mrt</ReportFile>
-  <ReportGuid>11c1d362d6d3423fa8bd77903460a39f</ReportGuid>
+  <ReportGuid>22cee38e17dd4da88eb0f56939d8a671</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Centimeters</ReportUnit>
   <ReportVersion>2019.3.2.0</ReportVersion>
