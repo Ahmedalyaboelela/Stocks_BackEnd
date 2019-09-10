@@ -199,7 +199,7 @@ namespace Stocks.Controllers
         {
             
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/Report1.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_SellingPurchasing.mrt");
             report.Load(path);
             report["@portfolioId"] = portId;
             report["@partnerId"] = partId;
