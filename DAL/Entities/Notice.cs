@@ -14,6 +14,9 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(100)")]
         public string Code { get; set; }
         public DateTime? NoticeDate { get; set; }
+
+        public DateTime? DistributionDate { get; set; }
+    
         public bool Type { get; set; }
 
         [Column(TypeName = "nvarchar(150)")]
@@ -26,7 +29,7 @@ namespace DAL.Entities
         [ForeignKey("PortfolioID")]
         public virtual Portfolio Portfolio { get; set; }
 
-        [ForeignKey("EmployeeID")]
+        [ForeignKey("EmployeeID")] 
         public virtual Employee Employee { get; set; }
 
 

@@ -604,13 +604,6 @@ namespace Stocks.Controllers
             }
         }
 
-
-
-
-
-
-
-
         [HttpGet]
         [Route("~/api/IOSAndroid/CodePur")]
         public IActionResult CodePur()
@@ -653,6 +646,35 @@ namespace Stocks.Controllers
         }
 
 
+        [Route("~/api/IOSAndroid/GetAllports")]
+        public IEnumerable<GetAllPortsIOS> GetAllports()
+        {
+            var model = unitOfWork.PortfolioRepository.Get().Select(m => new GetAllPortsIOS
+            {
+                PortfolioID=m.PortfolioID,
+                Code = m.Code,
+                NameAR=m.NameAR,
+                NameEN=m.NameEN
+            });
+            return model;
+        }
+
+        [Route("~/api/IOSAndroid/GetpartenersByport/{portID}")]
+        public IEnumerable<PortfolioTransactionModel> GetAllparteners(int portID)
+        {
+            var model = unitOfWork.PortfolioTransactionsRepository.Get(filter:x=> x.PortfolioID==portID).Select(m => new PortfolioTransactionModel
+            {
+                PortfolioID = portID,
+               CurrentStocksCount=m.CurrentStocksCount,
+               CurrentStockValue=m.CurrentStockValue,
+               PartnerID=m.PartnerID,
+               partenerCode=unitOfWork.PartnerRepository.GetEntity(filter: a=> a.PartnerID==m.PartnerID).Code,
+               partenerNameAR= unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameAR,
+               partenerNameEN= unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameEN,
+               PortTransID=m.PortTransID
+            });
+            return model;
+        }
 
     }
 
