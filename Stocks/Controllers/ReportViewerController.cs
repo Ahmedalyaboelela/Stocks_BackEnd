@@ -94,7 +94,7 @@ namespace Stocks.Controllers
         #region   portfolio Evaluateport
 
 
-        //RPT_Evaluateport
+        //RPT_Evaluateport  Earnings report
 
         // Retrieve Resultofportofolio Report after sending parameters
         [HttpPost]
@@ -143,6 +143,53 @@ namespace Stocks.Controllers
         }
         #endregion
 
+
+
+
+
+
+
+
+        #region   portfolio Evaluateport
+
+
+        //RPT_Evaluateport  Earnings report
+
+        // Retrieve Resultofportofolio Report after sending parameters
+        [HttpPost]
+        [Route("~/api/ReportViewer/Earningsreport")]
+        public string Earningsreport([FromBody] JObject data)
+        {
+            DateTime ToDate;
+            string todate = data.GetValue("todate").ToString();
+            string Firstdate = data.GetValue("firstdate").ToString();
+            string Enddate = data.GetValue("enddate").ToString();
+            int portID = Convert.ToInt32(data.GetValue("portID"));
+
+            if (todate != string.Empty)
+            {
+                ToDate = DateHelper.ChangeDateFormat(todate);
+            }
+            else
+            {
+                ToDate = DateTime.Now;
+            }
+
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport.mrt");
+            report.Load(path);
+            report["@todate"] = ToDate;
+            report["@firstdate"] = Firstdate;
+            report["@enddate"] = Enddate;
+            report["@portID"] = portID;
+            
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+            return report.SaveDocumentJsonToString();
+
+        }
+        #endregion
 
 
         #region Selling & Purchase Stocks 
