@@ -604,13 +604,6 @@ namespace Stocks.Controllers
             }
         }
 
-
-
-
-
-
-
-
         [HttpGet]
         [Route("~/api/IOSAndroid/CodePur")]
         public IActionResult CodePur()
