@@ -139,7 +139,37 @@ namespace Stocks.Controllers
             report.Render(false);
 
             return report.SaveDocumentJsonToString();
+        }
 
+
+        [HttpGet]
+        [Route("~/api/ReportViewer/CompaniesSharesInPortfolio")]
+        public string CompaniesSharesInPortfolio([FromQuery]int portfolioID, [FromQuery] string fromDate, [FromQuery] string toDate)
+        {
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_CompaniesSharesInPortfolio.mrt");
+            DateTime fDate;
+            if (fromDate != null)
+            {
+                fDate = DateTime.ParseExact(fromDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                fDate = new DateTime(2000,1,1);
+            }
+            DateTime tDate = DateTime.ParseExact(toDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+            if(tDate < fDate)
+            {
+                return "Bad Request";
+            }
+            report.Load(path);
+            report["@PortfolioID"] = portfolioID;
+            report["@FromDate"] = fDate.ToString("yyyy-MM-dd");
+            report["@ToDate"] = tDate.ToString("yyyy-MM-dd");
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+            return report.SaveDocumentJsonToString();
         }
         #endregion
     }
