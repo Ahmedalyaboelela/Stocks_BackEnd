@@ -91,34 +91,59 @@ namespace Stocks.Controllers
         #endregion
 
 
-
-
         #region   portfolio Evaluateport
 
 
         //RPT_Evaluateport
 
         // Retrieve Resultofportofolio Report after sending parameters
-        [HttpGet]
-        [Route("~/api/ReportViewer/portfolioEvaluateport/{endDate}/{portID}")]
-        public string portfolioEvaluateport(int portID,string endDate)
+        [HttpPost]
+        [Route("~/api/ReportViewer/portfolioEvaluateport")]
+        public string portfolioEvaluateport([FromBody] JObject data)
         {
-            DateTime EndDate = DateTime.Parse(endDate);
-           
-        decimal Balance = 756876;
+            DateTime ToDate;
+            string todate = data.GetValue("todate").ToString();
+            int portID = Convert.ToInt32(data.GetValue("portID"));
+            int accid = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == portID)
+           .Select(m => m.AccountID).SingleOrDefault();
+            decimal? debit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+                .Select(m => m.Debit).SingleOrDefault() ?? 0;
+            decimal? credit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+                .Select(m => m.Credit).SingleOrDefault() ?? 0;
+            decimal? opendebit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+           .Select(m => m.DebitOpenningBalance).SingleOrDefault() ?? 0;
+            decimal? opencredit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+                .Select(m => m.CreditOpenningBalance).SingleOrDefault() ?? 0;
+            decimal? RiyalBalance = debit - credit;
+
+
+
+            if (todate != string.Empty)
+            {
+                ToDate = DateHelper.ChangeDateFormat(todate);
+            }
+            else
+            {
+                ToDate = DateTime.Now;
+            }
+
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport");
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_ResultOfPortofolioWork.mrt");
             report.Load(path);
-            report["@enddate"] =EndDate;
-            report["@portID"] = portID;
-            report["@Balance"] = Balance;
+            report["@ToDate"] = ToDate;
+            report["@PortofolioID"] = portofolioid;
+            report["RiyalBalance"] = RiyalBalance;
+            report["RiyalOpenBalance"] = RiyalOpenBalance;
+            report["StocksValue"] = StocksOpenVal;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
-            dbMS_SQL.ConnectionString = "@" + _appSettings.Report_Connection;
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
             report.Render(false);
             return report.SaveDocumentJsonToString();
 
         }
         #endregion
+
+
 
         #region Selling & Purchase Stocks 
         [HttpGet]
