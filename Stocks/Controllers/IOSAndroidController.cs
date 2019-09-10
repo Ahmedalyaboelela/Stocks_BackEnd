@@ -666,7 +666,7 @@ namespace Stocks.Controllers
             return model;
         }
 
-        [Route("~/api/IOSAndroid/GetAllparteners")]
+        [Route("~/api/IOSAndroid/GetpartenersByport/{portID}")]
         public IEnumerable<PortfolioTransactionModel> GetAllparteners(int portID)
         {
             var model = unitOfWork.PortfolioTransactionsRepository.Get(filter:x=> x.PortfolioID==portID).Select(m => new PortfolioTransactionModel
