@@ -365,13 +365,14 @@ namespace Stocks.Controllers
         public IActionResult GetAllPortfolioPartners(int id)
         {
             // partners in portfolio openingstocks
-            var openingPartner = unitOfWork.PortfolioOpeningStocksRepository.Get(filter:a=>a.PortfolioID==id).Select(p=>new PortfolioPartners {
-                PartnerID=p.PartnerID,
-                Code=p.Partner.Code,
-                NameAR=p.Partner.NameAR,
-                NameEN=p.Partner.NameEN,
-                StocksCount=p.OpeningStocksCount,
-                StocksValue=p.OpeningStockValue
+            var openingPartner = unitOfWork.PortfolioOpeningStocksRepository.Get(filter: a => a.PortfolioID == id).Select(p => new PortfolioPartners
+            {
+                PartnerID = p.PartnerID,
+                Code = p.Partner.Code,
+                NameAR = p.Partner.NameAR,
+                NameEN = p.Partner.NameEN,
+                StocksCount = p.OpeningStocksCount,
+                StocksValue = p.OpeningStockValue
 
 
             }).ToList();
@@ -393,11 +394,10 @@ namespace Stocks.Controllers
             //var transPartnersModel = _mapper.Map<IEnumerable<PartenerModel>>(transPartners).ToList();
 
             // concat 2 lists
-            if(openingPartner!=null && openingPartner.Count() > 0 && transPartners != null && transPartners.Count() > 0)
+            if( transPartners != null && transPartners.Count() > 0)
             {
-                var allPartners = openingPartner.Concat(transPartners).ToList();
-
-                return Ok(allPartners);
+                
+                return Ok(transPartners);
             }
             else if(openingPartner != null && openingPartner.Count() > 0)
             {
