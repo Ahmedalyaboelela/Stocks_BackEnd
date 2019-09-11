@@ -170,16 +170,21 @@ namespace Stocks.Controllers
 
         #region Profits in year
         [HttpGet]
-        [Route("~/api/ReportViewer/ProfitsYear/{portId}/{startDate}/{endDate}")]
-        public string ProfitsInYear(int portId, string startDate, string endDate)
+        [Route("~/api/ReportViewer/ProfitsYear")]
+        public string ProfitsInYear([FromQuery]int portfolioID, [FromQuery] string fromDate, [FromQuery] string toDate)
         {
-
+            DateTime fDate = DateTime.ParseExact(fromDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+            DateTime tDate = DateTime.ParseExact(toDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+            if(fDate.Year != tDate.Year)
+            {
+                return "Bad Request";
+            }
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_SellingPurchasing.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_ProfitsOnSameYear.mrt");
             report.Load(path);
-            report["@portfolioId"] = portId;
-            report["@startdate"] = DateTime.Parse(startDate).ToString("yyyy-MM-dd");
-            report["@enddate"] = DateTime.Parse(endDate).ToString("yyyy-MM-dd");
+            report["@PortfolioID"] = portfolioID;
+            report["@FromDate"] = fDate.ToString("yyyy-MM-dd");
+            report["@ToDate"] = tDate.ToString("yyyy-MM-dd");
 
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
