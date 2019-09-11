@@ -197,7 +197,7 @@ namespace Stocks.Controllers
         {
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_SellingPurchasing.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_TotalProfitsInYears.mrt");
             report.Load(path);
             report["@portfolioId"] = portId;
             report["@startdate"] = DateTime.Parse(startDate).ToString("yyyy-MM-dd");
