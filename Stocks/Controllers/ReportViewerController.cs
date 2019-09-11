@@ -166,9 +166,12 @@ namespace Stocks.Controllers
             return report.SaveDocumentJsonToString();
         }
 
+        #endregion
+
+        #region Profits in year
         [HttpGet]
         [Route("~/api/ReportViewer/ProfitsYear/{portId}/{startDate}/{endDate}")]
-        public string ProfitsInYear(int portId,string startDate, string endDate)
+        public string ProfitsInYear(int portId, string startDate, string endDate)
         {
 
             StiReport report = new StiReport();
@@ -184,9 +187,29 @@ namespace Stocks.Controllers
 
             return report.SaveDocumentJsonToString();
         }
-
         #endregion
 
+
+        #region total profits in all years
+        [HttpGet]
+        [Route("~/api/ReportViewer/TotalProfitsAllYears/{portId}/{startDate}/{endDate}")]
+        public string TotalProfitsAllYears(int portId, string startDate, string endDate)
+        {
+
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_SellingPurchasing.mrt");
+            report.Load(path);
+            report["@portfolioId"] = portId;
+            report["@startdate"] = DateTime.Parse(startDate).ToString("yyyy-MM-dd");
+            report["@enddate"] = DateTime.Parse(endDate).ToString("yyyy-MM-dd");
+
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+        }
+        #endregion
 
         [HttpGet]
         [Route("~/api/ReportViewer/CompaniesSharesInPortfolio")]
