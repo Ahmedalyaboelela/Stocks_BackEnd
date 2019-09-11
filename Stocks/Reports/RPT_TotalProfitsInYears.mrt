@@ -26,7 +26,7 @@
         <Name>DataSource</Name>
         <NameInSource>MS SQL</NameInSource>
         <Parameters isList="true" count="3">
-          <value>_x0040_portfolioId,_x0031_3,8,10</value>
+          <value>_x0040_portfolioId,,8,10</value>
           <value>_x0040_startdate,_x0022_2018-09-04_x0022_,18,50</value>
           <value>_x0040_enddate,_x0022_2019-09-26_x0022_,18,50</value>
         </Parameters>
@@ -680,10 +680,10 @@ TkSuQmCC</ImageBytes>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>9/11/2019 7:29:51 PM</ReportChanged>
+  <ReportChanged>9/11/2019 7:57:48 PM</ReportChanged>
   <ReportCreated>9/11/2019 7:01:49 PM</ReportCreated>
   <ReportFile>E:\Shrouk\Stocks_Project\Stocks_BackEnd\Stocks\Reports\RPT_TotalProfitsInYears.mrt</ReportFile>
-  <ReportGuid>ee2e4d82550041c9a3f43755741ab1ce</ReportGuid>
+  <ReportGuid>041461bced3c421183251d17df72af22</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Centimeters</ReportUnit>
   <ReportVersion>2019.3.4.0</ReportVersion>
