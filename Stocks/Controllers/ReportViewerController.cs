@@ -26,8 +26,8 @@ namespace Stocks.Controllers
         #region CTOR & Definitions
         private readonly ApplicationSettings _appSettings;
         private UnitOfWork unitOfWork;
-        public ReportViewerController( IOptions<ApplicationSettings> appSettings
-        ,StocksContext context)
+        public ReportViewerController(IOptions<ApplicationSettings> appSettings
+        , StocksContext context)
         {
             _appSettings = appSettings.Value;
             this.unitOfWork = new UnitOfWork(context);
@@ -83,7 +83,7 @@ namespace Stocks.Controllers
             report["RiyalOpenBalance"] = RiyalOpenBalance;
             report["StocksValue"] = StocksOpenVal;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
-            dbMS_SQL.ConnectionString =  _appSettings.Report_Connection;
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
             report.Render(false);
             return report.SaveDocumentJsonToString();
 
@@ -94,7 +94,7 @@ namespace Stocks.Controllers
         #region   portfolio Evaluateport
 
 
-        //RPT_Evaluateport
+        //RPT_Evaluateport  Earnings report
 
         // Retrieve Resultofportofolio Report after sending parameters
         [HttpPost]
@@ -133,8 +133,8 @@ namespace Stocks.Controllers
             report["@enddate"] = ToDate;
             report["@portID"] = portID;
             report["RiyalBalance"] = RiyalBalance;
-           
-          
+
+
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
             report.Render(false);
@@ -143,6 +143,68 @@ namespace Stocks.Controllers
         }
         #endregion
 
+
+
+
+
+
+
+
+        #region   portfolio Evaluateport
+
+
+        //RPT_Evaluateport  Earnings report
+
+        // Retrieve Resultofportofolio Report after sending parameters
+        [HttpPost]
+        [Route("~/api/ReportViewer/Earningsreport")]
+        public string Earningsreport([FromBody] JObject data)
+        {
+            DateTime? ToDate;
+            DateTime? Firstdate;
+            DateTime? Enddate;
+            string todate = data.GetValue("todate").ToString();
+            string firstdate = data.GetValue("firstdate").ToString();
+            string enddate = data.GetValue("@enddate").ToString();
+            int portID = Convert.ToInt32(data.GetValue("portID"));
+            if (todate == string.Empty && firstdate == string.Empty && enddate == string.Empty) {
+                ToDate = DateTime.Now;
+
+            }
+            else
+            {
+                if (todate == string.Empty)
+                    ToDate = null;
+                else
+                    ToDate = DateHelper.ChangeDateFormat(todate);
+                if (firstdate == string.Empty)
+                    Firstdate = null;
+                else
+                    Firstdate = DateHelper.ChangeDateFormat(firstdate);
+                if (enddate == string.Empty)
+                    Enddate = null;
+                else
+                    Enddate = DateHelper.ChangeDateFormat(enddate);
+            
+
+
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Earnings.mrt");
+            report.Load(path);
+            report["@todate"] = ToDate;
+            report["@startdate"] = Firstdate;
+            report["@enddate"] = Enddate;
+            report["@portID"] = portID;
+
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+            return report.SaveDocumentJsonToString();
+
+        }
+            return null;
+        }
+        #endregion
 
 
         #region Selling & Purchase Stocks 
