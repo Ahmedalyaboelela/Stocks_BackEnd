@@ -218,7 +218,7 @@ namespace Stocks.Controllers
             DateTime? Enddate;
             string todate = data.GetValue("todate").ToString();
             string firstdate = data.GetValue("firstdate").ToString();
-            string enddate = data.GetValue("@enddate").ToString();
+            string enddate = data.GetValue("enddate").ToString();
             int portID = Convert.ToInt32(data.GetValue("portID"));
             if (todate == string.Empty && firstdate == string.Empty && enddate == string.Empty) {
                 ToDate = DateTime.Now;
