@@ -193,11 +193,13 @@ namespace Stocks.Controllers
         #region total profits in all years
         [HttpGet]
         [Route("~/api/ReportViewer/TotalProfitsAllYears/{portId}/{startDate}/{endDate}")]
-        public string TotalProfitsAllYears(int portId, string startDate, string endDate)
+        public string TotalProfitsAllYears(int? portId, string startDate, string endDate)
         {
+            if (portId == 0)
+                portId = null;
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_SellingPurchasing.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_TotalProfitsInYears.mrt");
             report.Load(path);
             report["@portfolioId"] = portId;
             report["@startdate"] = DateTime.Parse(startDate).ToString("yyyy-MM-dd");
