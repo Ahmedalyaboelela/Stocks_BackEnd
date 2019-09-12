@@ -173,9 +173,18 @@ namespace Stocks.Controllers
             }
             else
             {
-                if (todate == string.Empty)                    ToDate = null;                else                    ToDate = DateHelper.ChangeDateFormat(todate);
-                if (firstdate == string.Empty)                    Firstdate = null;                else                    Firstdate = DateHelper.ChangeDateFormat(firstdate);
-                if (enddate == string.Empty)                    Enddate = null;                else                    Enddate = DateHelper.ChangeDateFormat(enddate);
+                if (todate == string.Empty)
+                    ToDate = null;
+                else
+                    ToDate = DateHelper.ChangeDateFormat(todate);
+                if (firstdate == string.Empty)
+                    Firstdate = null;
+                else
+                    Firstdate = DateHelper.ChangeDateFormat(firstdate);
+                if (enddate == string.Empty)
+                    Enddate = null;
+                else
+                    Enddate = DateHelper.ChangeDateFormat(enddate);
             
 
 
