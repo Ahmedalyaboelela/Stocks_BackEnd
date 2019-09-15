@@ -326,43 +326,47 @@ namespace Stocks.Controllers
 
         [HttpGet]
         [Route("~/api/IOSAndroid/CodePur")]
-        public IActionResult CodePur()
+        public string CodePur()
         {
-            PurchaseOrderModel model = new PurchaseOrderModel();
+            
           
-                model.LastCode = unitOfWork.PurchaseOrderRepository.Last().Code; 
+                 var LastCode = unitOfWork.PurchaseOrderRepository.Last().Code; 
 
-            if (model.LastCode==null)
+            if (LastCode == null)
             {
-                model.LastCode = "1";
+                LastCode = "1";
             }
                
             
           
         
 
-            return Ok(model);
+            return LastCode;
         }
 
 
         [HttpGet]
         [Route("~/api/IOSAndroid/CodeSell")]
-        public IActionResult CodeSell()
+        public string CodeSell()
         {
-            SellingOrderModel model = new SellingOrderModel();
 
-            model.LastCode = unitOfWork.SellingOrderReposetory.Last().Code;
+            var LastCode = unitOfWork.SellingOrderReposetory.Last().Code;
 
-            if (model.LastCode == null)
+            if (LastCode == null)
             {
-                model.LastCode = "1";
+                LastCode = "1";
             }
 
 
 
 
 
-            return Ok(model);
+            return LastCode;
+
+
+
+
+            
         }
 
 
