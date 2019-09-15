@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +11,7 @@ using DAL.Context;
 using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace Stocks.Controllers
 {
@@ -72,7 +74,7 @@ namespace Stocks.Controllers
 
 
         [HttpGet]
-        [Route("~/api/IOSAndroid/GetbyID/{id}")]
+        [Route("~/api/IOSAndroid/GetPortfolioById/{id}")]
 
         public IActionResult GetPortfolioById(int id)
         {
@@ -312,9 +314,94 @@ namespace Stocks.Controllers
 
 
 
+
+
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("~/api/IOSAndroid/CodePur")]
+        public IActionResult CodePur()
+        {
+            PurchaseOrderModel model = new PurchaseOrderModel();
+          
+                model.LastCode = unitOfWork.PurchaseOrderRepository.Last().Code; 
+
+            if (model.LastCode==null)
+            {
+                model.LastCode = "1";
+            }
+               
+            
+          
+        
+
+            return Ok(model);
+        }
+
+
+        [HttpGet]
+        [Route("~/api/IOSAndroid/CodeSell")]
+        public IActionResult CodeSell()
+        {
+            SellingOrderModel model = new SellingOrderModel();
+
+            model.LastCode = unitOfWork.SellingOrderReposetory.Last().Code;
+
+            if (model.LastCode == null)
+            {
+                model.LastCode = "1";
+            }
+
+
+
+
+
+            return Ok(model);
+        }
+
+
+        [Route("~/api/IOSAndroid/GetAllports")]
+        public IEnumerable<GetAllPortsIOS> GetAllports()
+        {
+            var model = unitOfWork.PortfolioRepository.Get().Select(m => new GetAllPortsIOS
+            {
+                PortfolioID=m.PortfolioID,
+                Code = m.Code,
+                NameAR=m.NameAR,
+                NameEN=m.NameEN,
+                PortfolioAccount=unitOfWork.PortfolioAccountRepository.GetEntity(filter:x=>x.PortfolioID==m.PortfolioID).AccountID
+            });
+            return model;
+        }
+
+        [Route("~/api/IOSAndroid/GetpartenersByport/{portID}")]
+        public IEnumerable<PortfolioTransactionModel> GetAllparteners(int portID)
+        {
+            var model = unitOfWork.PortfolioTransactionsRepository.Get(filter:x=> x.PortfolioID==portID).Select(m => new PortfolioTransactionModel
+            {
+                PortfolioID = portID,
+               CurrentStocksCount=m.CurrentStocksCount,
+               CurrentStockValue=m.CurrentStockValue,
+               PartnerID=m.PartnerID,
+               partenerCode=unitOfWork.PartnerRepository.GetEntity(filter: a=> a.PartnerID==m.PartnerID).Code,
+               partenerNameAR= unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameAR,
+               partenerNameEN= unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameEN,
+               PortTransID=m.PortTransID
+            });
+            return model;
+        }
+
+
+
         [HttpPost]
-        [Route("~/api/IOSAndroid/PostPurchaseOrder")]
-        public IActionResult PostPurchaseOrder([FromBody] PurchaseOrderModel purchaseOrderModel)
+        [Route("~/api/IOSAndroid/Purchase")]
+        public IActionResult Purchase([FromBody] PurchaseOrderModel purchaseOrderModel)
         {
             if (ModelState.IsValid)
             {
@@ -326,6 +413,26 @@ namespace Stocks.Controllers
                 }
                 else
                 {
+                    purchaseOrderModel.SettingModel = unitOfWork.SettingRepository.Get(filter: x => x.VoucherType == 2).Select(m => new SettingModel {
+                        VoucherType=2,
+                        AutoGenerateEntry=m.AutoGenerateEntry,
+                        Code=m.Code,
+                        DoNotGenerateEntry=m.DoNotGenerateEntry,
+                        GenerateEntry=m.GenerateEntry,
+                        SettingID=m.SettingID,
+                        TransferToAccounts=m.TransferToAccounts,
+                        SettingAccs=unitOfWork.SettingAccountRepository.Get(filter: x=>x.SettingID==m.SettingID).Select(a=> new SettingAccountModel {
+                            SettingID=a.SettingID,
+                            AccCode=a.Account.Code,
+                            AccNameAR=a.Account.NameAR,
+                            AccNameEN=a.Account.NameEN,
+                            AccountID=a.AccountID,
+                            SettingAccountID=a.SettingAccountID,
+                            AccountType=a.AccountType,
+                            
+                        })
+
+                    }).SingleOrDefault();
 
                     var purchaseOrder = _mapper.Map<PurchaseOrder>(purchaseOrderModel);
                     int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
@@ -433,7 +540,7 @@ namespace Stocks.Controllers
                         }
 
                     }
-                
+                   
 
 
                     var Result = unitOfWork.Save();
@@ -464,8 +571,8 @@ namespace Stocks.Controllers
 
 
         [HttpPost]
-        [Route("~/api/IOSAndroid/PostSellingOrder")]
-        public IActionResult PostSellingOrder([FromBody] SellingOrderModel sellingOrderModel)
+        [Route("~/api/IOSAndroid/Selling")]
+        public IActionResult Selling([FromBody] SellingOrderModel sellingOrderModel)
         {
             if (ModelState.IsValid)
             {
@@ -479,6 +586,30 @@ namespace Stocks.Controllers
                 }
                 else
                 {
+
+
+                    sellingOrderModel.SettingModel = unitOfWork.SettingRepository.Get(filter: x => x.VoucherType == 1).Select(m => new SettingModel
+                    {
+                        VoucherType = 1,
+                        AutoGenerateEntry = m.AutoGenerateEntry,
+                        Code = m.Code,
+                        DoNotGenerateEntry = m.DoNotGenerateEntry,
+                        GenerateEntry = m.GenerateEntry,
+                        SettingID = m.SettingID,
+                        TransferToAccounts = m.TransferToAccounts,
+                        SettingAccs = unitOfWork.SettingAccountRepository.Get(filter: x => x.SettingID == m.SettingID).Select(a => new SettingAccountModel
+                        {
+                            SettingID = a.SettingID,
+                            AccCode = a.Account.Code,
+                            AccNameAR = a.Account.NameAR,
+                            AccNameEN = a.Account.NameEN,
+                            AccountID = a.AccountID,
+                            SettingAccountID = a.SettingAccountID,
+                            AccountType = a.AccountType,
+
+                        })
+
+                    }).SingleOrDefault();
                     portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
                     var modelselling = _mapper.Map<SellingOrder>(sellingOrderModel);
 
@@ -576,7 +707,8 @@ namespace Stocks.Controllers
                             }
                         }
                     }
-                   
+                 
+
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
@@ -604,79 +736,55 @@ namespace Stocks.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("~/api/IOSAndroid/CodePur")]
-        public IActionResult CodePur()
-        {
-            PurchaseOrderModel model = new PurchaseOrderModel();
-          
-                model.LastCode = unitOfWork.PurchaseOrderRepository.Last().Code; 
 
-            if (model.LastCode==null)
-            {
-                model.LastCode = "1";
-            }
-               
-            
-          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
 
-            return Ok(model);
-        }
-
-
-        [HttpGet]
-        [Route("~/api/IOSAndroid/CodeSell")]
-        public IActionResult CodeSell()
-        {
-            SellingOrderModel model = new SellingOrderModel();
-
-            model.LastCode = unitOfWork.SellingOrderReposetory.Last().Code;
-
-            if (model.LastCode == null)
-            {
-                model.LastCode = "1";
-            }
 
 
 
 
 
-            return Ok(model);
-        }
-
-
-        [Route("~/api/IOSAndroid/GetAllports")]
-        public IEnumerable<GetAllPortsIOS> GetAllports()
-        {
-            var model = unitOfWork.PortfolioRepository.Get().Select(m => new GetAllPortsIOS
-            {
-                PortfolioID=m.PortfolioID,
-                Code = m.Code,
-                NameAR=m.NameAR,
-                NameEN=m.NameEN
-            });
-            return model;
-        }
-
-        [Route("~/api/IOSAndroid/GetpartenersByport/{portID}")]
-        public IEnumerable<PortfolioTransactionModel> GetAllparteners(int portID)
-        {
-            var model = unitOfWork.PortfolioTransactionsRepository.Get(filter:x=> x.PortfolioID==portID).Select(m => new PortfolioTransactionModel
-            {
-                PortfolioID = portID,
-               CurrentStocksCount=m.CurrentStocksCount,
-               CurrentStockValue=m.CurrentStockValue,
-               PartnerID=m.PartnerID,
-               partenerCode=unitOfWork.PartnerRepository.GetEntity(filter: a=> a.PartnerID==m.PartnerID).Code,
-               partenerNameAR= unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameAR,
-               partenerNameEN= unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameEN,
-               PortTransID=m.PortTransID
-            });
-            return model;
-        }
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

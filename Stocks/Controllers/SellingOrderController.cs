@@ -16,8 +16,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Stocks.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,Admin,Employee")]
-    [Route("api/[controller]")]
+    //[Authorize(Roles = "SuperAdmin,Admin,Employee")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class SellingOrderController : Controller
     {
@@ -62,42 +62,42 @@ namespace Stocks.Controllers
 
         }
 
-        public EntryModel GetEntry(Entry Entry)
-        {
-            EntryModel entryModel = new EntryModel();
+        //public EntryModel GetEntry(Entry Entry)
+        //{
+        //    EntryModel entryModel = new EntryModel();
 
-            if (Entry != null)
-            {
-                var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
-                entryModel.EntryID = Entry.EntryID;
-                entryModel.Code = Entry.Code;
-                entryModel.Date = Entry.Date.Value.ToString("d/M/yyyy");
-                entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
-                entryModel.NoticeID = Entry.NoticeID;
-                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
-                entryModel.ReceiptID = Entry.ReceiptID;
-                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
-                entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
-                {
-                    AccCode = m.Account.Code,
-                    AccNameAR = m.Account.NameAR,
-                    AccNameEN = m.Account.NameEN,
-                    AccountID = m.AccountID,
-                    ParentAccountID = m.Account.AccoutnParentID,
-                    ParentAccCode = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.Code).FirstOrDefault(),
-                    ParentAccNameAR = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.NameAR).FirstOrDefault(),
-                    Credit = m.Credit,
-                    Debit = m.Debit,
-                    EntryDetailID = m.EntryDetailID,
-                    EntryID = m.EntryID,
+        //    if (Entry != null)
+        //    {
+        //        var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+        //        entryModel.EntryID = Entry.EntryID;
+        //        entryModel.Code = Entry.Code;
+        //        entryModel.Date = Entry.Date.Value.ToString("d/M/yyyy");
+        //        entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
+        //        entryModel.NoticeID = Entry.NoticeID;
+        //        entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+        //        entryModel.ReceiptID = Entry.ReceiptID;
+        //        entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+        //        entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
+        //        {
+        //            AccCode = m.Account.Code,
+        //            AccNameAR = m.Account.NameAR,
+        //            AccNameEN = m.Account.NameEN,
+        //            AccountID = m.AccountID,
+        //            ParentAccountID = m.Account.AccoutnParentID,
+        //            ParentAccCode = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.Code).FirstOrDefault(),
+        //            ParentAccNameAR = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.NameAR).FirstOrDefault(),
+        //            Credit = m.Credit,
+        //            Debit = m.Debit,
+        //            EntryDetailID = m.EntryDetailID,
+        //            EntryID = m.EntryID,
 
 
-                });
-                entryModel.TransferedToAccounts = Entry.TransferedToAccounts;
+        //        });
+        //        entryModel.TransferedToAccounts = Entry.TransferedToAccounts;
 
-            }
-            return entryModel;
-        }
+        //    }
+        //    return entryModel;
+        //}
 
         [HttpGet]//القيد
         [Route("~/api/SellingOrder/GetEntry/{sellingOrderID}")]
