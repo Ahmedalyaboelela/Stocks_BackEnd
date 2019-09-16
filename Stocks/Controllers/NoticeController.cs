@@ -202,6 +202,7 @@ namespace Stocks.Controllers
                 Code = a.Code,
                 DoNotGenerateEntry = a.DoNotGenerateEntry,
                 GenerateEntry = a.GenerateEntry,
+                TransferToAccounts=a.TransferToAccounts,
                 SettingAccs = SettingAccounts(a.SettingID),
 
             }).SingleOrDefault();
@@ -505,7 +506,9 @@ namespace Stocks.Controllers
                     ParentAccCode = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.Code).FirstOrDefault(),
                     ParentAccNameAR = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.NameAR).FirstOrDefault(),
                     Credit = m.Credit,
+                    StocksCredit=m.StocksCredit,
                     Debit = m.Debit,
+                    StocksDebit=m.StocksDebit,
                     EntryDetailID = m.EntryDetailID,
                     EntryID = m.EntryID,
 
@@ -542,7 +545,9 @@ namespace Stocks.Controllers
                 ParentAccCode = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.Code).FirstOrDefault(),
                 ParentAccNameAR = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.NameAR).FirstOrDefault(),
                 Credit = m.Credit,
+                StocksCredit=m.StocksCredit,
                 Debit = m.Debit,
+                StocksDebit=m.StocksDebit,
                 EntryDetailID = m.EntryDetailID,
                 EntryID = m.EntryID,
 
@@ -830,8 +835,8 @@ namespace Stocks.Controllers
                 var notice = _mapper.Map<Notice>(noticeModel);
                 var NewdDetails = noticeModel.NoticeModelDetails;
                 var Newdetails = _mapper.Map<IEnumerable<NoticeDetail>>(NewdDetails);
-                var OldDetails = unitOfWork.NoticeDetailRepository.Get(filter: m => m.NoticeID == notice.NoticeID);
-                var EntryCheck = unitOfWork.EntryRepository.Get(x => x.NoticeID == notice.NoticeID).SingleOrDefault();
+                var OldDetails = unitOfWork.NoticeDetailRepository.Get(NoTrack: "NoTrack", filter: m => m.NoticeID == notice.NoticeID);
+                var EntryCheck = unitOfWork.EntryRepository.Get(x => x.NoticeID == notice.NoticeID, NoTrack: "NoTrack").SingleOrDefault();
                 #region Warehouse
                 if(noticeModel.Type==false)
                 {
@@ -860,7 +865,7 @@ namespace Stocks.Controllers
                 {
 
                     //var Entry = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack",filter: x => x.NoticeID == notice.NoticeID).SingleOrDefault();
-                    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == EntryCheck.EntryID);
+                    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(NoTrack: "NoTrack",filter: a => a.EntryID == EntryCheck.EntryID);
                     if (EntryCheck.TransferedToAccounts == true)
                     {
                         accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
@@ -1024,7 +1029,7 @@ namespace Stocks.Controllers
                                 else
                                 {
                                     EntryCheck.TransferedToAccounts = false;
-                                    unitOfWork.EntryRepository.Insert(EntryCheck);
+                                    unitOfWork.EntryRepository.Update(EntryCheck);
                                     foreach (var item in EntryDitails)
                                     {
                                         item.EntryID = EntryCheck.EntryID;
@@ -1323,7 +1328,7 @@ namespace Stocks.Controllers
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
-                    return Ok("Succeeded");
+                    return Ok(4);
                 }
                 else if (Result == 501)
                 {
