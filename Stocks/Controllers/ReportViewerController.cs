@@ -228,6 +228,57 @@ namespace Stocks.Controllers
             return report.SaveDocumentJsonToString();
         }
 
+        #endregion
+
+        #region Profits in year
+        [HttpGet]
+        [Route("~/api/ReportViewer/ProfitsYear")]
+        public string ProfitsInYear([FromQuery]int portfolioID, [FromQuery] string fromDate, [FromQuery] string toDate)
+        {
+            DateTime fDate = DateTime.ParseExact(fromDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+            DateTime tDate = DateTime.ParseExact(toDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+            if(fDate.Year != tDate.Year)
+            {
+                return "Bad Request";
+            }
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_ProfitsOnSameYear.mrt");
+            report.Load(path);
+            report["@PortfolioID"] = portfolioID;
+            report["@FromDate"] = fDate.ToString("yyyy-MM-dd");
+            report["@ToDate"] = tDate.ToString("yyyy-MM-dd");
+
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+        }
+        #endregion
+
+
+        #region total profits in all years
+        [HttpGet]
+        [Route("~/api/ReportViewer/TotalProfitsAllYears/{portId}/{startDate}/{endDate}")]
+        public string TotalProfitsAllYears(int? portId, string startDate, string endDate)
+        {
+            if (portId == 0)
+                portId = null;
+
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_TotalProfitsInYears.mrt");
+            report.Load(path);
+            report["@portfolioId"] = portId;
+            report["@startdate"] = DateTime.Parse(startDate).ToString("yyyy-MM-dd");
+            report["@enddate"] = DateTime.Parse(endDate).ToString("yyyy-MM-dd");
+
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+        }
+        #endregion
 
         [HttpGet]
         [Route("~/api/ReportViewer/CompaniesSharesInPortfolio")]
@@ -242,10 +293,10 @@ namespace Stocks.Controllers
             }
             else
             {
-                fDate = new DateTime(2000,1,1);
+                fDate = new DateTime(2000, 1, 1);
             }
             DateTime tDate = DateTime.ParseExact(toDate, "d/M/yyyy", CultureInfo.InvariantCulture);
-            if(tDate < fDate)
+            if (tDate < fDate)
             {
                 return "Bad Request";
             }
@@ -258,6 +309,7 @@ namespace Stocks.Controllers
             report.Render(false);
             return report.SaveDocumentJsonToString();
         }
-        #endregion
+
+
     }
 }
