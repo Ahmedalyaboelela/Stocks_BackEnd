@@ -17,7 +17,7 @@ namespace Stocks.Controllers
 {
     [Authorize(Roles = "SuperAdmin,Admin")]
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] 
     public class CountryController : ControllerBase
     {
         #region CTOR & Definitions
