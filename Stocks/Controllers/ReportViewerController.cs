@@ -88,6 +88,59 @@ namespace Stocks.Controllers
             return report.SaveDocumentJsonToString();
 
         }
+
+        // Retrieve CashMovementReyalPortofolio Report after sending parameters
+        [HttpPost]
+        [Route("~/api/ReportViewer/CashMovementReyalPortofolio")]
+        public string CashMovementReyalPortofolio([FromBody] JObject data)
+        {
+            #region ReportCalculation
+            DateTime? ToDate, FromDate,UntillDate,PortofolioDate;
+            string todate = data.GetValue("todate").ToString();
+            string fromdate = data.GetValue("fromdate").ToString();
+            string untilldate = data.GetValue("untilldate").ToString();
+            int portofolioid = Convert.ToInt32(data.GetValue("portofolioid"));
+
+            if (untilldate == string.Empty && fromdate ==string.Empty && todate ==string.Empty)
+            {
+                UntillDate = DateTime.Now;
+                FromDate = null;
+                ToDate = null;
+            }
+            else
+            {
+                if (untilldate == string.Empty)
+                    UntillDate = null;
+                else
+                    UntillDate = DateHelper.ChangeDateFormat(untilldate);
+                if (fromdate == string.Empty)
+                    FromDate = null;
+                else
+                    FromDate = DateHelper.ChangeDateFormat(fromdate);
+                if (todate == string.Empty)
+                    ToDate = null;
+                else
+                    ToDate = DateHelper.ChangeDateFormat(todate);
+
+            }
+            PortofolioDate = unitOfWork.PortfolioRepository.Get(filter: m => m.PortfolioID == portofolioid).Select(m => m.EstablishDate).SingleOrDefault();
+            #endregion
+
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_CashMovementReyalPortofolio.mrt");
+            report.Load(path);
+            report["@FromDate"] = FromDate;
+            report["@ToDate"] = ToDate;
+            report["@UntillDate"] = UntillDate;
+            report["@PortofolioDate"] = PortofolioDate;
+            report["@PortofolioID"] = portofolioid;
+
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+            return report.SaveDocumentJsonToString();
+
+        }
         #endregion
 
 
