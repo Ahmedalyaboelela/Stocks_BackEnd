@@ -300,6 +300,7 @@ namespace Stocks.Controllers
         [HttpGet]
         [Route("~/api/ReceiptExchange/FirstOpen/{ReceiptExchangeType}/{type}")]
         public IActionResult FirstOpen(bool ReceiptExchangeType, bool type)
+
         {
             ReceiptExchangeModel model = new ReceiptExchangeModel();
             //RS

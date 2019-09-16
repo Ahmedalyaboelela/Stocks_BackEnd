@@ -68,7 +68,7 @@ namespace BAL.Helper
                 {
                     Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
                 }
-                Entrymodel.Date = DateTime.Now.ToShortDateString();
+                Entrymodel.Date = DateTime.Now.ToString("d/M/yyyy");
                 Entrymodel.SellingOrderID = sellingOrderModel.SellingOrderID;
                 #endregion
 
