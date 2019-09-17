@@ -42,7 +42,7 @@ namespace Stocks.Controllers
                 var model = Check.Select(m => new ReportSettingModel
                 {
 
-                    CurrentDate = date.ToString("d/M/yyyy"),
+                    CurrentDate = date.ToString("dd/M/yyyy"),
                     PartnerID = m.PartnerID,
                     PartnerCode = unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).Code,
                     PartnerNameAR = unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameAR,
@@ -74,7 +74,7 @@ namespace Stocks.Controllers
                     PartnerNameEN = unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == x.PartnerID).NameEN,
                     ReportSettingID = 0,
                     DailyStockValue = 0,
-                    CurrentDate=DateTime.UtcNow.Date.ToString("d/M/yyyy")
+                    CurrentDate=DateTime.UtcNow.Date.ToString("dd/M/yyyy")
                 });
                 return Ok(model);
 

@@ -178,7 +178,8 @@ namespace BAL.Mapper
 
             #region ReportSetting
             CreateMap<ReportSetting, ReportSettingModel>();
-            CreateMap<ReportSettingModel, ReportSetting>();
+            CreateMap<ReportSettingModel, ReportSetting>()
+                 .ForMember(t => t.CurrentDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.CurrentDate, "dd/M/yyyy", CultureInfo.InvariantCulture)));
             #endregion
 
         }
