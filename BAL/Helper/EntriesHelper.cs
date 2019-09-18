@@ -60,7 +60,7 @@ namespace BAL.Helper
                 #endregion
 
                 #region EntryMaster
-                if (LastEntry.Code == null)
+                 if (LastEntry == null)
                 {
                     Entrymodel.Code = "1";
                 }
@@ -141,7 +141,7 @@ namespace BAL.Helper
                 #endregion
 
                 #region EntryMaster
-                if (LastEntry.Code == null)
+                if (LastEntry == null)
                 {
                     Entrymodel.Code = "1";
                 }
@@ -149,7 +149,7 @@ namespace BAL.Helper
                 {
                     Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
                 }
-                Entrymodel.Date = DateTime.Now.ToShortDateString();
+                Entrymodel.Date = DateTime.Now.ToString("d/M/yyyy");
                 Entrymodel.PurchaseOrderID  = purchaseOrderModel.PurchaseOrderID;
                 #endregion
 
@@ -190,7 +190,7 @@ namespace BAL.Helper
                     
                     var ReceiptExchangeDetails = receiptExchangeModel.RecExcDetails;
                     #region EntryMaster
-                    if (LastEntry.Code == null)
+                    if (LastEntry == null)
                     {
                         Entrymodel.Code = "1";
                     }
@@ -198,7 +198,7 @@ namespace BAL.Helper
                     {
                         Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
                     }
-                    Entrymodel.Date = DateTime.Now.ToString("dd/MM/yyyy");
+                    Entrymodel.Date = DateTime.Now.ToString("d/MM/yyyy");
                     Entrymodel.ReceiptID = receiptExchangeModel.ReceiptID;
                     #endregion
 
@@ -258,7 +258,7 @@ namespace BAL.Helper
                 {
                     Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
                 }
-                Entrymodel.Date = DateTime.Now.ToShortDateString();
+                Entrymodel.Date = DateTime.Now.ToString("d/MM/yyyy");
                 Entrymodel.NoticeID = noticeModel.NoticeID;
                 #endregion
 

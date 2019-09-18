@@ -155,8 +155,9 @@ namespace Stocks.Controllers
                 Code = a.Code,
                 DoNotGenerateEntry = a.DoNotGenerateEntry,
                 GenerateEntry = a.GenerateEntry,
-                SettingAccs = SettingAccounts(a.SettingID),
-
+                TransferToAccounts = a.TransferToAccounts,
+                SettingAccs = SettingAccounts(a.SettingID)
+             
             }).SingleOrDefault();
             return setsetting;
 
