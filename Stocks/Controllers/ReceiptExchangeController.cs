@@ -78,6 +78,7 @@ namespace Stocks.Controllers
                 DoNotGenerateEntry = a.DoNotGenerateEntry,
                 GenerateEntry = a.GenerateEntry,
                 SettingAccs = SettingAccounts(a.SettingID),
+                TransferToAccounts=a.TransferToAccounts
 
             }).SingleOrDefault();
             return setsetting;
@@ -320,7 +321,7 @@ namespace Stocks.Controllers
 
                         model.LastCode = noti.Code;
                     }
-                    model.SettingModel = GetSetting(6);
+                    model.SettingModel = GetSetting(5);
                     model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == true).Count();
 
                 }
@@ -339,7 +340,7 @@ namespace Stocks.Controllers
                         model.LastCode = noti.Code;
                     }
 
-                    model.SettingModel = GetSetting(5);
+                    model.SettingModel = GetSetting(6);
                     model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == true).Count();
 
                 }
@@ -364,7 +365,7 @@ namespace Stocks.Controllers
 
                             model.LastCode = noti.Code;
                         }
-                        model.SettingModel = GetSetting(6);
+                        model.SettingModel = GetSetting(5);
                         model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == true && x.ReceiptExchangeType == false).Count();
 
                     }
@@ -383,7 +384,7 @@ namespace Stocks.Controllers
                             model.LastCode = noti.Code;
                         }
 
-                        model.SettingModel = GetSetting(5);
+                        model.SettingModel = GetSetting(6);
                         model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Type == false && x.ReceiptExchangeType == false).Count();
 
                     }
@@ -529,7 +530,7 @@ namespace Stocks.Controllers
             if (ModelState.IsValid)
             {
                 var Check = unitOfWork.ReceiptExchangeRepository.Get();
-                if (Check.Any(m => m.Code == recExcModel.Code))
+                if (Check.Any(m => m.Code == recExcModel.Code && m.Type==recExcModel.Type && m.ReceiptExchangeType==recExcModel.ReceiptExchangeType))
                 {
 
                     return Ok(2);
@@ -777,7 +778,7 @@ namespace Stocks.Controllers
 
                     else
                     {
-                        if (Check.Any(m => m.Code == ReceiptExchange.Code && m.ReceiptID == id))
+                        if (Check.Any(m => m.Code == ReceiptExchange.Code && m.ReceiptID == id && m.Type == receiptExchangeModel.Type && m.ReceiptExchangeType == receiptExchangeModel.ReceiptExchangeType))
                         {
                             unitOfWork.ReceiptExchangeRepository.Update(ReceiptExchange);
                             if (OldDetails != null)
@@ -878,7 +879,7 @@ namespace Stocks.Controllers
 
                 else
                 {
-                    if (Check.Any(m => m.Code != ReceiptExchange.Code))
+                    if (Check.Any(m => m.Code != ReceiptExchange.Code && m.Type == receiptExchangeModel.Type && m.ReceiptExchangeType == receiptExchangeModel.ReceiptExchangeType))
                     {
                         unitOfWork.ReceiptExchangeRepository.Update(ReceiptExchange);
                         if (OldDetails != null)
@@ -980,7 +981,7 @@ namespace Stocks.Controllers
 
                     else
                     {
-                        if (Check.Any(m => m.Code == ReceiptExchange.Code && m.ReceiptID == id))
+                        if (Check.Any(m => m.Code == ReceiptExchange.Code && m.ReceiptID == id && m.Type == receiptExchangeModel.Type && m.ReceiptExchangeType == receiptExchangeModel.ReceiptExchangeType))
                         {
                             unitOfWork.ReceiptExchangeRepository.Update(ReceiptExchange);
                             if (OldDetails != null)

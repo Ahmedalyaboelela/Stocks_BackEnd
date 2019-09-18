@@ -970,7 +970,7 @@ namespace Stocks.Controllers
 
                     else
                     {
-                        if (Check.Any(m => m.Code == notice.Code && m.NoticeID == id))
+                        if (Check.Any(m => m.Code == notice.Code && m.NoticeID == id && m.Type == noticeModel.Type))
                         {
                             unitOfWork.NoticeRepository.Update(notice);
                             if (OldDetails != null)
@@ -1069,7 +1069,7 @@ namespace Stocks.Controllers
 
                 else
                 {
-                    if (Check.Any(m => m.Code != notice.Code))
+                    if (Check.Any(m => m.Code != notice.Code && m.Type == noticeModel.Type))
                     {
                         unitOfWork.NoticeRepository.Update(notice);
                         if (OldDetails != null)
@@ -1172,7 +1172,7 @@ namespace Stocks.Controllers
 
                     else
                     {
-                        if (Check.Any(m => m.Code == notice.Code && m.NoticeID == id))
+                        if (Check.Any(m => m.Code == notice.Code && m.NoticeID == id && m.Type == noticeModel.Type))
                         {
                             unitOfWork.NoticeRepository.Update(notice);
                             if (OldDetails != null)
