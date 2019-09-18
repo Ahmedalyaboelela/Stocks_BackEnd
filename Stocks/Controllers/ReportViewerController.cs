@@ -42,6 +42,7 @@ namespace Stocks.Controllers
         [Route("~/api/ReportViewer/ResultOfPortofolio")]
         public string ResultOfPortofolioWork([FromBody] JObject data)
         {
+   
             #region ReportCalculation
             DateTime ToDate;
             string todate = data.GetValue("todate").ToString();
@@ -85,6 +86,7 @@ namespace Stocks.Controllers
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
             report.Render(false);
+
             return report.SaveDocumentJsonToString();
 
         }
@@ -358,6 +360,7 @@ namespace Stocks.Controllers
             {
                 return "Bad Request";
             }
+
             report.Load(path);
             report["@PortfolioID"] = portfolioID;
             report["@FromDate"] = fDate.ToString("yyyy-MM-dd");
