@@ -10,6 +10,7 @@ using BAL.Repositories;
 using DAL.Context;
 using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace Stocks.Controllers
 {
@@ -26,12 +27,15 @@ namespace Stocks.Controllers
         #endregion
 
         #region GET Methods
-        [Route("~/api/ReportSetting/GetAllReportSetting/{portID}/{DayDate}")]
+        [HttpPost]
+        [Route("~/api/ReportSetting/GetAllReportSetting")]
 
-        public IActionResult GetAllPortfolios( int portID ,string DayDate)
+        public IActionResult GetAllPortfolios([FromBody] JObject data)
         {
 
-            DateTime date = DateTime.Parse(DayDate);
+            DateTime date = DateTime.Parse(data.GetValue("DayDate").ToString());
+            int portID= Convert.ToInt32(data.GetValue("PortfolioID"));
+
             var Check = unitOfWork.ReportSettingRepository.Get(filter: x => x.PortfolioID == portID && x.CurrentDate == date);
             var portfolio = unitOfWork.PortfolioRepository.GetEntity(filter: a => a.PortfolioID == portID);
 
@@ -42,7 +46,7 @@ namespace Stocks.Controllers
                 var model = Check.Select(m => new ReportSettingModel
                 {
 
-                    CurrentDate = date.ToString("dd/M/yyyy"),
+                    CurrentDate = date.ToString("d/M/yyyy"),
                     PartnerID = m.PartnerID,
                     PartnerCode = unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).Code,
                     PartnerNameAR = unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameAR,
@@ -74,7 +78,7 @@ namespace Stocks.Controllers
                     PartnerNameEN = unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == x.PartnerID).NameEN,
                     ReportSettingID = 0,
                     DailyStockValue = 0,
-                    CurrentDate=DateTime.UtcNow.Date.ToString("dd/M/yyyy")
+                    CurrentDate=DateTime.UtcNow.Date.ToString("d/M/yyyy")
                 });
                 return Ok(model);
 
@@ -91,6 +95,7 @@ namespace Stocks.Controllers
         [Route("~/api/ReportSetting/AddReportSetting/{portID}/{DayDate}")]
         public IActionResult PostReportSetting([FromBody] ReportSettingModel [] reportSettingModels, int portID, string DayDate)
         {
+            DayDate = DayDate.Replace('-', '/');
             DateTime date = DateTime.Parse(DayDate);
 
             var Check = unitOfWork.ReportSettingRepository.Get(NoTrack: "NoTrack");

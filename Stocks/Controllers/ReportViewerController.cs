@@ -150,7 +150,9 @@ namespace Stocks.Controllers
         [Route("~/api/ReportViewer/SellPurchase/{portId}/{partId}/{startDate}/{endDate}")]
         public string SellPurchase(int portId,int partId,string startDate,string endDate)
         {
-            
+            startDate = startDate.Replace('-', '/');
+            endDate = endDate.Replace('-', '/');
+
             StiReport report = new StiReport();
             var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_SellingPurchasing.mrt");
             report.Load(path);
@@ -195,6 +197,9 @@ namespace Stocks.Controllers
         [Route("~/api/ReportViewer/TotalProfitsAllYears/{portId}/{startDate}/{endDate}")]
         public string TotalProfitsAllYears(int? portId, string startDate, string endDate)
         {
+            startDate = startDate.Replace('-', '/');
+            endDate = endDate.Replace('-', '/');
+
             if (portId == 0)
                 portId = null;
 
