@@ -673,7 +673,7 @@ Sum(DataSource2.ReyalDebit)-RiyalOpenBalance
               <Name>Text5</Name>
               <Page isRef="4" />
               <Parent isRef="24" />
-              <Text>=الإجمالي</Text>
+              <Text>= الإجمالي</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
@@ -733,13 +733,13 @@ Sum(DataSource2.ReyalDebit)-RiyalOpenBalance
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>9/12/2019 7:14:07 AM</ReportChanged>
+  <ReportChanged>9/17/2019 11:59:47 AM</ReportChanged>
   <ReportCreated>9/8/2019 12:02:27 PM</ReportCreated>
   <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\RPT_ResultOfPortofolioWork.mrt</ReportFile>
-  <ReportGuid>aa0183f7990e47c9b18d13cc7a8ab5e2</ReportGuid>
+  <ReportGuid>27e3dc43cbd74d1e9e31eea35328ee81</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Centimeters</ReportUnit>
-  <ReportVersion>2019.3.2.0</ReportVersion>
+  <ReportVersion>2019.3.5.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;
