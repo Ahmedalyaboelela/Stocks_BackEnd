@@ -267,7 +267,7 @@ namespace BAL.Helper
                 {
                     foreach (var item in NoticeDetails)
                     {
-                        if (item.Debit != null )
+                        if (item.Debit != null || item.StocksDebit!=null)
                         {
                             //Add Debit Accounts with values
                             #region Debit
@@ -279,7 +279,7 @@ namespace BAL.Helper
                             DetailListModel.Add(DetailModel);
                             #endregion
                         }
-                        if (item.Credit != null)
+                        if (item.Credit != null || item.StocksCredit !=null)
                         {
 
                             //Add Credit Accounts with values
@@ -530,7 +530,7 @@ namespace BAL.Helper
                 {
                     foreach (var item in NoticeDetails)
                     {
-                        if (item.Debit != null)
+                        if (item.Debit != null || item.StocksDebit != null)
                         {
                             //Add Debit Accounts with values
                             #region Debit
@@ -543,7 +543,7 @@ namespace BAL.Helper
                             DetailListModel.Add(DetailModel);
                             #endregion
                         }
-                        if (item.Credit != null)
+                        if (item.Credit != null || item.StocksCredit != null)
                         {
 
                             //Add Credit Accounts with values
