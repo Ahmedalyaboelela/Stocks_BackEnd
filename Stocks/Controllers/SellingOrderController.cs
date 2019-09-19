@@ -861,6 +861,7 @@ namespace Stocks.Controllers
                       accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
                   }
                   unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
+                    unitOfWork.EntryRepository.Delete(Entry.EntryID);
 
                   if (Check.Any(m => m.Code != sellingOrder.Code))
                   {
@@ -914,7 +915,7 @@ namespace Stocks.Controllers
                             if (sellingOrderModel.SettingModel.TransferToAccounts == true)
                             {
                                 Entry.TransferedToAccounts = true;
-                                unitOfWork.EntryRepository.Update(Entry);
+                                unitOfWork.EntryRepository.Insert(Entry);
                                 foreach (var item in EntryDitails)
                                 {
                                     item.EntryID = Entry.EntryID;
@@ -1046,7 +1047,7 @@ namespace Stocks.Controllers
                               if (sellingOrderModel.SettingModel.TransferToAccounts == true)
                               {
                                   Entry.TransferedToAccounts = true;
-                                  unitOfWork.EntryRepository.Update(Entry);
+                                  unitOfWork.EntryRepository.Insert(Entry);
                                   foreach (var item in EntryDitails)
                                   {
                                       item.EntryID = Entry.EntryID;
