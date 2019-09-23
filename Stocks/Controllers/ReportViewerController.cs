@@ -372,5 +372,59 @@ namespace Stocks.Controllers
         }
 
 
+
+
+
+
+
+
+
+
+
+        //[HttpGet]
+        //[Route("~/api/ReportViewer/ProfitsDistributor")]
+        //public string ProfitsDistributor([FromBody] JObject data)
+        //{
+        //    DateTime ToDate;
+           
+        //    int portID = Convert.ToInt32(data.GetValue("portID"));
+        //   // int accid = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == portID)
+        //   //.Select(m => m.AccountID).SingleOrDefault();
+        //   // decimal? debit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+        //   //     .Select(m => m.Debit).SingleOrDefault() ?? 0;
+        //   // decimal? credit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+        //   //     .Select(m => m.Credit).SingleOrDefault() ?? 0;
+        //   // decimal? opendebit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+        //   //.Select(m => m.DebitOpenningBalance).SingleOrDefault() ?? 0;
+        //   // decimal? opencredit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+        //   //     .Select(m => m.CreditOpenningBalance).SingleOrDefault() ?? 0;
+        //   // decimal? RiyalBalance = debit - credit;
+
+
+
+        //    if (todate != string.Empty)
+        //    {
+        //        ToDate = DateHelper.ChangeDateFormat(todate);
+        //    }
+        //    else
+        //    {
+        //        ToDate = DateTime.Now;
+        //    }
+
+        //    StiReport report = new StiReport();
+        //    var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport.mrt");
+        //    report.Load(path);
+        //    report["@enddate"] = ToDate;
+        //    report["@portID"] = portID;
+        //    report["RiyalBalance"] = RiyalBalance;
+
+
+        //    var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+        //    dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+        //    report.Render(false);
+        //    return report.SaveDocumentJsonToString();
+        //}
+
+
     }
 }
