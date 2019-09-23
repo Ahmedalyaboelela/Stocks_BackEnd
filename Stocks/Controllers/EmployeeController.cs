@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,Admin")]
+    //[Authorize(Roles = "SuperAdmin,Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeeController : ControllerBase
@@ -329,13 +329,13 @@ namespace Stocks.Controllers
         #region Update Methods
         [HttpPut]
         [Route("~/api/Employee/Update/{id}")]
-        public IActionResult Update(int id, [FromBody] EmployeeModel empModel)
+        public IActionResult Update( int id,[FromBody] EmployeeModel empModel)
         {
-            if (id != empModel.EmployeeID)
-            {
+            //if (id != empModel.EmployeeID)
+            //{
 
-                return Ok(1);
-            }
+            //    return Ok(1);
+            //}
 
             if (ModelState.IsValid)
             {
@@ -358,7 +358,7 @@ namespace Stocks.Controllers
 
                     .Get(filter: m => m.EmployeeID == model.EmployeeID);
 
-                    if (oldcards != null)
+                    if ( oldcards != null)
                     {
 
                         unitOfWork.EmployeeCardRepository.RemovRange(oldcards);
@@ -398,7 +398,7 @@ namespace Stocks.Controllers
                 else
                 {
                      
-                    if (Check.Any(m => m.Code == empModel.Code && m.EmployeeID==id))
+                    if (Check.Any(m => m.Code == empModel.Code && m.EmployeeID== empModel.EmployeeID))
                     {
                         unitOfWork.EmployeeRepository.Update(model);
 
@@ -416,7 +416,7 @@ namespace Stocks.Controllers
                             unitOfWork.EmployeeCardRepository.RemovRange(oldcards);
 
                         }
-                        if (newCards != null)
+                        if (newCards.Count() > 0 && newCards != null)
                         {
                             foreach (var item in newCards)
                             {
