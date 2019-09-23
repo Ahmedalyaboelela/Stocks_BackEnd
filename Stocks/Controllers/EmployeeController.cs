@@ -358,7 +358,7 @@ namespace Stocks.Controllers
 
                     .Get(filter: m => m.EmployeeID == model.EmployeeID);
 
-                    if (oldcards != null)
+                    if ( oldcards != null)
                     {
 
                         unitOfWork.EmployeeCardRepository.RemovRange(oldcards);
@@ -416,7 +416,7 @@ namespace Stocks.Controllers
                             unitOfWork.EmployeeCardRepository.RemovRange(oldcards);
 
                         }
-                        if (newCards != null)
+                        if (newCards.Count() > 0 && newCards != null)
                         {
                             foreach (var item in newCards)
                             {
