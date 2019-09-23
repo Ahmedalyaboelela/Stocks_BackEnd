@@ -157,7 +157,7 @@ namespace BAL.Helper
                 //Add Debit Accounts with values
                 #region Debit
                 EntryDetailModel DetailModel1 = new EntryDetailModel();
-                DetailModel1.Credit = TotalNet;
+                DetailModel1.Debit = TotalNet;
                 DetailModel1.AccountID = AccPuchaseStocks;
                 DetailListModel.Add(DetailModel1);
                 EntryDetailModel DetailModel2 = new EntryDetailModel();
@@ -174,7 +174,7 @@ namespace BAL.Helper
                 #region Credit
 
                 EntryDetailModel DetailModel4 = new EntryDetailModel();
-                DetailModel4.Debit = TotalSTocksPurchase;
+                DetailModel4.Credit = TotalSTocksPurchase;
                 DetailModel4.AccountID = portofolioaccount;
                 DetailListModel.Add(DetailModel4);
                 #endregion
@@ -436,7 +436,7 @@ namespace BAL.Helper
                 //Add Debit Accounts with values
                 #region Debit
                 EntryDetailModel DetailModel1 = new EntryDetailModel();
-                DetailModel1.Credit = TotalNet;
+                DetailModel1.Debit = TotalNet;
                 DetailModel1.AccountID = AccPuchaseStocks;
                 DetailModel1.EntryID = EntryID;
                 DetailListModel.Add(DetailModel1);
@@ -456,7 +456,7 @@ namespace BAL.Helper
                 #region Credit
  
                 EntryDetailModel DetailModel4 = new EntryDetailModel();
-                DetailModel4.Debit = TotalSTocksPurchase;
+                DetailModel4.Credit = TotalSTocksPurchase;
                 DetailModel4.AccountID = portofolioaccount;
                 DetailModel4.EntryID = EntryID;
                 DetailListModel.Add(DetailModel4);

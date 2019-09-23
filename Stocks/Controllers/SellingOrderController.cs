@@ -750,7 +750,7 @@ namespace Stocks.Controllers
                         }
                         else
                         {
-                            Entry.TransferedToAccounts = true;
+                            Entry.TransferedToAccounts = false;
                             unitOfWork.EntryRepository.Insert(Entry);
                             foreach (var item in DetailEnt)
                             {
@@ -762,27 +762,7 @@ namespace Stocks.Controllers
                             }
                         }
                     }
-                    //================================توليد قيد مع عدم الترحيل====================================== 
-                    //else if (sellingOrderModel.SettingModel.GenerateEntry == true)
-
-                    //{
-                    //    var lastEntry = unitOfWork.EntryRepository.Last();
-                    //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(sellingOrderModel, null, null, null, lastEntry);
-                    //    EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
-                    //    var Entry = _mapper.Map<Entry>(EntryMODEL);
-                    //    var DetailEnt = EntryMODEL.EntryDetailModel;
-                    //    Entry.TransferedToAccounts = false;
-                    //    unitOfWork.EntryRepository.Insert(Entry);
-                    //    foreach (var item in DetailEnt)
-                    //    {
-                    //        item.EntryID = Entry.EntryID;
-                    //        item.EntryDetailID = 0;
-                    //        var details = _mapper.Map<EntryDetail>(item);
-
-                    //        unitOfWork.EntryDetailRepository.Insert(details);
-                    //    }
-                    //}
-
+         
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
@@ -838,7 +818,7 @@ namespace Stocks.Controllers
                 var sellingOrder = _mapper.Map<SellingOrder>(sellingOrderModel);
                 var NewdDetails = sellingOrderModel.DetailsModels;
                 var Newdetails = _mapper.Map<IEnumerable<SellingOrderDetail>>(NewdDetails);
-                var OldDetails = unitOfWork.SellingOrderDetailRepository.Get(filter: m => m.SellingOrderID == sellingOrder.SellingOrderID);
+                var OldDetails = unitOfWork.SellingOrderDetailRepository.Get(NoTrack: "NoTrack",filter: m => m.SellingOrderID == sellingOrder.SellingOrderID);
                 #region Warehouse
                 //Cancel Selling Order From Stocks 
                 _stocksHelper.CancelSellingFromStocks(sellingOrderModel.PortfolioID, OldDetails);
@@ -850,18 +830,20 @@ namespace Stocks.Controllers
                 else
                  _stocksHelper.TransferSellingFromStocks(sellingOrderModel);
                 #endregion
-                var EntryCheck = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == sellingOrder.SellingOrderID).SingleOrDefault();
+                var EntryCheck = unitOfWork.EntryRepository.Get(x => x.SellingOrderID == sellingOrder.SellingOrderID, NoTrack: "NoTrack").SingleOrDefault();
               if (EntryCheck != null)
               {
 
-                  var Entry = unitOfWork.EntryRepository.Get(filter: x => x.SellingOrderID == sellingOrder.SellingOrderID).SingleOrDefault();
+                    // get old entry data
+                  var Entry = unitOfWork.EntryRepository.Get(NoTrack: "NoTrack",filter: x => x.SellingOrderID == sellingOrder.SellingOrderID).SingleOrDefault();
                   var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
                   if (Entry.TransferedToAccounts == true)
                   {
                       accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
                   }
+                  // delete old entry
                   unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
-                    unitOfWork.EntryRepository.Delete(Entry.EntryID);
+                  unitOfWork.EntryRepository.Delete(Entry.EntryID);
 
                   if (Check.Any(m => m.Code != sellingOrder.Code))
                   {
@@ -889,7 +871,7 @@ namespace Stocks.Controllers
                       //==================================================لا تولد قيد ===================================
                       if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                       {
-                          unitOfWork.EntryRepository.Delete(Entry.EntryID);
+                          //unitOfWork.EntryRepository.Delete(Entry.EntryID);
 
                             var reslt = unitOfWork.Save();
                             if (reslt == 200)
@@ -910,15 +892,22 @@ namespace Stocks.Controllers
                         //===================================توليد قيد مع ترحيل تلقائي===================================
                         if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                         {
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
+                            //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
+
+                            var lastEntry = unitOfWork.EntryRepository.Last();
+                    
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
+                            EntryMODEL.SellingOrderID = sellingOrderModel.SellingOrderID;
+                            var NewEntry = _mapper.Map<Entry>(EntryMODEL);
+                            var EntryDitails = EntryMODEL.EntryDetailModel;
 
                             if (sellingOrderModel.SettingModel.TransferToAccounts == true)
                             {
-                                Entry.TransferedToAccounts = true;
-                                unitOfWork.EntryRepository.Insert(Entry);
+                                NewEntry.TransferedToAccounts = true;
+                                unitOfWork.EntryRepository.Insert(NewEntry);
                                 foreach (var item in EntryDitails)
                                 {
-                                    item.EntryID = Entry.EntryID;
+                                    item.EntryID = NewEntry.EntryID;
                                     item.EntryDetailID = 0;
                                     var details = _mapper.Map<EntryDetail>(item);
 
@@ -942,11 +931,11 @@ namespace Stocks.Controllers
                             }
                             else
                             {
-                                Entry.TransferedToAccounts = true;
-                                unitOfWork.EntryRepository.Insert(Entry);
+                                NewEntry.TransferedToAccounts = false;
+                                unitOfWork.EntryRepository.Insert(NewEntry);
                                 foreach (var item in EntryDitails)
                                 {
-                                    item.EntryID = Entry.EntryID;
+                                    item.EntryID = NewEntry.EntryID;
                                     item.EntryDetailID = 0;
                                     var details = _mapper.Map<EntryDetail>(item);
 
@@ -1021,7 +1010,7 @@ namespace Stocks.Controllers
                           //==================================================لا تولد قيد ===================================
                           if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
                           {
-                              unitOfWork.EntryRepository.Delete(Entry.EntryID);
+                              //unitOfWork.EntryRepository.Delete(Entry.EntryID);
 
                             var res = unitOfWork.Save();
                             if (res == 200)
@@ -1042,15 +1031,21 @@ namespace Stocks.Controllers
                           //===================================توليد قيد مع ترحيل تلقائي===================================
                           if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
                           {
-                              var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
+                                //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
+                                var lastEntry = unitOfWork.EntryRepository.Last();
 
-                              if (sellingOrderModel.SettingModel.TransferToAccounts == true)
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, sellingOrderModel, null, null, null, lastEntry);
+                                EntryMODEL.SellingOrderID = sellingOrderModel.SellingOrderID;
+                                var NewEntry = _mapper.Map<Entry>(EntryMODEL);
+                                var EntryDitails = EntryMODEL.EntryDetailModel;
+
+                                if (sellingOrderModel.SettingModel.TransferToAccounts == true)
                               {
-                                  Entry.TransferedToAccounts = true;
-                                  unitOfWork.EntryRepository.Insert(Entry);
+                                  NewEntry.TransferedToAccounts = true;
+                                  unitOfWork.EntryRepository.Insert(NewEntry);
                                   foreach (var item in EntryDitails)
                                   {
-                                      item.EntryID = Entry.EntryID;
+                                      item.EntryID = NewEntry.EntryID;
                                       item.EntryDetailID = 0;
                                       var details = _mapper.Map<EntryDetail>(item);
 
@@ -1074,11 +1069,11 @@ namespace Stocks.Controllers
                               }
                                 else
                                 {
-                                    Entry.TransferedToAccounts = true;
-                                    unitOfWork.EntryRepository.Insert(Entry);
+                                    NewEntry.TransferedToAccounts = false;
+                                    unitOfWork.EntryRepository.Insert(NewEntry);
                                     foreach (var item in EntryDitails)
                                     {
-                                        item.EntryID = Entry.EntryID;
+                                        item.EntryID = NewEntry.EntryID;
                                         item.EntryDetailID = 0;
                                         var details = _mapper.Map<EntryDetail>(item);
 
@@ -1235,31 +1230,7 @@ namespace Stocks.Controllers
 
                         }
 
-                        //================================توليد قيد مع عدم الترحيل======================================
-
-                        //if (sellingOrderModel.SettingModel.GenerateEntry == true)
-
-
-                        // {
-                        //     var lastEntry = unitOfWork.EntryRepository.Last();
-                        //     var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
-                        //     EntryMODEL.SellingOrderID = sellingOrder.SellingOrderID;
-                        //     var Entry = _mapper.Map<Entry>(EntryMODEL);
-                        //     Entry.SellingOrderID = sellingOrder.SellingOrderID;
-
-                        //     var DetailEnt = EntryMODEL.EntryDetailModel;
-                        //     Entry.TransferedToAccounts = false;
-                        //     unitOfWork.EntryRepository.Insert(Entry);
-                        //     foreach (var item in DetailEnt)
-                        //     {
-                        //         item.EntryID = Entry.EntryID;
-                        //         item.EntryDetailID = 0;
-                        //         var details = _mapper.Map<EntryDetail>(item);
-
-                        //         unitOfWork.EntryDetailRepository.Insert(details);
-
-                        //     }
-                        // }
+                 
 
                         var Res = unitOfWork.Save();
                         if (Res == 200)
@@ -1390,7 +1361,7 @@ namespace Stocks.Controllers
 
                             else
                             {
-                                Entry.TransferedToAccounts = true;
+                                Entry.TransferedToAccounts = false;
                                 unitOfWork.EntryRepository.Insert(Entry);
                                 foreach (var item in DetailEnt)
                                 {
