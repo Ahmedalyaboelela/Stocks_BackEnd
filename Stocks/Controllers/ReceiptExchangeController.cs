@@ -674,13 +674,15 @@ namespace Stocks.Controllers
                 if (EntryCheck != null)
                 {
 
-                    var Entry = unitOfWork.EntryRepository.Get(filter: x => x.ReceiptID == ReceiptExchange.ReceiptID).SingleOrDefault();
-                    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
-                    if (Entry.TransferedToAccounts == true)
+                    var OldEntry = unitOfWork.EntryRepository.Get(filter: x => x.ReceiptID == ReceiptExchange.ReceiptID).SingleOrDefault();
+                    var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == OldEntry.EntryID);
+                    if (OldEntry.TransferedToAccounts == true)
                     {
                         accountingHelper.CancelTransferToAccounts(OldEntryDetails.ToList());
                     }
+                    // delete old entry
                     unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
+                    unitOfWork.EntryRepository.Delete(OldEntry);
 
                     if (Check.Any(m => m.Code != ReceiptExchange.Code))
                     {
@@ -705,15 +707,20 @@ namespace Stocks.Controllers
                             }
                         }
 
-                        
-                        //===================================توليد قيد مع ترحيل تلقائي===================================
-                       
-                            var EntryDitails = EntriesHelper.UpdateCalculateEntries(0,Entry.EntryID, null, null, receiptExchangeModel, null);
 
-                            if (receiptExchangeModel.SettingModel.TransferToAccounts == true)
+                        //===================================توليد قيد مع ترحيل تلقائي===================================
+
+                        //var EntryDitails = EntriesHelper.UpdateCalculateEntries(0,Entry.EntryID, null, null, receiptExchangeModel, null);
+                        var lastEntry = unitOfWork.EntryRepository.Last();
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0, null, null, receiptExchangeModel, null, lastEntry);
+                        var Entry = _mapper.Map<Entry>(EntryMODEL);
+                        Entry.ReceiptID = ReceiptExchange.ReceiptID;
+                        var EntryDitails = EntryMODEL.EntryDetailModel;
+
+                        if (receiptExchangeModel.SettingModel.TransferToAccounts == true)
                             {
                                 Entry.TransferedToAccounts = true;
-                                unitOfWork.EntryRepository.Update(Entry);
+                                unitOfWork.EntryRepository.Insert(Entry);
                                 foreach (var item in EntryDitails)
                                 {
                                     item.EntryID = Entry.EntryID;
@@ -739,7 +746,7 @@ namespace Stocks.Controllers
                             else
                             {
                                 Entry.TransferedToAccounts = false;
-                                unitOfWork.EntryRepository.Update(Entry);
+                                unitOfWork.EntryRepository.Insert(Entry);
                                 foreach (var item in EntryDitails)
                                 {
                                     item.EntryID = Entry.EntryID;
@@ -802,13 +809,17 @@ namespace Stocks.Controllers
 
 
                             //===================================توليد قيد مع ترحيل تلقائي===================================
-                          
-                                var EntryDitails = EntriesHelper.UpdateCalculateEntries(0,Entry.EntryID, null, null, receiptExchangeModel, null);
 
-                                if (receiptExchangeModel.SettingModel.TransferToAccounts == true)
+                            //var EntryDitails = EntriesHelper.UpdateCalculateEntries(0,Entry.EntryID, null, null, receiptExchangeModel, null);
+                            var lastEntry = unitOfWork.EntryRepository.Last();
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0, null, null, receiptExchangeModel, null, lastEntry);
+                            var Entry = _mapper.Map<Entry>(EntryMODEL);
+                            Entry.ReceiptID = ReceiptExchange.ReceiptID;
+                            var EntryDitails = EntryMODEL.EntryDetailModel;
+                            if (receiptExchangeModel.SettingModel.TransferToAccounts == true)
                                 {
                                     Entry.TransferedToAccounts = true;
-                                    unitOfWork.EntryRepository.Update(Entry);
+                                    unitOfWork.EntryRepository.Insert(Entry);
                                     foreach (var item in EntryDitails)
                                     {
                                         item.EntryID = Entry.EntryID;
