@@ -265,7 +265,11 @@ namespace Stocks.Controllers
                     return Ok(2);
                 }
                 else
-                {
+                { 
+                    if (empModel.BirthDate ==null)
+                    {
+                        empModel.BirthDate = DateTime.Now.ToString("d/M/yyyy");
+                    }
 
                     var model = _mapper.Map<Employee>(empModel);
                     

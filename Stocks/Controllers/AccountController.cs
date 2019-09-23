@@ -177,7 +177,7 @@ namespace Stocks.Controllers
         [Route("~/api/Account/GetAll")]
         public IActionResult GetAllSubAccount()
         {
-            var account = unitOfWork.AccountRepository.Get(filter: a => a.AccountType == false);
+            var account = unitOfWork.AccountRepository.Get(filter: a => a.AccountType == false);/*.Where(x=> x.NameAR.Contains(Search)||x.NameEN.Contains(Search) || x.Phone1.Contains(Search) || x.Phone2.Contains(Search));*/
             var model = _mapper.Map<IEnumerable<AccountModel>>(account);
 
             if (model == null)

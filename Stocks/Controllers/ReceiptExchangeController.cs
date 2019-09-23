@@ -570,8 +570,6 @@ namespace Stocks.Controllers
 
 
 
-                    if (recExcModel.SettingModel.AutoGenerateEntry == true)
-                    {
                         var lastEntry = unitOfWork.EntryRepository.Last();
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0, null, null, recExcModel, null, lastEntry);
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
@@ -621,7 +619,7 @@ namespace Stocks.Controllers
 
 
 
-                    }
+                    
 
 
                     var Res = unitOfWork.Save();
@@ -709,8 +707,7 @@ namespace Stocks.Controllers
 
                         
                         //===================================توليد قيد مع ترحيل تلقائي===================================
-                        if (receiptExchangeModel.SettingModel.AutoGenerateEntry == true)
-                        {
+                       
                             var EntryDitails = EntriesHelper.UpdateCalculateEntries(0,Entry.EntryID, null, null, receiptExchangeModel, null);
 
                             if (receiptExchangeModel.SettingModel.TransferToAccounts == true)
@@ -753,7 +750,7 @@ namespace Stocks.Controllers
                                 }
                             }
 
-                        }
+                        
 
 
                         var Res = unitOfWork.Save();
@@ -805,8 +802,7 @@ namespace Stocks.Controllers
 
 
                             //===================================توليد قيد مع ترحيل تلقائي===================================
-                            if (receiptExchangeModel.SettingModel.AutoGenerateEntry == true)
-                            {
+                          
                                 var EntryDitails = EntriesHelper.UpdateCalculateEntries(0,Entry.EntryID, null, null, receiptExchangeModel, null);
 
                                 if (receiptExchangeModel.SettingModel.TransferToAccounts == true)
@@ -849,7 +845,7 @@ namespace Stocks.Controllers
                                     }
                                 }
 
-                            }
+                            
                             
                             }
 
@@ -909,8 +905,7 @@ namespace Stocks.Controllers
 
 
 
-                        if (receiptExchangeModel.SettingModel.AutoGenerateEntry == true)
-                        {
+                       
                             var lastEntry = unitOfWork.EntryRepository.Last();
                             var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0,null, null, receiptExchangeModel, null, lastEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
@@ -957,7 +952,7 @@ namespace Stocks.Controllers
                                     unitOfWork.EntryDetailRepository.Insert(details);
                                 }
                             }
-                        }
+                        
 
 
                         var Res = unitOfWork.Save();
