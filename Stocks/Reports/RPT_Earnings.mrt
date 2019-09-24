@@ -597,6 +597,7 @@ TkSuQmCC</ImageBytes>
         </HeaderBand1>
         <DataDataSource2 Ref="21" type="DataBand" isKey="true">
           <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
           <ClientRectangle>0,3.28,7.72,0.3</ClientRectangle>
           <Components isList="true" count="6">
             <Text3 Ref="22" type="Text" isKey="true">
@@ -714,13 +715,13 @@ TkSuQmCC</ImageBytes>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>9/12/2019 5:51:03 AM</ReportChanged>
+  <ReportChanged>9/23/2019 8:32:15 PM</ReportChanged>
   <ReportCreated>9/11/2019 4:18:44 PM</ReportCreated>
-  <ReportFile>C:\Users\Administrator.KARIMDEV\Desktop\New folder\RPT_Earnings.mrt</ReportFile>
-  <ReportGuid>7ff39f23c6d2448888da2506d728e5be</ReportGuid>
+  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\RPT_Earnings.mrt</ReportFile>
+  <ReportGuid>129ed22405364392b2a3c14b1e6304a8</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Inches</ReportUnit>
-  <ReportVersion>2019.3.4.0</ReportVersion>
+  <ReportVersion>2019.3.5.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;

@@ -112,17 +112,35 @@ namespace Stocks.Controllers
             else
             {
                 if (untilldate == string.Empty)
+                {
                     UntillDate = null;
+                }
+
                 else
+                {
                     UntillDate = DateHelper.ChangeDateFormat(untilldate);
+                }
+
                 if (fromdate == string.Empty)
+                {
                     FromDate = null;
+                }
+
                 else
+                {
                     FromDate = DateHelper.ChangeDateFormat(fromdate);
+                }
+
                 if (todate == string.Empty)
+                {
                     ToDate = null;
+                }
+
                 else
+                {
                     ToDate = DateHelper.ChangeDateFormat(todate);
+                }
+
 
             }
             PortofolioDate = unitOfWork.PortfolioRepository.Get(filter: m => m.PortfolioID == portofolioid).Select(m => m.EstablishDate).SingleOrDefault();
@@ -145,6 +163,54 @@ namespace Stocks.Controllers
         }
         #endregion
 
+
+
+        #region Selling & Purchase Stocks 
+        [HttpPost]
+        [Route("~/api/ReportViewer/SellPurchase")]
+        public string SellPurchase([FromBody] JObject data)
+        {
+            #region ReportCalculation
+            DateTime StartDate, EndDate;
+            string startDate = data.GetValue("startDate").ToString();
+            string endDate = data.GetValue("endDate").ToString();
+            int portId = Convert.ToInt32(data.GetValue("portfolioId"));
+            int partId = Convert.ToInt32(data.GetValue("partnerId"));
+            if (startDate != string.Empty)
+            {
+                StartDate = DateHelper.ChangeDateFormat(startDate);
+            }
+            else
+            {
+                StartDate = DateTime.Now;
+            }
+            if (endDate != string.Empty)
+            {
+                EndDate = DateHelper.ChangeDateFormat(endDate);
+            }
+            else
+            {
+                EndDate = DateTime.Now;
+            }
+            #endregion
+
+
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_SellingPurchasing.mrt");
+            report.Load(path);
+            report["@portfolioId"] = portId;
+            report["@partnerId"] = partId;
+            report["@startdate"] = StartDate;
+            report["@enddate"] = EndDate;
+
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+        }
+
+        #endregion
 
         #region   portfolio Evaluateport
 
@@ -262,30 +328,6 @@ namespace Stocks.Controllers
         #endregion
 
 
-        #region Selling & Purchase Stocks 
-        [HttpGet]
-        [Route("~/api/ReportViewer/SellPurchase/{portId}/{partId}/{startDate}/{endDate}")]
-        public string SellPurchase(int portId,int partId,string startDate,string endDate)
-        {
-            startDate = startDate.Replace('-', '/');
-            endDate = endDate.Replace('-', '/');
-
-            StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_SellingPurchasing.mrt");
-            report.Load(path);
-            report["@portfolioId"] = portId;
-            report["@partnerId"] = partId;
-            report["@startdate"] = DateTime.Parse(startDate).ToString("yyyy-MM-dd");
-            report["@enddate"] = DateTime.Parse(endDate).ToString("yyyy-MM-dd") ;
-
-            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
-            dbMS_SQL.ConnectionString =  _appSettings.Report_Connection;
-            report.Render(false);
-
-            return report.SaveDocumentJsonToString();
-        }
-
-        #endregion
 
         #region Profits in year
         [HttpGet]
@@ -315,22 +357,41 @@ namespace Stocks.Controllers
 
 
         #region total profits in all years
-        [HttpGet]
-        [Route("~/api/ReportViewer/TotalProfitsAllYears/{portId}/{startDate}/{endDate}")]
-        public string TotalProfitsAllYears(int? portId, string startDate, string endDate)
+        [HttpPost]
+        [Route("~/api/ReportViewer/TotalProfitsAllYears")]
+        public string TotalProfitsAllYears([FromBody] JObject data)
         {
-            startDate = startDate.Replace('-', '/');
-            endDate = endDate.Replace('-', '/');
+            DateTime StartDate, EndDate;
+            string startDate = data.GetValue("startDate").ToString();
+            string endDate = data.GetValue("endDate").ToString();
+            int? portId = Convert.ToInt32(data.GetValue("portId"));
 
             if (portId == 0)
                 portId = null;
+
+            if (startDate != string.Empty)
+            {
+                StartDate = DateHelper.ChangeDateFormat(startDate);
+            }
+            else
+            {
+                StartDate = DateTime.Now;
+            }
+            if (endDate != string.Empty)
+            {
+                EndDate = DateHelper.ChangeDateFormat(endDate);
+            }
+            else
+            {
+                EndDate = DateTime.Now;
+            }
 
             StiReport report = new StiReport();
             var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_TotalProfitsInYears.mrt");
             report.Load(path);
             report["@portfolioId"] = portId;
-            report["@startdate"] = DateTime.Parse(startDate).ToString("yyyy-MM-dd");
-            report["@enddate"] = DateTime.Parse(endDate).ToString("yyyy-MM-dd");
+            report["@startdate"] = StartDate;
+            report["@enddate"] = EndDate;
 
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
@@ -340,31 +401,46 @@ namespace Stocks.Controllers
         }
         #endregion
 
-        [HttpGet]
+        [HttpPost]
         [Route("~/api/ReportViewer/CompaniesSharesInPortfolio")]
-        public string CompaniesSharesInPortfolio([FromQuery]int portfolioID, [FromQuery] string fromDate, [FromQuery] string toDate)
+        public string CompaniesSharesInPortfolio([FromBody] JObject data)
         {
-            StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_CompaniesSharesInPortfolio.mrt");
-            DateTime fDate;
-            if (fromDate != null)
+
+            #region ReportCalculation
+            DateTime StartDate, EndDate;
+            string fromDate = data.GetValue("fromDate").ToString();
+            string toDate = data.GetValue("toDate").ToString();
+            int portfolioID = Convert.ToInt32(data.GetValue("portfolioID"));
+            if (fromDate != string.Empty)
             {
-                fDate = DateTime.ParseExact(fromDate, "d/M/yyyy", CultureInfo.InvariantCulture);
+                StartDate = DateHelper.ChangeDateFormat(fromDate);
             }
             else
             {
-                fDate = new DateTime(2000, 1, 1);
+                StartDate = DateTime.Now;
             }
-            DateTime tDate = DateTime.ParseExact(toDate, "d/M/yyyy", CultureInfo.InvariantCulture);
-            if (tDate < fDate)
+            if (toDate != string.Empty)
+            {
+                EndDate = DateHelper.ChangeDateFormat(toDate);
+            }
+            else
+            {
+                EndDate = DateTime.Now;
+            }
+            if (EndDate < StartDate)
             {
                 return "Bad Request";
             }
+            #endregion
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_CompaniesSharesInPortfolio.mrt");
+
+
 
             report.Load(path);
             report["@PortfolioID"] = portfolioID;
-            report["@FromDate"] = fDate.ToString("yyyy-MM-dd");
-            report["@ToDate"] = tDate.ToString("yyyy-MM-dd");
+            report["@FromDate"] = StartDate;
+            report["@ToDate"] = EndDate;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
             report.Render(false);
