@@ -171,7 +171,7 @@ namespace Stocks.Controllers
         public string SellPurchase([FromBody] JObject data)
         {
             #region ReportCalculation
-            DateTime StartDate, EndDate;
+            DateTime? StartDate, EndDate;
             string startDate = data.GetValue("startDate").ToString();
             string endDate = data.GetValue("endDate").ToString();
             int portId = Convert.ToInt32(data.GetValue("portfolioId"));
@@ -182,7 +182,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                StartDate = DateTime.Now;
+                StartDate = null;
             }
             if (endDate != string.Empty)
             {
@@ -361,10 +361,12 @@ namespace Stocks.Controllers
         [Route("~/api/ReportViewer/TotalProfitsAllYears")]
         public string TotalProfitsAllYears([FromBody] JObject data)
         {
-            DateTime StartDate, EndDate;
+            DateTime? StartDate, EndDate;
             string startDate = data.GetValue("startDate").ToString();
             string endDate = data.GetValue("endDate").ToString();
-            int? portId = Convert.ToInt32(data.GetValue("portId"));
+            int? portId = null;
+            if ( data.GetValue("portId").ToString()!="")
+               Convert.ToInt32(data.GetValue("portId"));
 
             if (portId == 0)
                 portId = null;
@@ -372,10 +374,11 @@ namespace Stocks.Controllers
             if (startDate != string.Empty)
             {
                 StartDate = DateHelper.ChangeDateFormat(startDate);
+
             }
             else
             {
-                StartDate = DateTime.Now;
+                StartDate = null;
             }
             if (endDate != string.Empty)
             {
