@@ -458,51 +458,73 @@ namespace Stocks.Controllers
 
 
 
+        //	الارباح الموزعة للسهم الواحد وعدد الاسهم المجانية 10
+
+        [HttpPost]
+        [Route("~/api/ReportViewer/ProfitsDistributor")]
+        public string ProfitsDistributor([FromBody] JObject data)
+        {
+            DateTime Enddate;
+
+            DateTime Startdate;
+            int portID = Convert.ToInt32(data.GetValue("portID"));
+            string startdate= data.GetValue("startdate").ToString();
+            string enddate= data.GetValue("enddate").ToString();
+            Enddate = DateHelper.ChangeDateFormat(enddate);
+            Startdate = DateHelper.ChangeDateFormat(startdate);
 
 
-        //[HttpGet]
-        //[Route("~/api/ReportViewer/ProfitsDistributor")]
-        //public string ProfitsDistributor([FromBody] JObject data)
-        //{
-        //    DateTime ToDate;
+
+
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport.mrt");
+            report.Load(path);
+            report["@enddate"] = Enddate;
+            report["@startdate"] = Startdate;
+            report["@portID"] = portID;
            
-        //    int portID = Convert.ToInt32(data.GetValue("portID"));
-        //   // int accid = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == portID)
-        //   //.Select(m => m.AccountID).SingleOrDefault();
-        //   // decimal? debit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
-        //   //     .Select(m => m.Debit).SingleOrDefault() ?? 0;
-        //   // decimal? credit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
-        //   //     .Select(m => m.Credit).SingleOrDefault() ?? 0;
-        //   // decimal? opendebit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
-        //   //.Select(m => m.DebitOpenningBalance).SingleOrDefault() ?? 0;
-        //   // decimal? opencredit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
-        //   //     .Select(m => m.CreditOpenningBalance).SingleOrDefault() ?? 0;
-        //   // decimal? RiyalBalance = debit - credit;
+
+
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+            return report.SaveDocumentJsonToString();
+        }
 
 
 
-        //    if (todate != string.Empty)
-        //    {
-        //        ToDate = DateHelper.ChangeDateFormat(todate);
-        //    }
-        //    else
-        //    {
-        //        ToDate = DateTime.Now;
-        //    }
+  //    9-	توزيع الارباح المحصلة على السنة موزعة على الارباع
 
-        //    StiReport report = new StiReport();
-        //    var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport.mrt");
-        //    report.Load(path);
-        //    report["@enddate"] = ToDate;
-        //    report["@portID"] = portID;
-        //    report["RiyalBalance"] = RiyalBalance;
+        [HttpPost]
+        [Route("~/api/ReportViewer/Earningscollected")]
+        public string Earningscollected([FromBody] JObject data)
+        {
+            DateTime Enddate;
+
+            DateTime Startdate;
+            int portID = Convert.ToInt32(data.GetValue("portID"));
+            string startdate = data.GetValue("startdate").ToString();
+            string enddate = data.GetValue("enddate").ToString();
+            Enddate = DateHelper.ChangeDateFormat(enddate);
+            Startdate = DateHelper.ChangeDateFormat(startdate);
 
 
-        //    var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
-        //    dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
-        //    report.Render(false);
-        //    return report.SaveDocumentJsonToString();
-        //}
+
+
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport.mrt");
+            report.Load(path);
+            report["@enddate"] = Enddate;
+            report["@startdate"] = Startdate;
+            report["@portID"] = portID;
+
+
+
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+            return report.SaveDocumentJsonToString();
+        }
 
 
     }
