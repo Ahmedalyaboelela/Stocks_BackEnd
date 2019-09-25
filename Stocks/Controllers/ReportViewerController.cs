@@ -95,7 +95,7 @@ namespace Stocks.Controllers
         [HttpPost]
         [Route("~/api/ReportViewer/CashMovementReyalPortofolio")]
         public string CashMovementReyalPortofolio([FromBody] JObject data)
-        {
+         {
             #region ReportCalculation
             DateTime? ToDate, FromDate,UntillDate,PortofolioDate;
             string todate = data.GetValue("todate").ToString();
@@ -138,7 +138,7 @@ namespace Stocks.Controllers
 
                 else
                 {
-                    ToDate = DateHelper.ChangeDateFormat(todate);
+                    ToDate = DateHelper.ChangeDateFormat(todate);  
                 }
 
 
