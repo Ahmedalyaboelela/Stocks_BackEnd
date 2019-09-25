@@ -37,7 +37,7 @@ namespace Stocks.Controllers
 
         public IEnumerable<PortfolioModel> GetAllIOSAndroid(int pageNumber)
         {
-            if (unitOfWork.PortfolioRepository.GetMobilApp(page: pageNumber) != null || unitOfWork.PortfolioRepository.GetMobilApp(page: pageNumber).Count() !=0)
+            if ( unitOfWork.PortfolioRepository.GetMobilApp(page: pageNumber).Count() !=0)
             {
                 var model = unitOfWork.PortfolioRepository.GetMobilApp(page: pageNumber).Select(m => new PortfolioModel
                 {
@@ -201,7 +201,7 @@ namespace Stocks.Controllers
 
         public IEnumerable<SellingOrderModel> GetAllportEmpSelling(int EmpID)
         {
-            if (unitOfWork.SellingOrderReposetory.Get(filter: x => x.EmployeeID == EmpID) != null || unitOfWork.SellingOrderReposetory.Get(filter: x => x.EmployeeID == EmpID).Count()!=0)
+            if ( unitOfWork.SellingOrderReposetory.Get(filter: x => x.EmployeeID == EmpID).Count()!=0)
             {
                 var model = unitOfWork.SellingOrderReposetory.Get(filter: x => x.EmployeeID == EmpID).Select(m => new SellingOrderModel
                 {
@@ -259,7 +259,7 @@ namespace Stocks.Controllers
         [Route("~/api/IOSAndroid/GetAllportEmppurchase/{EmpID}")]
         public IEnumerable<PurchaseOrderModel> GetAllportEmppurchase(int EmpID)
         { 
-            if (unitOfWork.PurchaseOrderRepository.Get(filter: x => x.EmployeeID == EmpID) != null || unitOfWork.PurchaseOrderRepository.Get(filter: x => x.EmployeeID == EmpID).Count() !=0)
+            if ( unitOfWork.PurchaseOrderRepository.Get(filter: x => x.EmployeeID == EmpID).Count() !=0)
             {
                 var model = unitOfWork.PurchaseOrderRepository.Get(filter: x => x.EmployeeID == EmpID).Select(m => new PurchaseOrderModel
                 {
@@ -319,7 +319,7 @@ namespace Stocks.Controllers
         [Route("~/api/IOSAndroid/GetAllEmps")]
         public IActionResult GetAllEmps()
         { 
-            if (unitOfWork.EmployeeRepository.Get() != null || unitOfWork.EmployeeRepository.Get().Count() !=0)
+            if ( unitOfWork.EmployeeRepository.Get().Count() !=0)
             {
                 var Emps = unitOfWork.EmployeeRepository.Get(filter: x => x.IsInternal == true).Select(m => new EmployeeModel
                 {
@@ -411,7 +411,7 @@ namespace Stocks.Controllers
         [Route("~/api/IOSAndroid/GetAllports")] 
         public IEnumerable<GetAllPortsIOS> GetAllports()
         { 
-            if (unitOfWork.PortfolioRepository.Get()!=null || unitOfWork.PortfolioRepository.Get().Count()!=0)
+            if (unitOfWork.PortfolioRepository.Get().Count()!=0)
             {
                 var model = unitOfWork.PortfolioRepository.Get().Select(m => new GetAllPortsIOS
                 {
@@ -433,7 +433,7 @@ namespace Stocks.Controllers
         [Route("~/api/IOSAndroid/GetpartenersByport/{portID}")]
         public IEnumerable<PortfolioTransactionModel> GetAllparteners(int portID)
         {
-            if (unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == portID) != null || unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == portID).Count() !=0)
+            if (unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == portID).Count() !=0)
             {
                 var model = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == portID).Select(m => new PortfolioTransactionModel
                 {
