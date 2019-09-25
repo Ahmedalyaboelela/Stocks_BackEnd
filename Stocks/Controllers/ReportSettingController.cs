@@ -33,7 +33,7 @@ namespace Stocks.Controllers
         public IActionResult GetAllPortfolios([FromBody] JObject data)
         {
 
-            DateTime date = DateTime.Parse(data.GetValue("DayDate").ToString());
+            DateTime date = DateHelper.ChangeDateFormat(data.GetValue("DayDate").ToString());
             int portID= Convert.ToInt32(data.GetValue("PortfolioID"));
 
             var Check = unitOfWork.ReportSettingRepository.Get(filter: x => x.PortfolioID == portID && x.CurrentDate == date);
@@ -96,7 +96,7 @@ namespace Stocks.Controllers
         public IActionResult PostReportSetting([FromBody] ReportSettingModel [] reportSettingModels, int portID, string DayDate)
         {
             DayDate = DayDate.Replace('-', '/');
-            DateTime date = DateTime.Parse(DayDate);
+            DateTime date = DateHelper.ChangeDateFormat(DayDate) ;
 
             var Check = unitOfWork.ReportSettingRepository.Get(NoTrack: "NoTrack");
 
