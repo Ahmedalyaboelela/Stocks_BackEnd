@@ -364,7 +364,7 @@ namespace Stocks.Controllers
         public string CodePur()
         {
             var LastCode = "";
-            if (unitOfWork.PurchaseOrderRepository.Last().Code != null)
+            if (unitOfWork.PurchaseOrderRepository.Count() != 0)
             {
                  LastCode = unitOfWork.PurchaseOrderRepository.Last().Code;
                
@@ -391,7 +391,7 @@ namespace Stocks.Controllers
         {
 
             var LastCode = "";
-            if (unitOfWork.SellingOrderReposetory.Last().Code != null)
+            if (unitOfWork.SellingOrderReposetory.Count() != 0)
             {
                 LastCode = unitOfWork.PurchaseOrderRepository.Last().Code;
 
