@@ -328,18 +328,23 @@ namespace Stocks.Controllers
         [Route("~/api/IOSAndroid/CodePur")]
         public string CodePur()
         {
-            
-          
-                 var LastCode = unitOfWork.PurchaseOrderRepository.Last().Code; 
-
-            if (LastCode == null)
+            var LastCode = "";
+            if (unitOfWork.PurchaseOrderRepository.Last().Code != null)
+            {
+                 LastCode = unitOfWork.PurchaseOrderRepository.Last().Code;
+               
+            }
+            else
             {
                 LastCode = "1";
+
             }
-               
-            
-          
-        
+
+
+
+
+
+
 
             return LastCode;
         }
@@ -350,23 +355,21 @@ namespace Stocks.Controllers
         public string CodeSell()
         {
 
-            var LastCode = unitOfWork.SellingOrderReposetory.Last().Code;
+            var LastCode = "";
+            if (unitOfWork.SellingOrderReposetory.Last().Code != null)
+            {
+                LastCode = unitOfWork.PurchaseOrderRepository.Last().Code;
 
-            if (LastCode == null)
+            }
+            else
             {
                 LastCode = "1";
+
             }
-
-
-
-
 
             return LastCode;
 
 
-
-
-            
         }
 
 

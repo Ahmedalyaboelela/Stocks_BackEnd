@@ -46,15 +46,319 @@
     <Page1 Ref="4" type="Page" isKey="true">
       <Border>None;White;2;Solid;False;4;White</Border>
       <Brush>Transparent</Brush>
-      <Components isList="true" count="7">
-        <ReportTitle Ref="5" type="ReportTitleBand" isKey="true">
+      <Components isList="true" count="8">
+        <PageHeaderBand1 Ref="5" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,0.4,27.7,1.4</ClientRectangle>
+          <ClientRectangle>0,0.4,23.7,3</ClientRectangle>
           <Components isList="true" count="1">
-            <ReportTitleText Ref="6" type="Text" isKey="true">
+            <Image1 Ref="6" type="Image" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.01,0,26.95,3.38</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Guid>7a2a96f981c247d4b3eb39a1a734551f</Guid>
+              <ImageBytes>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
+TkSuQmCC</ImageBytes>
+              <Margins>0,0,0,0</Margins>
+              <Name>Image1</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+            </Image1>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>0bea1ece98d54376aaf94eafd7ca91b3</Guid>
+          <Name>PageHeaderBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </PageHeaderBand1>
+        <ReportTitle Ref="7" type="ReportTitleBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,4.2,23.7,1.4</ClientRectangle>
+          <Components isList="true" count="1">
+            <ReportTitleText Ref="8" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
-              <ClientRectangle>0,0,27.7,1.4</ClientRectangle>
+              <ClientRectangle>0,0.8,27.7,1.4</ClientRectangle>
               <ComponentStyle>Blue Steel_Report_Title1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,14,Bold</Font>
@@ -63,7 +367,7 @@
               <Margins>0,0,0,0</Margins>
               <Name>ReportTitleText</Name>
               <Page isRef="4" />
-              <Parent isRef="5" />
+              <Parent isRef="7" />
               <Text>اجمالي الأرباح المحصلة حسب السنوات</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <Type>Expression</Type>
@@ -75,15 +379,15 @@
           <Page isRef="4" />
           <Parent isRef="4" />
         </ReportTitle>
-        <HeaderDataSource Ref="7" type="HeaderBand" isKey="true">
+        <HeaderDataSource Ref="9" type="HeaderBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,2.6,27.7,0.6</ClientRectangle>
+          <ClientRectangle>0,6.4,23.7,0.6</ClientRectangle>
           <Components isList="true" count="4">
-            <HeaderTextDataSource2 Ref="8" type="Text" isKey="true">
+            <HeaderTextDataSource2 Ref="10" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>13.6,0,7,0.6</ClientRectangle>
+              <ClientRectangle>14.2,0,6,0.6</ClientRectangle>
               <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
@@ -92,18 +396,18 @@
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource2</Name>
               <Page isRef="4" />
-              <Parent isRef="7" />
+              <Parent isRef="9" />
               <Text>المحفظة</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </HeaderTextDataSource2>
-            <HeaderTextDataSource3 Ref="9" type="Text" isKey="true">
+            <HeaderTextDataSource3 Ref="11" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>0,0,7,0.6</ClientRectangle>
+              <ClientRectangle>2.2,0,6,0.6</ClientRectangle>
               <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
@@ -112,18 +416,18 @@
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource3</Name>
               <Page isRef="4" />
-              <Parent isRef="7" />
+              <Parent isRef="9" />
               <Text>الأرباح</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </HeaderTextDataSource3>
-            <HeaderTextDataSource4 Ref="10" type="Text" isKey="true">
+            <HeaderTextDataSource4 Ref="12" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>7,0,6.6,0.6</ClientRectangle>
+              <ClientRectangle>8.2,0,6,0.6</ClientRectangle>
               <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
@@ -132,18 +436,18 @@
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource4</Name>
               <Page isRef="4" />
-              <Parent isRef="7" />
+              <Parent isRef="9" />
               <Text>العام</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </HeaderTextDataSource4>
-            <HeaderTextDataSource1 Ref="11" type="Text" isKey="true">
+            <HeaderTextDataSource1 Ref="13" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>20.6,0,7,0.6</ClientRectangle>
+              <ClientRectangle>17.6,0,6,0.6</ClientRectangle>
               <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
@@ -152,7 +456,7 @@
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource1</Name>
               <Page isRef="4" />
-              <Parent isRef="7" />
+              <Parent isRef="9" />
               <Text>اسم الشركة</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -165,15 +469,15 @@
           <Page isRef="4" />
           <Parent isRef="4" />
         </HeaderDataSource>
-        <GroupHeaderDataSource0 Ref="12" type="GroupHeaderBand" isKey="true">
+        <GroupHeaderDataSource0 Ref="14" type="GroupHeaderBand" isKey="true">
           <Brush>EmptyBrush</Brush>
-          <ClientRectangle>0,4,27.7,0.8</ClientRectangle>
+          <ClientRectangle>0,7.8,23.7,0.8</ClientRectangle>
           <Components isList="true" count="1">
-            <GroupHeaderTextDataSource0 Ref="13" type="Text" isKey="true">
+            <GroupHeaderTextDataSource0 Ref="15" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>7,0.4,6.7,0.8</ClientRectangle>
+              <ClientRectangle>8.4,0.2,4,0.8</ClientRectangle>
               <ComponentStyle>Blue Steel_Report_Title2</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,10,Bold</Font>
@@ -182,7 +486,7 @@
               <Margins>0,0,0,0</Margins>
               <Name>GroupHeaderTextDataSource0</Name>
               <Page isRef="4" />
-              <Parent isRef="12" />
+              <Parent isRef="14" />
               <Text>{DataSource._Year}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -195,36 +499,16 @@
           <Page isRef="4" />
           <Parent isRef="4" />
         </GroupHeaderDataSource0>
-        <DataDataSource Ref="14" type="DataBand" isKey="true">
+        <DataDataSource Ref="16" type="DataBand" isKey="true">
           <Brush>Transparent</Brush>
           <BusinessObjectGuid isNull="true" />
-          <ClientRectangle>0,5.6,27.7,0.6</ClientRectangle>
+          <ClientRectangle>0,9.4,23.7,0.6</ClientRectangle>
           <Components isList="true" count="4">
-            <DataTextDataSource2 Ref="15" type="Text" isKey="true">
+            <DataTextDataSource3 Ref="17" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>13.6,0,7,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource2</Name>
-              <Page isRef="4" />
-              <Parent isRef="14" />
-              <Text>{DataSource.Potfolio}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource2>
-            <DataTextDataSource3 Ref="16" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>0,0,7,0.6</ClientRectangle>
+              <ClientRectangle>2.2,0,4,1</ClientRectangle>
               <ComponentStyle>Blue Steel_Data1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
@@ -233,38 +517,18 @@
               <Margins>0,0,0,0</Margins>
               <Name>DataTextDataSource3</Name>
               <Page isRef="4" />
-              <Parent isRef="14" />
+              <Parent isRef="16" />
               <Text>{DataSource.Profit}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
               <VertAlignment>Center</VertAlignment>
             </DataTextDataSource3>
-            <DataTextDataSource4 Ref="17" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>7,0,6.6,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource4</Name>
-              <Page isRef="4" />
-              <Parent isRef="14" />
-              <Text>{DataSource._Year}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource4>
             <DataTextDataSource1 Ref="18" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>20.6,0,7,0.6</ClientRectangle>
+              <ClientRectangle>19.4,0,4.2,1</ClientRectangle>
               <ComponentStyle>Blue Steel_Data1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
@@ -273,13 +537,53 @@
               <Margins>0,0,0,0</Margins>
               <Name>DataTextDataSource1</Name>
               <Page isRef="4" />
-              <Parent isRef="14" />
+              <Parent isRef="16" />
               <Text>{DataSource.Partner}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
               <VertAlignment>Center</VertAlignment>
             </DataTextDataSource1>
+            <DataTextDataSource4 Ref="19" type="Text" isKey="true">
+              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>8.4,0,4,0.8</ClientRectangle>
+              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>DataTextDataSource4</Name>
+              <Page isRef="4" />
+              <Parent isRef="16" />
+              <Text>{DataSource._Year}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <TextQuality>Wysiwyg</TextQuality>
+              <VertAlignment>Center</VertAlignment>
+            </DataTextDataSource4>
+            <DataTextDataSource2 Ref="20" type="Text" isKey="true">
+              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>14.6,0,4,1</ClientRectangle>
+              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>DataTextDataSource2</Name>
+              <Page isRef="4" />
+              <Parent isRef="16" />
+              <Text>{DataSource.Potfolio}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <TextQuality>Wysiwyg</TextQuality>
+              <VertAlignment>Center</VertAlignment>
+            </DataTextDataSource2>
           </Components>
           <Conditions isList="true" count="0" />
           <DataSourceName>DataSource</DataSourceName>
@@ -292,14 +596,14 @@
           <Parent isRef="4" />
           <Sort isList="true" count="0" />
         </DataDataSource>
-        <GroupFooterBand1 Ref="19" type="GroupFooterBand" isKey="true">
+        <GroupFooterBand1 Ref="21" type="GroupFooterBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,7,27.7,0.8</ClientRectangle>
+          <ClientRectangle>0,10.8,23.7,1.2</ClientRectangle>
           <Components isList="true" count="2">
-            <Text1 Ref="20" type="Text" isKey="true">
+            <Text1 Ref="22" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
-              <ClientRectangle>20.6,0.2,7,0.6</ClientRectangle>
+              <ClientRectangle>19.6,0,4,1</ClientRectangle>
               <ComponentStyle>Blue Steel_Report_Title2</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,10,Bold</Font>
@@ -307,16 +611,16 @@
               <Margins>0,0,0,0</Margins>
               <Name>Text1</Name>
               <Page isRef="4" />
-              <Parent isRef="19" />
+              <Parent isRef="21" />
               <Text>المجموع</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text1>
-            <Text2 Ref="21" type="Text" isKey="true">
+            <Text2 Ref="23" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
-              <ClientRectangle>0,0.2,7,0.6</ClientRectangle>
+              <ClientRectangle>0.6,0,6,1</ClientRectangle>
               <ComponentStyle>Blue Steel_Report_Title2</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,10,Bold</Font>
@@ -324,7 +628,7 @@
               <Margins>0,0,0,0</Margins>
               <Name>Text2</Name>
               <Page isRef="4" />
-              <Parent isRef="19" />
+              <Parent isRef="21" />
               <Text>{Sum(DataSource.Profit)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <Type>Totals</Type>
@@ -336,18 +640,18 @@
           <Page isRef="4" />
           <Parent isRef="4" />
         </GroupFooterBand1>
-        <GroupFooterDataSource0 Ref="22" type="GroupFooterBand" isKey="true">
+        <GroupFooterDataSource0 Ref="24" type="GroupFooterBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,8.6,27.7,0.4</ClientRectangle>
+          <ClientRectangle>0,12.8,23.7,0.4</ClientRectangle>
           <Components isList="true" count="0" />
           <Conditions isList="true" count="0" />
           <Name>GroupFooterDataSource0</Name>
           <Page isRef="4" />
           <Parent isRef="4" />
         </GroupFooterDataSource0>
-        <FooterDataSource Ref="23" type="FooterBand" isKey="true">
+        <FooterDataSource Ref="25" type="FooterBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,9.8,27.7,0.6</ClientRectangle>
+          <ClientRectangle>0,14,23.7,0.6</ClientRectangle>
           <Components isList="true" count="0" />
           <Conditions isList="true" count="0" />
           <Name>FooterDataSource</Name>
@@ -360,8 +664,9 @@
       <Margins>1,1,1,1</Margins>
       <Name>Page1</Name>
       <Orientation>Landscape</Orientation>
-      <PageHeight>21</PageHeight>
-      <PageWidth>29.7</PageWidth>
+      <PageHeight>18.2</PageHeight>
+      <PageWidth>25.7</PageWidth>
+      <PaperSize>B5</PaperSize>
       <Report isRef="0" />
     </Page1>
   </Pages>
@@ -376,10 +681,10 @@
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>9/12/2019 4:11:40 PM</ReportChanged>
+  <ReportChanged>9/24/2019 1:37:55 PM</ReportChanged>
   <ReportCreated>9/11/2019 7:01:49 PM</ReportCreated>
-  <ReportFile>E:\Shrouk\Stocks_Project\Stocks_BackEnd\Stocks\Reports\RPT_TotalProfitsInYears.mrt</ReportFile>
-  <ReportGuid>7650c136238747148846a420e578579c</ReportGuid>
+  <ReportFile>C:\Users\Administrator.KARIMDEV\Desktop\New folder\RPT_TotalProfitsInYears.mrt</ReportFile>
+  <ReportGuid>447073ba8420432b9f4f1ee25415b782</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Centimeters</ReportUnit>
   <ReportVersion>2019.3.4.0</ReportVersion>
@@ -408,197 +713,197 @@ namespace Reports
 </Script>
   <ScriptLanguage>CSharp</ScriptLanguage>
   <Styles isList="true" count="12">
-    <Blue_x0020_Steel_Report_Title1 Ref="24" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item24 Ref="25" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>ReportTitle</Placement>
-          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item24>
-      </Conditions>
-      <Font>Arial,14,Bold</Font>
-      <Name>Blue Steel_Report_Title1</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Report_Title1>
-    <Blue_x0020_Steel_Report_Title2 Ref="26" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title1 Ref="26" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
         <Item26 Ref="27" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
-          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>ReportTitle</Placement>
-          <PlacementNestedLevel>2</PlacementNestedLevel>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
         </Item26>
       </Conditions>
-      <Font>Arial,10,Bold</Font>
-      <Name>Blue Steel_Report_Title2</Name>
+      <Font>Arial,14,Bold</Font>
+      <Name>Blue Steel_Report_Title1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Report_Title2>
-    <Blue_x0020_Steel_Report_Summary Ref="28" type="Stimulsoft.Report.StiStyle" isKey="true">
+    </Blue_x0020_Steel_Report_Title1>
+    <Blue_x0020_Steel_Report_Title2 Ref="28" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
         <Item28 Ref="29" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>ReportSummary</Placement>
-          <Type>ComponentType, Placement</Type>
+          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
+          <Placement>ReportTitle</Placement>
+          <PlacementNestedLevel>2</PlacementNestedLevel>
+          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
         </Item28>
       </Conditions>
       <Font>Arial,10,Bold</Font>
-      <Name>Blue Steel_Report_Summary</Name>
+      <Name>Blue Steel_Report_Title2</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Report_Summary>
-    <Blue_x0020_Steel_Page_Header Ref="30" type="Stimulsoft.Report.StiStyle" isKey="true">
+    </Blue_x0020_Steel_Report_Title2>
+    <Blue_x0020_Steel_Report_Summary Ref="30" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
         <Item30 Ref="31" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>PageHeader</Placement>
+          <Placement>ReportSummary</Placement>
           <Type>ComponentType, Placement</Type>
         </Item30>
       </Conditions>
-      <Font>Arial,10</Font>
-      <Name>Blue Steel_Page_Header</Name>
+      <Font>Arial,10,Bold</Font>
+      <Name>Blue Steel_Report_Summary</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>Black</TextBrush>
-    </Blue_x0020_Steel_Page_Header>
-    <Blue_x0020_Steel_Page_Footer Ref="32" type="Stimulsoft.Report.StiStyle" isKey="true">
+      <TextBrush>[79:129:189]</TextBrush>
+    </Blue_x0020_Steel_Report_Summary>
+    <Blue_x0020_Steel_Page_Header Ref="32" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
         <Item32 Ref="33" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>PageFooter</Placement>
+          <Placement>PageHeader</Placement>
           <Type>ComponentType, Placement</Type>
         </Item32>
+      </Conditions>
+      <Font>Arial,10</Font>
+      <Name>Blue Steel_Page_Header</Name>
+      <NegativeTextBrush>Red</NegativeTextBrush>
+      <TextBrush>Black</TextBrush>
+    </Blue_x0020_Steel_Page_Header>
+    <Blue_x0020_Steel_Page_Footer Ref="34" type="Stimulsoft.Report.StiStyle" isKey="true">
+      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <CollectionName>Blue Steel</CollectionName>
+      <Conditions isList="true" count="1">
+        <Item34 Ref="35" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+          <ComponentType>Text, Primitive, Image</ComponentType>
+          <Placement>PageFooter</Placement>
+          <Type>ComponentType, Placement</Type>
+        </Item34>
       </Conditions>
       <Font>Arial,10</Font>
       <Name>Blue Steel_Page_Footer</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Footer>
-    <Blue_x0020_Steel_Group_Header1 Ref="34" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item34 Ref="35" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
-          <Placement>GroupHeader</Placement>
-          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item34>
-      </Conditions>
-      <Font>Arial,13,Bold</Font>
-      <Name>Blue Steel_Group_Header1</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Group_Header1>
-    <Blue_x0020_Steel_Group_Footer1 Ref="36" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Header1 Ref="36" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
         <Item36 Ref="37" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>GroupFooter</Placement>
+          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
+          <Placement>GroupHeader</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
         </Item36>
+      </Conditions>
+      <Font>Arial,13,Bold</Font>
+      <Name>Blue Steel_Group_Header1</Name>
+      <NegativeTextBrush>Red</NegativeTextBrush>
+      <TextBrush>[79:129:189]</TextBrush>
+    </Blue_x0020_Steel_Group_Header1>
+    <Blue_x0020_Steel_Group_Footer1 Ref="38" type="Stimulsoft.Report.StiStyle" isKey="true">
+      <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <CollectionName>Blue Steel</CollectionName>
+      <Conditions isList="true" count="1">
+        <Item38 Ref="39" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+          <ComponentType>Text, Primitive, Image</ComponentType>
+          <Placement>GroupFooter</Placement>
+          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
+        </Item38>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Group_Footer1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Footer1>
-    <Blue_x0020_Steel_Header1 Ref="38" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Header1 Ref="40" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
       <Brush>[79:129:189]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item38 Ref="39" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item40 Ref="41" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Header</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item38>
+        </Item40>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Header1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>White</TextBrush>
     </Blue_x0020_Steel_Header1>
-    <Blue_x0020_Steel_Data1 Ref="40" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1 Ref="42" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item40 Ref="41" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item42 Ref="43" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image, CheckBox</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Data</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item40>
+        </Item42>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1>
-    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="42" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="44" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[255:255:255]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item42 Ref="43" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item44 Ref="45" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataOddStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item42>
+        </Item44>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Odd Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Odd_x0020_Style>
-    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="44" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="46" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[216:216:216]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item44 Ref="45" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item46 Ref="47" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataEvenStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item44>
+        </Item46>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Even Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Even_x0020_Style>
-    <Blue_x0020_Steel_Footer1 Ref="46" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Footer1 Ref="48" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black</Border>
       <Brush>White</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item46 Ref="47" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item48 Ref="49" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>Footer</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item46>
+        </Item48>
       </Conditions>
       <Font>Arial,8.25,Bold,Point,False,204</Font>
       <Name>Blue Steel_Footer1</Name>

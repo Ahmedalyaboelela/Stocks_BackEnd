@@ -46,7 +46,7 @@
     <Page1 Ref="4" type="Page" isKey="true">
       <Border>None;Black;2;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
-      <Components isList="true" count="9">
+      <Components isList="true" count="5">
         <PageHeaderBand1 Ref="5" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,0.2,7.72,1.18</ClientRectangle>
@@ -351,90 +351,11 @@ TkSuQmCC</ImageBytes>
           <Page isRef="4" />
           <Parent isRef="4" />
         </PageHeaderBand1>
-        <Text9 Ref="7" type="Text" isKey="true">
-          <Brush>SteelBlue</Brush>
-          <ClientRectangle>7,3.6,0.7,0.3</ClientRectangle>
-          <Conditions isList="true" count="0" />
-          <Font>Arial,8,Bold</Font>
-          <Guid>da04d317c68e4dd483b98b401f7bedbe</Guid>
-          <HorAlignment>Center</HorAlignment>
-          <Margins>0,0,0,0</Margins>
-          <Name>Text9</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-          <Text>المجموع</Text>
-          <TextBrush>Black</TextBrush>
-          <Type>Expression</Type>
-          <VertAlignment>Center</VertAlignment>
-        </Text9>
-        <Text10 Ref="8" type="Text" isKey="true">
-          <Brush>SteelBlue</Brush>
-          <ClientRectangle>5.4,3.6,1.6,0.3</ClientRectangle>
-          <Conditions isList="true" count="0" />
-          <Font>Arial,8,Bold</Font>
-          <Guid>7b101885242a43579116e5cba3cb34b0</Guid>
-          <HorAlignment>Center</HorAlignment>
-          <Margins>0,0,0,0</Margins>
-          <Name>Text10</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-          <Text>{Sum(DataDataSource2,DataSource2.ReyalDebit)}</Text>
-          <TextBrush>Black</TextBrush>
-          <Type>Totals</Type>
-          <VertAlignment>Center</VertAlignment>
-        </Text10>
-        <Text11 Ref="9" type="Text" isKey="true">
-          <Brush>SteelBlue</Brush>
-          <ClientRectangle>3.6,3.6,1.8,0.3</ClientRectangle>
-          <Conditions isList="true" count="0" />
-          <Font>Arial,8,Bold</Font>
-          <Guid>a7b8bb3780bd4e72b4c21b2b568e08a0</Guid>
-          <HorAlignment>Center</HorAlignment>
-          <Margins>0,0,0,0</Margins>
-          <Name>Text11</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-          <Text>{Sum(DataDataSource2,DataSource2.StockCount)}</Text>
-          <TextBrush>Black</TextBrush>
-          <Type>Totals</Type>
-          <VertAlignment>Center</VertAlignment>
-        </Text11>
-        <Text12 Ref="10" type="Text" isKey="true">
-          <Brush>SteelBlue</Brush>
-          <ClientRectangle>2.7,3.6,0.9,0.3</ClientRectangle>
-          <Conditions isList="true" count="0" />
-          <Font>Arial,8,Bold</Font>
-          <Guid>7a2bc676f46545a79cb9487a88752752</Guid>
-          <HorAlignment>Center</HorAlignment>
-          <Margins>0,0,0,0</Margins>
-          <Name>Text12</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-          <Text>{Div(Sum(DataDataSource2,DataSource2.ReyalDebit),Sum(DataDataSource2,DataSource2.StockCount))}</Text>
-          <TextBrush>Black</TextBrush>
-          <Type>Expression</Type>
-          <VertAlignment>Center</VertAlignment>
-        </Text12>
-        <Text13 Ref="11" type="Text" isKey="true">
-          <Brush>SteelBlue</Brush>
-          <ClientRectangle>0,3.6,2.7,0.3</ClientRectangle>
-          <Conditions isList="true" count="0" />
-          <Font>Arial,8,Bold</Font>
-          <Guid>46d714cfa28a48d6aefb02bf23a3ff7b</Guid>
-          <HorAlignment>Center</HorAlignment>
-          <Margins>0,0,0,0</Margins>
-          <Name>Text13</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-          <TextBrush>Black</TextBrush>
-          <Type>Expression</Type>
-          <VertAlignment>Center</VertAlignment>
-        </Text13>
-        <ReportTitle Ref="12" type="ReportTitleBand" isKey="true">
+        <ReportTitle Ref="7" type="ReportTitleBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,1.78,7.72,0.5</ClientRectangle>
           <Components isList="true" count="1">
-            <ReportTitleText Ref="13" type="Text" isKey="true">
+            <ReportTitleText Ref="8" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>0,0,7.72,0.5</ClientRectangle>
@@ -446,7 +367,7 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>ReportTitleText</Name>
               <Page isRef="4" />
-              <Parent isRef="12" />
+              <Parent isRef="7" />
               <Text>الارباح المحصله</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <Type>Expression</Type>
@@ -458,11 +379,11 @@ TkSuQmCC</ImageBytes>
           <Page isRef="4" />
           <Parent isRef="4" />
         </ReportTitle>
-        <HeaderBand1 Ref="14" type="HeaderBand" isKey="true">
+        <HeaderBand1 Ref="9" type="HeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,2.68,7.72,0.2</ClientRectangle>
           <Components isList="true" count="6">
-            <HeaderTextDataSource24 Ref="15" type="Text" isKey="true">
+            <HeaderTextDataSource24 Ref="10" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
@@ -476,14 +397,14 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource24</Name>
               <Page isRef="4" />
-              <Parent isRef="14" />
+              <Parent isRef="9" />
               <Text>ربح السهم</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </HeaderTextDataSource24>
-            <HeaderTextDataSource21 Ref="16" type="Text" isKey="true">
+            <HeaderTextDataSource21 Ref="11" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
@@ -497,14 +418,14 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource21</Name>
               <Page isRef="4" />
-              <Parent isRef="14" />
+              <Parent isRef="9" />
               <Text>اسم الشركة</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </HeaderTextDataSource21>
-            <HeaderTextDataSource22 Ref="17" type="Text" isKey="true">
+            <HeaderTextDataSource22 Ref="12" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
@@ -518,14 +439,14 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource22</Name>
               <Page isRef="4" />
-              <Parent isRef="14" />
+              <Parent isRef="9" />
               <Text>المبلغ ريال</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </HeaderTextDataSource22>
-            <HeaderTextDataSource23 Ref="18" type="Text" isKey="true">
+            <HeaderTextDataSource23 Ref="13" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
@@ -539,14 +460,14 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource23</Name>
               <Page isRef="4" />
-              <Parent isRef="14" />
+              <Parent isRef="9" />
               <Text>رصيد الاسهم عند توزيع الارباح</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </HeaderTextDataSource23>
-            <Text1 Ref="19" type="Text" isKey="true">
+            <Text1 Ref="14" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
@@ -560,14 +481,14 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text1</Name>
               <Page isRef="4" />
-              <Parent isRef="14" />
+              <Parent isRef="9" />
               <Text>البيان</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text1>
-            <Text2 Ref="20" type="Text" isKey="true">
+            <Text2 Ref="15" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
@@ -581,7 +502,7 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text2</Name>
               <Page isRef="4" />
-              <Parent isRef="14" />
+              <Parent isRef="9" />
               <Text>تاريخ التوزيع</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -595,12 +516,12 @@ TkSuQmCC</ImageBytes>
           <Page isRef="4" />
           <Parent isRef="4" />
         </HeaderBand1>
-        <DataDataSource2 Ref="21" type="DataBand" isKey="true">
+        <DataDataSource2 Ref="16" type="DataBand" isKey="true">
           <Brush>Transparent</Brush>
           <BusinessObjectGuid isNull="true" />
           <ClientRectangle>0,3.28,7.72,0.3</ClientRectangle>
           <Components isList="true" count="6">
-            <Text3 Ref="22" type="Text" isKey="true">
+            <Text3 Ref="17" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>6.7,0.02,1,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -609,12 +530,12 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text3</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="16" />
               <Text>{DataSource2.PartnerName}</Text>
               <TextBrush>Black</TextBrush>
               <Type>DataColumn</Type>
             </Text3>
-            <Text4 Ref="23" type="Text" isKey="true">
+            <Text4 Ref="18" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>5.4,0.02,1,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -623,12 +544,12 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text4</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="16" />
               <Text>{DataSource2.ReyalDebit}</Text>
               <TextBrush>Black</TextBrush>
               <Type>DataColumn</Type>
             </Text4>
-            <Text5 Ref="24" type="Text" isKey="true">
+            <Text5 Ref="19" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>4,0.02,1.1,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -637,12 +558,12 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text5</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="16" />
               <Text>{DataSource2.ReyalDebit}</Text>
               <TextBrush>Black</TextBrush>
               <Type>DataColumn</Type>
             </Text5>
-            <Text6 Ref="25" type="Text" isKey="true">
+            <Text6 Ref="20" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>2.6,0.02,0.8,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -651,12 +572,12 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text6</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="16" />
               <Text>{Div(DataSource2.ReyalDebit,DataSource2.StockCount)}</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
             </Text6>
-            <Text7 Ref="26" type="Text" isKey="true">
+            <Text7 Ref="21" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>1.5,0.02,0.9,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -665,11 +586,11 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text7</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="16" />
               <Text>{DataSource2.Description}</Text>
               <TextBrush>Black</TextBrush>
             </Text7>
-            <Text8 Ref="27" type="Text" isKey="true">
+            <Text8 Ref="22" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>0.2,0.02,0.9,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -678,10 +599,10 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text8</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="16" />
               <Text>{DataSource2.DistributionDate}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="28" type="DateFormat" isKey="true" />
+              <TextFormat Ref="23" type="DateFormat" isKey="true" />
             </Text8>
           </Components>
           <Conditions isList="true" count="0" />
@@ -693,6 +614,108 @@ TkSuQmCC</ImageBytes>
           <Parent isRef="4" />
           <Sort isList="true" count="0" />
         </DataDataSource2>
+        <FooterDataSource2 Ref="24" type="FooterBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,3.98,7.72,0.2</ClientRectangle>
+          <Components isList="true" count="6">
+            <Text14 Ref="25" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>7.6,0.2,0.6,0.2</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>8b04cc9b04604d538d59296bbe5d3487</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text14</Name>
+              <Page isRef="4" />
+              <Parent isRef="24" />
+              <TextBrush>Black</TextBrush>
+            </Text14>
+            <Text9 Ref="26" type="Text" isKey="true">
+              <Brush>SteelBlue</Brush>
+              <ClientRectangle>7,-0.08,0.7,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8,Bold</Font>
+              <Guid>da04d317c68e4dd483b98b401f7bedbe</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text9</Name>
+              <Page isRef="4" />
+              <Parent isRef="24" />
+              <Text>المجموع</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text9>
+            <Text10 Ref="27" type="Text" isKey="true">
+              <Brush>SteelBlue</Brush>
+              <ClientRectangle>5.4,-0.08,1.6,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8,Bold</Font>
+              <Guid>7b101885242a43579116e5cba3cb34b0</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text10</Name>
+              <Page isRef="4" />
+              <Parent isRef="24" />
+              <Text>{Sum(DataDataSource2,DataSource2.ReyalDebit)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text10>
+            <Text11 Ref="28" type="Text" isKey="true">
+              <Brush>SteelBlue</Brush>
+              <ClientRectangle>3.5,-0.08,1.9,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8,Bold</Font>
+              <Guid>a7b8bb3780bd4e72b4c21b2b568e08a0</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text11</Name>
+              <Page isRef="4" />
+              <Parent isRef="24" />
+              <Text>{Sum(DataDataSource2,DataSource2.StockCount)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text11>
+            <Text12 Ref="29" type="Text" isKey="true">
+              <Brush>SteelBlue</Brush>
+              <ClientRectangle>1.5,-0.08,2,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8,Bold</Font>
+              <Guid>7a2bc676f46545a79cb9487a88752752</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text12</Name>
+              <Page isRef="4" />
+              <Parent isRef="24" />
+              <Text>{Div(Sum(DataDataSource2,DataSource2.ReyalDebit),Sum(DataDataSource2,DataSource2.StockCount))}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text12>
+            <Text13 Ref="30" type="Text" isKey="true">
+              <Brush>SteelBlue</Brush>
+              <ClientRectangle>0,-0.08,1.5,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8,Bold</Font>
+              <Guid>46d714cfa28a48d6aefb02bf23a3ff7b</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text13</Name>
+              <Page isRef="4" />
+              <Parent isRef="24" />
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text13>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>9c4a7c5df23048e39824343c3b487415</Guid>
+          <Name>FooterDataSource2</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </FooterDataSource2>
       </Components>
       <Conditions isList="true" count="0" />
       <Guid>96f544ab75544b02a40df759c3acbdfb</Guid>
@@ -715,10 +738,10 @@ TkSuQmCC</ImageBytes>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>9/23/2019 8:32:15 PM</ReportChanged>
+  <ReportChanged>9/12/2019 5:51:03 AM</ReportChanged>
   <ReportCreated>9/11/2019 4:18:44 PM</ReportCreated>
-  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\RPT_Earnings.mrt</ReportFile>
-  <ReportGuid>129ed22405364392b2a3c14b1e6304a8</ReportGuid>
+  <ReportFile>C:\Users\Administrator.KARIMDEV\Desktop\New folder\RPT_Earnings.mrt</ReportFile>
+  <ReportGuid>7ff39f23c6d2448888da2506d728e5be</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Inches</ReportUnit>
   <ReportVersion>2019.3.5.0</ReportVersion>
@@ -747,197 +770,197 @@ namespace Reports
 </Script>
   <ScriptLanguage>CSharp</ScriptLanguage>
   <Styles isList="true" count="12">
-    <Blue_x0020_Steel_Report_Title1 Ref="29" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item28 Ref="30" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>ReportTitle</Placement>
-          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item28>
-      </Conditions>
-      <Font>Arial,14,Bold</Font>
-      <Name>Blue Steel_Report_Title1</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Report_Title1>
-    <Blue_x0020_Steel_Report_Title2 Ref="31" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title1 Ref="31" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
         <Item30 Ref="32" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
-          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>ReportTitle</Placement>
-          <PlacementNestedLevel>2</PlacementNestedLevel>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
         </Item30>
       </Conditions>
-      <Font>Arial,10,Bold</Font>
-      <Name>Blue Steel_Report_Title2</Name>
+      <Font>Arial,14,Bold</Font>
+      <Name>Blue Steel_Report_Title1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Report_Title2>
-    <Blue_x0020_Steel_Report_Summary Ref="33" type="Stimulsoft.Report.StiStyle" isKey="true">
+    </Blue_x0020_Steel_Report_Title1>
+    <Blue_x0020_Steel_Report_Title2 Ref="33" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
         <Item32 Ref="34" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>ReportSummary</Placement>
-          <Type>ComponentType, Placement</Type>
+          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
+          <Placement>ReportTitle</Placement>
+          <PlacementNestedLevel>2</PlacementNestedLevel>
+          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
         </Item32>
       </Conditions>
       <Font>Arial,10,Bold</Font>
-      <Name>Blue Steel_Report_Summary</Name>
+      <Name>Blue Steel_Report_Title2</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Report_Summary>
-    <Blue_x0020_Steel_Page_Header Ref="35" type="Stimulsoft.Report.StiStyle" isKey="true">
+    </Blue_x0020_Steel_Report_Title2>
+    <Blue_x0020_Steel_Report_Summary Ref="35" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
         <Item34 Ref="36" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>PageHeader</Placement>
+          <Placement>ReportSummary</Placement>
           <Type>ComponentType, Placement</Type>
         </Item34>
       </Conditions>
-      <Font>Arial,10</Font>
-      <Name>Blue Steel_Page_Header</Name>
+      <Font>Arial,10,Bold</Font>
+      <Name>Blue Steel_Report_Summary</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>Black</TextBrush>
-    </Blue_x0020_Steel_Page_Header>
-    <Blue_x0020_Steel_Page_Footer Ref="37" type="Stimulsoft.Report.StiStyle" isKey="true">
+      <TextBrush>[79:129:189]</TextBrush>
+    </Blue_x0020_Steel_Report_Summary>
+    <Blue_x0020_Steel_Page_Header Ref="37" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
         <Item36 Ref="38" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>PageFooter</Placement>
+          <Placement>PageHeader</Placement>
           <Type>ComponentType, Placement</Type>
         </Item36>
+      </Conditions>
+      <Font>Arial,10</Font>
+      <Name>Blue Steel_Page_Header</Name>
+      <NegativeTextBrush>Red</NegativeTextBrush>
+      <TextBrush>Black</TextBrush>
+    </Blue_x0020_Steel_Page_Header>
+    <Blue_x0020_Steel_Page_Footer Ref="39" type="Stimulsoft.Report.StiStyle" isKey="true">
+      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <CollectionName>Blue Steel</CollectionName>
+      <Conditions isList="true" count="1">
+        <Item38 Ref="40" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+          <ComponentType>Text, Primitive, Image</ComponentType>
+          <Placement>PageFooter</Placement>
+          <Type>ComponentType, Placement</Type>
+        </Item38>
       </Conditions>
       <Font>Arial,10</Font>
       <Name>Blue Steel_Page_Footer</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Footer>
-    <Blue_x0020_Steel_Group_Header1 Ref="39" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item38 Ref="40" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
-          <Placement>GroupHeader</Placement>
-          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item38>
-      </Conditions>
-      <Font>Arial,13,Bold</Font>
-      <Name>Blue Steel_Group_Header1</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Group_Header1>
-    <Blue_x0020_Steel_Group_Footer1 Ref="41" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Header1 Ref="41" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
         <Item40 Ref="42" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>GroupFooter</Placement>
+          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
+          <Placement>GroupHeader</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
         </Item40>
+      </Conditions>
+      <Font>Arial,13,Bold</Font>
+      <Name>Blue Steel_Group_Header1</Name>
+      <NegativeTextBrush>Red</NegativeTextBrush>
+      <TextBrush>[79:129:189]</TextBrush>
+    </Blue_x0020_Steel_Group_Header1>
+    <Blue_x0020_Steel_Group_Footer1 Ref="43" type="Stimulsoft.Report.StiStyle" isKey="true">
+      <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <CollectionName>Blue Steel</CollectionName>
+      <Conditions isList="true" count="1">
+        <Item42 Ref="44" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+          <ComponentType>Text, Primitive, Image</ComponentType>
+          <Placement>GroupFooter</Placement>
+          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
+        </Item42>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Group_Footer1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Footer1>
-    <Blue_x0020_Steel_Header1 Ref="43" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Header1 Ref="45" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
       <Brush>[79:129:189]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item42 Ref="44" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item44 Ref="46" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Header</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item42>
+        </Item44>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Header1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>White</TextBrush>
     </Blue_x0020_Steel_Header1>
-    <Blue_x0020_Steel_Data1 Ref="45" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1 Ref="47" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item44 Ref="46" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item46 Ref="48" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image, CheckBox</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Data</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item44>
+        </Item46>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1>
-    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="47" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="49" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[255:255:255]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item46 Ref="48" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item48 Ref="50" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataOddStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item46>
+        </Item48>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Odd Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Odd_x0020_Style>
-    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="49" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="51" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[216:216:216]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item48 Ref="50" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item50 Ref="52" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataEvenStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item48>
+        </Item50>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Even Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Even_x0020_Style>
-    <Blue_x0020_Steel_Footer1 Ref="51" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Footer1 Ref="53" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black</Border>
       <Brush>White</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item50 Ref="52" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item52 Ref="54" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>Footer</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item50>
+        </Item52>
       </Conditions>
       <Font>Arial,8.25,Bold,Point,False,204</Font>
       <Name>Blue Steel_Footer1</Name>
