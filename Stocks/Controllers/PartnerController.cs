@@ -421,7 +421,11 @@ namespace Stocks.Controllers
         public IActionResult PostPartner([FromBody] PartenerModel partnerModel)
         {
             if (ModelState.IsValid)
-            {
+            { 
+                if (partnerModel.IssueDate==null)
+                {
+                    partnerModel.IssueDate = DateTime.Now.ToString();
+                }
                 var model = _mapper.Map<Partner>(partnerModel);
                 if (model == null)
                 {
