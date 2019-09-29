@@ -906,7 +906,7 @@ namespace Stocks.Controllers
                         {
                             //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount, EntryCheck.EntryID, null, null, null, noticeModel);
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry, EntryCheck);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
                             Entry.NoticeID = notice.NoticeID;
                             var EntryDitails = EntryMODEL.EntryDetailModel;
@@ -1007,7 +1007,7 @@ namespace Stocks.Controllers
                             {
                                 //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount, EntryCheck.EntryID, null, null, null, noticeModel);
                                 var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry, EntryCheck);
                                 var Entry = _mapper.Map<Entry>(EntryMODEL);
                                 Entry.NoticeID = notice.NoticeID;
                                 var EntryDitails = EntryMODEL.EntryDetailModel;
