@@ -393,7 +393,7 @@ namespace Stocks.Controllers
             var LastCode = "";
             if (unitOfWork.SellingOrderReposetory.Count() != 0)
             {
-                LastCode = unitOfWork.PurchaseOrderRepository.Last().Code;
+                LastCode = unitOfWork.SellingOrderReposetory.Last().Code;
 
             }
             else
