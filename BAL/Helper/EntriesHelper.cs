@@ -12,7 +12,7 @@ namespace BAL.Helper
         // Calculate Entry, EntryDetails using Models Case Insert
         public static EntryModel InsertCalculatedEntries(int portofolioaccount,SellingOrderModel sellingOrderModel=null ,
             PurchaseOrderModel purchaseOrderModel=null, ReceiptExchangeModel receiptExchangeModel=null,
-            NoticeModel noticeModel=null,Entry LastEntry =null)
+            NoticeModel noticeModel=null,Entry LastEntry =null,Entry OldEntry=null)
         {
 
             #region Definitions
@@ -60,16 +60,27 @@ namespace BAL.Helper
                 #endregion
 
                 #region EntryMaster
-                 if (LastEntry == null)
+                if(OldEntry !=null)
                 {
-                    Entrymodel.Code = "1";
+
+                    Entrymodel.Code =OldEntry.Code;
+                    Entrymodel.Date = OldEntry.Date.Value.ToString("d/M/yyyy");
+                    Entrymodel.SellingOrderID = sellingOrderModel.SellingOrderID;
                 }
                 else
                 {
-                    Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
+                    if (LastEntry == null)
+                    {
+                        Entrymodel.Code = "1";
+                    }
+                    else
+                    {
+                        Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
+                    }
+                    Entrymodel.Date = DateTime.Now.ToString("d/M/yyyy");
+                    Entrymodel.SellingOrderID = sellingOrderModel.SellingOrderID;
                 }
-                Entrymodel.Date = DateTime.Now.ToString("d/M/yyyy");
-                Entrymodel.SellingOrderID = sellingOrderModel.SellingOrderID;
+                
                 #endregion
 
                 #region EntryDetails
@@ -141,16 +152,27 @@ namespace BAL.Helper
                 #endregion
 
                 #region EntryMaster
-                if (LastEntry == null)
+                if(OldEntry !=null)
                 {
-                    Entrymodel.Code = "1";
+
+                    Entrymodel.Code = OldEntry.Code;
+                    Entrymodel.Date = OldEntry.Date.Value.ToString("d/M/yyyy");
+                    Entrymodel.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
                 }
                 else
                 {
-                    Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
+                    if (LastEntry == null)
+                    {
+                        Entrymodel.Code = "1";
+                    }
+                    else
+                    {
+                        Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
+                    }
+                    Entrymodel.Date = DateTime.Now.ToString("d/M/yyyy");
+                    Entrymodel.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
                 }
-                Entrymodel.Date = DateTime.Now.ToString("d/M/yyyy");
-                Entrymodel.PurchaseOrderID  = purchaseOrderModel.PurchaseOrderID;
+
                 #endregion
 
                 #region EntryDetails
@@ -190,6 +212,15 @@ namespace BAL.Helper
                     
                     var ReceiptExchangeDetails = receiptExchangeModel.RecExcDetails;
                     #region EntryMaster
+                if(OldEntry != null)
+                {
+
+                    Entrymodel.Code = OldEntry.Code;
+                    Entrymodel.Date = OldEntry.Date.Value.ToString("d/M/yyyy");
+                    Entrymodel.ReceiptID = receiptExchangeModel.ReceiptID;
+                }
+                else
+                {
                     if (LastEntry == null)
                     {
                         Entrymodel.Code = "1";
@@ -200,6 +231,8 @@ namespace BAL.Helper
                     }
                     Entrymodel.Date = DateTime.Now.ToString("d/MM/yyyy");
                     Entrymodel.ReceiptID = receiptExchangeModel.ReceiptID;
+                }
+
                     #endregion
 
                     #region EntryDetails
@@ -250,16 +283,27 @@ namespace BAL.Helper
 
                 var NoticeDetails = noticeModel.NoticeModelDetails;
                 #region EntryMaster
-                if (LastEntry == null)
+                if(OldEntry !=null)
                 {
-                    Entrymodel.Code = "1";
+
+                    Entrymodel.Code = OldEntry.Code;
+                    Entrymodel.Date = OldEntry.Date.Value.ToString("d/M/yyyy");
+                    Entrymodel.NoticeID = noticeModel.NoticeID;
                 }
                 else
                 {
-                    Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
+                    if (LastEntry == null)
+                    {
+                        Entrymodel.Code = "1";
+                    }
+                    else
+                    {
+                        Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
+                    }
+                    Entrymodel.Date = DateTime.Now.ToString("d/MM/yyyy");
+                    Entrymodel.NoticeID = noticeModel.NoticeID;
                 }
-                Entrymodel.Date = DateTime.Now.ToString("d/MM/yyyy");
-                Entrymodel.NoticeID = noticeModel.NoticeID;
+
                 #endregion
 
                 #region EntryDetails
