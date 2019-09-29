@@ -896,7 +896,7 @@ namespace Stocks.Controllers
 
                             var lastEntry = unitOfWork.EntryRepository.Last();
                     
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingOrderModel, null, null, null, lastEntry, Entry);
                             EntryMODEL.SellingOrderID = sellingOrderModel.SellingOrderID;
                             var NewEntry = _mapper.Map<Entry>(EntryMODEL);
                             var EntryDitails = EntryMODEL.EntryDetailModel;
@@ -1034,7 +1034,7 @@ namespace Stocks.Controllers
                                 //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, sellingOrderModel, null, null, null);
                                 var lastEntry = unitOfWork.EntryRepository.Last();
 
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, sellingOrderModel, null, null, null, lastEntry);
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, sellingOrderModel, null, null, null, lastEntry,Entry);
                                 EntryMODEL.SellingOrderID = sellingOrderModel.SellingOrderID;
                                 var NewEntry = _mapper.Map<Entry>(EntryMODEL);
                                 var EntryDitails = EntryMODEL.EntryDetailModel;

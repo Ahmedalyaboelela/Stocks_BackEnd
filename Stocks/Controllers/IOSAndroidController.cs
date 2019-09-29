@@ -369,18 +369,6 @@ namespace Stocks.Controllers
                  LastCode = unitOfWork.PurchaseOrderRepository.Last().Code;
                
             }
-            else
-            {
-                LastCode = "1";
-
-            }
-
-
-
-
-
-
-
             return LastCode;
         }
 
@@ -394,11 +382,6 @@ namespace Stocks.Controllers
             if (unitOfWork.SellingOrderReposetory.Count() != 0)
             {
                 LastCode = unitOfWork.SellingOrderReposetory.Last().Code;
-
-            }
-            else
-            {
-                LastCode = "1";
 
             }
 
