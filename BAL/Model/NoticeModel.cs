@@ -11,6 +11,12 @@ namespace BAL.Model
         public string NoticeDate { get; set; }
         public string NoticeDateHijri { get; set; }
 
+        //public DateTime? DistributionDate { get; set; }
+        //public DateTime? DistributionDateHijri { get; set; }
+        public string DistributionDate { get; set; }
+        public string DistributionDateHijri { get; set; }
+
+
         public bool Type { get; set; }
 
         public int PortfolioID { get; set; }

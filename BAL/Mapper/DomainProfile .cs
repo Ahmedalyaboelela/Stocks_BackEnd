@@ -132,7 +132,8 @@ namespace BAL.Mapper
             CreateMap<Notice, NoticeModel>();
             CreateMap<NoticeModel, Notice>()
                  .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                .ForMember(t => t.NoticeDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.NoticeDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
+                .ForMember(t => t.NoticeDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.NoticeDate, "d/M/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(t => t.DistributionDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.DistributionDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
 
             // Notice Details

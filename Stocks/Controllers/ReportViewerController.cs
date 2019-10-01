@@ -477,7 +477,7 @@ namespace Stocks.Controllers
 
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_ProfitsDistributor.mrt");
             report.Load(path);
             report["@enddate"] = Enddate;
             report["@startdate"] = Startdate;
