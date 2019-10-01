@@ -228,6 +228,11 @@ namespace Stocks.Controllers
                 model.NoticeDate = notice.NoticeDate.Value.ToString("d/M/yyyy");
                 model.NoticeDateHijri = DateHelper.GetHijriDate(notice.NoticeDate);
             }
+            if (notice.DistributionDate != null)
+            {
+                model.DistributionDate = notice.DistributionDate.Value.ToString("d/M/yyyy");
+                model.DistributionDateHijri = DateHelper.GetHijriDate(notice.DistributionDate);
+            }
             #endregion
 
             #region Details part
