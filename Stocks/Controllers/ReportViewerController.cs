@@ -499,23 +499,20 @@ namespace Stocks.Controllers
         [Route("~/api/ReportViewer/Earningscollected")]
         public string Earningscollected([FromBody] JObject data)
         {
-            DateTime Enddate;
+           
 
-            DateTime Startdate;
+            
             int portID = Convert.ToInt32(data.GetValue("portID"));
-            string startdate = data.GetValue("startdate").ToString();
-            string enddate = data.GetValue("enddate").ToString();
-            Enddate = DateHelper.ChangeDateFormat(enddate);
-            Startdate = DateHelper.ChangeDateFormat(startdate);
+            string year = data.GetValue("year").ToString();
 
 
 
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Evaluateport.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Earningscollected.mrt");
             report.Load(path);
-            report["@enddate"] = Enddate;
-            report["@startdate"] = Startdate;
+            report["@Year"] = year;
+            
             report["@portID"] = portID;
 
 
