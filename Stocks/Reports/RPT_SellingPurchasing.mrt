@@ -1586,13 +1586,13 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>9/25/2019 5:18:36 PM</ReportChanged>
+  <ReportChanged>10/1/2019 3:28:53 PM</ReportChanged>
   <ReportCreated>9/12/2019 3:40:17 PM</ReportCreated>
-  <ReportFile>D:\Stocks\Back\Stocks\Reports\RPT_SellingPurchasing.mrt</ReportFile>
-  <ReportGuid>968e1c044b664539a485b2e47597c624</ReportGuid>
+  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\RPT_SellingPurchasing.mrt</ReportFile>
+  <ReportGuid>cff674d8e4dc4fa38396f83f64ebcbfe</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Centimeters</ReportUnit>
-  <ReportVersion>2019.3.4.0</ReportVersion>
+  <ReportVersion>2019.3.5.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;
