@@ -39,3 +39,17 @@
 [200] - data saved successfully.
 [500] - exception occurred.
 [501] - FK Conflict Exception.
+//.......................search..........................//
+[1]- Purchase Order .
+[2]- Selling  Order .
+[3]- Notice   Creditor .
+[4]- Notice   Debitor  .
+[5]- Receipt voucher Ryal .
+[6]- Receipt voucher chique .
+[7]- exhange voucher Ryal .
+[8]- exhange voucher chique .
+[9]- Country .
+[10]-Account .
+[11]- Employee .
+
+
