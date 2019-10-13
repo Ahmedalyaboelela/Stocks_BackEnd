@@ -37,38 +37,47 @@ namespace Stocks.Controllers
 
         public IEnumerable<PortfolioModel> GetAllIOSAndroid(int pageNumber)
         {
-            var model = unitOfWork.PortfolioRepository.GetMobilApp(page:pageNumber).Select(m => new PortfolioModel {
-                Code = m.Code,
-                Description = m.Description,
-                EstablishDate = m.EstablishDate.Value.ToString("d/M/yyyy"),
-                EstablishDateHijri = DateHelper.GetHijriDate(m.EstablishDate),
-                NameAR = m.NameAR,
-                NameEN = m.NameEN,
-                PortfolioID = m.PortfolioID,
-                AccountID = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).AccountID,
-                AccountCode = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).Account.Code,
-                AccountNameAR = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).Account.NameAR,
-                AccountNameEN = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).Account.NameEN,
-                RSBalance= unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).Account.Debit - unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).Account.Credit,
-                 TotalStocksCount =m.TotalStocksCount,
-
-                portfolioOpeningStocksArray = unitOfWork.PortfolioOpeningStocksRepository.Get(filter: s => s.PortfolioID == m.PortfolioID).Select(q => new PortfolioOpeningStocksModel
+            if ( unitOfWork.PortfolioRepository.GetMobilApp(page: pageNumber).Count() !=0)
+            {
+                var model = unitOfWork.PortfolioRepository.GetMobilApp(page: pageNumber).Select(m => new PortfolioModel
                 {
-                    PartnerID = q.PartnerID,
-                    OpeningStocksCount = q.OpeningStocksCount,
-                    OpeningStockValue = q.OpeningStockValue,
-                    PartnerCode = q.Partner.Code,
-                    PartnerNameAR = q.Partner.NameAR,
-                    PartnerNameEN = q.Partner.NameEN,
-                    PortfolioID = q.PortfolioID,
-                    PortOPenStockID = q.PortOPenStockID,
+                    Code = m.Code,
+                    Description = m.Description,
+                    EstablishDate = m.EstablishDate.Value.ToString("d/M/yyyy"),
+                    EstablishDateHijri = DateHelper.GetHijriDate(m.EstablishDate),
+                    NameAR = m.NameAR,
+                    NameEN = m.NameEN,
+                    PortfolioID = m.PortfolioID,
+                    AccountID = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).AccountID,
+                    AccountCode = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).Account.Code,
+                    AccountNameAR = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).Account.NameAR,
+                    AccountNameEN = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).Account.NameEN,
+                    RSBalance = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).Account.Debit - unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == m.PortfolioID).Account.Credit,
+                    TotalStocksCount = m.TotalStocksCount,
 
-                }),
+                    portfolioOpeningStocksArray = unitOfWork.PortfolioOpeningStocksRepository.Get(filter: s => s.PortfolioID == m.PortfolioID).Select(q => new PortfolioOpeningStocksModel
+                    {
+                        PartnerID = q.PartnerID,
+                        OpeningStocksCount = q.OpeningStocksCount,
+                        OpeningStockValue = q.OpeningStockValue,
+                        PartnerCode = q.Partner.Code,
+                        PartnerNameAR = q.Partner.NameAR,
+                        PartnerNameEN = q.Partner.NameEN,
+                        PortfolioID = q.PortfolioID,
+                        PortOPenStockID = q.PortOPenStockID,
+
+                    }),
 
 
 
-            });
-            return model;
+                });
+                return model;
+            }
+            else
+            {
+                return null;
+            }
+          
         }
 
 
@@ -183,7 +192,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return Ok(3);
+                return null;
             }
         }
 
@@ -192,46 +201,55 @@ namespace Stocks.Controllers
 
         public IEnumerable<SellingOrderModel> GetAllportEmpSelling(int EmpID)
         {
-            var model = unitOfWork.SellingOrderReposetory.Get(filter: x => x.EmployeeID == EmpID).Select(m => new SellingOrderModel
+            if ( unitOfWork.SellingOrderReposetory.Get(filter: x => x.EmployeeID == EmpID).Count()!=0)
             {
-                Code = m.Code,
-                EmployeeID = m.EmployeeID,
-                EmpNameAR = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameAR,
-                EmpCode = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).Code,
-                EmpNameEN = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameEN,
-                PayWay = m.PayWay,
-                PortfolioID = m.PortfolioID,
-                SellDate = m.Date.Value.ToString("d/m/yyyy"),
-                SellDateHijri=DateHelper.GetHijriDate(m.Date),
-                SellingOrderID=m.SellingOrderID,
-                PortfolioCode=unitOfWork.PortfolioRepository.GetEntity(filter:x=> x.PortfolioID==m.PortfolioID).Code,
-                PortfolioNameAR= unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameAR,
-                PortfolioNameEN= unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameEN,
-                DetailsModels= unitOfWork.SellingOrderDetailRepository.Get(filter: x => x.SellingOrderID == m.SellingOrderID).Select(a=> new SelingOrderDetailsModel {
-                BankCommission=a.BankCommission,
-                SellingOrderID=a.SellingOrderID,
-                BankCommissionRate=a.BankCommissionRate,
-                NetAmmount=a.NetAmmount,
-                PartnerID=a.PartnerID,
-                PartnerCode=unitOfWork.PartnerRepository.GetEntity(filter:q=> q.PartnerID==a.PartnerID).Code,
-                PartnerNameAR= unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).NameAR,
-                PartnerNameEN= unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).NameEN,
-                SelingValue=a.SelingValue,
-                SellingPrice=a.SellingPrice,
-                SellOrderDetailID=a.SellOrderDetailID,
-                StockCount=a.StockCount,
-                TaxOnCommission=a.TaxOnCommission,
-                TaxRateOnCommission=a.TaxRateOnCommission,
-                
-                }),
-                
+                var model = unitOfWork.SellingOrderReposetory.Get(filter: x => x.EmployeeID == EmpID).Select(m => new SellingOrderModel
+                {
+                    Code = m.Code,
+                    EmployeeID = m.EmployeeID,
+                    EmpNameAR = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameAR,
+                    EmpCode = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).Code,
+                    EmpNameEN = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameEN,
+                    PayWay = m.PayWay,
+                    PortfolioID = m.PortfolioID,
+                    SellDate = m.Date.Value.ToString("d/m/yyyy"),
+                    SellDateHijri = DateHelper.GetHijriDate(m.Date),
+                    SellingOrderID = m.SellingOrderID,
+                    PortfolioCode = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).Code,
+                    PortfolioNameAR = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameAR,
+                    PortfolioNameEN = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameEN,
+                    DetailsModels = unitOfWork.SellingOrderDetailRepository.Get(filter: x => x.SellingOrderID == m.SellingOrderID).Select(a => new SelingOrderDetailsModel
+                    {
+                        BankCommission = a.BankCommission,
+                        SellingOrderID = a.SellingOrderID,
+                        BankCommissionRate = a.BankCommissionRate,
+                        NetAmmount = a.NetAmmount,
+                        PartnerID = a.PartnerID,
+                        PartnerCode = unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).Code,
+                        PartnerNameAR = unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).NameAR,
+                        PartnerNameEN = unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).NameEN,
+                        SelingValue = a.SelingValue,
+                        SellingPrice = a.SellingPrice,
+                        SellOrderDetailID = a.SellOrderDetailID,
+                        StockCount = a.StockCount,
+                        TaxOnCommission = a.TaxOnCommission,
+                        TaxRateOnCommission = a.TaxRateOnCommission,
+
+                    }),
 
 
 
 
 
-            });
-            return model;
+
+                });
+                return model;
+            }
+            else
+            {
+                return null;
+            }
+           
         }
 
 
@@ -240,48 +258,56 @@ namespace Stocks.Controllers
 
         [Route("~/api/IOSAndroid/GetAllportEmppurchase/{EmpID}")]
         public IEnumerable<PurchaseOrderModel> GetAllportEmppurchase(int EmpID)
-        {
-            var model = unitOfWork.PurchaseOrderRepository.Get(filter: x => x.EmployeeID == EmpID).Select(m => new PurchaseOrderModel
+        { 
+            if ( unitOfWork.PurchaseOrderRepository.Get(filter: x => x.EmployeeID == EmpID).Count() !=0)
             {
-                Code = m.Code,
-                EmployeeID = m.EmployeeID,
-                EmpNameAR = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameAR,
-                EmpCode = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).Code,
-                EmpNameEN = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameEN,
-                PayWay = m.PayWay,
-                PortfolioID = m.PortfolioID,
-                PurchaseDate = m.Date.Value.ToString("d/m/yyyy"),
-                PurchaseDateHijri = DateHelper.GetHijriDate(m.Date),
-                PurchaseOrderID = m.PurchaseOrderID,
-                PortfolioCode = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).Code,
-                PortfolioNameAR = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameAR,
-                PortfolioNameEN = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameEN,
-                DetailsModels = unitOfWork.PurchaseOrderDetailRepository.Get(filter: x => x.PurchaseID == m.PurchaseOrderID).Select(a => new PurchaseOrderDetailModel
+                var model = unitOfWork.PurchaseOrderRepository.Get(filter: x => x.EmployeeID == EmpID).Select(m => new PurchaseOrderModel
                 {
-                    BankCommission = a.BankCommission,
-                    PurchaseID = a.PurchaseID,
-                    BankCommissionRate = a.BankCommissionRate,
-                    NetAmmount = a.NetAmmount,
-                    PartnerID = a.PartnerID,
-                    PartnerCode = unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).Code,
-                    PartnerNameAR = unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).NameAR,
-                    PartnerNameEN = unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).NameEN,
-                    PurchaseValue = a.PurchaseValue,
-                    PurchasePrice = a.PurchasePrice,
-                    PurchaseOrderDetailID = a.PurchaseOrderDetailID,
-                    StockCount = a.StockCount,
-                    TaxOnCommission = a.TaxOnCommission,
-                    TaxRateOnCommission = a.TaxRateOnCommission,
+                    Code = m.Code,
+                    EmployeeID = m.EmployeeID,
+                    EmpNameAR = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameAR,
+                    EmpCode = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).Code,
+                    EmpNameEN = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameEN,
+                    PayWay = m.PayWay,
+                    PortfolioID = m.PortfolioID,
+                    PurchaseDate = m.Date.Value.ToString("d/m/yyyy"),
+                    PurchaseDateHijri = DateHelper.GetHijriDate(m.Date),
+                    PurchaseOrderID = m.PurchaseOrderID,
+                    PortfolioCode = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).Code,
+                    PortfolioNameAR = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameAR,
+                    PortfolioNameEN = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameEN,
+                    DetailsModels = unitOfWork.PurchaseOrderDetailRepository.Get(filter: x => x.PurchaseID == m.PurchaseOrderID).Select(a => new PurchaseOrderDetailModel
+                    {
+                        BankCommission = a.BankCommission,
+                        PurchaseID = a.PurchaseID,
+                        BankCommissionRate = a.BankCommissionRate,
+                        NetAmmount = a.NetAmmount,
+                        PartnerID = a.PartnerID,
+                        PartnerCode = unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).Code,
+                        PartnerNameAR = unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).NameAR,
+                        PartnerNameEN = unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).NameEN,
+                        PurchaseValue = a.PurchaseValue,
+                        PurchasePrice = a.PurchasePrice,
+                        PurchaseOrderDetailID = a.PurchaseOrderDetailID,
+                        StockCount = a.StockCount,
+                        TaxOnCommission = a.TaxOnCommission,
+                        TaxRateOnCommission = a.TaxRateOnCommission,
 
-                }),
+                    }),
 
 
 
 
 
 
-            });
-            return model;
+                });
+                return model;
+            }
+            else
+            {
+                return null;
+            }
+          
         }
 
 
@@ -292,23 +318,32 @@ namespace Stocks.Controllers
 
         [Route("~/api/IOSAndroid/GetAllEmps")]
         public IActionResult GetAllEmps()
-        {
-            var Emps = unitOfWork.EmployeeRepository.Get(filter: x => x.IsInternal == true).Select(m => new EmployeeModel {
-
-                EmployeeID=m.EmployeeID,
-                Code=m.Code,
-                NameAR=m.NameAR,
-                NameEN=m.NameEN,
-
-
-            });
-            
-            if (Emps == null)
+        { 
+            if ( unitOfWork.EmployeeRepository.Get().Count() !=0)
             {
-                return Ok(0);
-            }
+                var Emps = unitOfWork.EmployeeRepository.Get(filter: x => x.IsInternal == true).Select(m => new EmployeeModel
+                {
 
-            return Ok(Emps);
+                    EmployeeID = m.EmployeeID,
+                    Code = m.Code,
+                    NameAR = m.NameAR,
+                    NameEN = m.NameEN,
+
+
+                });
+
+                if (Emps == null)
+                {
+                    return Ok(0);
+                }
+
+                return Ok(Emps);
+            }
+            else
+            {
+                return null;
+            }
+           
         }
 
 
@@ -329,23 +364,11 @@ namespace Stocks.Controllers
         public string CodePur()
         {
             var LastCode = "";
-            if (unitOfWork.PurchaseOrderRepository.Last().Code != null)
+            if (unitOfWork.PurchaseOrderRepository.Count() != 0)
             {
                  LastCode = unitOfWork.PurchaseOrderRepository.Last().Code;
                
             }
-            else
-            {
-                LastCode = "1";
-
-            }
-
-
-
-
-
-
-
             return LastCode;
         }
 
@@ -356,14 +379,9 @@ namespace Stocks.Controllers
         {
 
             var LastCode = "";
-            if (unitOfWork.SellingOrderReposetory.Last().Code != null)
+            if (unitOfWork.SellingOrderReposetory.Count() != 0)
             {
-                LastCode = unitOfWork.PurchaseOrderRepository.Last().Code;
-
-            }
-            else
-            {
-                LastCode = "1";
+                LastCode = unitOfWork.SellingOrderReposetory.Last().Code;
 
             }
 
@@ -373,35 +391,51 @@ namespace Stocks.Controllers
         }
 
 
-        [Route("~/api/IOSAndroid/GetAllports")]
+        [Route("~/api/IOSAndroid/GetAllports")] 
         public IEnumerable<GetAllPortsIOS> GetAllports()
-        {
-            var model = unitOfWork.PortfolioRepository.Get().Select(m => new GetAllPortsIOS
+        { 
+            if (unitOfWork.PortfolioRepository.Get().Count()!=0)
             {
-                PortfolioID=m.PortfolioID,
-                Code = m.Code,
-                NameAR=m.NameAR,
-                NameEN=m.NameEN,
-                PortfolioAccount=unitOfWork.PortfolioAccountRepository.GetEntity(filter:x=>x.PortfolioID==m.PortfolioID).AccountID
-            });
-            return model;
+                var model = unitOfWork.PortfolioRepository.Get().Select(m => new GetAllPortsIOS
+                {
+                    PortfolioID = m.PortfolioID,
+                    Code = m.Code,
+                    NameAR = m.NameAR,
+                    NameEN = m.NameEN,
+                    PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).AccountID
+                });
+                return model;
+            }
+            else
+            {
+                return null;
+            }
+           
         }
 
         [Route("~/api/IOSAndroid/GetpartenersByport/{portID}")]
         public IEnumerable<PortfolioTransactionModel> GetAllparteners(int portID)
         {
-            var model = unitOfWork.PortfolioTransactionsRepository.Get(filter:x=> x.PortfolioID==portID).Select(m => new PortfolioTransactionModel
+            if (unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == portID).Count() !=0)
             {
-                PortfolioID = portID,
-               CurrentStocksCount=m.CurrentStocksCount,
-               CurrentStockValue=m.CurrentStockValue,
-               PartnerID=m.PartnerID,
-               partenerCode=unitOfWork.PartnerRepository.GetEntity(filter: a=> a.PartnerID==m.PartnerID).Code,
-               partenerNameAR= unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameAR,
-               partenerNameEN= unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameEN,
-               PortTransID=m.PortTransID
-            });
-            return model;
+                var model = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == portID).Select(m => new PortfolioTransactionModel
+                {
+                    PortfolioID = portID,
+                    CurrentStocksCount = m.CurrentStocksCount,
+                    CurrentStockValue = m.CurrentStockValue,
+                    PartnerID = m.PartnerID,
+                    partenerCode = unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).Code,
+                    partenerNameAR = unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameAR,
+                    partenerNameEN = unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameEN,
+                    PortTransID = m.PortTransID
+                });
+                return model;
+            }
+            else
+            {
+                return null;
+            }
+           
         }
 
 

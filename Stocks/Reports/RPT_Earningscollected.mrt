@@ -5,82 +5,38 @@
     <Databases isList="true" count="1">
       <MS_x0020_SQL Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
         <Alias>MS SQL</Alias>
-        <ConnectionStringEncrypted>9FzRoe9K8wVFYYRY5Bxif9Fu+81WX3sFRlu5CMNx5yffNtEpxgPDzUZ91dxpTKxn9Fr3oc1RS7xpTdn4ZhjrN99U9wLFUfO8f0nNzOoY9j/T</ConnectionStringEncrypted>
+        <ConnectionStringEncrypted>9FyXz01KcoH5CE34+ADhJ9FsUw1IAwGk4kztOOH84RfFVN3rVlP63UVGZZjDdOEn9HD3iEZrSpl5FSnseszge/la+c9PXVJdaVyEKHc9rGfJJFMCxV3DAexEvZh6+Pbr12CB</ConnectionStringEncrypted>
         <Name>MS SQL</Name>
       </MS_x0020_SQL>
     </Databases>
-    <DataSources isList="true" count="2">
-      <DataSource Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
-        <Alias>DataSource</Alias>
-        <Columns isList="true" count="17">
-          <value>_Date,System.String</value>
-          <value>_Description,System.String</value>
-          <value>Reference,System.String</value>
-          <value>Ryal,System.Decimal</value>
-          <value>_Count,System.Double</value>
-          <value>s_Total,System.Decimal</value>
-          <value>s_Tax,System.Decimal</value>
-          <value>s_Commission,System.Decimal</value>
-          <value>s_Value,System.Decimal</value>
-          <value>s_Price,System.Decimal</value>
-          <value>s_StockCount,System.Single</value>
-          <value>p_Total,System.Decimal</value>
-          <value>p_Tax,System.Decimal</value>
-          <value>p_Commission,System.Decimal</value>
-          <value>p_Value,System.Decimal</value>
-          <value>p_Price,System.Decimal</value>
-          <value>p_StockCount,System.Single</value>
-        </Columns>
-        <CommandTimeout>30</CommandTimeout>
-        <Dictionary isRef="1" />
-        <Key>400f2cedc022479eb38449468a7abf85</Key>
-        <Name>DataSource</Name>
-        <NameInSource>MS SQL</NameInSource>
-        <Parameters isList="true" count="4">
-          <value>_x0040_portfolioId,_x0031_3,8,13</value>
-          <value>_x0040_partnerId,_x0032_019,8,2019</value>
-          <value>_x0040_startdate,,33,7</value>
-          <value>_x0040_enddate,,33,7</value>
-        </Parameters>
-        <SqlCommand>
-exec rpt_selling_buying_stocks @portfolioId,@partnerId,@startdate,@enddate</SqlCommand>
-      </DataSource>
-      <DataSource2 Ref="4" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+    <DataSources isList="true" count="1">
+      <DataSource2 Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
         <Alias>DataSource2</Alias>
-        <Columns isList="true" count="20">
-          <value>OrderID,System.Int32</value>
-          <value>Code,System.String</value>
-          <value>Date,System.String</value>
-          <value>Description,System.String</value>
-          <value>BalanceCount,System.Single</value>
-          <value>BalanceValue,System.Decimal</value>
-          <value>s_StockCount,System.Single</value>
-          <value>s_Price,System.Decimal</value>
-          <value>s_Value,System.Decimal</value>
-          <value>s_Commission,System.Decimal</value>
-          <value>s_Tax,System.Decimal</value>
-          <value>s_Total,System.Decimal</value>
-          <value>p_StockCount,System.Single</value>
-          <value>p_Price,System.Decimal</value>
-          <value>p_Value,System.Decimal</value>
-          <value>p_Commission,System.Decimal</value>
-          <value>p_Tax,System.Decimal</value>
-          <value>p_Total,System.Decimal</value>
-          <value>RyalBalance,System.Decimal</value>
-          <value>CountBalance,System.Double</value>
+        <Columns isList="true" count="13">
+          <value>PartnerID,System.Int32</value>
+          <value>PartnerName,System.String</value>
+          <value>StockCountinfirstQUter,System.Decimal</value>
+          <value>StockCountinSecondQUter,System.Decimal</value>
+          <value>StockCountinthirdQUter,System.Nullable`1[System.Decimal]</value>
+          <value>StockCountinFOurthQUter,System.Decimal</value>
+          <value>R1,System.Decimal</value>
+          <value>R2,System.Decimal</value>
+          <value>R3,System.Decimal</value>
+          <value>R4,System.Decimal</value>
+          <value>Y,System.Int32</value>
+          <value>TotalStocks,System.Double</value>
+          <value>TotalRial,System.Decimal</value>
         </Columns>
         <CommandTimeout>30</CommandTimeout>
         <Dictionary isRef="1" />
-        <Key>99699c413e5242428e499a08d9b8b194</Key>
+        <Key>72a5147dbe71470989e31f2fbdbb1cba</Key>
         <Name>DataSource2</Name>
         <NameInSource>MS SQL</NameInSource>
-        <Parameters isList="true" count="4">
-          <value>_x0040_portfolioId,_x0031_3,8,10</value>
-          <value>_x0040_partnerId,_x0032_019,8,10</value>
-          <value>_x0040_startdate,,33,7</value>
-          <value>_x0040_enddate,,33,7</value>
+        <Parameters isList="true" count="2">
+          <value>_x0040_Year,_x0032_019,18,10</value>
+          <value>_x0040_portID,_x0032_026,8,32</value>
         </Parameters>
-        <SqlCommand>exec rpt_selling_buying_stocks @portfolioId,@partnerId,@startdate,@enddate</SqlCommand>
+        <SqlCommand>EXEC [dbo].[RPT_Earningscollected] @Year,@portID</SqlCommand>
       </DataSource2>
     </DataSources>
     <Relations isList="true" count="0" />
@@ -90,21 +46,22 @@ exec rpt_selling_buying_stocks @portfolioId,@partnerId,@startdate,@enddate</SqlC
   </Dictionary>
   <EngineVersion>EngineV2</EngineVersion>
   <GlobalizationStrings isList="true" count="0" />
-  <Key>e1d7bc93359c49fd9ba0f257eed532b5</Key>
+  <Key>bd7d8daad9d349fb8a8b65a52daabfc7</Key>
   <MetaTags isList="true" count="0" />
   <Pages isList="true" count="1">
-    <Page1 Ref="5" type="Page" isKey="true">
+    <Page1 Ref="4" type="Page" isKey="true">
       <Border>None;Black;2;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
-      <Components isList="true" count="9">
-        <PageHeaderBand1 Ref="6" type="PageHeaderBand" isKey="true">
+      <Components isList="true" count="6">
+        <PageHeaderBand2 Ref="5" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,0.4,27.7,3.6</ClientRectangle>
+          <ClientRectangle>0,0.2,10.22,1.41</ClientRectangle>
           <Components isList="true" count="1">
-            <Image1 Ref="7" type="Image" isKey="true">
+            <Image2 Ref="6" type="Image" isKey="true">
               <Brush>Transparent</Brush>
-              <ClientRectangle>2.8,0.2,23.6,3.6</ClientRectangle>
+              <ClientRectangle>0.9,0.18,9.29,1.42</ClientRectangle>
               <Conditions isList="true" count="0" />
+              <Guid>7fc9a8237fe54a278cb6247775e8ab2e</Guid>
               <ImageBytes>iVBORw0KGgoAAAANSUhEUgAAA1IAAAB9CAMAAACf6qJLAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
 bWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp
 bj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6
@@ -412,24 +369,46 @@ av4pXZz+7MJsjnf9VTv9hhO+3DT1NAaRKAIHMcJKDL/EGw1HCtezRGP2TU5O9hmiazX8ADyaJ+K1
 bW42xF+zn+aOoXVHhn2TJcNpaSWThvgGLjhSuF5CTD919cknpp5oQHjL4EjhwoUjhQsXLhwpXLhw
 pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
-              <Name>Image1</Name>
-              <Page isRef="5" />
-              <Parent isRef="6" />
-            </Image1>
+              <Name>Image2</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+            </Image2>
           </Components>
           <Conditions isList="true" count="0" />
-          <Name>PageHeaderBand1</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
-        </PageHeaderBand1>
+          <Guid>9482f948aa794debb4f9afd0089bc8d6</Guid>
+          <Name>PageHeaderBand2</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </PageHeaderBand2>
+        <Text26 Ref="7" type="Text" isKey="true">
+          <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+          <Brush>[79:129:189]</Brush>
+          <CanGrow>True</CanGrow>
+          <ClientRectangle>2.2,8.8,0.9,0.2</ClientRectangle>
+          <ComponentStyle>Blue Steel_Header1</ComponentStyle>
+          <Conditions isList="true" count="0" />
+          <Font>Arial,9.75,Bold,Point,False,204</Font>
+          <GrowToHeight>True</GrowToHeight>
+          <Guid>961debbf5d2948a5a5fc375c98d66309</Guid>
+          <HorAlignment>Center</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text26</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <Text>اسم الشركة</Text>
+          <TextBrush>White</TextBrush>
+          <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text26>
         <ReportTitle Ref="8" type="ReportTitleBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,4.8,27.7,1.4</ClientRectangle>
+          <ClientRectangle>0,2.01,10.22,0.5</ClientRectangle>
           <Components isList="true" count="1">
             <ReportTitleText Ref="9" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
-              <ClientRectangle>0,0,27.7,1.4</ClientRectangle>
+              <ClientRectangle>1.4,0,7.72,0.5</ClientRectangle>
               <ComponentStyle>Blue Steel_Report_Title1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,14,Bold</Font>
@@ -437,9 +416,9 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>ReportTitleText</Name>
-              <Page isRef="5" />
+              <Page isRef="4" />
               <Parent isRef="8" />
-              <Text>بيع وشراء أسهم شركة</Text>
+              <Text>توزيع الارباح المحصلة على السنة موزعة على الارباع</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
@@ -447,867 +426,504 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
           </Components>
           <Conditions isList="true" count="0" />
           <Name>ReportTitle</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
+          <Page isRef="4" />
+          <Parent isRef="4" />
         </ReportTitle>
         <HeaderDataSource2 Ref="10" type="HeaderBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,7,27.7,1.4</ClientRectangle>
-          <Components isList="true" count="26">
-            <HeaderTextDataSource22 Ref="11" type="Text" isKey="true">
+          <ClientRectangle>0,2.91,10.22,0.2</ClientRectangle>
+          <Components isList="true" count="12">
+            <Text1 Ref="11" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>0,0.8,2.2,0.6</ClientRectangle>
+              <ClientRectangle>9.1,0.02,1.1,0.4</ClientRectangle>
               <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
+              <Guid>e52244666f9c416a8ee1700bb9733364</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource22</Name>
-              <Page isRef="5" />
+              <Name>Text1</Name>
+              <Page isRef="4" />
               <Parent isRef="10" />
-              <Text>التاريخ</Text>
+              <Text>الشركه
+</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource22>
-            <HeaderTextDataSource23 Ref="12" type="Text" isKey="true">
+            </Text1>
+            <Text2 Ref="12" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>2.2,0.8,1.4,0.6</ClientRectangle>
+              <ClientRectangle>8.6,0.02,0.8,0.4</ClientRectangle>
               <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
+              <Guid>53a126e928ae41ceb1d7f823822a8760</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource23</Name>
-              <Page isRef="5" />
+              <Name>Text2</Name>
+              <Page isRef="4" />
               <Parent isRef="10" />
-              <Text>البيان</Text>
+              <Text>اسهم الربع الاول</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource23>
-            <HeaderTextDataSource24 Ref="13" type="Text" isKey="true">
+            </Text2>
+            <Text4 Ref="13" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>5,0.8,1.4,0.6</ClientRectangle>
+              <ClientRectangle>7.7,0.02,0.9,0.4</ClientRectangle>
               <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
+              <Guid>48e01e0daba047c39c6ab1e81909c54a</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource24</Name>
-              <Page isRef="5" />
+              <Name>Text4</Name>
+              <Page isRef="4" />
               <Parent isRef="10" />
-              <Text>الأسهم الأفتتاحية</Text>
+              <Text>اسهم الربع الثاني</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource24>
-            <HeaderTextDataSource25 Ref="14" type="Text" isKey="true">
+            </Text4>
+            <Text3 Ref="14" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>6.4,0.8,1.4,0.6</ClientRectangle>
+              <ClientRectangle>6.8,0.02,0.9,0.4</ClientRectangle>
               <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
+              <Guid>3e479c2b5c5d459eb20708e6ad33eaf9</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource25</Name>
-              <Page isRef="5" />
+              <Name>Text3</Name>
+              <Page isRef="4" />
               <Parent isRef="10" />
-              <Text>الأرصدة ألأفتتاحية</Text>
+              <Text>اسهم الربع الثالث</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource25>
-            <HeaderTextDataSource26 Ref="15" type="Text" isKey="true">
+            </Text3>
+            <Text6 Ref="15" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>17.8,0.8,1.4,0.6</ClientRectangle>
+              <ClientRectangle>6,0.02,0.9,0.4</ClientRectangle>
               <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
+              <Guid>454655f0c58149718a9293c1b9c140ea</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource26</Name>
-              <Page isRef="5" />
+              <Name>Text6</Name>
+              <Page isRef="4" />
               <Parent isRef="10" />
-              <Text>العدد</Text>
+              <Text>اسهم الربع الرابع</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource26>
-            <HeaderTextDataSource27 Ref="16" type="Text" isKey="true">
+            </Text6>
+            <Text9 Ref="16" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>[79:129:189]</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>16.4,0.8,1.4,0.6</ClientRectangle>
+              <ClientRectangle>5.1,0.02,0.9,0.4</ClientRectangle>
               <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource27</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>السعر</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource27>
-            <HeaderTextDataSource28 Ref="17" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>15,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource28</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>القيمة</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource28>
-            <HeaderTextDataSource29 Ref="18" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>13.6,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource29</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>العمولة</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource29>
-            <HeaderTextDataSource210 Ref="19" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>12.2,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource210</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>الضريبة</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource210>
-            <HeaderTextDataSource211 Ref="20" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>10.8,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource211</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>الصافي</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource211>
-            <HeaderTextDataSource212 Ref="21" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>26.2,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource212</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>العدد</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource212>
-            <HeaderTextDataSource213 Ref="22" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>24.8,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource213</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>السعر</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource213>
-            <HeaderTextDataSource214 Ref="23" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>23.4,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource214</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>القيمة</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource214>
-            <HeaderTextDataSource215 Ref="24" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>22,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource215</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>العمولة</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource215>
-            <HeaderTextDataSource216 Ref="25" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>20.6,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource216</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>الضريبة</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource216>
-            <HeaderTextDataSource217 Ref="26" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>19.2,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource217</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>اجمالي التكلفة</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource217>
-            <HeaderTextDataSource21 Ref="27" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>3.6,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource21</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>رقم المرجع</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource21>
-            <HeaderTextDataSource218 Ref="28" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>7.8,0.8,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource218</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>ريال</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource218>
-            <HeaderTextDataSource219 Ref="29" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>9.2,0.8,1.8,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>HeaderTextDataSource219</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <Text>عدد</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </HeaderTextDataSource219>
-            <Text9 Ref="30" type="Text" isKey="true">
-              <Border>All;Black;1;Solid;False;4;Black</Border>
-              <Brush>DarkGray</Brush>
-              <ClientRectangle>10.8,0,8.4,0.8</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,10,Bold</Font>
-              <Guid>1b39bb1cf7f941d7b8bfe758c6a0d1e2</Guid>
+              <Guid>66d1e77955e6491f9457a87c94681151</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text9</Name>
-              <Page isRef="5" />
+              <Page isRef="4" />
               <Parent isRef="10" />
-              <Text>البيع</Text>
-              <TextBrush>Black</TextBrush>
+              <Text>ارباح الربع الاول</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text9>
-            <Text11 Ref="31" type="Text" isKey="true">
-              <Border>All;Black;1;Solid;False;4;Black</Border>
-              <Brush>DarkGray</Brush>
-              <ClientRectangle>5,0,5.8,0.8</ClientRectangle>
+            <Text10 Ref="17" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>4.1,0.02,1,0.4</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Font>Arial,10,Bold</Font>
-              <Guid>2ba4a43ab1da439cbc259470ebf8ea99</Guid>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>191d464b1ea14b798453b1801fb13c4a</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>Text11</Name>
-              <Page isRef="5" />
+              <Name>Text10</Name>
+              <Page isRef="4" />
               <Parent isRef="10" />
-              <Text>الرصيد</Text>
-              <TextBrush>Black</TextBrush>
+              <Text>ارباح الربع الثاني</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
-            </Text11>
-            <Text8 Ref="32" type="Text" isKey="true">
-              <Border>All;Black;1;Solid;False;4;Black</Border>
-              <Brush>DarkGray</Brush>
-              <ClientRectangle>19.2,0,8.4,0.8</ClientRectangle>
+            </Text10>
+            <Text7 Ref="18" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>3.3,0.02,0.9,0.4</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Font>Arial,10,Bold</Font>
-              <Guid>22190a2d1ca84465892c5a77679b4176</Guid>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>c447c78fd70f47f3af12f911722fa30e</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text7</Name>
+              <Page isRef="4" />
+              <Parent isRef="10" />
+              <Text>ارباح الربع الثالث</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text7>
+            <Text8 Ref="19" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>2.2,0.02,1.1,0.4</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>ffadbf1805294940920c90d23d44316a</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text8</Name>
-              <Page isRef="5" />
+              <Page isRef="4" />
               <Parent isRef="10" />
-              <Text>الشراء</Text>
-              <TextBrush>Black</TextBrush>
+              <Text>ارباح الربع الرابع</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text8>
-            <StartPointPrimitive1 Ref="33" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
-              <ClientRectangle>19.2,0,0,0</ClientRectangle>
+            <Text13 Ref="20" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>0,0.02,0.8,0.4</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Name>StartPointPrimitive1</Name>
-              <Page isRef="5" />
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>6fac046d3260450a88b016b320dd1ca0</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text13</Name>
+              <Page isRef="4" />
               <Parent isRef="10" />
-              <ReferenceToGuid>2be5132d5f6f46c18a6a8ea8561b8311</ReferenceToGuid>
-            </StartPointPrimitive1>
-            <StartPointPrimitive2 Ref="34" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
-              <ClientRectangle>10.8,0,0,0</ClientRectangle>
+              <Text>المتوسط</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text13>
+            <Text21 Ref="21" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>1.4,0.02,0.8,0.4</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Name>StartPointPrimitive2</Name>
-              <Page isRef="5" />
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>f485286716f04b12addcc42ce8104125</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text21</Name>
+              <Page isRef="4" />
               <Parent isRef="10" />
-              <ReferenceToGuid>b1635ac5ecd44a9c83f8c23b3c0ee7f8</ReferenceToGuid>
-            </StartPointPrimitive2>
-            <StartPointPrimitive3 Ref="35" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
-              <ClientRectangle>8.2,0.8,0,0</ClientRectangle>
+              <Text>اجمالي اسهم</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text21>
+            <Text11 Ref="22" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>0.6,0.02,0.8,0.4</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Name>StartPointPrimitive3</Name>
-              <Page isRef="5" />
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>b43bcee1bda24fe79ea980666f7e9c01</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text11</Name>
+              <Page isRef="4" />
               <Parent isRef="10" />
-              <ReferenceToGuid>2af0beb62e3d4151979fc3a900eed4b2</ReferenceToGuid>
-            </StartPointPrimitive3>
-            <StartPointPrimitive4 Ref="36" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
-              <ClientRectangle>5,0.8,0,0</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Name>StartPointPrimitive4</Name>
-              <Page isRef="5" />
-              <Parent isRef="10" />
-              <ReferenceToGuid>e1611f309a1148ba83b728c6093b6657</ReferenceToGuid>
-            </StartPointPrimitive4>
+              <Text>اجمالي ارباح
+</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text11>
           </Components>
           <Conditions isList="true" count="0" />
           <Name>HeaderDataSource2</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
+          <Page isRef="4" />
+          <Parent isRef="4" />
         </HeaderDataSource2>
-        <DataDataSource2 Ref="37" type="DataBand" isKey="true">
+        <DataDataSource2 Ref="23" type="DataBand" isKey="true">
           <Brush>Transparent</Brush>
           <BusinessObjectGuid isNull="true" />
-          <ClientRectangle>0,9.2,27.7,0.6</ClientRectangle>
-          <Components isList="true" count="19">
-            <DataTextDataSource22 Ref="38" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+          <ClientRectangle>0,3.51,10.22,0.6</ClientRectangle>
+          <Components isList="true" count="12">
+            <Text5 Ref="24" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>0,0,2.2,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>9.5,0.02,0.7,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource22</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.Date}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource22>
-            <DataTextDataSource23 Ref="39" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Name>Text5</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{DataSource2.PartnerName}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="25" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+            </Text5>
+            <Text12 Ref="26" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>2.2,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>8.8,0.02,0.6,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource23</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.Description}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource23>
-            <DataTextDataSource24 Ref="40" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Name>Text12</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{DataSource2.StockCountinfirstQUter}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="27" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+            </Text12>
+            <Text14 Ref="28" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>5,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>8,0.02,0.6,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource24</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.BalanceCount}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource24>
-            <DataTextDataSource25 Ref="41" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Name>Text14</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{DataSource2.StockCountinSecondQUter}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="29" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+            </Text14>
+            <Text15 Ref="30" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>6.4,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>7.1,0.02,0.6,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource25</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.BalanceValue}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource25>
-            <DataTextDataSource26 Ref="42" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Name>Text15</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{DataSource2.StockCountinthirdQUter}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="31" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+            </Text15>
+            <Text16 Ref="32" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>17.8,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>6.2,0.02,0.5,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource26</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.s_StockCount}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource26>
-            <DataTextDataSource27 Ref="43" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Name>Text16</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{DataSource2.StockCountinFOurthQUter}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="33" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+            </Text16>
+            <Text17 Ref="34" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>16.4,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>5.3,0.02,0.6,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource27</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.s_Price}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource27>
-            <DataTextDataSource28 Ref="44" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Name>Text17</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{DataSource2.R1}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="35" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+            </Text17>
+            <Text18 Ref="36" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>15,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>4.5,0.02,0.6,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource28</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.s_Value}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource28>
-            <DataTextDataSource29 Ref="45" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Name>Text18</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{DataSource2.R2}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="37" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+            </Text18>
+            <Text19 Ref="38" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>13.6,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>3.5,0.02,0.7,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource29</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.s_Commission}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource29>
-            <DataTextDataSource210 Ref="46" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Name>Text19</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{DataSource2.R3}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="39" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+            </Text19>
+            <Text20 Ref="40" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>12.2,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>2.5,0.02,0.7,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource210</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.s_Tax}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource210>
-            <DataTextDataSource211 Ref="47" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Name>Text20</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{DataSource2.R4}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="41" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+            </Text20>
+            <Text22 Ref="42" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>10.8,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>1.6,0.02,0.7,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
+              <Guid>2e8deabcb410470b9a80723d514b9a3b</Guid>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource211</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.s_Total}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource211>
-            <DataTextDataSource212 Ref="48" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Name>Text22</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{DataSource2.TotalStocks}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="43" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <Type>DataColumn</Type>
+            </Text22>
+            <Text23 Ref="44" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>26.2,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>0.8,0.02,0.7,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
+              <Guid>b8b06a6166f64b0996cb8a5c92f2c356</Guid>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource212</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.p_StockCount}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource212>
-            <DataTextDataSource213 Ref="49" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Name>Text23</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{DataSource2.TotalRial}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="45" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <Type>DataColumn</Type>
+            </Text23>
+            <Text24 Ref="46" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>24.8,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
+              <ClientRectangle>0,0.02,0.7,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
+              <Guid>8d2f5cd8fd634519b793cec0650aafd2</Guid>
               <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource213</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.p_Price}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource213>
-            <DataTextDataSource214 Ref="50" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>23.4,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource214</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.p_Value}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource214>
-            <DataTextDataSource215 Ref="51" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>22,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource215</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.p_Commission}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource215>
-            <DataTextDataSource216 Ref="52" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>20.6,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource216</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.p_Tax}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource216>
-            <DataTextDataSource217 Ref="53" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>19.2,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource217</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.p_Total}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource217>
-            <DataTextDataSource21 Ref="54" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>3.6,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource21</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.Code}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource21>
-            <DataTextDataSource218 Ref="55" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>7.8,0,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource218</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.RyalBalance}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource218>
-            <DataTextDataSource219 Ref="56" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>9.2,0,1.8,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Data1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>DataTextDataSource219</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
-              <Text>{DataSource2.CountBalance}</Text>
-              <TextBrush>[0:0:0]</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <TextQuality>Wysiwyg</TextQuality>
-              <VertAlignment>Center</VertAlignment>
-            </DataTextDataSource219>
+              <Name>Text24</Name>
+              <Page isRef="4" />
+              <Parent isRef="23" />
+              <Text>{Div(Div(DataSource2.R1,DataSource2.StockCountinfirstQUter)+
+Div(DataSource2.R2,DataSource2.StockCountinSecondQUter)+
+Div(DataSource2.R3,DataSource2.StockCountinthirdQUter)+
+Div(DataSource2.R4,DataSource2.StockCountinFOurthQUter)
+,4)}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="47" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <Type>Expression</Type>
+            </Text24>
           </Components>
           <Conditions isList="true" count="0" />
           <DataSourceName>DataSource2</DataSourceName>
@@ -1316,262 +932,351 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
           <Filters isList="true" count="0" />
           <Name>DataDataSource2</Name>
           <OddStyle>Blue Steel_Data1_Odd Style</OddStyle>
-          <Page isRef="5" />
-          <Parent isRef="5" />
-          <Sort isList="true" count="2">
-            <value>ASC</value>
-            <value>Date</value>
-          </Sort>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <Sort isList="true" count="0" />
         </DataDataSource2>
-        <FooterDataSource2 Ref="57" type="FooterBand" isKey="true">
+        <FooterDataSource2 Ref="48" type="FooterBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,10.6,27.7,0.6</ClientRectangle>
+          <ClientRectangle>0,4.51,10.22,0.4</ClientRectangle>
           <Components isList="true" count="12">
-            <Text1 Ref="58" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <ClientRectangle>26,0.2,1.6,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Report_Summary</ComponentStyle>
+            <Text36 Ref="49" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>8.4,0,0.9,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Font>Arial,10,Bold</Font>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>6a3033010c4b4860a23e15de714171fd</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>Text1</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <Text>المجموع</Text>
-              <TextBrush>[79:129:189]</TextBrush>
+              <Name>Text36</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>{Sum(DataSource2.StockCountinfirstQUter)}</Text>
+              <TextBrush>White</TextBrush>
+              <TextFormat Ref="50" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text36>
+            <Text27 Ref="51" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>0,0,0.7,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>9dbf082cf2494cf7b2951d28ec6256e5</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text27</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>{Sum(Div(Div(DataSource2.R1,DataSource2.StockCountinfirstQUter)+
+Div(DataSource2.R2,DataSource2.StockCountinSecondQUter)+
+Div(DataSource2.R3,DataSource2.StockCountinthirdQUter)+
+Div(DataSource2.R4,DataSource2.StockCountinFOurthQUter)
+,4))}</Text>
+              <TextBrush>White</TextBrush>
+              <TextFormat Ref="52" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
-            </Text1>
-            <Text2 Ref="59" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <ClientRectangle>19.2,0.2,1.6,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Report_Summary</ComponentStyle>
+            </Text27>
+            <Text44 Ref="53" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>0.7,0,0.8,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Font>Arial,10,Bold</Font>
-              <Guid>60e2dc931f0a42c2a1b93a85c0ef1d64</Guid>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>fd3587b2ed6949ec875d5671be786a29</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>Text2</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <Text>{Sum(DataSource2.p_Total)}</Text>
-              <TextBrush>[79:129:189]</TextBrush>
+              <Name>Text44</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>{Sum(DataSource2.TotalStocks)}</Text>
+              <TextBrush>White</TextBrush>
+              <TextFormat Ref="54" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Totals</Type>
               <VertAlignment>Center</VertAlignment>
-            </Text2>
-            <Text3 Ref="60" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <ClientRectangle>10.8,0.2,1.6,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Report_Summary</ComponentStyle>
+            </Text44>
+            <Text37 Ref="55" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>7.5,0,0.9,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Font>Arial,10,Bold</Font>
-              <Guid>8b11305e870146b2b914ceec8aa21d5d</Guid>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>ea564cc0f5e8477b862d641e9737c5a4</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>Text3</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <Text>{Sum(DataSource2.s_Total)}</Text>
-              <TextBrush>[79:129:189]</TextBrush>
+              <Name>Text37</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>{Sum(DataSource2.StockCountinSecondQUter)}</Text>
+              <TextBrush>White</TextBrush>
+              <TextFormat Ref="56" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Totals</Type>
               <VertAlignment>Center</VertAlignment>
-            </Text3>
-            <Text4 Ref="61" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <ClientRectangle>9.2,0.2,1.6,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Report_Summary</ComponentStyle>
+            </Text37>
+            <Text38 Ref="57" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>6.6,0,0.9,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Font>Arial,10,Bold</Font>
-              <Guid>b5800e923e524fc3b47de0968928b9d1</Guid>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>01f16e6b4883492ea0d533129e70f494</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>Text4</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <Text>{Sum(DataSource2.CountBalance)}</Text>
-              <TextBrush>[79:129:189]</TextBrush>
+              <Name>Text38</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>{Sum(DataSource2.StockCountinthirdQUter)}</Text>
+              <TextBrush>White</TextBrush>
+              <TextFormat Ref="58" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Totals</Type>
               <VertAlignment>Center</VertAlignment>
-            </Text4>
-            <Text5 Ref="62" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <ClientRectangle>8,0.2,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Report_Summary</ComponentStyle>
+            </Text38>
+            <Text39 Ref="59" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>5.7,0,0.9,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Font>Arial,10,Bold</Font>
-              <Guid>b0c103b4412249668806f8c1932c5561</Guid>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>7e6b7e1d488644ec84da5ccace6b7807</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>Text5</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <Text>{Sum(DataSource2.RyalBalance)}</Text>
-              <TextBrush>[79:129:189]</TextBrush>
+              <Name>Text39</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>{Sum(DataSource2.StockCountinFOurthQUter)}</Text>
+              <TextBrush>White</TextBrush>
+              <TextFormat Ref="60" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Totals</Type>
               <VertAlignment>Center</VertAlignment>
-            </Text5>
-            <Text6 Ref="63" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <ClientRectangle>6.4,0.2,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Report_Summary</ComponentStyle>
+            </Text39>
+            <Text40 Ref="61" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>4.7,0,1,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Font>Arial,10,Bold</Font>
-              <Guid>4d95b64942ac42fea9fdebeadf7cdf23</Guid>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>38ab828831464fb6b4fa7473757ca9d6</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>Text6</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <Text>{Sum(DataSource2.BalanceValue)}</Text>
-              <TextBrush>[79:129:189]</TextBrush>
+              <Name>Text40</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>{Sum(DataSource2.R1)}</Text>
+              <TextBrush>White</TextBrush>
+              <TextFormat Ref="62" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Totals</Type>
               <VertAlignment>Center</VertAlignment>
-            </Text6>
-            <Text7 Ref="64" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <ClientRectangle>5,0.2,1.4,0.6</ClientRectangle>
-              <ComponentStyle>Blue Steel_Report_Summary</ComponentStyle>
+            </Text40>
+            <Text41 Ref="63" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>3.8,0,0.9,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Font>Arial,10,Bold</Font>
-              <Guid>8ab15004faf648739290aa9ccb79fa8e</Guid>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>af61f952abca4181a4c4d330050d6bb4</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>Text7</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <Text>{Sum(DataSource2.BalanceCount)}</Text>
-              <TextBrush>[79:129:189]</TextBrush>
+              <Name>Text41</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>{Sum(DataSource2.R2)}</Text>
+              <TextBrush>White</TextBrush>
+              <TextFormat Ref="64" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Totals</Type>
               <VertAlignment>Center</VertAlignment>
-            </Text7>
-            <EndPointPrimitive1 Ref="65" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
-              <ClientRectangle>19.2,0,0,0</ClientRectangle>
+            </Text41>
+            <Text43 Ref="65" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>3,0,0.8,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Name>EndPointPrimitive1</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <ReferenceToGuid>2be5132d5f6f46c18a6a8ea8561b8311</ReferenceToGuid>
-            </EndPointPrimitive1>
-            <EndPointPrimitive2 Ref="66" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
-              <ClientRectangle>10.8,0,0,0</ClientRectangle>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>bab71cb2746743f4bfd97a4aec50c614</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text43</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>{Sum(DataSource2.R3)}</Text>
+              <TextBrush>White</TextBrush>
+              <TextFormat Ref="66" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text43>
+            <Text42 Ref="67" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>2.3,0,0.7,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Name>EndPointPrimitive2</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <ReferenceToGuid>b1635ac5ecd44a9c83f8c23b3c0ee7f8</ReferenceToGuid>
-            </EndPointPrimitive2>
-            <EndPointPrimitive3 Ref="67" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
-              <ClientRectangle>8.2,0,0,0</ClientRectangle>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>ab426bbaa78749b09a70e1b92af3a5d4</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text42</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>{Sum(DataSource2.R4)}</Text>
+              <TextBrush>White</TextBrush>
+              <TextFormat Ref="68" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text42>
+            <Text45 Ref="69" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>1.5,0,0.8,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Name>EndPointPrimitive3</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <ReferenceToGuid>2af0beb62e3d4151979fc3a900eed4b2</ReferenceToGuid>
-            </EndPointPrimitive3>
-            <EndPointPrimitive4 Ref="68" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
-              <ClientRectangle>5,0,0,0</ClientRectangle>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>9b5b0b70e2b849f49591575115bc2a36</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text45</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>{Sum(DataSource2.TotalRial)}</Text>
+              <TextBrush>White</TextBrush>
+              <TextFormat Ref="70" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text45>
+            <Text25 Ref="71" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>[79:129:189]</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>9.3,0,0.9,0.2</ClientRectangle>
+              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
               <Conditions isList="true" count="0" />
-              <Name>EndPointPrimitive4</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <ReferenceToGuid>e1611f309a1148ba83b728c6093b6657</ReferenceToGuid>
-            </EndPointPrimitive4>
-            <HorizontalLinePrimitive1 Ref="69" type="HorizontalLinePrimitive" isKey="true">
-              <ClientRectangle>0,0.2,27.6,0.0254</ClientRectangle>
-              <Color>Black</Color>
-              <Conditions isList="true" count="0" />
-              <EndCap Ref="70" type="Cap" isKey="true">
-                <Color>Black</Color>
-              </EndCap>
-              <Name>HorizontalLinePrimitive1</Name>
-              <Page isRef="5" />
-              <Parent isRef="57" />
-              <StartCap Ref="71" type="Cap" isKey="true">
-                <Color>Black</Color>
-              </StartCap>
-            </HorizontalLinePrimitive1>
+              <Font>Arial,9.75,Bold,Point,False,204</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>72902fc948664caabebb2b2fa8e6e097</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text25</Name>
+              <Page isRef="4" />
+              <Parent isRef="48" />
+              <Text>المجموع</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text25>
           </Components>
           <Conditions isList="true" count="0" />
           <Name>FooterDataSource2</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
+          <Page isRef="4" />
+          <Parent isRef="4" />
         </FooterDataSource2>
-        <VerticalLinePrimitive1 Ref="72" type="VerticalLinePrimitive" isKey="true">
-          <ClientRectangle>19.2,7,0.0254,3.6</ClientRectangle>
-          <Color>Black</Color>
-          <Conditions isList="true" count="0" />
-          <EndCap Ref="73" type="Cap" isKey="true">
-            <Color>Black</Color>
-          </EndCap>
-          <Guid>2be5132d5f6f46c18a6a8ea8561b8311</Guid>
-          <Name>VerticalLinePrimitive1</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
-          <StartCap Ref="74" type="Cap" isKey="true">
-            <Color>Black</Color>
-          </StartCap>
-        </VerticalLinePrimitive1>
-        <VerticalLinePrimitive2 Ref="75" type="VerticalLinePrimitive" isKey="true">
-          <ClientRectangle>10.8,7,0.0254,3.6</ClientRectangle>
-          <Color>Black</Color>
-          <Conditions isList="true" count="0" />
-          <EndCap Ref="76" type="Cap" isKey="true">
-            <Color>Black</Color>
-          </EndCap>
-          <Guid>b1635ac5ecd44a9c83f8c23b3c0ee7f8</Guid>
-          <Name>VerticalLinePrimitive2</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
-          <StartCap Ref="77" type="Cap" isKey="true">
-            <Color>Black</Color>
-          </StartCap>
-        </VerticalLinePrimitive2>
-        <VerticalLinePrimitive3 Ref="78" type="VerticalLinePrimitive" isKey="true">
-          <ClientRectangle>8.2,7.8,0.0254,2.8</ClientRectangle>
-          <Color>Black</Color>
-          <Conditions isList="true" count="0" />
-          <EndCap Ref="79" type="Cap" isKey="true">
-            <Color>Black</Color>
-          </EndCap>
-          <Guid>2af0beb62e3d4151979fc3a900eed4b2</Guid>
-          <Name>VerticalLinePrimitive3</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
-          <StartCap Ref="80" type="Cap" isKey="true">
-            <Color>Black</Color>
-          </StartCap>
-        </VerticalLinePrimitive3>
-        <VerticalLinePrimitive4 Ref="81" type="VerticalLinePrimitive" isKey="true">
-          <ClientRectangle>5,7.8,0.0254,2.8</ClientRectangle>
-          <Color>Black</Color>
-          <Conditions isList="true" count="0" />
-          <EndCap Ref="82" type="Cap" isKey="true">
-            <Color>Black</Color>
-          </EndCap>
-          <Guid>e1611f309a1148ba83b728c6093b6657</Guid>
-          <Name>VerticalLinePrimitive4</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
-          <StartCap Ref="83" type="Cap" isKey="true">
-            <Color>Black</Color>
-          </StartCap>
-        </VerticalLinePrimitive4>
       </Components>
       <Conditions isList="true" count="0" />
-      <Guid>1967589092524d4e909dd33aa2854f0a</Guid>
-      <Margins>1,1,1,1</Margins>
+      <Guid>8b21c8c57a8546c68af10a1062db23df</Guid>
+      <Margins>0.39,0.39,0.39,0.39</Margins>
       <Name>Page1</Name>
       <Orientation>Landscape</Orientation>
-      <PageHeight>21</PageHeight>
-      <PageWidth>29.7</PageWidth>
+      <PageHeight>8.5</PageHeight>
+      <PageWidth>11</PageWidth>
+      <PaperSize>Letter</PaperSize>
       <Report isRef="0" />
     </Page1>
   </Pages>
@@ -1586,13 +1291,13 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>10/1/2019 3:28:53 PM</ReportChanged>
-  <ReportCreated>9/12/2019 3:40:17 PM</ReportCreated>
-  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\RPT_SellingPurchasing.mrt</ReportFile>
-  <ReportGuid>cff674d8e4dc4fa38396f83f64ebcbfe</ReportGuid>
+  <ReportChanged>10/2/2019 3:19:34 PM</ReportChanged>
+  <ReportCreated>10/2/2019 12:39:03 PM</ReportCreated>
+  <ReportFile>C:\Users\Administrator.KARIMDEV\Desktop\New folder\RPT_Earningscollected.mrt</ReportFile>
+  <ReportGuid>780b17c82a164aaebc63cf364a8a11aa</ReportGuid>
   <ReportName>Report</ReportName>
-  <ReportUnit>Centimeters</ReportUnit>
-  <ReportVersion>2019.3.5.0</ReportVersion>
+  <ReportUnit>Inches</ReportUnit>
+  <ReportVersion>2019.3.4.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -1618,197 +1323,197 @@ namespace Reports
 </Script>
   <ScriptLanguage>CSharp</ScriptLanguage>
   <Styles isList="true" count="12">
-    <Blue_x0020_Steel_Report_Title1 Ref="84" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title1 Ref="72" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item74 Ref="85" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item49 Ref="73" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>ReportTitle</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item74>
+        </Item49>
       </Conditions>
       <Font>Arial,14,Bold</Font>
       <Name>Blue Steel_Report_Title1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Title1>
-    <Blue_x0020_Steel_Report_Title2 Ref="86" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title2 Ref="74" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item76 Ref="87" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item51 Ref="75" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>ReportTitle</Placement>
           <PlacementNestedLevel>2</PlacementNestedLevel>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item76>
+        </Item51>
       </Conditions>
       <Font>Arial,10,Bold</Font>
       <Name>Blue Steel_Report_Title2</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Title2>
-    <Blue_x0020_Steel_Report_Summary Ref="88" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Summary Ref="76" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item78 Ref="89" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item53 Ref="77" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>ReportSummary</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item78>
+        </Item53>
       </Conditions>
       <Font>Arial,10,Bold</Font>
       <Name>Blue Steel_Report_Summary</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Summary>
-    <Blue_x0020_Steel_Page_Header Ref="90" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Page_Header Ref="78" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item80 Ref="91" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item55 Ref="79" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>PageHeader</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item80>
+        </Item55>
       </Conditions>
       <Font>Arial,10</Font>
       <Name>Blue Steel_Page_Header</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Header>
-    <Blue_x0020_Steel_Page_Footer Ref="92" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Page_Footer Ref="80" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item82 Ref="93" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item57 Ref="81" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>PageFooter</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item82>
+        </Item57>
       </Conditions>
       <Font>Arial,10</Font>
       <Name>Blue Steel_Page_Footer</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Footer>
-    <Blue_x0020_Steel_Group_Header1 Ref="94" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Header1 Ref="82" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item84 Ref="95" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item59 Ref="83" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>GroupHeader</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item84>
+        </Item59>
       </Conditions>
       <Font>Arial,13,Bold</Font>
       <Name>Blue Steel_Group_Header1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Header1>
-    <Blue_x0020_Steel_Group_Footer1 Ref="96" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Footer1 Ref="84" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item86 Ref="97" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item61 Ref="85" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>GroupFooter</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item86>
+        </Item61>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Group_Footer1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Footer1>
-    <Blue_x0020_Steel_Header1 Ref="98" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Header1 Ref="86" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
       <Brush>[79:129:189]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item88 Ref="99" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item63 Ref="87" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Header</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item88>
+        </Item63>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Header1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>White</TextBrush>
     </Blue_x0020_Steel_Header1>
-    <Blue_x0020_Steel_Data1 Ref="100" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1 Ref="88" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item90 Ref="101" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item65 Ref="89" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image, CheckBox</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Data</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item90>
+        </Item65>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1>
-    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="102" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="90" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[255:255:255]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item92 Ref="103" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item67 Ref="91" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataOddStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item92>
+        </Item67>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Odd Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Odd_x0020_Style>
-    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="104" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="92" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[216:216:216]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item94 Ref="105" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item69 Ref="93" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataEvenStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item94>
+        </Item69>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Even Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Even_x0020_Style>
-    <Blue_x0020_Steel_Footer1 Ref="106" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Footer1 Ref="94" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black</Border>
       <Brush>White</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item96 Ref="107" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item71 Ref="95" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>Footer</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item96>
+        </Item71>
       </Conditions>
       <Font>Arial,8.25,Bold,Point,False,204</Font>
       <Name>Blue Steel_Footer1</Name>

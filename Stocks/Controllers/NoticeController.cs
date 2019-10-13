@@ -228,6 +228,11 @@ namespace Stocks.Controllers
                 model.NoticeDate = notice.NoticeDate.Value.ToString("d/M/yyyy");
                 model.NoticeDateHijri = DateHelper.GetHijriDate(notice.NoticeDate);
             }
+            if (notice.DistributionDate != null)
+            {
+                model.DistributionDate = notice.DistributionDate.Value.ToString("d/M/yyyy");
+                model.DistributionDateHijri = DateHelper.GetHijriDate(notice.DistributionDate);
+            }
             #endregion
 
             #region Details part
@@ -906,7 +911,7 @@ namespace Stocks.Controllers
                         {
                             //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount, EntryCheck.EntryID, null, null, null, noticeModel);
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry, EntryCheck);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
                             Entry.NoticeID = notice.NoticeID;
                             var EntryDitails = EntryMODEL.EntryDetailModel;
@@ -1007,7 +1012,7 @@ namespace Stocks.Controllers
                             {
                                 //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount, EntryCheck.EntryID, null, null, null, noticeModel);
                                 var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry, EntryCheck);
                                 var Entry = _mapper.Map<Entry>(EntryMODEL);
                                 Entry.NoticeID = notice.NoticeID;
                                 var EntryDitails = EntryMODEL.EntryDetailModel;

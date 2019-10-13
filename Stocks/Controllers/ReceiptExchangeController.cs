@@ -711,7 +711,7 @@ namespace Stocks.Controllers
 
                         //var EntryDitails = EntriesHelper.UpdateCalculateEntries(0,Entry.EntryID, null, null, receiptExchangeModel, null);
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0, null, null, receiptExchangeModel, null, lastEntry);
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0, null, null, receiptExchangeModel, null, lastEntry, OldEntry);
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.ReceiptID = ReceiptExchange.ReceiptID;
                         var EntryDitails = EntryMODEL.EntryDetailModel;
@@ -811,7 +811,7 @@ namespace Stocks.Controllers
 
                             //var EntryDitails = EntriesHelper.UpdateCalculateEntries(0,Entry.EntryID, null, null, receiptExchangeModel, null);
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0, null, null, receiptExchangeModel, null, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0, null, null, receiptExchangeModel, null, lastEntry, OldEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
                             Entry.ReceiptID = ReceiptExchange.ReceiptID;
                             var EntryDitails = EntryMODEL.EntryDetailModel;
