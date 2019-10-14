@@ -213,7 +213,6 @@ namespace Stocks.Controllers
         public EntryModel GetEntry(int receiptID)
         {
             var Entry = unitOfWork.EntryRepository.Get(x => x.ReceiptID == receiptID).FirstOrDefault();
-            //var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
             EntryModel entryModel = new EntryModel();
             if(Entry != null)
             {
