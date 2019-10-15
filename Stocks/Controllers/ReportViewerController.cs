@@ -364,12 +364,13 @@ namespace Stocks.Controllers
             DateTime? StartDate, EndDate;
             string startDate = data.GetValue("startDate").ToString();
             string endDate = data.GetValue("endDate").ToString();
-            int? portId = null;
-            if ( data.GetValue("portId").ToString()!="")
-               Convert.ToInt32(data.GetValue("portId"));
+            //int? portId = null;
+            //if ( data.GetValue("portId").ToString()!="")
+            //   Convert.ToInt32(data.GetValue("portId"));
+            int portID = Convert.ToInt32(data.GetValue("portfolioId"));
 
-            if (portId == 0)
-                portId = null;
+            //if (portId == 0)
+            //    portId = null;
 
             if (startDate != string.Empty)
             {
@@ -392,7 +393,7 @@ namespace Stocks.Controllers
             StiReport report = new StiReport();
             var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_TotalProfitsInYears.mrt");
             report.Load(path);
-            report["@portfolioId"] = portId;
+            report["@portfolioId"] = portID;
             report["@startdate"] = StartDate;
             report["@enddate"] = EndDate;
 
