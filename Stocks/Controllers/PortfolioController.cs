@@ -195,6 +195,55 @@ namespace Stocks.Controllers
         }
 
 
+        [Route("~/api/Portfolio/GetAllportparteners/{id}")]
+        public IEnumerable<PortfolioTransactionModel> GetParteners(int id)
+        {
+
+            var Parteners = unitOfWork.PortfolioTransactionsRepository.Get(filter: s => s.PortfolioID == id).Select(q => new PortfolioTransactionModel
+            {
+                PartnerID = q.PartnerID,
+                CurrentStocksCount = q.CurrentStocksCount,
+                CurrentStockValue = q.CurrentStockValue,
+                partenerCode = q.Partner.Code,
+                partenerNameAR = q.Partner.NameAR,
+                partenerNameEN = q.Partner.NameEN,
+                PortfolioID = q.PortfolioID,
+                PortTransID = q.PortTransID,
+            });
+
+            return Parteners;
+
+
+        }
+
+
+        [Route("~/api/Portfolio/portAccount/{id}")]
+        public PortfolioAccountModel portAccount(int id)
+        {
+
+            var Account = unitOfWork.PortfolioAccountRepository.Get(filter: s => s.PortfolioID == id).Select(q => new PortfolioAccountModel
+            {
+                PortfolioID=q.PortfolioID,
+                AccountCode=q.Account.Code,
+                AccountID=q.AccountID,
+                AccountNameAR=q.Account.NameAR,
+                AccountNameEN=q.Account.NameEN,
+                Credit=q.Account.Credit,
+                Debit=q.Account.Debit,
+                PortfolioAccountID=q.PortfolioAccountID,
+                PortfolioCode=q.Portfolio.Code,
+                PortfolioNameAR=q.Portfolio.NameAR,
+                Type=q.Type,
+                PortfolioNameEN=q.Portfolio.NameEN
+               
+            }).SingleOrDefault();
+
+            return Account;
+
+
+        }
+
+
 
 
         [HttpGet]
