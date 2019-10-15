@@ -422,9 +422,9 @@ namespace Stocks.Controllers
         {
             if (ModelState.IsValid)
             { 
-                if (partnerModel.IssueDate==null)
+                if (partnerModel.IssueDate=="" || partnerModel.IssueDate ==null )
                 {
-                    partnerModel.IssueDate = DateTime.Now.ToString();
+                    partnerModel.IssueDate = DateTime.Now.ToString("d/M/yyyy");
                 }
                 var model = _mapper.Map<Partner>(partnerModel);
                 if (model == null)
@@ -490,8 +490,12 @@ namespace Stocks.Controllers
 
             if (ModelState.IsValid)
             {
-                var checkAccount = unitOfWork.PartnerRepository.Get(NoTrack: "NoTrack", filter: a => a.PartnerID == id);
-                if (checkAccount != null)
+                if (partnerModel.IssueDate == "" || partnerModel.IssueDate == null)
+                {
+                    partnerModel.IssueDate = DateTime.Now.ToString("d/M/yyyy");
+                }
+                var check1 = unitOfWork.PartnerRepository.Get(NoTrack: "NoTrack", filter: a => a.PartnerID == id);
+                if (check1 != null)
                 {
                     var model = _mapper.Map<Partner>(partnerModel);
                     if (model == null)
