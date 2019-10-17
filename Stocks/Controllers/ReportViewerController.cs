@@ -198,10 +198,10 @@ namespace Stocks.Controllers
             StiReport report = new StiReport();
             var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_SellingPurchasing.mrt");
             report.Load(path);
-            report["@portfolioId"] = portId;
-            report["@partnerId"] = partId;
-            report["@startdate"] = StartDate;
-            report["@enddate"] = EndDate;
+            report["@portID"] = portId;
+            report["@partenerID"] = partId;
+            report["@StartDate"] = StartDate;
+            report["@ToDate"] = EndDate;
 
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
