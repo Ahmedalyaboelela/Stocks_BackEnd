@@ -410,15 +410,18 @@ namespace Stocks.Controllers
                     {
                         PurchaseOrderModel purchaseOrderModel = new PurchaseOrderModel();
                         purchaseOrderModel = _mapper.Map<PurchaseOrderModel>(PurchaseOrderEntitylist.SingleOrDefault());
-
-                        purchaseOrderModel.PurchaseDate = PurchaseOrderEntitylist.SingleOrDefault().Date.Value.ToString("d/M/yyyy");
-                        purchaseOrderModel.PurchaseDateHijri = DateHelper.GetHijriDate(PurchaseOrderEntitylist.SingleOrDefault().Date);
-
+                        if (PurchaseOrderEntitylist.SingleOrDefault().Date != null)
+                        {
+                            purchaseOrderModel.PurchaseDate = PurchaseOrderEntitylist.SingleOrDefault().Date.Value.ToString("d/M/yyyy");
+                            purchaseOrderModel.PurchaseDateHijri = DateHelper.GetHijriDate(PurchaseOrderEntitylist.SingleOrDefault().Date);
+                        }
                         var EmplyeeEntity = unitOfWork.EmployeeRepository.Get(filter: e => e.EmployeeID == purchaseOrderModel.EmployeeID).SingleOrDefault();
-                        purchaseOrderModel.EmpCode = EmplyeeEntity.Code;
-                        purchaseOrderModel.EmpNameAR = EmplyeeEntity.NameAR;
-                        purchaseOrderModel.EmpCode = EmplyeeEntity.NameEN;
-
+                        if (EmplyeeEntity != null)
+                        {
+                            purchaseOrderModel.EmpCode = EmplyeeEntity.Code;
+                            purchaseOrderModel.EmpNameAR = EmplyeeEntity.NameAR;
+                            purchaseOrderModel.EmpCode = EmplyeeEntity.NameEN;
+                        }
                         var PortfolioEntity = unitOfWork.PortfolioRepository.Get(filter: p => p.PortfolioID == purchaseOrderModel.PortfolioID).SingleOrDefault();
                         purchaseOrderModel.PortfolioCode = PortfolioEntity.Code;
                         purchaseOrderModel.PortfolioNameAR = PortfolioEntity.NameAR;
@@ -455,15 +458,18 @@ namespace Stocks.Controllers
                     {
                         SellingOrderModel SellingOrderModel = new SellingOrderModel();
                         SellingOrderModel = _mapper.Map<SellingOrderModel>(SellingOrderEntitylist.SingleOrDefault());
-
-                        SellingOrderModel.SellDate = SellingOrderEntitylist.SingleOrDefault().Date.Value.ToString("d/M/yyyy");
-                        SellingOrderModel.SellDateHijri = DateHelper.GetHijriDate(SellingOrderEntitylist.SingleOrDefault().Date);
-
+                        if (SellingOrderEntitylist.SingleOrDefault().Date != null)
+                        {
+                            SellingOrderModel.SellDate = SellingOrderEntitylist.SingleOrDefault().Date.Value.ToString("d/M/yyyy");
+                            SellingOrderModel.SellDateHijri = DateHelper.GetHijriDate(SellingOrderEntitylist.SingleOrDefault().Date);
+                        }
                         var EmplyeeEntity = unitOfWork.EmployeeRepository.Get(filter: e => e.EmployeeID == SellingOrderModel.EmployeeID).SingleOrDefault();
-                        SellingOrderModel.EmpCode = EmplyeeEntity.Code;
-                        SellingOrderModel.EmpNameAR = EmplyeeEntity.NameAR;
-                        SellingOrderModel.EmpCode = EmplyeeEntity.NameEN;
-
+                        if (EmplyeeEntity != null)
+                        {
+                            SellingOrderModel.EmpCode = EmplyeeEntity.Code;
+                            SellingOrderModel.EmpNameAR = EmplyeeEntity.NameAR;
+                            SellingOrderModel.EmpCode = EmplyeeEntity.NameEN;
+                        }
                         var PortfolioEntity = unitOfWork.PortfolioRepository.Get(filter: p => p.PortfolioID == SellingOrderModel.PortfolioID).SingleOrDefault();
                         SellingOrderModel.PortfolioCode = PortfolioEntity.Code;
                         SellingOrderModel.PortfolioNameAR = PortfolioEntity.NameAR;
@@ -658,7 +664,8 @@ namespace Stocks.Controllers
                         }
                     }
                 #endregion
-                #region Partner
+
+                #region Portfolio
                 case 13:
                     {
                         
