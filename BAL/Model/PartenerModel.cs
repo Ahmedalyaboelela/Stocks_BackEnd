@@ -1,4 +1,5 @@
 ﻿using DAL.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -67,5 +68,15 @@ namespace BAL.Model
 
         public string LastCode { get; set; }
         public IEnumerable<CountryModel> Countries { get; set; }
+
+        #region update 14/10/2019
+        public DateTime Date { get; set; }
+        public double Capital { get; set; }
+        public int StocksBlance { get; set; }
+        public string RegNo  { get; set; }
+        public string VatNo { get; set; }
+        public string Notes { get; set; }
+        public IEnumerable<IFormFile> files { get; set; }
+        #endregion
     }
 }
