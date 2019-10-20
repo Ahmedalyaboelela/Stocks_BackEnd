@@ -15,6 +15,17 @@ namespace BAL.Model
         
         public string NameEN { get; set; }
 
+        public string Date { get; set; }
+
+
+        public string DateHijri { get; set; }
+
+        public decimal? Capital { get; set; }
+
+        public string CommercialRegNo { get; set; }
+
+        public string TaxNo { get; set; }
+
         public int IdentityType { get; set; }
         
         public string IdentityNumber { get; set; }
@@ -41,6 +52,7 @@ namespace BAL.Model
         
         public string Email { get; set; }
 
+        public string Notes { get; set; }
         public int AccountID { get; set; }
 
         public string AccountNameAr { get; set; }
