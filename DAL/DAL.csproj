@@ -7,6 +7,7 @@
   <ItemGroup>
     <Compile Remove="Migrations\20190626152511_updateinentriesandothertables.cs" />
     <Compile Remove="Migrations\20190808121734_upd8-8.cs" />
+    <Compile Remove="Migrations\20191020103052_Updatepartner.cs" />
   </ItemGroup>
 
   <ItemGroup>
