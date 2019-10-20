@@ -29,6 +29,8 @@ namespace DAL.Context
 
         public DbSet<Country> Countries { get; set; }
         public DbSet<Partner> Partners { get; set; }
+
+        public DbSet<PartnerAttachment> PartnerAttachments { get; set; }
         public DbSet<Currency> Currencies { get; set; }
 
         public DbSet<Portfolio> Portfolios { get; set; }
