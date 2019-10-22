@@ -22,6 +22,17 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(150)")]
         public string NameEN { get; set; }
 
+        public DateTime Date { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? Capital { get; set; }
+
+        [Column(TypeName = "nvarchar(150)")]
+        public string CommercialRegNo { get; set; }
+
+        [Column(TypeName = "nvarchar(150)")]
+        public string TaxNo { get; set; }
+
         public int IdentityType { get; set; }
 
         [Column(TypeName = "nvarchar(150)")]
@@ -55,6 +66,9 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(150)")]
         public string Email { get; set; }
 
+        [Column(TypeName = "nvarchar(MAX)")]
+        public string Notes { get; set; }
+
         public int AccountID { get; set; }
 
         public int? CountryID { get; set; }
@@ -75,5 +89,7 @@ namespace DAL.Entities
         public virtual ICollection<NoticeDetail> NoticeDetails { get; set; }
 
         public virtual ICollection<ReportSetting> ReportSettings { get; set; }
+
+        public virtual ICollection<PartnerAttachment> PartnerAttachments { get; set; }
     }
 }

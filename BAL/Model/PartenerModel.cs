@@ -1,4 +1,5 @@
 ﻿using DAL.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +15,17 @@ namespace BAL.Model
         public string NameAR { get; set; }
         
         public string NameEN { get; set; }
+
+        public string Date { get; set; }
+
+
+        public string DateHijri { get; set; }
+
+        public decimal? Capital { get; set; }
+
+        public string CommercialRegNo { get; set; }
+
+        public string TaxNo { get; set; }
 
         public int IdentityType { get; set; }
         
@@ -41,6 +53,7 @@ namespace BAL.Model
         
         public string Email { get; set; }
 
+        public string Notes { get; set; }
         public int AccountID { get; set; }
 
         public string AccountNameAr { get; set; }
@@ -55,5 +68,15 @@ namespace BAL.Model
 
         public string LastCode { get; set; }
         public IEnumerable<CountryModel> Countries { get; set; }
+
+        #region update 14/10/2019
+        public DateTime Date { get; set; }
+        public double Capital { get; set; }
+        public int StocksBlance { get; set; }
+        public string RegNo  { get; set; }
+        public string VatNo { get; set; }
+        public string Notes { get; set; }
+        public IEnumerable<IFormFile> files { get; set; }
+        #endregion
     }
 }
