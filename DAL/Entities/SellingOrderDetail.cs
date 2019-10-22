@@ -10,23 +10,10 @@ namespace DAL.Entities
     {
         [Key]
         public int SellOrderDetailID { get; set; }
+
         public float StockCount { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal SellingPrice { get; set; }
-
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal SelingValue { get; set; }
-
-        public float BankCommissionRate { get; set; }
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal BankCommission { get; set; }
-
-        public float TaxRateOnCommission { get; set; }
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal TaxOnCommission { get; set; }
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal NetAmmount { get; set; }
+        public int PriceType { get; set; }
 
         public int SellingOrderID { get; set; }
 
@@ -35,7 +22,7 @@ namespace DAL.Entities
 
 
         [ForeignKey("SellingOrderID")]
-        public virtual SellingOrder SellOrder { get; set; }
+        public virtual SellingOrder SellingOrder { get; set; }
 
         [ForeignKey("PartnerID")]
         public virtual Partner Partner { get; set; }
