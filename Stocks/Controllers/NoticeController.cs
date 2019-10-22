@@ -539,7 +539,7 @@ namespace Stocks.Controllers
             entryModel.NoticeID = Entry.NoticeID;
             entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
             entryModel.ReceiptID = Entry.ReceiptID;
-            entryModel.SellingOrderID = Entry.SellingOrderID;
+            entryModel.SellingInvoiceID = Entry.SellingInvoiceID;
             entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
             {
                 AccCode = m.Account.Code,

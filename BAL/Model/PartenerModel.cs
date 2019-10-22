@@ -69,6 +69,6 @@ namespace BAL.Model
         public string LastCode { get; set; }
         public IEnumerable<CountryModel> Countries { get; set; }
 
-      
+
     }
 }

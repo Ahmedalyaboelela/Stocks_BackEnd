@@ -16,7 +16,7 @@ namespace DAL.Entities
         public string Code { get; set; }
         public DateTime? Date { get; set; }
 
-        public int? SellingOrderID { get; set; }
+        public int? SellingInvoiceID { get; set; }
 
         public int? PurchaseOrderID { get; set; }
 
@@ -26,8 +26,8 @@ namespace DAL.Entities
 
         public bool TransferedToAccounts { get; set; }
 
-        [ForeignKey("SellingOrderID")]
-        public virtual SellingOrder SellingOrder { get; set; }
+        [ForeignKey("SellingInvoiceID")]
+        public virtual SellingInvoice SellingInvoice { get; set; }
 
         [ForeignKey("PurchaseOrderID")]
         public virtual PurchaseOrder PurchaseOrder { get; set; }

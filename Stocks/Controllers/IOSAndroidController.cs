@@ -199,29 +199,28 @@ namespace Stocks.Controllers
         [HttpGet]
         [Route("~/api/IOSAndroid/GetAllportEmpSelling/{EmpID}")]
 
-        public IEnumerable<SellingOrderModel> GetAllportEmpSelling(int EmpID)
+        public IEnumerable<SellingInvoiceModel> GetAllportEmpSelling(int EmpID)
         {
-            if ( unitOfWork.SellingOrderReposetory.Get(filter: x => x.EmployeeID == EmpID).Count()!=0)
+            if ( unitOfWork.SellingInvoiceReposetory.Get(filter: x => x.EmployeeID == EmpID).Count()!=0)
             {
-                var model = unitOfWork.SellingOrderReposetory.Get(filter: x => x.EmployeeID == EmpID).Select(m => new SellingOrderModel
+                var model = unitOfWork.SellingInvoiceReposetory.Get(filter: x => x.EmployeeID == EmpID).Select(m => new SellingInvoiceModel
                 {
                     Code = m.Code,
                     EmployeeID = m.EmployeeID,
                     EmpNameAR = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameAR,
                     EmpCode = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).Code,
                     EmpNameEN = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameEN,
-                    PayWay = m.PayWay,
-                    PortfolioID = m.PortfolioID,
+                 //   PortfolioID = m.PortfolioID,
                     SellDate = m.Date.Value.ToString("d/m/yyyy"),
                     SellDateHijri = DateHelper.GetHijriDate(m.Date),
-                    SellingOrderID = m.SellingOrderID,
-                    PortfolioCode = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).Code,
-                    PortfolioNameAR = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameAR,
-                    PortfolioNameEN = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameEN,
-                    DetailsModels = unitOfWork.SellingOrderDetailRepository.Get(filter: x => x.SellingOrderID == m.SellingOrderID).Select(a => new SelingOrderDetailsModel
+                    SellingInvoiceID = m.SellingInvoiceID,
+                   // PortfolioCode = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).Code,
+                   // PortfolioNameAR = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameAR,
+                   // PortfolioNameEN = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameEN,
+                    DetailsModels = unitOfWork.SellingInvoiceDetailRepository.Get(filter: x => x.SellingInvoiceID == m.SellingInvoiceID).Select(a => new SellingInvoiceDetailsModel
                     {
                         BankCommission = a.BankCommission,
-                        SellingOrderID = a.SellingOrderID,
+                        SellingInvoiceID = a.SellingInvoiceID,
                         BankCommissionRate = a.BankCommissionRate,
                         NetAmmount = a.NetAmmount,
                         PartnerID = a.PartnerID,
@@ -230,7 +229,7 @@ namespace Stocks.Controllers
                         PartnerNameEN = unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).NameEN,
                         SelingValue = a.SelingValue,
                         SellingPrice = a.SellingPrice,
-                        SellOrderDetailID = a.SellOrderDetailID,
+                        SellingInvoiceDetailID = a.SellInvoiceDetailID,
                         StockCount = a.StockCount,
                         TaxOnCommission = a.TaxOnCommission,
                         TaxRateOnCommission = a.TaxRateOnCommission,
@@ -379,9 +378,9 @@ namespace Stocks.Controllers
         {
 
             var LastCode = "";
-            if (unitOfWork.SellingOrderReposetory.Count() != 0)
+            if (unitOfWork.SellingInvoiceReposetory.Count() != 0)
             {
-                LastCode = unitOfWork.SellingOrderReposetory.Last().Code;
+                LastCode = unitOfWork.SellingInvoiceReposetory.Last().Code;
 
             }
 
@@ -613,13 +612,13 @@ namespace Stocks.Controllers
 
         [HttpPost]
         [Route("~/api/IOSAndroid/Selling")]
-        public IActionResult Selling([FromBody] SellingOrderModel sellingOrderModel)
+        public IActionResult Selling([FromBody] SellingInvoiceModel sellingInvoiceModel)
         {
             if (ModelState.IsValid)
             {
                 int portofolioaccount = 0;
-                var Check = unitOfWork.SellingOrderReposetory.Get();
-                if (Check.Any(m => m.Code == sellingOrderModel.Code))
+                var Check = unitOfWork.SellingInvoiceReposetory.Get();
+                if (Check.Any(m => m.Code == sellingInvoiceModel.Code))
                 {
 
                     return Ok(2);
@@ -629,7 +628,7 @@ namespace Stocks.Controllers
                 {
 
 
-                    sellingOrderModel.SettingModel = unitOfWork.SettingRepository.Get(filter: x => x.VoucherType == 1).Select(m => new SettingModel
+                    sellingInvoiceModel.SettingModel = unitOfWork.SettingRepository.Get(filter: x => x.VoucherType == 1).Select(m => new SettingModel
                     {
                         VoucherType = 1,
                         AutoGenerateEntry = m.AutoGenerateEntry,
@@ -651,65 +650,65 @@ namespace Stocks.Controllers
                         })
 
                     }).SingleOrDefault();
-                    portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
-                    var modelselling = _mapper.Map<SellingOrder>(sellingOrderModel);
+                    portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingInvoiceModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
+                    var modelselling = _mapper.Map<SellingInvoice>(sellingInvoiceModel);
 
 
-                    var Details = sellingOrderModel.DetailsModels;
+                    var Details = sellingInvoiceModel.DetailsModels;
 
-                    unitOfWork.SellingOrderReposetory.Insert(modelselling);
+                    unitOfWork.SellingInvoiceReposetory.Insert(modelselling);
                     if (Details != null && Details.Count() > 0)
                     {
                         foreach (var item in Details)
                         {
-                            SelingOrderDetailsModel selingOrderDetailsModel = new SelingOrderDetailsModel();
-                            selingOrderDetailsModel.SellingOrderID = modelselling.SellingOrderID;
-                            selingOrderDetailsModel.NetAmmount = item.NetAmmount;
-                            selingOrderDetailsModel.SelingValue = item.SelingValue;
-                            selingOrderDetailsModel.SellingPrice = item.SellingPrice;
-                            selingOrderDetailsModel.StockCount = item.StockCount;
-                            selingOrderDetailsModel.TaxOnCommission = item.TaxOnCommission;
-                            selingOrderDetailsModel.TaxRateOnCommission = item.TaxRateOnCommission;
-                            selingOrderDetailsModel.BankCommission = item.BankCommission;
-                            selingOrderDetailsModel.BankCommissionRate = item.BankCommissionRate;
-                            selingOrderDetailsModel.PartnerID = item.PartnerID;
+                            SellingInvoiceDetailsModel sellingInvoiceDetailsModel = new SellingInvoiceDetailsModel();
+                            sellingInvoiceDetailsModel.SellingInvoiceID = modelselling.SellingInvoiceID;
+                            sellingInvoiceDetailsModel.NetAmmount = item.NetAmmount;
+                            sellingInvoiceDetailsModel.SelingValue = item.SelingValue;
+                            sellingInvoiceDetailsModel.SellingPrice = item.SellingPrice;
+                            sellingInvoiceDetailsModel.StockCount = item.StockCount;
+                            sellingInvoiceDetailsModel.TaxOnCommission = item.TaxOnCommission;
+                            sellingInvoiceDetailsModel.TaxRateOnCommission = item.TaxRateOnCommission;
+                            sellingInvoiceDetailsModel.BankCommission = item.BankCommission;
+                            sellingInvoiceDetailsModel.BankCommissionRate = item.BankCommissionRate;
+                            sellingInvoiceDetailsModel.PartnerID = item.PartnerID;
 
-                            var details = _mapper.Map<SellingOrderDetail>(selingOrderDetailsModel);
-                            unitOfWork.SellingOrderDetailRepository.Insert(details);
+                            var details = _mapper.Map<SellingInvoiceDetail>(sellingInvoiceDetailsModel);
+                            unitOfWork.SellingInvoiceDetailRepository.Insert(details);
 
                         }
 
                     }
                     #region Warehouse
                     //Check Stocks Count Allowed For Selling 
-                    var Chk = _stocksHelper.CheckStockCountForSelling(sellingOrderModel);
+                    var Chk = _stocksHelper.CheckStockCountForSelling(sellingInvoiceModel);
                     if (!Chk)
                         return Ok(7);
                     // Transfer From Portofolio Stocks
                     else
-                        _stocksHelper.TransferSellingFromStocks(sellingOrderModel);
+                        _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
                     #endregion
 
 
                     //==================================================لا تولد قيد ===================================
-                    if (sellingOrderModel.SettingModel.DoNotGenerateEntry == true)
+                    if (sellingInvoiceModel.SettingModel.DoNotGenerateEntry == true)
                     {
                         unitOfWork.Save();
 
-                        return Ok(sellingOrderModel);
+                        return Ok(sellingInvoiceModel);
                     }
 
                     //===============================================================توليد قيد مع ترحيل تلقائي============================
-                    else if (sellingOrderModel.SettingModel.AutoGenerateEntry == true)
+                    else if (sellingInvoiceModel.SettingModel.AutoGenerateEntry == true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
 
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, sellingOrderModel, null, null, null, lastEntry);
-                        EntryMODEL.SellingOrderID = modelselling.SellingOrderID;
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, sellingInvoiceModel, null, null, null, lastEntry);
+                        EntryMODEL.SellingInvoiceID = modelselling.SellingInvoiceID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         var DetailEnt = EntryMODEL.EntryDetailModel;
 
-                        if (sellingOrderModel.SettingModel.TransferToAccounts == true)
+                        if (sellingInvoiceModel.SettingModel.TransferToAccounts == true)
                         {
                             Entry.TransferedToAccounts = true;
                             unitOfWork.EntryRepository.Insert(Entry);

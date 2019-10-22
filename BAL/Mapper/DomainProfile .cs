@@ -59,16 +59,16 @@ namespace BAL.Mapper
             CreateMap<SettingModel, Setting>();
           
             #endregion 
-            #region Map Selling order
+            #region Map Selling Invoice
 
-            CreateMap<SellingOrder, SellingOrderModel>();
-            CreateMap<SellingOrderModel, SellingOrder>()
+            CreateMap<SellingInvoice, SellingInvoiceModel>();
+            CreateMap<SellingInvoiceModel, SellingInvoice>()
                 .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
                  .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.SellDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
 
-            CreateMap<SellingOrderDetail, SelingOrderDetailsModel>();
-            CreateMap<SelingOrderDetailsModel, SellingOrderDetail>();
+            CreateMap<SellingInvoiceDetail, SellingInvoiceDetailsModel>();
+            CreateMap<SellingInvoiceDetailsModel , SellingInvoiceDetail>();
             #endregion
 
             #region Map Purchase order

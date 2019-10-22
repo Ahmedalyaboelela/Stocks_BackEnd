@@ -14,7 +14,7 @@ namespace BAL.Model
 
         public string DateHijri { get; set; }
 
-        public int? SellingOrderID { get; set; }
+        public int? SellingInvoiceID { get; set; }
 
         public int? PurchaseOrderID { get; set; }
 

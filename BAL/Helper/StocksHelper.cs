@@ -23,10 +23,10 @@ namespace BAL.Helper
 
 
         //Check Stocks Count Allowed For Selling 
-        public bool CheckStockCountForSelling(SellingOrderModel sellingOrderModel)
+        public bool CheckStockCountForSelling(SellingInvoiceModel sellingInvoiceModel)
         {
-            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter:m=> m.PortfolioID== sellingOrderModel.PortfolioID);
-            var Details = sellingOrderModel.DetailsModels;
+            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter:m=> m.PortfolioID== sellingInvoiceModel.PortfolioID);
+            var Details = sellingInvoiceModel.DetailsModels;
             foreach (var detail in Details)
             {
                 if (!PortofolioStocks.Any(m => m.PartnerID == detail.PartnerID))
@@ -54,10 +54,10 @@ namespace BAL.Helper
         }
 
         // Discount Selling Order Stocks Count From Portofolio
-        public void TransferSellingFromStocks(SellingOrderModel sellingOrderModel)
+        public void TransferSellingFromStocks(SellingInvoiceModel sellingInvoiceModel)
         {
-            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == sellingOrderModel.PortfolioID);
-            var Details = sellingOrderModel.DetailsModels;
+            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == sellingInvoiceModel.PortfolioID);
+            var Details = sellingInvoiceModel.DetailsModels;
             foreach (var detail in Details)
             {
                     foreach (var item in PortofolioStocks)
@@ -73,7 +73,7 @@ namespace BAL.Helper
         }
 
         //Cancel Selling Order From Portofolio Stocks
-        public void CancelSellingFromStocks(int PortofolioId, IEnumerable<SellingOrderDetail> oldDetils)
+        public void CancelSellingFromStocks(int PortofolioId, IEnumerable<SellingInvoiceDetail> oldDetils)
         {
             var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == PortofolioId);
             foreach (var detail in oldDetils)

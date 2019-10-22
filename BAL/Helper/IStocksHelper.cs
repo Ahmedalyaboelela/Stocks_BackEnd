@@ -8,10 +8,10 @@ namespace BAL.Helper
 {
     public interface IStocksHelper
     {
-        bool CheckStockCountForSelling(SellingOrderModel sellingOrderModel);
-        void TransferSellingFromStocks(SellingOrderModel sellingOrderModel);
+        bool CheckStockCountForSelling(SellingInvoiceModel sellingInvoiceModel);
+        void TransferSellingFromStocks(SellingInvoiceModel sellingInvoiceModel);
 
-        void CancelSellingFromStocks(int PortofolioId, IEnumerable<SellingOrderDetail> oldDetils);
+        void CancelSellingFromStocks(int PortofolioId, IEnumerable<SellingInvoiceDetail> oldDetils);
 
         void TransferPurchaseToStocks(PurchaseOrderModel purchaseOrderModel);
 
