@@ -90,6 +90,61 @@ namespace Stocks.Controllers
             return report.SaveDocumentJsonToString();
 
         }
+        // Retrieve Resultofportofolio Report after sending parameters
+        [HttpPost]
+        [Route("~/api/ReportViewer/EditResultOfPortofolio")]
+        public IActionResult EditResultOfPortofolioWork([FromBody] JObject data)
+        {
+
+            #region ReportCalculation
+            DateTime ToDate;
+            string todate = data.GetValue("todate").ToString();
+            int portofolioid = Convert.ToInt32(data.GetValue("portofolioid"));
+            int accid = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == portofolioid)
+           .Select(m => m.AccountID).SingleOrDefault();
+            decimal? debit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+                .Select(m => m.Debit).SingleOrDefault() ?? 0;
+            decimal? credit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+                .Select(m => m.Credit).SingleOrDefault() ?? 0;
+            decimal? opendebit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+           .Select(m => m.DebitOpenningBalance).SingleOrDefault() ?? 0;
+            decimal? opencredit = unitOfWork.AccountRepository.Get(filter: m => m.AccountID == accid)
+                .Select(m => m.CreditOpenningBalance).SingleOrDefault() ?? 0;
+            decimal? RiyalBalance = debit - credit;
+            decimal? RiyalOpenBalance = opendebit - opencredit;
+            decimal? StocksOpenVal = 0;
+            var openstocks = unitOfWork.PortfolioOpeningStocksRepository.Get(filter: m => m.PortfolioID == portofolioid).ToList();
+            foreach (var item in openstocks)
+            {
+                StocksOpenVal += item.OpeningStockValue;
+            }
+            if (todate != string.Empty)
+            {
+                ToDate = DateHelper.ChangeDateFormat(todate);
+            }
+            else
+            {
+                ToDate = DateTime.Now;
+            }
+            #endregion
+
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_ResultOfPortofolioWork.mrt");
+            report.Load(path);
+            report["@ToDate"] = ToDate;
+            report["@PortofolioID"] = portofolioid;
+            report["RiyalBalance"] = RiyalBalance;
+            report["RiyalOpenBalance"] = RiyalOpenBalance;
+            report["StocksValue"] = StocksOpenVal;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            // report.Render(false);
+         //   return report.SaveDocumentJsonToString();
+          return StiNetCoreDesigner.GetReportResult(this, report);
+         //   return report.SaveDocumentJsonToString();
+
+        }
+
 
         // Retrieve CashMovementReyalPortofolio Report after sending parameters
         [HttpPost]

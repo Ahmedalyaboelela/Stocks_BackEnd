@@ -10,7 +10,7 @@ namespace BAL.Helper
     {
 
         // Calculate Entry, EntryDetails using Models Case Insert
-        public static EntryModel InsertCalculatedEntries(int portofolioaccount,SellingOrderModel sellingOrderModel=null ,
+        public static EntryModel InsertCalculatedEntries(int portofolioaccount,SellingInvoiceModel sellingInvoiceModel=null ,
             PurchaseOrderModel purchaseOrderModel=null, ReceiptExchangeModel receiptExchangeModel=null,
             NoticeModel noticeModel=null,Entry LastEntry =null,Entry OldEntry=null)
         {
@@ -22,11 +22,11 @@ namespace BAL.Helper
             EntryModel Entrymodel = new EntryModel();
 
             #endregion
-            #region SellingOrder
-            if (sellingOrderModel !=null)
+            #region SellingInvoice
+            if (sellingInvoiceModel != null)
             {
-                var SettingAccsell = sellingOrderModel.SettingModel.SettingAccs;
-                var SellDetails = sellingOrderModel.DetailsModels;
+                var SettingAccsell = sellingInvoiceModel.SettingModel.SettingAccs;
+                var SellDetails = sellingInvoiceModel.DetailsModels;
                 //Get EntryDetail Accounts From Setting
                 #region SettingAccounts
                 foreach (var Accs in SettingAccsell)
@@ -65,7 +65,7 @@ namespace BAL.Helper
 
                     Entrymodel.Code =OldEntry.Code;
                     Entrymodel.Date = OldEntry.Date.Value.ToString("d/M/yyyy");
-                    Entrymodel.SellingOrderID = sellingOrderModel.SellingOrderID;
+                    Entrymodel.SellingInvoiceID = sellingInvoiceModel.SellingInvoiceID;
                 }
                 else
                 {
@@ -78,7 +78,7 @@ namespace BAL.Helper
                         Entrymodel.Code = (int.Parse(LastEntry.Code) + 1).ToString();
                     }
                     Entrymodel.Date = DateTime.Now.ToString("d/M/yyyy");
-                    Entrymodel.SellingOrderID = sellingOrderModel.SellingOrderID;
+                    Entrymodel.SellingInvoiceID = sellingInvoiceModel.SellingInvoiceID;
                 }
                 
                 #endregion
@@ -355,7 +355,7 @@ namespace BAL.Helper
         }
 
         // Calculate EntryDetails using Models Case Update
-        public static List<EntryDetailModel> UpdateCalculateEntries(int portofolioaccount,int EntryID,SellingOrderModel sellingOrderModel = null,
+        public static List<EntryDetailModel> UpdateCalculateEntries(int portofolioaccount,int EntryID,SellingInvoiceModel sellingInvoiceModel = null,
             PurchaseOrderModel purchaseOrderModel = null, ReceiptExchangeModel receiptExchangeModel = null,
             NoticeModel noticeModel = null)
         {
@@ -366,11 +366,11 @@ namespace BAL.Helper
             EntryModel Entrymodel = new EntryModel();
 
             #endregion
-            #region SellingOrder
-            if (sellingOrderModel != null)
+            #region SellingInvoice
+            if (sellingInvoiceModel != null)
             {
-                var SettingAccsell = sellingOrderModel.SettingModel.SettingAccs;
-                var SellDetails = sellingOrderModel.DetailsModels;
+                var SettingAccsell = sellingInvoiceModel.SettingModel.SettingAccs;
+                var SellDetails = sellingInvoiceModel.DetailsModels;
                 //Get EntryDetail Accounts From Setting
                 #region SettingAccounts
                 foreach (var Accs in SettingAccsell)

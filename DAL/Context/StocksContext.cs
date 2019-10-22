@@ -15,6 +15,8 @@ namespace DAL.Context
         {
 
         }
+        public DbSet<SellingInvoice> SellingInvoices { get; set; }
+
         public DbSet<SellingOrder> SellingOrders { get; set; }
 
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
@@ -22,6 +24,8 @@ namespace DAL.Context
         public DbSet<Entry> Entries { get; set; }
 
         public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+        public DbSet<SellingInvoiceDetail> SellingInvoiceDetails { get; set; }
+
         public DbSet<SellingOrderDetail> SellingOrderDetails { get; set; }
         public DbSet<EntryDetail> EntryDetails { get; set; }
 

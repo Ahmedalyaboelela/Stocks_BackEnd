@@ -99,7 +99,7 @@ namespace Stocks.Controllers
                 entryModel.NoticeID = Entry.NoticeID;
                 entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
                 entryModel.ReceiptID = Entry.ReceiptID;
-                entryModel.SellingOrderID = Entry.SellingOrderID;
+                entryModel.SellingInvoiceID = Entry.SellingInvoiceID;
                 entryModel.EntryDetailModel = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID) != null ? unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
                 {
                     AccCode = m.Account.Code,
@@ -133,7 +133,7 @@ namespace Stocks.Controllers
                 entryModel.NoticeID = Entry.NoticeID;
                 entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
                 entryModel.ReceiptID = Entry.ReceiptID;
-                entryModel.SellingOrderID = Entry.SellingOrderID;
+                entryModel.SellingInvoiceID = Entry.SellingInvoiceID;
                 entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
                 {
                     AccCode = m.Account.Code,
@@ -448,43 +448,43 @@ namespace Stocks.Controllers
                     }
                 #endregion
 
-                #region selling Order
+                #region selling Invoice
                 case 2:
-                    var SellingOrderEntitylist = unitOfWork.SellingOrderReposetory.Get(NoTrack: "NoTrack", filter: a => a.Code == Code);
-                    if (SellingOrderEntitylist.Count() > 0)
+                    var SellingInvoiceEntitylist = unitOfWork.SellingInvoiceReposetory.Get(NoTrack: "NoTrack", filter: a => a.Code == Code);
+                    if (SellingInvoiceEntitylist.Count() > 0)
                     {
-                        SellingOrderModel SellingOrderModel = new SellingOrderModel();
-                        SellingOrderModel = _mapper.Map<SellingOrderModel>(SellingOrderEntitylist.SingleOrDefault());
+                        SellingInvoiceModel SellingInvoiceModel = new SellingInvoiceModel();
+                        SellingInvoiceModel = _mapper.Map<SellingInvoiceModel>(SellingInvoiceEntitylist.SingleOrDefault());
 
-                        SellingOrderModel.SellDate = SellingOrderEntitylist.SingleOrDefault().Date.Value.ToString("d/M/yyyy");
-                        SellingOrderModel.SellDateHijri = DateHelper.GetHijriDate(SellingOrderEntitylist.SingleOrDefault().Date);
+                        SellingInvoiceModel.SellDate = SellingInvoiceEntitylist.SingleOrDefault().Date.Value.ToString("d/M/yyyy");
+                        SellingInvoiceModel.SellDateHijri = DateHelper.GetHijriDate(SellingInvoiceEntitylist.SingleOrDefault().Date);
 
-                        var EmplyeeEntity = unitOfWork.EmployeeRepository.Get(filter: e => e.EmployeeID == SellingOrderModel.EmployeeID).SingleOrDefault();
-                        SellingOrderModel.EmpCode = EmplyeeEntity.Code;
-                        SellingOrderModel.EmpNameAR = EmplyeeEntity.NameAR;
-                        SellingOrderModel.EmpCode = EmplyeeEntity.NameEN;
+                        var EmplyeeEntity = unitOfWork.EmployeeRepository.Get(filter: e => e.EmployeeID == SellingInvoiceModel.EmployeeID).SingleOrDefault();
+                        SellingInvoiceModel.EmpCode = EmplyeeEntity.Code;
+                        SellingInvoiceModel.EmpNameAR = EmplyeeEntity.NameAR;
+                        SellingInvoiceModel.EmpCode = EmplyeeEntity.NameEN;
 
-                        var PortfolioEntity = unitOfWork.PortfolioRepository.Get(filter: p => p.PortfolioID == SellingOrderModel.PortfolioID).SingleOrDefault();
-                        SellingOrderModel.PortfolioCode = PortfolioEntity.Code;
-                        SellingOrderModel.PortfolioNameAR = PortfolioEntity.NameAR;
-                        SellingOrderModel.PortfolioNameEN = PortfolioEntity.NameEN;
+                        var PortfolioEntity = unitOfWork.PortfolioRepository.Get(filter: p => p.PortfolioID == SellingInvoiceModel.PortfolioID).SingleOrDefault();
+                        SellingInvoiceModel.PortfolioCode = PortfolioEntity.Code;
+                        SellingInvoiceModel.PortfolioNameAR = PortfolioEntity.NameAR;
+                        SellingInvoiceModel.PortfolioNameEN = PortfolioEntity.NameEN;
 
-                        SellingOrderModel.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: s => s.PortfolioID == SellingOrderModel.PortfolioID).AccountID;
+                        SellingInvoiceModel.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: s => s.PortfolioID == SellingInvoiceModel.PortfolioID).AccountID;
 
-                        var SellingOrderDitailsEntitylist = unitOfWork.SellingOrderDetailRepository.Get(filter: z => z.SellingOrderID == SellingOrderModel.SellingOrderID);
-                        SellingOrderModel.DetailsModels = _mapper.Map<IEnumerable<SelingOrderDetailsModel>>(SellingOrderDitailsEntitylist);
+                        var SellingInvoiceDitailsEntitylist = unitOfWork.SellingInvoiceReposetory.Get(filter: z => z.SellingInvoiceID == SellingInvoiceModel.SellingInvoiceID);
+                        SellingInvoiceModel.DetailsModels = _mapper.Map<IEnumerable<SellingInvoiceDetailsModel>>(SellingInvoiceDitailsEntitylist);
 
-                        SellingOrderModel.SettingModel = GetSetting(1);
+                        SellingInvoiceModel.SettingModel = GetSetting(1);
                       
 
-                        var EntrySellingOrderEntitylist = unitOfWork.EntryRepository.Get(filter: a => a.SellingOrderID == SellingOrderModel.SellingOrderID);
-                        SellingOrderModel.EntryModel = _mapper.Map<EntryModel>(EntrySellingOrderEntitylist.SingleOrDefault());
-                        if (EntrySellingOrderEntitylist.Count() > 0)
+                        var EntrySellingInvoiceEntitylist = unitOfWork.EntryRepository.Get(filter: a => a.SellingInvoiceID == SellingInvoiceModel.SellingInvoiceID);
+                        SellingInvoiceModel.EntryModel = _mapper.Map<EntryModel>(EntrySellingInvoiceEntitylist.SingleOrDefault());
+                        if (EntrySellingInvoiceEntitylist.Count() > 0)
                         {
-                            var EntryDitailsSellingOrderEntitylist = unitOfWork.EntryDetailRepository.Get(filter: d => d.EntryID == SellingOrderModel.EntryModel.EntryID);
-                            SellingOrderModel.EntryModel.EntryDetailModel = _mapper.Map<IEnumerable<EntryDetailModel>>(EntryDitailsSellingOrderEntitylist);
+                            var EntryDitailsSellingInvoiceEntitylist = unitOfWork.EntryDetailRepository.Get(filter: d => d.EntryID == SellingInvoiceModel.EntryModel.EntryID);
+                            SellingInvoiceModel.EntryModel.EntryDetailModel = _mapper.Map<IEnumerable<EntryDetailModel>>(EntryDitailsSellingInvoiceEntitylist);
                         }
-                        return Ok(SellingOrderModel);
+                        return Ok(SellingInvoiceModel);
                     }
                     else
                     {

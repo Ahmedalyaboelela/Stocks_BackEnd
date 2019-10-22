@@ -144,29 +144,29 @@ namespace BAL.Repositories
             }
         }
 
-        private GenericRepository<SellingOrder> sellingOrderRepository;
-        public GenericRepository<SellingOrder> SellingOrderReposetory
+        private GenericRepository<SellingInvoice> sellingInvoiceRepository;
+        public GenericRepository<SellingInvoice> SellingInvoiceReposetory
         {
             get
             {
-                if (this.sellingOrderRepository == null)
+                if (this.sellingInvoiceRepository == null)
                 {
-                    this.sellingOrderRepository = new GenericRepository<SellingOrder>(Context);
+                    this.sellingInvoiceRepository = new GenericRepository<SellingInvoice>(Context);
                 }
-                return sellingOrderRepository;
+                return sellingInvoiceRepository;
             }
         }
 
-        private GenericRepository<SellingOrderDetail> sellingOrderDetailRepository;
-        public GenericRepository<SellingOrderDetail> SellingOrderDetailRepository
+        private GenericRepository<SellingInvoiceDetail> sellingInvoiceDetailRepository;
+        public GenericRepository<SellingInvoiceDetail> SellingInvoiceDetailRepository
         {
             get
             {
-                if (this.sellingOrderDetailRepository == null)
+                if (this.sellingInvoiceDetailRepository == null)
                 {
-                    this.sellingOrderDetailRepository = new GenericRepository<SellingOrderDetail>(Context);
+                    this.sellingInvoiceDetailRepository = new GenericRepository<SellingInvoiceDetail>(Context);
                 }
-                return sellingOrderDetailRepository;
+                return sellingInvoiceDetailRepository;
             }
         }
 
