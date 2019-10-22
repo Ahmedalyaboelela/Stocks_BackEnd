@@ -271,16 +271,9 @@ namespace Stocks.Controllers
         [Route("~/api/SellingOrder/ManualmigrationSellingOrder")]
         public IActionResult ManualmigrationSellingOrder([FromBody]EntryModel entryModel)
         {
-            //var Entry = unitOfWork.EntryRepository.GetByID(EntryMODEL.EntryID);
-            //Entry.TransferedToAccounts = true;
-            //unitOfWork.EntryRepository.Update(Entry);
+           
             var Details = entryModel.EntryDetailModel;
-            //foreach (var item in Details)
-            //{
-            //    var detail = _mapper.Map<SellingOrderDetail>(item);
-
-            //    unitOfWork.SellingOrderDetailRepository.Update(detail);
-            //}
+           
 
   
 
