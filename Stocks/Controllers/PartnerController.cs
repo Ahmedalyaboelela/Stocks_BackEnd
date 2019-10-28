@@ -386,7 +386,7 @@ namespace Stocks.Controllers
 
 
         }
-
+        [HttpGet]
         [Route("~/api/Order/Getname/{id}")]
         public PortfolioPartners Getname(int id)
         {

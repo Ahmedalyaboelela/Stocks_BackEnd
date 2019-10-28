@@ -184,6 +184,30 @@ namespace BAL.Mapper
                  .ForMember(t => t.CurrentDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.CurrentDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
             #endregion
 
+
+
+
+
+            #region Map Setting
+            CreateMap<Setting, SettingModel>();
+            CreateMap<SettingModel, Setting>();
+
+            #endregion
+
+
+
+            #region Map Selling order
+
+            CreateMap<SellingOrder, SellingOrderModel>();
+            CreateMap<SellingOrderModel, SellingOrder>()
+                .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
+                 .ForMember(t => t.OrderDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.OrderDateGorg, "d/M/yyyy", CultureInfo.InvariantCulture)));
+
+
+            CreateMap<SellingOrderDetail, SellingOrderDetailModel>();
+            CreateMap<SellingOrderDetailModel, SellingOrderDetail>();
+            #endregion
+
         }
     }
 }

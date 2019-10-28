@@ -371,6 +371,48 @@ namespace BAL.Repositories
         #endregion
 
 
+
+
+
+
+
+
+        #region sellingOrderRepository 
+
+        private GenericRepository<SellingOrder> sellingOrderRepository;
+        public GenericRepository<SellingOrder> SellingOrderRepository
+        {
+            get
+            {
+
+                if (this.sellingOrderRepository == null)
+                {
+                    this.sellingOrderRepository = new GenericRepository<SellingOrder>(Context);
+                }
+                return sellingOrderRepository;
+            }
+        }
+        #endregion
+
+
+
+        #region sellingOrderDetailRepository
+
+        private GenericRepository<SellingOrderDetail> sellingOrderDetailRepository;
+        public GenericRepository<SellingOrderDetail> SellingOrderDetailRepository
+        {
+            get
+            {
+
+                if (this.sellingOrderDetailRepository == null)
+                {
+                    this.sellingOrderDetailRepository = new GenericRepository<SellingOrderDetail>(Context);
+                }
+                return sellingOrderDetailRepository;
+            }
+        }
+        #endregion
+
         public virtual int Save()
         {
             int returnValue = 200;
