@@ -27,11 +27,13 @@ namespace BAL.Model
         public string PortfolioNameAR { get; set; }
         public string PortfolioNameEN { get; set; }
         public string PortfolioCode { get; set; }
-
+        public int SellingOrderID { get; set; }
         public int Count { get; set; }
+        public string Codeselling { get; set; }
 
         public int PortfolioAccount { get; set; }
         public string LastCode { get; set; }
+        public float TotalStockCount { get; set; }
 
         public IEnumerable<SellingInvoiceDetailsModel> DetailsModels { get; set; }
         public SettingModel SettingModel { get; set; }
