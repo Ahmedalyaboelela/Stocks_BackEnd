@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Stocks.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,Admin,Employee")]
+  // [Authorize(Roles = "SuperAdmin,Admin,Employee")]
     [Route("api/[controller]")]
     [ApiController]
     public class SellingInvoiceController : Controller
@@ -543,21 +543,7 @@ namespace Stocks.Controllers
 
                 var model = _mapper.Map<SellingInvoiceModel>(selling);
 
-                #region portfolio data
-                //var portfolio = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == selling.PortfolioID && x.Type == true);
-                //if (portfolio != null)
-                //{
-
-                //    model.PortfolioAccount = portfolio.AccountID;
-
-                //    // portfolio data
-                //    model.PortfolioCode = portfolio.Portfolio.Code;
-                //    model.PortfolioNameAR = portfolio.Portfolio.NameAR;
-                //    model.PortfolioNameEN = portfolio.Portfolio.NameEN;
-                //    model.PortfolioID = portfolio.Portfolio.PortfolioID;
-                //}
-
-                #endregion
+            
 
                 // employee data
                 #region employee part
@@ -588,8 +574,11 @@ namespace Stocks.Controllers
                     return Ok(model);
 
                 }
-
-
+                model.PortfolioID = unitOfWork.SellingOrderRepository.GetEntity(filter: x => x.SellingOrderID == selling.SellingOrderID).PortfolioID;
+                model.PortfolioCode = unitOfWork.SellingOrderRepository.GetEntity(filter: x => x.SellingOrderID == selling.SellingOrderID).Portfolio.Code;
+                model.PortfolioNameAR = unitOfWork.SellingOrderRepository.GetEntity(filter: x => x.SellingOrderID == selling.SellingOrderID).Portfolio.NameAR;
+                model.PortfolioNameEN = unitOfWork.SellingOrderRepository.GetEntity(filter: x => x.SellingOrderID == selling.SellingOrderID).Portfolio.NameEN;
+                model.Codeselling = unitOfWork.SellingOrderRepository.GetEntity(filter: z => z.SellingOrderID == selling.SellingOrderID).Code;
                 model.Count = unitOfWork.SellingInvoiceReposetory.Count();
 
                 if (model.Count == 0)
@@ -655,6 +644,8 @@ namespace Stocks.Controllers
         {
             if (ModelState.IsValid)
             {
+               
+
                 int portofolioaccount = 0;
                 var Check = unitOfWork.SellingInvoiceReposetory.Get();
                 if (Check.Any(m => m.Code == sellingInvoiceModel.Code))
@@ -811,6 +802,7 @@ namespace Stocks.Controllers
 
             if (ModelState.IsValid)
             {
+               
 
                 var Check = unitOfWork.SellingInvoiceReposetory.Get(NoTrack: "NoTrack");
                 portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingInvoiceModel.PortfolioID && m.Type == true)
@@ -1478,6 +1470,111 @@ namespace Stocks.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("~/api/SellingInvoice/GetAllSellings")]
+        public IEnumerable<sellingComboList> GetAllSelling()
+        {
+
+            var checks = unitOfWork.SellingInvoiceReposetory.Get();
+            List<sellingComboList> sellings = unitOfWork.SellingOrderRepository.Get().Select(x => new sellingComboList
+            {
+
+                Code = x.Code,
+                SellingOrderID = x.SellingOrderID,
+
+
+            }).ToList();
+            List<sellingComboList> lists = new List<sellingComboList>();
+            foreach (var item in sellings)
+            {
+                if (!checks.Any(m => m.SellingOrderID == item.SellingOrderID ))
+                {
+                    lists.Add(item);
+                }
+                if (checks.Any(m=> m.SellingOrderID == item.SellingOrderID &&
+                 m.SellingOrder.OrderType == true ))
+                {
+                    lists.Add(item);
+                }
+            }
+
+
+            return lists;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //var checks = unitOfWork.SellingInvoiceReposetory.Get(filter: x=> x.SellingOrder.OrderType==false).ToList();
+            //var selling = unitOfWork.SellingOrderRepository.Get().Select(x => new sellingComboList
+            //{
+
+            //    Code = x.Code,
+            //    SellingOrderID = x.SellingOrderID,
+
+
+            //}).ToList();
+            ////List<sellingComboList> lists = new List<sellingComboList>();
+            //foreach (var item in selling)
+            //{
+            //    if (checks.Any(m => m.SellingOrderID == item.SellingOrderID))
+            //    {
+            //        selling.Remove(item);
+            //    }
+            //}
+
+            //return selling;
+
+
+
+
+
+
+        }
+
+
+
+
+        [HttpGet]
+        [Route("~/api/SellingInvoice/GetPortfolioINFO/{id}")]
+        public IActionResult GetPortfolioINFO(int id)
+        {
+            var Info = unitOfWork.SellingOrderRepository.Get(filter: x => x.SellingOrderID == id).SingleOrDefault();
+            SellingOrderModel sellingOrderModel = new SellingOrderModel();
+            sellingOrderModel.SellingOrderID = Info.SellingOrderID;
+            sellingOrderModel.PortfolioID = Info.PortfolioID;
+            sellingOrderModel.Portfoliocode = Info.Portfolio.Code;
+            sellingOrderModel.PortfolioNameAR = Info.Portfolio.NameAR;
+            sellingOrderModel.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter:a=> a.PortfolioID==Info.PortfolioID).AccountID;
+            sellingOrderModel.PortfolioAccountName = unitOfWork.PortfolioAccountRepository.GetEntity(filter: a => a.PortfolioID == Info.PortfolioID).Account.NameAR;
+
+
+            return Ok(sellingOrderModel);
+
+
+
+
+
+        }
     }
 }
 
