@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="UploadFiles\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
