@@ -92,7 +92,7 @@ namespace BAL.Helper
         }
 
         // Add Purchase Order Stocks Count To Portofolio
-        public void TransferPurchaseToStocks(PurchaseOrderModel purchaseOrderModel)
+        public void TransferPurchaseToStocks(PurchaseInvoiceModel purchaseOrderModel)
         {
             var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID);
             var Details = purchaseOrderModel.DetailsModels;
@@ -114,7 +114,7 @@ namespace BAL.Helper
         }
 
         //Cancel Purchase Order From Portofolio Stocks
-        public void CancelPurchaseFromStocks(int PortofolioId, IEnumerable<PurchaseOrderDetail> oldDetils)
+        public void CancelPurchaseFromStocks(int PortofolioId, IEnumerable<PurchaseInvoiceDetail> oldDetils)
         {
             var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == PortofolioId);
             foreach (var detail in oldDetils)

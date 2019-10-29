@@ -97,7 +97,7 @@ namespace Stocks.Controllers
                 entryModel.Date = Entry.Date != null ? Entry.Date.Value.ToString("d/M/yyyy") : null;
                 entryModel.DateHijri = Entry.Date != null ? DateHelper.GetHijriDate(Entry.Date) : null;
                 entryModel.NoticeID = Entry.NoticeID;
-                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.PurchaseInvoiceID = Entry.PurchaseInvoiceID;
                 entryModel.ReceiptID = Entry.ReceiptID;
                 entryModel.SellingInvoiceID = Entry.SellingInvoiceID;
                 entryModel.EntryDetailModel = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID) != null ? unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
@@ -131,7 +131,7 @@ namespace Stocks.Controllers
                 entryModel.Date = Entry.Date != null ? Entry.Date.Value.ToString("d/M/yyyy") : null;
                 entryModel.DateHijri = Entry.Date != null ? DateHelper.GetHijriDate(Entry.Date) : null;
                 entryModel.NoticeID = Entry.NoticeID;
-                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.PurchaseInvoiceID = Entry.PurchaseInvoiceID;
                 entryModel.ReceiptID = Entry.ReceiptID;
                 entryModel.SellingInvoiceID = Entry.SellingInvoiceID;
                 entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
@@ -405,14 +405,14 @@ namespace Stocks.Controllers
             {
                 #region Purchase Order
                 case 1:
-                    var PurchaseOrderEntitylist = unitOfWork.PurchaseOrderRepository.Get(NoTrack: "NoTrack", filter: a => a.Code == Code);
+                    var PurchaseOrderEntitylist = unitOfWork.PurchaseInvoiceRepository.Get(NoTrack: "NoTrack", filter: a => a.Code == Code);
                     if (PurchaseOrderEntitylist.Count() > 0)
                     {
-                        PurchaseOrderModel purchaseOrderModel = new PurchaseOrderModel();
-                        purchaseOrderModel = _mapper.Map<PurchaseOrderModel>(PurchaseOrderEntitylist.SingleOrDefault());
+                        PurchaseInvoiceModel purchaseOrderModel = new PurchaseInvoiceModel();
+                        purchaseOrderModel = _mapper.Map<PurchaseInvoiceModel>(PurchaseOrderEntitylist.SingleOrDefault());
 
                         purchaseOrderModel.PurchaseDate = PurchaseOrderEntitylist.SingleOrDefault().Date.Value.ToString("d/M/yyyy");
-                        purchaseOrderModel.PurchaseDateHijri = DateHelper.GetHijriDate(PurchaseOrderEntitylist.SingleOrDefault().Date);
+                        purchaseOrderModel.PurchaseDate = DateHelper.GetHijriDate(PurchaseOrderEntitylist.SingleOrDefault().Date);
 
                         var EmplyeeEntity = unitOfWork.EmployeeRepository.Get(filter: e => e.EmployeeID == purchaseOrderModel.EmployeeID).SingleOrDefault();
                         purchaseOrderModel.EmpCode = EmplyeeEntity.Code;
@@ -426,13 +426,13 @@ namespace Stocks.Controllers
 
                         purchaseOrderModel.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: s => s.PortfolioID == purchaseOrderModel.PortfolioID).AccountID;
 
-                        var PurchaseOrderDitailsEntitylist = unitOfWork.PurchaseOrderDetailRepository.Get(filter: z => z.PurchaseID == purchaseOrderModel.PurchaseOrderID);
-                        purchaseOrderModel.DetailsModels = _mapper.Map<IEnumerable<PurchaseOrderDetailModel>>(PurchaseOrderDitailsEntitylist);
+                        var PurchaseOrderDitailsEntitylist = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: z => z.PurchaseInvoiceID == purchaseOrderModel.PurchaseInvoiceID);
+                        purchaseOrderModel.DetailsModels = _mapper.Map<IEnumerable<PurchaseInvoiceDetailModel>>(PurchaseOrderDitailsEntitylist);
 
                       
                         purchaseOrderModel.SettingModel = GetSetting(2);
 
-                        var EntryPurchaseOrderEntitylist = unitOfWork.EntryRepository.Get(filter: a => a.PurchaseOrderID == purchaseOrderModel.PurchaseOrderID);
+                        var EntryPurchaseOrderEntitylist = unitOfWork.EntryRepository.Get(filter: a => a.PurchaseInvoiceID == purchaseOrderModel.PurchaseInvoiceID);
                         purchaseOrderModel.EntryModel = _mapper.Map<EntryModel>(EntryPurchaseOrderEntitylist.SingleOrDefault());
                         if (EntryPurchaseOrderEntitylist.Count() > 0)
                         {

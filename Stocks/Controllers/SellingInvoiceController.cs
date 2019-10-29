@@ -114,7 +114,7 @@ namespace Stocks.Controllers
                 entryModel.Date = Entry.Date.Value.ToString("d/M/yyyy");
                 entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
                 entryModel.NoticeID = Entry.NoticeID;
-                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.PurchaseInvoiceID = Entry.PurchaseInvoiceID;
                 entryModel.ReceiptID = Entry.ReceiptID;
                 entryModel.SellingInvoiceID = Entry.SellingInvoiceID;
                 entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel

@@ -10,11 +10,11 @@ namespace BAL.Model
         
         public string Code { get; set; }
 
-        public int PayWay { get; set; }
 
-        public string PurchaseDate { get; set; }
-        public string PurchaseDateHijri { get; set; }
+        public string OrderDate { get; set; }
+        public string OrderDateHijri { get; set; }
 
+        public bool OrderType { get; set; }
 
         public int EmployeeID { get; set; }
         public string EmpNameAR { get; set; }
@@ -30,8 +30,9 @@ namespace BAL.Model
         public int PortfolioAccount { get; set; }
         public int Count { get; set; }
         public string LastCode { get; set; }
+        public string PortfolioAccountName { get; set; }
 
-        public  IEnumerable<PurchaseOrderDetailModel> DetailsModels { get; set; }
+        public  IEnumerable<PurchaseInvoiceDetailModel> purchaseOrderDetailsModels { get; set; }
         public  SettingModel SettingModel { get; set; }
         public  EntryModel EntryModel { get; set; }
 

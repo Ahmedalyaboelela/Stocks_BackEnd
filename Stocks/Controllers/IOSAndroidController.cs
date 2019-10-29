@@ -258,27 +258,27 @@ namespace Stocks.Controllers
         [Route("~/api/IOSAndroid/GetAllportEmppurchase/{EmpID}")]
         public IEnumerable<PurchaseOrderModel> GetAllportEmppurchase(int EmpID)
         { 
-            if ( unitOfWork.PurchaseOrderRepository.Get(filter: x => x.EmployeeID == EmpID).Count() !=0)
+            if ( unitOfWork.PurchaseInvoiceRepository.Get(filter: x => x.EmployeeID == EmpID).Count() !=0)
             {
-                var model = unitOfWork.PurchaseOrderRepository.Get(filter: x => x.EmployeeID == EmpID).Select(m => new PurchaseOrderModel
+                var model = unitOfWork.PurchaseInvoiceRepository.Get(filter: x => x.EmployeeID == EmpID).Select(m => new PurchaseOrderModel
                 {
                     Code = m.Code,
                     EmployeeID = m.EmployeeID,
                     EmpNameAR = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameAR,
                     EmpCode = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).Code,
                     EmpNameEN = unitOfWork.EmployeeRepository.GetEntity(x => x.EmployeeID == EmpID).NameEN,
-                    PayWay = m.PayWay,
-                    PortfolioID = m.PortfolioID,
-                    PurchaseDate = m.Date.Value.ToString("d/m/yyyy"),
-                    PurchaseDateHijri = DateHelper.GetHijriDate(m.Date),
+                   
+                    PortfolioID = m.PurchaseOrder.PortfolioID,
+                    OrderDate = m.Date.Value.ToString("d/m/yyyy"),
+                    OrderDateHijri = DateHelper.GetHijriDate(m.Date),
                     PurchaseOrderID = m.PurchaseOrderID,
-                    PortfolioCode = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).Code,
-                    PortfolioNameAR = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameAR,
-                    PortfolioNameEN = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).NameEN,
-                    DetailsModels = unitOfWork.PurchaseOrderDetailRepository.Get(filter: x => x.PurchaseID == m.PurchaseOrderID).Select(a => new PurchaseOrderDetailModel
+                    PortfolioCode = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PurchaseOrder.PortfolioID).Code,
+                    PortfolioNameAR = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PurchaseOrder.PortfolioID).NameAR,
+                    PortfolioNameEN = unitOfWork.PortfolioRepository.GetEntity(filter: x => x.PortfolioID == m.PurchaseOrder.PortfolioID).NameEN,
+                    purchaseOrderDetailsModels = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: x => x.PurchaseInvoiceID == m.PurchaseInvoiceID).Select(a => new PurchaseInvoiceDetailModel
                     {
                         BankCommission = a.BankCommission,
-                        PurchaseID = a.PurchaseID,
+                        PurchaseInvoiceID = a.PurchaseInvoiceID,
                         BankCommissionRate = a.BankCommissionRate,
                         NetAmmount = a.NetAmmount,
                         PartnerID = a.PartnerID,
@@ -287,7 +287,7 @@ namespace Stocks.Controllers
                         PartnerNameEN = unitOfWork.PartnerRepository.GetEntity(filter: q => q.PartnerID == a.PartnerID).NameEN,
                         PurchaseValue = a.PurchaseValue,
                         PurchasePrice = a.PurchasePrice,
-                        PurchaseOrderDetailID = a.PurchaseOrderDetailID,
+                        PurchaseInvoiceDetailID = a.PurchaseInvoiceDetailID,
                         StockCount = a.StockCount,
                         TaxOnCommission = a.TaxOnCommission,
                         TaxRateOnCommission = a.TaxRateOnCommission,
@@ -441,7 +441,7 @@ namespace Stocks.Controllers
 
         [HttpPost]
         [Route("~/api/IOSAndroid/Purchase")]
-        public IActionResult Purchase([FromBody] PurchaseOrderModel purchaseOrderModel)
+        public IActionResult Purchase([FromBody] PurchaseInvoiceModel purchaseOrderModel)
         {
             if (ModelState.IsValid)
             {
@@ -474,19 +474,19 @@ namespace Stocks.Controllers
 
                     }).SingleOrDefault();
 
-                    var purchaseOrder = _mapper.Map<PurchaseOrder>(purchaseOrderModel);
+                    var purchaseOrder = _mapper.Map<PurchaseInvoice>(purchaseOrderModel);
                     int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
 
 
                     var Details = purchaseOrderModel.DetailsModels;
 
-                    unitOfWork.PurchaseOrderRepository.Insert(purchaseOrder);
+                    unitOfWork.PurchaseInvoiceRepository.Insert(purchaseOrder);
                     if (Details != null && Details.Count() > 0)
                     {
                         foreach (var item in Details)
                         {
-                            PurchaseOrderDetailModel purchaseOrderDetailModel = new PurchaseOrderDetailModel();
-                            purchaseOrderDetailModel.PurchaseID = purchaseOrder.PurchaseOrderID;
+                            PurchaseInvoiceDetailModel purchaseOrderDetailModel = new PurchaseInvoiceDetailModel();
+                            purchaseOrderDetailModel.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
                             purchaseOrderDetailModel.NetAmmount = item.NetAmmount;
                             purchaseOrderDetailModel.StockCount = item.StockCount;
                             purchaseOrderDetailModel.TaxOnCommission = item.TaxOnCommission;
@@ -496,8 +496,8 @@ namespace Stocks.Controllers
                             purchaseOrderDetailModel.PurchaseValue = item.PurchaseValue;
                             purchaseOrderDetailModel.PurchasePrice = item.PurchasePrice;
                             purchaseOrderDetailModel.PartnerID = item.PartnerID;
-                            var details = _mapper.Map<PurchaseOrderDetail>(purchaseOrderDetailModel);
-                            unitOfWork.PurchaseOrderDetailRepository.Insert(details);
+                            var details = _mapper.Map<PurchaseInvoiceDetail>(purchaseOrderDetailModel);
+                            unitOfWork.PurchaseInvoiceDetailRepository.Insert(details);
 
                         }
                     }
@@ -535,7 +535,7 @@ namespace Stocks.Controllers
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, purchaseOrderModel, null, null, lastEntry);
-                        EntryMODEL.PurchaseOrderID = purchaseOrder.PurchaseOrderID;
+                        EntryMODEL.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         var DetailEnt = EntryMODEL.EntryDetailModel;
 

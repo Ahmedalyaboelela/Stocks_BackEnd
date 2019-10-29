@@ -216,7 +216,6 @@ namespace BAL.Repositories
                 return purchaseOrderRepository;
             }
         }
-
         private GenericRepository<PurchaseOrderDetail> purchaseOrderDetailRepository;
         public GenericRepository<PurchaseOrderDetail> PurchaseOrderDetailRepository
         {
@@ -227,6 +226,34 @@ namespace BAL.Repositories
                     this.purchaseOrderDetailRepository = new GenericRepository<PurchaseOrderDetail>(Context);
                 }
                 return purchaseOrderDetailRepository;
+            }
+        }
+
+
+        private GenericRepository<PurchaseInvoice> purchaseInvoiceRepository;
+        public GenericRepository<PurchaseInvoice> PurchaseInvoiceRepository
+        {
+            get
+            {
+                if (this.purchaseInvoiceRepository == null)
+                {
+                    this.purchaseInvoiceRepository = new GenericRepository<PurchaseInvoice>(Context);
+                }
+                return purchaseInvoiceRepository;
+            }
+        }
+
+
+        private GenericRepository<PurchaseInvoiceDetail> purchaseInvoiceDetailRepository;
+        public GenericRepository<PurchaseInvoiceDetail> PurchaseInvoiceDetailRepository
+        {
+            get
+            {
+                if (this.purchaseInvoiceDetailRepository == null)
+                {
+                    this.purchaseInvoiceDetailRepository = new GenericRepository<PurchaseInvoiceDetail>(Context);
+                }
+                return purchaseInvoiceDetailRepository;
             }
         }
 
