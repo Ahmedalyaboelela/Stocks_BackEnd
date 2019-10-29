@@ -18,7 +18,6 @@ namespace BAL.Model
 
         public string Date { get; set; }
 
-
         public string DateHijri { get; set; }
 
         public decimal? Capital { get; set; }
@@ -70,13 +69,10 @@ namespace BAL.Model
         public IEnumerable<CountryModel> Countries { get; set; }
 
         #region update 14/10/2019
-        public DateTime Date { get; set; }
-        public double Capital { get; set; }
-        public int StocksBlance { get; set; }
-        public string RegNo  { get; set; }
-        public string VatNo { get; set; }
-        public string Notes { get; set; }
-        public IEnumerable<IFormFile> files { get; set; }
+
+        public int StocksCount { get; set; }
+
+        public ICollection<PartnerAttachmentModel> PartnerAttachments { get; set; }
         #endregion
     }
 }

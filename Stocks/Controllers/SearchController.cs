@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin,Admin,Employee")]
+    [Authorize(Roles = "SuperAdmin,Admin,Employee")]
     [Route("api/[controller]")]
     [ApiController]
     public class SearchController : Controller
@@ -629,6 +629,7 @@ namespace Stocks.Controllers
                         }
                     }
                 #endregion
+                
                 #region Employee
                 case 11:
                     {
@@ -653,9 +654,23 @@ namespace Stocks.Controllers
                         var PartnerEntityList = unitOfWork.PartnerRepository.Get(filter: x => x.Code == Code || x.NameAR == Code);
                         if (PartnerEntityList.Count() > 0)
                         {
-                            PartenerModel partnerModel = _mapper.Map<PartenerModel>(PartnerEntityList.SingleOrDefault());
+                            Partner partner = PartnerEntityList.SingleOrDefault();
+                            PartenerModel partnerModel = _mapper.Map<PartenerModel>(partner);
                             var Countries = unitOfWork.CountryRepository.Get(filter: x => x.CountryID == partnerModel.CountryID);
                             partnerModel.Countries = _mapper.Map<IEnumerable<CountryModel>>(Countries);
+                            if (partner.IssueDate != null)
+                            {
+                               partnerModel.IssueDate = partner.IssueDate.Value.ToString("d/M/yyyy");
+                               partnerModel.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
+                            }
+
+                            if (partner.Date != null)
+                            {
+
+                                partnerModel.Date = partner.Date.ToString("d/M/yyyy");
+                                partnerModel.DateHijri = DateHelper.GetHijriDate(partner.Date);
+
+                            }
                             return Ok(partnerModel);
                         }
                         else
