@@ -64,16 +64,16 @@ namespace BAL.Mapper
             CreateMap<SettingModel, Setting>();
           
             #endregion 
-            #region Map Selling order
+            #region Map Selling Invoice
 
-            CreateMap<SellingOrder, SellingOrderModel>();
-            CreateMap<SellingOrderModel, SellingOrder>()
+            CreateMap<SellingInvoice, SellingInvoiceModel>();
+            CreateMap<SellingInvoiceModel, SellingInvoice>()
                 .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
                  .ForMember(t => t.Date, opt => opt.MapFrom(s => DateTime.ParseExact(s.SellDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
 
-            CreateMap<SellingOrderDetail, SelingOrderDetailsModel>();
-            CreateMap<SelingOrderDetailsModel, SellingOrderDetail>();
+            CreateMap<SellingInvoiceDetail, SellingInvoiceDetailsModel>();
+            CreateMap<SellingInvoiceDetailsModel , SellingInvoiceDetail>();
             #endregion
 
             #region Map Purchase order
@@ -187,6 +187,30 @@ namespace BAL.Mapper
             CreateMap<ReportSetting, ReportSettingModel>();
             CreateMap<ReportSettingModel, ReportSetting>()
                  .ForMember(t => t.CurrentDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.CurrentDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
+            #endregion
+
+
+
+
+
+            #region Map Setting
+            CreateMap<Setting, SettingModel>();
+            CreateMap<SettingModel, Setting>();
+
+            #endregion
+
+
+
+            #region Map Selling order
+
+            CreateMap<SellingOrder, SellingOrderModel>();
+            CreateMap<SellingOrderModel, SellingOrder>()
+                .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
+                 .ForMember(t => t.OrderDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.OrderDateGorg, "d/M/yyyy", CultureInfo.InvariantCulture)));
+
+
+            CreateMap<SellingOrderDetail, SellingOrderDetailModel>();
+            CreateMap<SellingOrderDetailModel, SellingOrderDetail>();
             #endregion
 
         }

@@ -54,7 +54,7 @@ namespace DAL.Entities
 
         public virtual ICollection<EmployeeCard> EmployeeCards { get; set; }
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
-        public virtual ICollection<SellingOrder> SellingOrders { get; set; }
+        public virtual ICollection<SellingInvoice> SellingInvoices { get; set; }
         public virtual ICollection<Notice> Notices { get; set; }
     }
 }

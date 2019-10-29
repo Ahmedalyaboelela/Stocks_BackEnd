@@ -132,7 +132,7 @@ namespace Stocks.Controllers
 
         #region Insert Method
         [HttpPost]
-        [Authorize(Roles = "SuperAdmin")]
+   //     [Authorize(Roles = "SuperAdmin")]
         [Route("Register")]
         //Post: /api/ApplicationUser/Register
         public async Task<object> PostApplicationUser(UserModel model)

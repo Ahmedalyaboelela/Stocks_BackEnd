@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,Admin,Employee")]
+    //[Authorize(Roles = "SuperAdmin,Admin,Employee")]
     [Route("api/[controller]")]
     [ApiController]
     public class SearchController : Controller
@@ -99,7 +99,7 @@ namespace Stocks.Controllers
                 entryModel.NoticeID = Entry.NoticeID;
                 entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
                 entryModel.ReceiptID = Entry.ReceiptID;
-                entryModel.SellingOrderID = Entry.SellingOrderID;
+                entryModel.SellingInvoiceID = Entry.SellingInvoiceID;
                 entryModel.EntryDetailModel = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID) != null ? unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel
                 {
                     AccCode = m.Account.Code,
@@ -133,7 +133,7 @@ namespace Stocks.Controllers
                 entryModel.NoticeID = Entry.NoticeID;
                 entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
                 entryModel.ReceiptID = Entry.ReceiptID;
-                entryModel.SellingOrderID = Entry.SellingOrderID;
+                entryModel.SellingInvoiceID = Entry.SellingInvoiceID;
                 entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
                 {
                     AccCode = m.Account.Code,
@@ -410,18 +410,15 @@ namespace Stocks.Controllers
                     {
                         PurchaseOrderModel purchaseOrderModel = new PurchaseOrderModel();
                         purchaseOrderModel = _mapper.Map<PurchaseOrderModel>(PurchaseOrderEntitylist.SingleOrDefault());
-                        if (PurchaseOrderEntitylist.SingleOrDefault().Date != null)
-                        {
-                            purchaseOrderModel.PurchaseDate = PurchaseOrderEntitylist.SingleOrDefault().Date.Value.ToString("d/M/yyyy");
-                            purchaseOrderModel.PurchaseDateHijri = DateHelper.GetHijriDate(PurchaseOrderEntitylist.SingleOrDefault().Date);
-                        }
+
+                        purchaseOrderModel.PurchaseDate = PurchaseOrderEntitylist.SingleOrDefault().Date.Value.ToString("d/M/yyyy");
+                        purchaseOrderModel.PurchaseDateHijri = DateHelper.GetHijriDate(PurchaseOrderEntitylist.SingleOrDefault().Date);
+
                         var EmplyeeEntity = unitOfWork.EmployeeRepository.Get(filter: e => e.EmployeeID == purchaseOrderModel.EmployeeID).SingleOrDefault();
-                        if (EmplyeeEntity != null)
-                        {
-                            purchaseOrderModel.EmpCode = EmplyeeEntity.Code;
-                            purchaseOrderModel.EmpNameAR = EmplyeeEntity.NameAR;
-                            purchaseOrderModel.EmpCode = EmplyeeEntity.NameEN;
-                        }
+                        purchaseOrderModel.EmpCode = EmplyeeEntity.Code;
+                        purchaseOrderModel.EmpNameAR = EmplyeeEntity.NameAR;
+                        purchaseOrderModel.EmpCode = EmplyeeEntity.NameEN;
+
                         var PortfolioEntity = unitOfWork.PortfolioRepository.Get(filter: p => p.PortfolioID == purchaseOrderModel.PortfolioID).SingleOrDefault();
                         purchaseOrderModel.PortfolioCode = PortfolioEntity.Code;
                         purchaseOrderModel.PortfolioNameAR = PortfolioEntity.NameAR;
@@ -451,52 +448,68 @@ namespace Stocks.Controllers
                     }
                 #endregion
 
-                #region selling Order
+                #region selling Invoice
                 case 2:
-                    var SellingOrderEntitylist = unitOfWork.SellingOrderReposetory.Get(NoTrack: "NoTrack", filter: a => a.Code == Code);
-                    if (SellingOrderEntitylist.Count() > 0)
+                    var SellingInvoiceEntitylist = unitOfWork.SellingInvoiceReposetory.Get(NoTrack: "NoTrack", filter: a => a.Code == Code).SingleOrDefault();
+                    if (SellingInvoiceEntitylist.Code != null)
                     {
-                        SellingOrderModel SellingOrderModel = new SellingOrderModel();
-                        SellingOrderModel = _mapper.Map<SellingOrderModel>(SellingOrderEntitylist.SingleOrDefault());
-                        if (SellingOrderEntitylist.SingleOrDefault().Date != null)
-                        {
-                            SellingOrderModel.SellDate = SellingOrderEntitylist.SingleOrDefault().Date.Value.ToString("d/M/yyyy");
-                            SellingOrderModel.SellDateHijri = DateHelper.GetHijriDate(SellingOrderEntitylist.SingleOrDefault().Date);
-                        }
-                        var EmplyeeEntity = unitOfWork.EmployeeRepository.Get(filter: e => e.EmployeeID == SellingOrderModel.EmployeeID).SingleOrDefault();
-                        if (EmplyeeEntity != null)
-                        {
-                            SellingOrderModel.EmpCode = EmplyeeEntity.Code;
-                            SellingOrderModel.EmpNameAR = EmplyeeEntity.NameAR;
-                            SellingOrderModel.EmpCode = EmplyeeEntity.NameEN;
-                        }
-                        var PortfolioEntity = unitOfWork.PortfolioRepository.Get(filter: p => p.PortfolioID == SellingOrderModel.PortfolioID).SingleOrDefault();
-                        SellingOrderModel.PortfolioCode = PortfolioEntity.Code;
-                        SellingOrderModel.PortfolioNameAR = PortfolioEntity.NameAR;
-                        SellingOrderModel.PortfolioNameEN = PortfolioEntity.NameEN;
+                        SellingInvoiceModel SellingInvoiceModel = new SellingInvoiceModel();
+                        SellingInvoiceModel = _mapper.Map<SellingInvoiceModel>(SellingInvoiceEntitylist);
 
-                        SellingOrderModel.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: s => s.PortfolioID == SellingOrderModel.PortfolioID).AccountID;
+                        SellingInvoiceModel.SellDate = SellingInvoiceEntitylist.Date.Value.ToString("d/M/yyyy");
+                        SellingInvoiceModel.SellDateHijri = DateHelper.GetHijriDate(SellingInvoiceEntitylist.Date);
 
-                        var SellingOrderDitailsEntitylist = unitOfWork.SellingOrderDetailRepository.Get(filter: z => z.SellingOrderID == SellingOrderModel.SellingOrderID);
-                        SellingOrderModel.DetailsModels = _mapper.Map<IEnumerable<SelingOrderDetailsModel>>(SellingOrderDitailsEntitylist);
+                        var EmplyeeEntity = unitOfWork.EmployeeRepository.Get(filter: e => e.EmployeeID == SellingInvoiceModel.EmployeeID).SingleOrDefault();
+                        SellingInvoiceModel.EmpCode = EmplyeeEntity.Code;
+                        SellingInvoiceModel.EmpNameAR = EmplyeeEntity.NameAR;
+                        SellingInvoiceModel.EmpCode = EmplyeeEntity.NameEN;
+                        var id = unitOfWork.SellingOrderRepository.GetEntity(filter: x => x.SellingOrderID == SellingInvoiceEntitylist.SellingOrderID).PortfolioID;
+                        var PortfolioEntity = unitOfWork.PortfolioRepository.Get(filter: p => p.PortfolioID == id).SingleOrDefault();
+                        SellingInvoiceModel.PortfolioCode = PortfolioEntity.Code;
+                        SellingInvoiceModel.PortfolioNameAR = PortfolioEntity.NameAR;
+                        SellingInvoiceModel.PortfolioNameEN = PortfolioEntity.NameEN;
 
-                        SellingOrderModel.SettingModel = GetSetting(1);
+                        SellingInvoiceModel.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: s => s.PortfolioID == id).AccountID;
+
+                        SellingInvoiceModel.DetailsModels = unitOfWork.SellingInvoiceDetailRepository.Get(filter: z => z.SellingInvoiceID == SellingInvoiceEntitylist.SellingInvoiceID).Select( a=> new SellingInvoiceDetailsModel {
+                            BankCommission=a.BankCommission,
+                            BankCommissionRate=a.BankCommissionRate,
+                            NetAmmount=a.NetAmmount,
+                            PartnerCode=a.Partner.Code,
+                            PartnerID=a.PartnerID,
+                            PartnerNameAR=a.Partner.NameAR,
+                            PartnerNameEN=a.Partner.NameEN,
+                            SelingValue=a.SelingValue,
+                            SellingInvoiceDetailID=a.SellInvoiceDetailID,
+                            SellingInvoiceID=a.SellingInvoiceID,
+                            SellingPrice=a.SellingPrice,
+                            StockCount=a.StockCount,
+                            StocksCount=a.StockCount,
+                            TaxRateOnCommission=a.TaxRateOnCommission,
+                            TaxOnCommission=a.TaxOnCommission,
+                        });
+                         
+
+                        SellingInvoiceModel.SettingModel = GetSetting(1);
                       
 
-                        var EntrySellingOrderEntitylist = unitOfWork.EntryRepository.Get(filter: a => a.SellingOrderID == SellingOrderModel.SellingOrderID);
-                        SellingOrderModel.EntryModel = _mapper.Map<EntryModel>(EntrySellingOrderEntitylist.SingleOrDefault());
-                        if (EntrySellingOrderEntitylist.Count() > 0)
+                        var EntrySellingInvoiceEntitylist = unitOfWork.EntryRepository.Get(filter: a => a.SellingInvoiceID == SellingInvoiceModel.SellingInvoiceID);
+                        SellingInvoiceModel.EntryModel = _mapper.Map<EntryModel>(EntrySellingInvoiceEntitylist.SingleOrDefault());
+                        if (EntrySellingInvoiceEntitylist.Count() > 0)
                         {
-                            var EntryDitailsSellingOrderEntitylist = unitOfWork.EntryDetailRepository.Get(filter: d => d.EntryID == SellingOrderModel.EntryModel.EntryID);
-                            SellingOrderModel.EntryModel.EntryDetailModel = _mapper.Map<IEnumerable<EntryDetailModel>>(EntryDitailsSellingOrderEntitylist);
+                            var EntryDitailsSellingInvoiceEntitylist = unitOfWork.EntryDetailRepository.Get(filter: d => d.EntryID == SellingInvoiceModel.EntryModel.EntryID);
+                            SellingInvoiceModel.EntryModel.EntryDetailModel = _mapper.Map<IEnumerable<EntryDetailModel>>(EntryDitailsSellingInvoiceEntitylist);
                         }
-                        return Ok(SellingOrderModel);
+                        return Ok(SellingInvoiceModel);
                     }
                     else
                     {
                         return Ok(0);
                     }
                 #endregion
+
+             
+
 
                 #region Notice Creditor
                 case 3:
@@ -629,7 +642,6 @@ namespace Stocks.Controllers
                         }
                     }
                 #endregion
-                
                 #region Employee
                 case 11:
                     {
@@ -654,23 +666,9 @@ namespace Stocks.Controllers
                         var PartnerEntityList = unitOfWork.PartnerRepository.Get(filter: x => x.Code == Code || x.NameAR == Code);
                         if (PartnerEntityList.Count() > 0)
                         {
-                            Partner partner = PartnerEntityList.SingleOrDefault();
-                            PartenerModel partnerModel = _mapper.Map<PartenerModel>(partner);
+                            PartenerModel partnerModel = _mapper.Map<PartenerModel>(PartnerEntityList.SingleOrDefault());
                             var Countries = unitOfWork.CountryRepository.Get(filter: x => x.CountryID == partnerModel.CountryID);
                             partnerModel.Countries = _mapper.Map<IEnumerable<CountryModel>>(Countries);
-                            if (partner.IssueDate != null)
-                            {
-                               partnerModel.IssueDate = partner.IssueDate.Value.ToString("d/M/yyyy");
-                               partnerModel.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
-                            }
-
-                            if (partner.Date != null)
-                            {
-
-                                partnerModel.Date = partner.Date.ToString("d/M/yyyy");
-                                partnerModel.DateHijri = DateHelper.GetHijriDate(partner.Date);
-
-                            }
                             return Ok(partnerModel);
                         }
                         else
@@ -680,7 +678,7 @@ namespace Stocks.Controllers
                     }
                 #endregion
 
-                #region Portfolio
+                #region portfolio
                 case 13:
                     {
                         
@@ -694,7 +692,78 @@ namespace Stocks.Controllers
                             return Ok(0);
                         }
                     }
+                #endregion
+
+
+                #region selling Order
+
+
+                case 14:
+                    {
+
+                      
+                           
+                                var sellingorder = unitOfWork.SellingOrderRepository.Get(filter: x=> x.Code== Code).SingleOrDefault();
+                                var model = _mapper.Map<SellingOrderModel>(sellingorder);
+
+                                #region Date part 
+                                if (sellingorder.OrderDate != null)
+                                {
+                                    model.OrderDateGorg = sellingorder.OrderDate.ToString("d/M/yyyy");
+                                    model.OrderDateHigri = DateHelper.GetHijriDate(sellingorder.OrderDate);
+                                }
+
+
+
+                                #endregion
+
+                                #region  Details
+                                var Details = unitOfWork.SellingOrderDetailRepository
+
+                                    .Get(filter: m => m.SellingOrderID == sellingorder.SellingOrderID)
+                                    .Select(m => new SellingOrderDetailModel
+                                    {
+                                        PartnerID = m.PartnerID,
+                                        PartnerNameAr = m.Partner.NameAR,
+                                        PriceType = m.PriceType,
+                                        SellingOrderID = m.SellingOrderID,
+                                        SellOrderDetailID = m.SellOrderDetailID,
+                                        StockCount = m.StockCount,
+                                        PartnerCode = m.Partner.Code
+
+
+
+
+                                    });
+
+
+
+
+                                if (Details != null)
+                                {
+                                    model.sellingOrderDetailModels = Details;
+
+                                }
+
+                                #endregion
+                                model.Count = unitOfWork.SellingOrderRepository.Count();
+                                model.Portfoliocode = unitOfWork.PortfolioRepository.GetEntity(filter: a => a.PortfolioID == sellingorder.PortfolioID).Code;
+
+                                return Ok(model);
+
+
+                            }
+                           
+                        
+                    
+
+
+
+
+
+
                     #endregion
+
             }
             return Ok("Error Table Number");
          }

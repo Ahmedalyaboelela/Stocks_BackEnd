@@ -439,11 +439,11 @@ namespace Stocks.Controllers
                 var model = _mapper.Map<Portfolio>(portModel);
                 var currentstocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == model.PortfolioID);
 
-                var Checkselles = unitOfWork.SellingOrderReposetory.Get(filter: q => q.PortfolioID == model.PortfolioID);
-                if (Checkselles.Any(m => m.PortfolioID == model.PortfolioID))
-                {
-                    return Ok(5);
-                }
+                //var Checkselles = unitOfWork.SellingInvoiceReposetory.Get(filter: q => q.PortfolioID == model.PortfolioID);
+                //if (Checkselles.Any(m => m.PortfolioID == model.PortfolioID))
+                //{
+                //    return Ok(5);
+                //}
 
                 var Checkpurches = unitOfWork.PurchaseOrderRepository.Get(filter: q => q.PortfolioID == model.PortfolioID);
                 if (Checkpurches.Any(m => m.PortfolioID == model.PortfolioID))
@@ -753,11 +753,11 @@ namespace Stocks.Controllers
 
                 var currentstocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID==portfolio.PortfolioID);
               
-                var Checkselles = unitOfWork.SellingOrderReposetory.Get(filter: q=> q.PortfolioID==portfolio.PortfolioID);
-                if (Checkselles.Any(m => m.PortfolioID == portfolio.PortfolioID))
-                {
-                    return Ok(5);
-                }
+                //var Checkselles = unitOfWork.SellingInvoiceReposetory.Get(filter: q=> q.PortfolioID==portfolio.PortfolioID);
+                //if (Checkselles.Any(m => m.PortfolioID == portfolio.PortfolioID))
+                //{
+                //    return Ok(5);
+                //}
 
                 var Checkpurches = unitOfWork.PurchaseOrderRepository.Get(filter: q => q.PortfolioID == portfolio.PortfolioID);
                 if (Checkpurches.Any(m => m.PortfolioID == portfolio.PortfolioID))

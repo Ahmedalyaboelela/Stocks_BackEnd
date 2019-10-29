@@ -91,6 +91,20 @@ namespace Stocks.Controllers
 
         }
 
+
+        //[HttpPost]
+        //[Route("~/api/ReportViewer/savereport")]
+        //public IActionResult SaveReport()
+        //{
+        //    var report = StiNetCoreDesigner.GetReportObject(this);
+
+        //    var path = StiNetCoreHelper.MapWebRootPath(this, "Reports/RPT_ResultOfPortofolioWork.mrt");
+        //    report.Save(path);
+
+        //    return StiNetCoreDesigner.SaveReportResult(this);
+        //}
+
+
         // Retrieve CashMovementReyalPortofolio Report after sending parameters
         [HttpPost]
         [Route("~/api/ReportViewer/CashMovementReyalPortofolio")]
@@ -161,8 +175,6 @@ namespace Stocks.Controllers
             return report.SaveDocumentJsonToString();
 
         }
-        #endregion
-
 
 
         #region Selling & Purchase Stocks 
@@ -198,10 +210,10 @@ namespace Stocks.Controllers
             StiReport report = new StiReport();
             var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_SellingPurchasing.mrt");
             report.Load(path);
-            report["@portfolioId"] = portId;
-            report["@partnerId"] = partId;
-            report["@startdate"] = StartDate;
-            report["@enddate"] = EndDate;
+            report["@portID"] = portId;
+            report["@partenerID"] = partId;
+            report["@StartDate"] = StartDate;
+            report["@ToDate"] = EndDate;
 
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
@@ -264,13 +276,6 @@ namespace Stocks.Controllers
         }
         #endregion
 
-
-
-
-
-
-
-
         #region   portfolio Evaluateport
 
 
@@ -288,7 +293,8 @@ namespace Stocks.Controllers
             string firstdate = data.GetValue("firstdate").ToString();
             string enddate = data.GetValue("enddate").ToString();
             int portID = Convert.ToInt32(data.GetValue("portID"));
-            if (todate == string.Empty && firstdate == string.Empty && enddate == string.Empty) {
+            if (todate == string.Empty && firstdate == string.Empty && enddate == string.Empty)
+            {
                 ToDate = DateTime.Now;
 
             }
@@ -306,23 +312,23 @@ namespace Stocks.Controllers
                     Enddate = null;
                 else
                     Enddate = DateHelper.ChangeDateFormat(enddate);
-            
 
 
-            StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Earnings.mrt");
-            report.Load(path);
-            report["@todate"] = ToDate;
-            report["@startdate"] = Firstdate;
-            report["@enddate"] = Enddate;
-            report["@portID"] = portID;
 
-            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
-            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
-            report.Render(false);
-            return report.SaveDocumentJsonToString();
+                StiReport report = new StiReport();
+                var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Earnings.mrt");
+                report.Load(path);
+                report["@todate"] = ToDate;
+                report["@startdate"] = Firstdate;
+                report["@enddate"] = Enddate;
+                report["@portID"] = portID;
 
-        }
+                var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+                dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+                report.Render(false);
+                return report.SaveDocumentJsonToString();
+
+            }
             return null;
         }
         #endregion
@@ -336,7 +342,7 @@ namespace Stocks.Controllers
         {
             DateTime fDate = DateTime.ParseExact(fromDate, "d/M/yyyy", CultureInfo.InvariantCulture);
             DateTime tDate = DateTime.ParseExact(toDate, "d/M/yyyy", CultureInfo.InvariantCulture);
-            if(fDate.Year != tDate.Year)
+            if (fDate.Year != tDate.Year)
             {
                 return "Bad Request";
             }
@@ -469,8 +475,8 @@ namespace Stocks.Controllers
 
             DateTime Startdate;
             int portID = Convert.ToInt32(data.GetValue("portID"));
-            string startdate= data.GetValue("startdate").ToString();
-            string enddate= data.GetValue("enddate").ToString();
+            string startdate = data.GetValue("startdate").ToString();
+            string enddate = data.GetValue("enddate").ToString();
             Enddate = DateHelper.ChangeDateFormat(enddate);
             Startdate = DateHelper.ChangeDateFormat(startdate);
 
@@ -483,7 +489,7 @@ namespace Stocks.Controllers
             report["@enddate"] = Enddate;
             report["@startdate"] = Startdate;
             report["@portID"] = portID;
-           
+
 
 
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
@@ -494,15 +500,15 @@ namespace Stocks.Controllers
 
 
 
-  //    9-	توزيع الارباح المحصلة على السنة موزعة على الارباع
+        //    9-	توزيع الارباح المحصلة على السنة موزعة على الارباع
 
         [HttpPost]
         [Route("~/api/ReportViewer/Earningscollected")]
         public string Earningscollected([FromBody] JObject data)
         {
-           
 
-            
+
+
             int portID = Convert.ToInt32(data.GetValue("portID"));
             string year = data.GetValue("year").ToString();
 
@@ -513,7 +519,7 @@ namespace Stocks.Controllers
             var path = StiNetCoreHelper.MapPath(this, "Reports/RPT_Earningscollected.mrt");
             report.Load(path);
             report["@Year"] = year;
-            
+
             report["@portID"] = portID;
 
 
@@ -523,6 +529,86 @@ namespace Stocks.Controllers
             report.Render(false);
             return report.SaveDocumentJsonToString();
         }
+
+        #endregion
+
+
+        #region Printing Reports
+        #region Print NoticeCredit
+        // Print Notice Credit
+        [HttpPost]
+        [Route("~/api/ReportViewer/printCreditnote")]
+        public string printCreditnote([FromBody] JObject data)
+        {
+
+            int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_NoticeCredit.mrt");
+            report.Load(path);
+            report["@NoticeID1"] = NoticeID;
+            report["@NoticeID2"] = NoticeID;
+            report["@NoticeID3"] = NoticeID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+
+        // Print Notice Debit
+        [HttpPost]
+        [Route("~/api/ReportViewer/printDebitnote")]
+        public string printDebitnote([FromBody] JObject data)
+        {
+
+            int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_NoticeDebit.mrt");
+            report.Load(path);
+            report["@NoticeID1"] = NoticeID;
+            report["@NoticeID2"] = NoticeID;
+            report["@NoticeID3"] = NoticeID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+        // Print Notice Debit
+        [HttpPost]
+        [Route("~/api/ReportViewer/printRiyalReciept")]
+        public string printRiyalReciept([FromBody] JObject data)
+        {
+
+            int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_RiyalRecieptVoucher.mrt");
+            report.Load(path);
+            report["@NoticeID1"] = NoticeID;
+            report["@NoticeID2"] = NoticeID;
+            report["@NoticeID3"] = NoticeID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+        #endregion
+        #endregion
+
+
+
+
+
+
+
+
 
 
     }

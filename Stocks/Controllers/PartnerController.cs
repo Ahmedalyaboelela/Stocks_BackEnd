@@ -437,21 +437,9 @@ namespace Stocks.Controllers
 
 
         [Route("~/api/Partner/GetAllPortfolioPartners/{id}")]
-        public IActionResult GetAllPortfolioPartners(int id)
+        public IEnumerable<PortfolioPartners>GetAllPortfolioPartners(int id)
         {
-            // partners in portfolio openingstocks
-            var openingPartner = unitOfWork.PortfolioOpeningStocksRepository.Get(filter: a => a.PortfolioID == id).Select(p => new PortfolioPartners
-            {
-                PartnerID = p.PartnerID,
-                Code = p.Partner.Code,
-                NameAR = p.Partner.NameAR,
-                NameEN = p.Partner.NameEN,
-                StocksCount = p.OpeningStocksCount,
-                StocksValue = p.OpeningStockValue
 
-
-            }).ToList();
-            //var openingPartnerModel= _mapper.Map<IEnumerable<PartenerModel>>(openingPartner).ToList();
 
             // partners in portfolio transactions
             var transPartners = unitOfWork.PortfolioTransactionsRepository.Get(filter: a => a.PortfolioID == id).Select(p => new PortfolioPartners
@@ -465,28 +453,38 @@ namespace Stocks.Controllers
 
 
 
-            }).ToList();
-            //var transPartnersModel = _mapper.Map<IEnumerable<PartenerModel>>(transPartners).ToList();
+            });
+            return transPartners;
 
-            // concat 2 lists
-            if( transPartners != null && transPartners.Count() > 0)
-            {
-                
-                return Ok(transPartners);
-            }
-            else if(openingPartner != null && openingPartner.Count() > 0)
-            {
-                return Ok(openingPartner);
 
-            }
-            else 
-            {
-                return Ok(transPartners);
 
-            }
-            
-      
+
+
         }
+        [HttpGet]
+        [Route("~/api/Order/Getname/{id}")]
+        public PortfolioPartners Getname(int id)
+        {
+
+
+            var part = unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == id);
+            PortfolioPartners portfolio = new PortfolioPartners();
+            portfolio.NameAR = part.NameAR;
+            portfolio.NameEN = part.NameEN;
+            portfolio.Code = part.Code;
+            portfolio.PartnerID = part.PartnerID;
+           
+
+            return portfolio;
+
+
+
+
+
+        }
+
+
+
         #endregion
 
         #region Insert Method

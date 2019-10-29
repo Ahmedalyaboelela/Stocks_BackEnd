@@ -33,8 +33,8 @@
         <Name>DataSource2</Name>
         <NameInSource>MS SQL</NameInSource>
         <Parameters isList="true" count="2">
-          <value>_x0040_Year,_x0032_019,18,10</value>
-          <value>_x0040_portID,_x0032_026,8,32</value>
+          <value>_x0040_Year,_x0032_018,18,10</value>
+          <value>_x0040_portID,_x0031_008,8,32</value>
         </Parameters>
         <SqlCommand>EXEC [dbo].[RPT_Earningscollected] @Year,@portID</SqlCommand>
       </DataSource2>
@@ -878,7 +878,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
                 <NegativePattern>1</NegativePattern>
                 <State>DecimalDigits</State>
               </TextFormat>
-              <Type>DataColumn</Type>
+              <Type>Expression</Type>
             </Text22>
             <Text23 Ref="44" type="Text" isKey="true">
               <Brush>Transparent</Brush>
@@ -898,7 +898,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
                 <NegativePattern>1</NegativePattern>
                 <State>DecimalDigits</State>
               </TextFormat>
-              <Type>DataColumn</Type>
+              <Type>Expression</Type>
             </Text23>
             <Text24 Ref="46" type="Text" isKey="true">
               <Brush>Transparent</Brush>
@@ -1291,10 +1291,10 @@ Div(DataSource2.R4,DataSource2.StockCountinFOurthQUter)
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>10/2/2019 3:19:34 PM</ReportChanged>
+  <ReportChanged>10/15/2019 2:25:13 PM</ReportChanged>
   <ReportCreated>10/2/2019 12:39:03 PM</ReportCreated>
-  <ReportFile>C:\Users\Administrator.KARIMDEV\Desktop\New folder\RPT_Earningscollected.mrt</ReportFile>
-  <ReportGuid>780b17c82a164aaebc63cf364a8a11aa</ReportGuid>
+  <ReportFile>D:\Stocks\Back\Stocks\Reports\RPT_Earningscollected.mrt</ReportFile>
+  <ReportGuid>2ef5f0220ee540b681358c0707fbd864</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Inches</ReportUnit>
   <ReportVersion>2019.3.4.0</ReportVersion>

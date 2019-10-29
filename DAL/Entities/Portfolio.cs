@@ -31,7 +31,7 @@ namespace DAL.Entities
         public virtual ICollection<PortfolioOpeningStocks> PortfolioOpeningStocks { get; set; }
         public virtual ICollection<PortfolioAccount> PortfolioAccounts { get; set; }
         public virtual ICollection<PortfolioTransaction> PortfolioTransactions { get; set; }
-        public virtual ICollection<SellingOrder> SellOrders { get; set; }
+        public virtual ICollection<SellingOrder> SellingOrders { get; set; }
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual ICollection<Notice> Notices { get; set; }
 

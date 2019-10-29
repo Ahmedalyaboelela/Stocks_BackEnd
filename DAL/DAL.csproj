@@ -8,10 +8,11 @@
     <Compile Remove="Migrations\20190626152511_updateinentriesandothertables.cs" />
     <Compile Remove="Migrations\20190808121734_upd8-8.cs" />
     <Compile Remove="Migrations\20191020103052_Updatepartner.cs" />
+    <Compile Remove="Migrations\20191021112301_AddNewSellOrder.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.4" />
