@@ -51,5 +51,7 @@
 [9]- Country .
 [10]-Account .
 [11]- Employee .
+[12]- partner.
+[13]- Portfolio
 
 

@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.IO;
 
 namespace Stocks.Controllers
 {
@@ -22,6 +24,71 @@ namespace Stocks.Controllers
     [ApiController]
     public class PartnerController : ControllerBase
     {
+    
+
+        [HttpPost, DisableRequestSizeLimit]
+        //[Consumes("multipart/form-data")]
+        [Route("~/api/Partner/UploadFile/{PartnerID}")]
+        public IActionResult UploadFile(int PartnerID)
+        {
+                var partner = unitOfWork.PartnerRepository.GetByID(PartnerID);
+                if (partner != null)
+                {
+                    PartnerAttachmentModel partnerAttachmentModel = new PartnerAttachmentModel();
+                    partnerAttachmentModel.PartnerID = PartnerID;
+                    IEnumerable<IFormFile> files = Request.Form.Files;
+                    List<object> paths = new List<object>();
+                    Dictionary<string,string> temp;
+                    for (int i = 0; i < files.Count(); i++)
+                    {
+                        IFormFile file = files.ElementAt(i);
+                        temp = UploadHelper.SaveFile(file, "Partner");
+                        partnerAttachmentModel.FilePath = temp.GetValueOrDefault("dbPath");
+                        partnerAttachmentModel.FileName = temp.GetValueOrDefault("_ext");
+                        PartnerAttachment partnerAttachment = _mapper.Map<PartnerAttachment>(partnerAttachmentModel);
+                        unitOfWork.PartnerAttachmentRepository.Insert(partnerAttachment);
+                        unitOfWork.Save();
+                        paths.Add(temp);
+
+                    }
+                    return Ok(paths);
+                }  
+            return NotFound();
+        }
+
+
+        [HttpGet]
+        [Route("~/api/Partner/GetAllFiles/{PartnerID}")]
+        public IActionResult GetAllFile(int PartnerID)
+        {
+            var partner = unitOfWork.PartnerRepository.GetByID(PartnerID);
+            if (partner != null)
+            {
+                IEnumerable<PartnerAttachment> partnerAttachments = unitOfWork.PartnerAttachmentRepository.Get(filter: x => x.PartnerID == PartnerID);
+                IEnumerable<PartnerAttachmentModel> partnerAttachmentModels =_mapper.Map<IEnumerable<PartnerAttachmentModel>>(partnerAttachments);
+                return Ok(partnerAttachmentModels);
+            }
+            return Ok(0);
+        }
+
+        [HttpDelete]
+        [Route("~/api/Partner/deleteFile/{PartnerAttachID}")]
+        public IActionResult deleteFile(int PartnerAttachID)
+        {
+            var PartnerAttach = unitOfWork.PartnerAttachmentRepository.GetByID(PartnerAttachID);
+            if (PartnerAttach != null)
+            {
+                if (System.IO.File.Exists(Directory.GetCurrentDirectory()+ PartnerAttach.FilePath))
+                {
+                    System.IO.File.Delete(Directory.GetCurrentDirectory()+ PartnerAttach.FilePath);
+                }
+                unitOfWork.PartnerAttachmentRepository.Delete(PartnerAttachID);
+                unitOfWork.Save();
+                return Ok("done");
+            }
+            return Ok(0);
+        }
+
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
@@ -163,6 +230,14 @@ namespace Stocks.Controllers
 
                         model.IssueDate = partner.IssueDate.Value.ToString("d/M/yyyy");
                         model.IssueDateHijri = DateHelper.GetHijriDate(partner.IssueDate);
+
+                    }
+
+                    if (partner.Date != null)
+                    {
+
+                        model.Date = partner.Date.ToString("d/M/yyyy");
+                        model.DateHijri = DateHelper.GetHijriDate(partner.Date);
 
                     }
 
@@ -491,6 +566,10 @@ namespace Stocks.Controllers
                 if (partnerModel.IssueDate == "" || partnerModel.IssueDate == null)
                 {
                     partnerModel.IssueDate = DateTime.Now.ToString("d/M/yyyy");
+                }
+                if (partnerModel.Date == "" || partnerModel.Date == null)
+                {
+                    partnerModel.Date = DateTime.Now.ToString("d/M/yyyy");
                 }
                 var check1 = unitOfWork.PartnerRepository.Get(NoTrack: "NoTrack", filter: a => a.PartnerID == id);
                 if (check1 != null)

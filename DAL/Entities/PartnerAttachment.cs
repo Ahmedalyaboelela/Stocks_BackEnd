@@ -15,6 +15,10 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(250)")]
         public string FilePath { get; set; }
 
+        [Required]
+        [Column(TypeName = "nvarchar(250)")]
+        public string FileName { get; set; }
+
         public int PartnerID { get; set; }
 
 

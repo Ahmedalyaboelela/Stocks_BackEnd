@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -51,9 +52,18 @@ namespace Stocks.Controllers
             return Ok(pathes);
 
         }
+        [HttpDelete]
+        [Route("~/api/Employee/DeleteImage/{name}")]
+        public IActionResult deleteFile(string name)
+        {
+                if (System.IO.File.Exists(Directory.GetCurrentDirectory() + "/UploadFiles/Employee/" + name))
+                {
+                    System.IO.File.Delete(Directory.GetCurrentDirectory() + "/UploadFiles/Employee/"  + name);
+                }
+                return Ok("done");
+        }
 
         [HttpPost, DisableRequestSizeLimit]
-        //[Consumes("multipart/form-data")]
         [Route("~/api/Employee/UploadImage")]
         public IActionResult UploadImage()
         {

@@ -321,7 +321,10 @@ namespace Stocks.Controllers
 
 
                     }
-
+                    if (portModel.EstablishDate ==null)
+                    {
+                        portModel.EstablishDate = DateTime.Now.ToString();
+                    }
                     var model = _mapper.Map<Portfolio>(portModel);
 
                     #region Bind List Accounts & Shareholders
@@ -429,6 +432,10 @@ namespace Stocks.Controllers
 
             if (ModelState.IsValid)
             {
+                if (portModel.EstablishDate == null)
+                {
+                    portModel.EstablishDate = DateTime.Now.ToString();
+                }
                 var model = _mapper.Map<Portfolio>(portModel);
                 var currentstocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == model.PortfolioID);
 

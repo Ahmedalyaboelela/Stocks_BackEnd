@@ -1,0 +1,285 @@
+<div class="app-main__inner">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb background-none d-flex align-items-center">
+                <li class="breadcrumb-item active">
+                    <a href="#">
+                        <i class="fa fa-home">
+                        </i>
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span>سند صرف ريال</span>
+                </li>
+            </ol>
+        </nav>    
+        <div class="card-body text-right pl-0 pr-0">
+            <form>   
+                <div class="titele__bage d-flex justify-content-between align-items-center pl-0 pr-0 pb-0">
+                    <div class="row w-100 align-content-center justify-content-between d-flex pr-0">
+                        <div class="col-12 d-flex justify-content-end align-items-center pl-0">
+                            <div class="pages d-flex align-items-center">
+                                <button class="bord-radu-right">
+                                    <i class="fa fa-angle-double-right"></i>
+                                </button>
+                                <button>
+                                    <i class="fa fa-chevron-right"></i>
+                                </button>
+                                <input type="text" class="text-center border-0" value="5">
+                                <input type="text" class="text-center border-0" value="5">
+                                <button>
+                                    <i class="fa fa-chevron-left"></i>
+                                </button>
+                                <button class="bord-radu-left">
+                                    <i class="fa fa-angle-double-left"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-4 col-xl-12">
+                            <nav class="navbar navbar-expand-xl background-none">
+                                <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <div class="collapse navbar-collapse p-xl-0 pt-3" id="navbarNav">
+                                    <ul class="navbar-nav tabs-animated pr-0">
+                                        <li class="nav-item mb-2">
+                                            <button class="nav-link w-100 text-right mr-0">
+                                                <i class="fas fa-plus-square"></i>
+                                                <span class="mr-2">جديد</span>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item mb-2">
+                                            <button class="nav-link w-100 text-right">
+                                                <i class="fas fa-plus"></i>
+                                                <span class="mr-2">اضافه</span>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item mb-2">
+                                            <button class="nav-link w-100 text-right">
+                                                <i class="fas fa-edit"></i>
+                                                <span class="mr-2">تعديل</span>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item mb-2">
+                                            <button class="nav-link w-100 text-right">
+                                                <i class="fas fa-trash"></i>
+                                                <span class="mr-2">حذف</span>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item mb-2">
+                                            <button class="nav-link w-100 text-right">
+                                                <i class="fas fa-print"></i>
+                                                <span class="mr-2">طباعه</span>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item mb-2">
+                                            <button class="nav-link w-100 text-right" disabled>
+                                                <i class="fas fa-arrow-left"></i>
+                                                <span class="mr-2">توليد قيد</span>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item mb-2">
+                                            <button type="button" class="nav-link w-100 text-right" data-toggle="modal" data-target="#exampleModalScrollable">
+                                                <i class="fas fa-eye"></i>
+                                                <span class="mr-2">عرض القيد</span>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item mb-2">
+                                            <button class="nav-link w-100 text-right" disabled>
+                                                <i class="fas fa-arrow-left"></i>
+                                                <span class="mr-2">ترحيل تلقائي</span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div> 
+                <div class="form__page mb-4">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 d-flex align-items-center">
+                            <div class="row flex-column flex-lg-row w-100 mb-3">
+                                <div class="col-lg-4 col-12 d-flex align-items-center justify-content-start">
+                                    <label for="sexuality" class="mb-lg-0 mt-lg-0 mb-2 mt-3">
+                                        سند قبض
+                                    </label>
+                                </div>
+                                <div class="col-lg-8 col-12">
+                                    <div class="d-flex align-items-center w-100">
+                                        <div class="input-group-addon">
+                                            <i class="fas fa-flag"></i>
+                                        </div>
+                                        <input name="sexuality" id="sexuality" type="text" class="form-control w-100" placeholder="سند قبض">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 d-flex align-items-center">
+                            <div class="row flex-column flex-lg-row w-100 mb-3">
+                                <div class="col-lg-4 col-12 d-flex align-items-center justify-content-start">
+                                    <label for="date" class="mb-lg-0 mt-lg-0 mb-2 mt-3">
+                                        التاريخ
+                                    </label>
+                                </div>
+                                <div class="col-lg-8 col-12">
+                                    <div class="d-flex align-items-center w-100">
+                                        <div class="w-25 d-flex ">
+                                            <span class="btn-calender active w-50 text-center" id="ad_button">م</span>
+                                            <span class="btn-calender w-50 text-center" id="hijri_button">هـ</span>
+                                        </div>
+                                        <div class="w-75">
+                                            <input name="date" id="ad_Input" type="date" class="form-control pr-0 pl-2 w-100 ad_Input">
+                                            <input name="date" id="hijri_Input" type="date" class="form-control pr-0 pl-2 w-100 d-none hijri_Input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-6 d-flex align-items-center">
+                            <div class="row flex-column flex-lg-row w-100 mb-3">
+                                <div class="col-lg-4 col-12 d-flex align-items-center justify-content-start">
+                                    <label for="account" class="mb-lg-0 mt-lg-0 mb-2 mt-3">
+                                        اختيار المحفظه
+                                    </label>
+                                </div>
+                                <div class="col-lg-8 col-12">
+                                    <div class="d-flex align-items-center w-100 search position-relative">
+                                        <input name="account" id="account" type="search" class="form-control w-100 pr-2" placeholder="اختيار المحفظه">
+                                        <button class="search-button" type="button" data-toggle="modal" data-target="#exampleModal">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12 d-flex align-items-center">
+                            <div class="row flex-column flex-lg-row w-100 mb-3">
+                                <div class="col-lg-4 col-12 d-flex align-items-center justify-content-start">
+                                    <label class="mb-lg-0 mt-lg-0 mb-2 mt-3">
+                                        مناوله
+                                    </label>
+                                </div>
+                                <div class="col-lg-8 col-12">
+                                    <div class="d-flex align-items-center w-100">
+                                        <div class="input-group-addon">
+                                            <i class="fas fa-flag"></i>
+                                        </div>
+                                        <input type="text" class="form-control w-100" placeholder="مناوله">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-12 d-flex align-items-center">
+                            <div class="row flex-column flex-lg-row w-100 mb-3">
+                                <div class="col-lg-4 col-12 d-flex align-items-center justify-content-start">
+                                    <label class="mb-lg-0 mt-lg-0 mb-2 mt-3">
+                                        الحساب
+                                    </label>
+                                </div>
+                                <div class="col-lg-8 col-12">
+                                    <div class="d-flex align-items-center w-100">
+                                        <div class="input-group-addon">
+                                            <i class="fas fa-flag"></i>
+                                        </div>
+                                        <input type="text" class="form-control w-100" placeholder="الحساب">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12 d-flex align-items-center">
+                            <div class="row flex-column flex-lg-row w-100 mb-3">
+                                <div class="col-lg-4 col-12 d-flex align-items-center justify-content-start">
+                                    <label class="mb-lg-0 mt-lg-0 mb-2 mt-3">
+                                        البيان
+                                    </label>
+                                </div>
+                                <div class="col-lg-8 col-12">
+                                    <div class="d-flex align-items-center w-100">
+                                        <div class="input-group-addon">
+                                            <i class="fas fa-flag"></i>
+                                        </div>
+                                        <input type="text" class="form-control w-100" placeholder="البيان">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn-edit mt-3 ml-4 mb-5">
+                                <i class="fas fa-arrow-down m-0"></i>
+                                <span class="mr-2">اضف الى القيد</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="border border-light border-radius-5 p-2">
+                        <h5 class="text-right mt-2 mr-2 mb-4">مدين</h5>
+                        <div class="overflow-auto p-2 border-radius-5 border border-light">
+                            <table class="table table-bordered text-right m-auto">
+                                <thead class="back-thead-1">
+                                    <tr>
+                                        <th scope="col">الكود</th>
+                                        <th scope="col">اسم الحساب</th>
+                                        <th scope="col">مدين</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            1
+                                        </td>
+                                        <td>
+                                            حساب 1
+                                        </td>
+                                        <td>
+                                            <input type="text">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            1
+                                        </td>
+                                        <td>
+                                            حساب 1
+                                        </td>
+                                        <td>
+                                            <input type="text">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h5 class="text-right mt-4 mr-2 mb-4">دائن</h5>
+                        <div class="overflow-auto mt-4 p-2 border-radius-5 border border-light">
+                            <table class="table table-bordered text-right m-auto">
+                                <thead class="back-thead-2">
+                                    <tr>
+                                        <th scope="col">الكود</th>
+                                        <th scope="col">اسم الحساب</th>
+                                        <th scope="col">مدين</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            1
+                                        </td>
+                                        <td>
+                                            حساب 1
+                                        </td>
+                                        <td>
+                                            <input type="text">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>    
+    </div> 

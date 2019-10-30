@@ -59,6 +59,23 @@ namespace BAL.Repositories
         }
         #endregion
 
+        #region Partner Attachment repository
+
+        private GenericRepository<PartnerAttachment> partnerAttachmentRepository;
+        public GenericRepository<PartnerAttachment> PartnerAttachmentRepository
+        {
+            get
+            {
+
+                if (this.partnerAttachmentRepository == null)
+                {
+                    this.partnerAttachmentRepository = new GenericRepository<PartnerAttachment>(Context);
+                }
+                return partnerAttachmentRepository;
+            }
+        }
+        #endregion
+
         #region Country repository
 
         private GenericRepository<Country> countryRepository;
