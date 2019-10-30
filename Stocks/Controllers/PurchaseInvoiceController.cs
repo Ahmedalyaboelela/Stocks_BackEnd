@@ -16,8 +16,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Stocks.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin,Admin,Employee")]
-    //[Route("api/[controller]")]
+    [Authorize(Roles = "SuperAdmin,Admin,Employee")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PurchaseInvoiceController : ControllerBase
     {
@@ -191,21 +191,21 @@ namespace Stocks.Controllers
 
         [HttpPost] // يولد قيد يدوي مع ترحيل تلقائي
         [Route("~/api/PurchaseInvoice/GenerateconstraintManual")]
-        public IActionResult GenerateconstraintManual([FromBody]PurchaseInvoiceModel purchaseOrderModel)
+        public IActionResult GenerateconstraintManual([FromBody]PurchaseInvoiceModel purchaseInvoiceModel)
         { 
-            if (purchaseOrderModel.SettingModel.GenerateEntry==true)
+            if (purchaseInvoiceModel.SettingModel.GenerateEntry==true)
             {
                 var lastEntry = unitOfWork.EntryRepository.Last();
-                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
+                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseInvoiceModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
 
 
-                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
+                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseInvoiceModel, null, null, lastEntry);
                 var Entry = _mapper.Map<Entry>(EntryMODEL);
 
 
                 var DetailEnt = EntryMODEL.EntryDetailModel;
 
-                if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
+                if (purchaseInvoiceModel.SettingModel.TransferToAccounts == true)
                 {
                     Entry.TransferedToAccounts = true;
                     unitOfWork.EntryRepository.Insert(Entry);
@@ -261,11 +261,11 @@ namespace Stocks.Controllers
                 {
                     return Ok(6);
                 }
-                //purchaseOrderModel.EntryModel = GetEntryPurchaseInvoiceModel(purchaseOrderModel.PurchaseInvoiceID);
+                //purchaseInvoiceModel.EntryModel = GetEntryPurchaseInvoiceModel(purchaseInvoiceModel.PurchaseInvoiceID);
 
             }
 
-            return Ok(purchaseOrderModel);
+            return Ok(purchaseInvoiceModel);
 
         }
 
@@ -665,12 +665,12 @@ namespace Stocks.Controllers
 
         [HttpPost]
         [Route("~/api/PurchaseInvoice/PostPurchaseInvoice")]
-        public IActionResult PostPurchaseInvoice([FromBody] PurchaseInvoiceModel purchaseOrderModel)
+        public IActionResult PostPurchaseInvoice([FromBody] PurchaseInvoiceModel purchaseInvoiceModel)
         {
             if (ModelState.IsValid)
             {
                 var Check = unitOfWork.PurchaseInvoiceRepository.Get();
-                if (Check.Any(m => m.Code == purchaseOrderModel.Code))
+                if (Check.Any(m => m.Code == purchaseInvoiceModel.Code))
                 {
 
                     return Ok(2);
@@ -678,29 +678,29 @@ namespace Stocks.Controllers
                 else
                 {
 
-                    var purchaseOrder = _mapper.Map<PurchaseInvoice>(purchaseOrderModel);
-                    int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
+                    var purchaseInvoice = _mapper.Map<PurchaseInvoice>(purchaseInvoiceModel);
+                    int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseInvoiceModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
 
 
-                    var Details = purchaseOrderModel.DetailsModels;
+                    var Details = purchaseInvoiceModel.DetailsModels;
 
-                    unitOfWork.PurchaseInvoiceRepository.Insert(purchaseOrder);
+                    unitOfWork.PurchaseInvoiceRepository.Insert(purchaseInvoice);
                     if (Details != null && Details.Count() > 0)
                     {
                         foreach (var item in Details)
                         {
-                            PurchaseInvoiceDetailModel purchaseOrderDetailModel = new PurchaseInvoiceDetailModel();
-                            purchaseOrderDetailModel.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
-                            purchaseOrderDetailModel.NetAmmount = item.NetAmmount;
-                            purchaseOrderDetailModel.StockCount = item.StockCount;
-                            purchaseOrderDetailModel.TaxOnCommission = item.TaxOnCommission;
-                            purchaseOrderDetailModel.TaxRateOnCommission = item.TaxRateOnCommission;
-                            purchaseOrderDetailModel.BankCommission = item.BankCommission;
-                            purchaseOrderDetailModel.BankCommissionRate = item.BankCommissionRate;
-                            purchaseOrderDetailModel.PurchaseValue = item.PurchaseValue;
-                            purchaseOrderDetailModel.PurchasePrice = item.PurchasePrice;
-                            purchaseOrderDetailModel.PartnerID = item.PartnerID;
-                            var details = _mapper.Map<PurchaseInvoiceDetail>(purchaseOrderDetailModel);
+                            PurchaseInvoiceDetailModel purchaseInvoiceDetailModel = new PurchaseInvoiceDetailModel();
+                            purchaseInvoiceDetailModel.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
+                            purchaseInvoiceDetailModel.NetAmmount = item.NetAmmount;
+                            purchaseInvoiceDetailModel.StockCount = item.StockCount;
+                            purchaseInvoiceDetailModel.TaxOnCommission = item.TaxOnCommission;
+                            purchaseInvoiceDetailModel.TaxRateOnCommission = item.TaxRateOnCommission;
+                            purchaseInvoiceDetailModel.BankCommission = item.BankCommission;
+                            purchaseInvoiceDetailModel.BankCommissionRate = item.BankCommissionRate;
+                            purchaseInvoiceDetailModel.PurchaseValue = item.PurchaseValue;
+                            purchaseInvoiceDetailModel.PurchasePrice = item.PurchasePrice;
+                            purchaseInvoiceDetailModel.PartnerID = item.PartnerID;
+                            var details = _mapper.Map<PurchaseInvoiceDetail>(purchaseInvoiceDetailModel);
                             unitOfWork.PurchaseInvoiceDetailRepository.Insert(details);
 
                         }
@@ -708,11 +708,11 @@ namespace Stocks.Controllers
 
 
                     #region Warehouse
-                    // Add Purchase Order Stocks Count To Portofolio
-                    _stocksHelper.TransferPurchaseToStocks(purchaseOrderModel);
+                    // Add Purchase Invoice Stocks Count To Portofolio
+                    _stocksHelper.TransferPurchaseToStocks(purchaseInvoiceModel);
                     #endregion
                     //==================================================لا تولد قيد ===================================
-                    if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
+                    if (purchaseInvoiceModel.SettingModel.DoNotGenerateEntry == true)
                     {
                         var Res = unitOfWork.Save();
                         if (Res == 200)
@@ -735,15 +735,15 @@ namespace Stocks.Controllers
 
 
 
-                    else  if (purchaseOrderModel.SettingModel.AutoGenerateEntry==true)
+                    else  if (purchaseInvoiceModel.SettingModel.AutoGenerateEntry==true)
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
-                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
-                        EntryMODEL.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
+                        var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseInvoiceModel, null, null, lastEntry);
+                        EntryMODEL.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         var DetailEnt = EntryMODEL.EntryDetailModel;
 
-                        if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
+                        if (purchaseInvoiceModel.SettingModel.TransferToAccounts == true)
                         {
                             Entry.TransferedToAccounts = true;
                             unitOfWork.EntryRepository.Insert(Entry);
@@ -786,12 +786,12 @@ namespace Stocks.Controllers
                     }
                     //================================توليد قيد مع عدم الترحيل======================================
                     #region generate entry commented
-                    //else if (purchaseOrderModel.SettingModel.GenerateEntry == true)
+                    //else if (purchaseInvoiceModel.SettingModel.GenerateEntry == true)
 
                     //{
                     //    var lastEntry = unitOfWork.EntryRepository.Last();
-                    //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
-                    //    EntryMODEL.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
+                    //    var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseInvoiceModel, null, null, lastEntry);
+                    //    EntryMODEL.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
                     //    var Entry = _mapper.Map<Entry>(EntryMODEL);
 
 
@@ -843,11 +843,11 @@ namespace Stocks.Controllers
 
         [HttpPut]
         [Route("~/api/PurchaseInvoice/PutPurchaseInvoice/{id}")]
-        public IActionResult PutPurchaseInvoice(int id, [FromBody]  PurchaseInvoiceModel purchaseOrderModel )
+        public IActionResult PutPurchaseInvoice(int id, [FromBody]  PurchaseInvoiceModel purchaseInvoiceModel )
         {
-            if (purchaseOrderModel != null)
+            if (purchaseInvoiceModel != null)
             {
-                if (id != purchaseOrderModel.PurchaseInvoiceID)
+                if (id != purchaseInvoiceModel.PurchaseInvoiceID)
                 {
 
                     return Ok(1);
@@ -858,25 +858,25 @@ namespace Stocks.Controllers
             {
 
                 var Check = unitOfWork.PurchaseInvoiceRepository.Get(NoTrack: "NoTrack");
-                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseOrderModel.PortfolioID && m.Type == true)
+                int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == purchaseInvoiceModel.PortfolioID && m.Type == true)
                     .Select(m => m.AccountID).SingleOrDefault();
 
-                var purchaseOrder = _mapper.Map<PurchaseInvoice>(purchaseOrderModel);
-                var NewdDetails = purchaseOrderModel.DetailsModels;
+                var purchaseInvoice = _mapper.Map<PurchaseInvoice>(purchaseInvoiceModel);
+                var NewdDetails = purchaseInvoiceModel.DetailsModels;
                 var Newdetails = _mapper.Map<IEnumerable<PurchaseInvoiceDetail>>(NewdDetails);
-                var OldDetails = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: m => m.PurchaseInvoiceID == purchaseOrder.PurchaseInvoiceID);
-                var EntryCheck = unitOfWork.EntryRepository.Get(x => x.PurchaseInvoiceID == purchaseOrder.PurchaseInvoiceID).SingleOrDefault();
+                var OldDetails = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: m => m.PurchaseInvoiceID == purchaseInvoice.PurchaseInvoiceID);
+                var EntryCheck = unitOfWork.EntryRepository.Get(x => x.PurchaseInvoiceID == purchaseInvoice.PurchaseInvoiceID).SingleOrDefault();
 
                 #region Warehouse
-                //Cancel Purchase Order From Portofolio Stocks
-                _stocksHelper.CancelPurchaseFromStocks(purchaseOrderModel.PortfolioID, OldDetails);
-                // Add Purchase Order Stocks Count To Portofolio
-                _stocksHelper.TransferPurchaseToStocks(purchaseOrderModel);
+                //Cancel Purchase Invoice From Portofolio Stocks
+                _stocksHelper.CancelPurchaseFromStocks(purchaseInvoiceModel.PortfolioID, OldDetails);
+                // Add Purchase Invoice Stocks Count To Portofolio
+                _stocksHelper.TransferPurchaseToStocks(purchaseInvoiceModel);
                 #endregion
                 if (EntryCheck != null)
                 {
                     // get old entry
-                    var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseInvoiceID == purchaseOrder.PurchaseInvoiceID).SingleOrDefault();
+                    var Entry = unitOfWork.EntryRepository.Get(filter: x => x.PurchaseInvoiceID == purchaseInvoice.PurchaseInvoiceID).SingleOrDefault();
                     var OldEntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
                     if (Entry.TransferedToAccounts == true)
                     {
@@ -886,9 +886,9 @@ namespace Stocks.Controllers
                     unitOfWork.EntryDetailRepository.RemovRange(OldEntryDetails);
                     unitOfWork.EntryRepository.Delete(Entry.EntryID);
 
-                    if (Check.Any(m => m.Code != purchaseOrder.Code))
+                    if (Check.Any(m => m.Code != purchaseInvoice.Code))
                     {
-                        unitOfWork.PurchaseInvoiceRepository.Update(purchaseOrder);
+                        unitOfWork.PurchaseInvoiceRepository.Update(purchaseInvoice);
                         if (OldDetails != null)
                         {
                             unitOfWork.PurchaseInvoiceDetailRepository.RemovRange(OldDetails);
@@ -900,7 +900,7 @@ namespace Stocks.Controllers
                         {
                             foreach (var item in Newdetails)
                             {
-                                item.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
+                                item.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
                                 item.PurchaseInvoiceDetailID = 0;
                                 var details = _mapper.Map<PurchaseInvoiceDetail>(item);
 
@@ -911,7 +911,7 @@ namespace Stocks.Controllers
 
 
                         //==================================================لا تولد قيد ===================================
-                        if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
+                        if (purchaseInvoiceModel.SettingModel.DoNotGenerateEntry == true)
                         {
                             //unitOfWork.EntryRepository.Delete(Entry.EntryID);
                             var Res = unitOfWork.Save();
@@ -930,17 +930,17 @@ namespace Stocks.Controllers
                             }
                         }
                         //===================================توليد قيد مع ترحيل تلقائي===================================
-                        if (purchaseOrderModel.SettingModel.AutoGenerateEntry == true)
+                        if (purchaseInvoiceModel.SettingModel.AutoGenerateEntry == true)
                         {
-                            //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, purchaseOrderModel, null, null);
+                            //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, purchaseInvoiceModel, null, null);
 
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, purchaseOrderModel, null, null, lastEntry,Entry);
-                            EntryMODEL.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, purchaseInvoiceModel, null, null, lastEntry,Entry);
+                            EntryMODEL.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
                             var NewEntry = _mapper.Map<Entry>(EntryMODEL);
                             var EntryDitails = EntryMODEL.EntryDetailModel;
 
-                            if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
+                            if (purchaseInvoiceModel.SettingModel.TransferToAccounts == true)
                             {
                                 NewEntry.TransferedToAccounts = true;
                                 unitOfWork.EntryRepository.Insert(NewEntry);
@@ -1006,9 +1006,9 @@ namespace Stocks.Controllers
 
                     else
                     {
-                        if (Check.Any(m => m.Code == purchaseOrder.Code && m.PurchaseInvoiceID == id))
+                        if (Check.Any(m => m.Code == purchaseInvoice.Code && m.PurchaseInvoiceID == id))
                         {
-                            unitOfWork.PurchaseInvoiceRepository.Update(purchaseOrder);
+                            unitOfWork.PurchaseInvoiceRepository.Update(purchaseInvoice);
                             if (OldDetails != null)
                             {
                                 unitOfWork.PurchaseInvoiceDetailRepository.RemovRange(OldDetails);
@@ -1020,7 +1020,7 @@ namespace Stocks.Controllers
                             {
                                 foreach (var item in Newdetails)
                                 {
-                                    item.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
+                                    item.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
                                     item.PurchaseInvoiceDetailID = 0;
                                     var details = _mapper.Map<PurchaseInvoiceDetail>(item);
 
@@ -1031,7 +1031,7 @@ namespace Stocks.Controllers
 
 
                             //==================================================لا تولد قيد ===================================
-                            if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
+                            if (purchaseInvoiceModel.SettingModel.DoNotGenerateEntry == true)
                             {
                                 //unitOfWork.EntryRepository.Delete(Entry.EntryID);
                                 var Res = unitOfWork.Save();
@@ -1050,16 +1050,16 @@ namespace Stocks.Controllers
                                 }
                             }
                             //===================================توليد قيد مع ترحيل تلقائي===================================
-                            if (purchaseOrderModel.SettingModel.AutoGenerateEntry == true)
+                            if (purchaseInvoiceModel.SettingModel.AutoGenerateEntry == true)
                             {
-                                //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, purchaseOrderModel, null, null);
+                                //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount,Entry.EntryID, null, purchaseInvoiceModel, null, null);
                                 var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, purchaseOrderModel, null, null, lastEntry,Entry);
-                                EntryMODEL.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, purchaseInvoiceModel, null, null, lastEntry,Entry);
+                                EntryMODEL.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
                                 var NewEntry = _mapper.Map<Entry>(EntryMODEL);
                                 var EntryDitails = EntryMODEL.EntryDetailModel;
 
-                                if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
+                                if (purchaseInvoiceModel.SettingModel.TransferToAccounts == true)
                                 {
                                     NewEntry.TransferedToAccounts = true;
                                     unitOfWork.EntryRepository.Insert(NewEntry);
@@ -1119,9 +1119,9 @@ namespace Stocks.Controllers
 
                 else
                 {
-                    if (Check.Any(m => m.Code != purchaseOrder.Code))
+                    if (Check.Any(m => m.Code != purchaseInvoice.Code))
                     {
-                        unitOfWork.PurchaseInvoiceRepository.Update(purchaseOrder);
+                        unitOfWork.PurchaseInvoiceRepository.Update(purchaseInvoice);
                         if (OldDetails != null && OldDetails.Count()>0)
                         {
                             unitOfWork.PurchaseInvoiceDetailRepository.RemovRange(OldDetails);
@@ -1133,7 +1133,7 @@ namespace Stocks.Controllers
                         {
                             foreach (var item in Newdetails)
                             {
-                                item.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
+                                item.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
                                 item.PurchaseInvoiceDetailID = 0;
                                 var details = _mapper.Map<PurchaseInvoiceDetail>(item);
 
@@ -1144,7 +1144,7 @@ namespace Stocks.Controllers
 
 
                         //==================================================لا تولد قيد ===================================
-                        if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
+                        if (purchaseInvoiceModel.SettingModel.DoNotGenerateEntry == true)
                         {
 
 
@@ -1168,16 +1168,16 @@ namespace Stocks.Controllers
 
 
 
-                        else if (purchaseOrderModel.SettingModel.AutoGenerateEntry == true)
+                        else if (purchaseInvoiceModel.SettingModel.AutoGenerateEntry == true)
                         {
                             var lastEntry = unitOfWork.EntryRepository.Last();
-                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
+                            var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseInvoiceModel, null, null, lastEntry);
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
-                            Entry.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
+                            Entry.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
 
                             var DetailEnt = EntryMODEL.EntryDetailModel;
 
-                            if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
+                            if (purchaseInvoiceModel.SettingModel.TransferToAccounts == true)
                             {
                                 Entry.TransferedToAccounts = true;
                                 unitOfWork.EntryRepository.Insert(Entry);
@@ -1246,9 +1246,9 @@ namespace Stocks.Controllers
 
                     else
                     {
-                        if (Check.Any(m => m.Code == purchaseOrder.Code && m.PurchaseInvoiceID == id))
+                        if (Check.Any(m => m.Code == purchaseInvoice.Code && m.PurchaseInvoiceID == id))
                         {
-                            unitOfWork.PurchaseInvoiceRepository.Update(purchaseOrder);
+                            unitOfWork.PurchaseInvoiceRepository.Update(purchaseInvoice);
                             if (OldDetails != null && OldDetails.Count()>0)
                             {
                                 unitOfWork.PurchaseInvoiceDetailRepository.RemovRange(OldDetails);
@@ -1260,7 +1260,7 @@ namespace Stocks.Controllers
                             {
                                 foreach (var item in Newdetails)
                                 {
-                                    item.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
+                                    item.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
                                     item.PurchaseInvoiceDetailID = 0;
                                     var details = _mapper.Map<PurchaseInvoiceDetail>(item);
 
@@ -1271,7 +1271,7 @@ namespace Stocks.Controllers
 
 
                             //==================================================لا تولد قيد ===================================
-                            if (purchaseOrderModel.SettingModel.DoNotGenerateEntry == true)
+                            if (purchaseInvoiceModel.SettingModel.DoNotGenerateEntry == true)
                             {
 
 
@@ -1295,17 +1295,17 @@ namespace Stocks.Controllers
 
 
 
-                            else if (purchaseOrderModel.SettingModel.AutoGenerateEntry == true)
+                            else if (purchaseInvoiceModel.SettingModel.AutoGenerateEntry == true)
                             {
                                 var lastEntry = unitOfWork.EntryRepository.Last();
-                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseOrderModel, null, null, lastEntry);
-                                purchaseOrder.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
+                                var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseInvoiceModel, null, null, lastEntry);
+                                purchaseInvoice.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
                                 var Entry = _mapper.Map<Entry>(EntryMODEL);
-                                Entry.PurchaseInvoiceID = purchaseOrder.PurchaseInvoiceID;
+                                Entry.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
 
                                 var DetailEnt = EntryMODEL.EntryDetailModel;
 
-                                if (purchaseOrderModel.SettingModel.TransferToAccounts == true)
+                                if (purchaseInvoiceModel.SettingModel.TransferToAccounts == true)
                                 {
                                     Entry.TransferedToAccounts = true;
                                     unitOfWork.EntryRepository.Insert(Entry);
@@ -1370,7 +1370,7 @@ namespace Stocks.Controllers
 
 
                     }
-                    return Ok(purchaseOrderModel);
+                    return Ok(purchaseInvoiceModel);
                 }    
             }
             else
@@ -1406,7 +1406,7 @@ namespace Stocks.Controllers
             }
             var Details = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: m => m.PurchaseInvoiceID == id);
             #region
-            //Cancel Purchase Order From Portofolio Stocks
+            //Cancel Purchase Invoice From Portofolio Stocks
             _stocksHelper.CancelPurchaseFromStocks(modelPurchase.PurchaseOrder.PortfolioID, Details);
             #endregion
             unitOfWork.PurchaseInvoiceDetailRepository.RemovRange(Details);

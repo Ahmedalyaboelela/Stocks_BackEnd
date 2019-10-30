@@ -13,7 +13,7 @@ namespace BAL.Helper
 
         void CancelSellingFromStocks(int PortofolioId, IEnumerable<SellingInvoiceDetail> oldDetils);
 
-        void TransferPurchaseToStocks(PurchaseInvoiceModel purchaseOrderModel);
+        void TransferPurchaseToStocks(PurchaseInvoiceModel purchaseInvoiceModel);
 
         void CancelPurchaseFromStocks(int PortofolioId, IEnumerable<PurchaseInvoiceDetail> oldDetils);
 

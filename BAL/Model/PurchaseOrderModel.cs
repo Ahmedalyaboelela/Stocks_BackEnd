@@ -32,7 +32,7 @@ namespace BAL.Model
         public string LastCode { get; set; }
         public string PortfolioAccountName { get; set; }
 
-        public  IEnumerable<PurchaseInvoiceDetailModel> purchaseOrderDetailsModels { get; set; }
+        public  IEnumerable<PurchaseInvoiceDetailModel> purchaseInvoiceDetailsModels { get; set; }
         public  SettingModel SettingModel { get; set; }
         public  EntryModel EntryModel { get; set; }
 

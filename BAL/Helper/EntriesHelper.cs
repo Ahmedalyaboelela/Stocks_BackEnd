@@ -114,7 +114,7 @@ namespace BAL.Helper
 
             }
             #endregion
-            #region PurchaseOrder  
+            #region PurchaseInvoice  
             if (purchaseInvoiceModel != null)
             {
                 var SettingAccpurchase = purchaseInvoiceModel.SettingModel.SettingAccs;
@@ -356,7 +356,7 @@ namespace BAL.Helper
 
         // Calculate EntryDetails using Models Case Update
         public static List<EntryDetailModel> UpdateCalculateEntries(int portofolioaccount,int EntryID,SellingInvoiceModel sellingInvoiceModel = null,
-            PurchaseOrderModel purchaseOrderModel = null, ReceiptExchangeModel receiptExchangeModel = null,
+            PurchaseInvoiceModel purchaseInvoiceModel = null, ReceiptExchangeModel receiptExchangeModel = null,
             NoticeModel noticeModel = null)
         {
             #region Definitions
@@ -437,11 +437,11 @@ namespace BAL.Helper
 
             }
             #endregion
-            #region PurchaseOrder  
-            if (purchaseOrderModel != null)
+            #region PurchaseInvoice  
+            if (purchaseInvoiceModel != null)
             {
-                var SettingAccpurchase = purchaseOrderModel.SettingModel.SettingAccs;
-                var PurchaseDetails = purchaseOrderModel.purchaseOrderDetailsModels;
+                var SettingAccpurchase = purchaseInvoiceModel.SettingModel.SettingAccs;
+                var PurchaseDetails = purchaseInvoiceModel.DetailsModels;
                 //Get EntryDetail Accounts From Setting
                 #region SettingAccounts
                 foreach (var Accs in SettingAccpurchase)
