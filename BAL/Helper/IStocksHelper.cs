@@ -13,9 +13,9 @@ namespace BAL.Helper
 
         void CancelSellingFromStocks(int PortofolioId, IEnumerable<SellingInvoiceDetail> oldDetils);
 
-        void TransferPurchaseToStocks(PurchaseOrderModel purchaseOrderModel);
+        void TransferPurchaseToStocks(PurchaseInvoiceModel purchaseInvoiceModel);
 
-        void CancelPurchaseFromStocks(int PortofolioId, IEnumerable<PurchaseOrderDetail> oldDetils);
+        void CancelPurchaseFromStocks(int PortofolioId, IEnumerable<PurchaseInvoiceDetail> oldDetils);
 
         bool CheckStockCountForNCredit(NoticeModel noticeModel);
 

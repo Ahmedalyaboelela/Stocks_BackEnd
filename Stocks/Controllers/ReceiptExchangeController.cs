@@ -221,7 +221,7 @@ namespace Stocks.Controllers
                 entryModel.Date = Entry.Date != null ? Entry.Date.Value.ToString("d/M/yyyy") : null;
                 entryModel.DateHijri = Entry.Date != null ? DateHelper.GetHijriDate(Entry.Date) : null;
                 entryModel.NoticeID = Entry.NoticeID;
-                entryModel.PurchaseOrderID = Entry.PurchaseOrderID;
+                entryModel.PurchaseInvoiceID = Entry.PurchaseInvoiceID;
                 entryModel.ReceiptID = Entry.ReceiptID;
                 entryModel.SellingInvoiceID = Entry.SellingInvoiceID;
                 entryModel.EntryDetailModel = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID) != null ? unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID).Select(m => new EntryDetailModel

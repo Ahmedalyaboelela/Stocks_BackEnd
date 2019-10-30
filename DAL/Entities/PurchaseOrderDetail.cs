@@ -13,25 +13,15 @@ namespace DAL.Entities
 
         public float StockCount { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal PurchasePrice { get; set; }
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal PurchaseValue { get; set; }
-        public float BankCommissionRate { get; set; }
+        public int PriceType { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal BankCommission { get; set; }
-        public float TaxRateOnCommission { get; set; }
-
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal TaxOnCommission { get; set; }
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal NetAmmount { get; set; }
-        public int PurchaseID { get; set; }
+        public int PurchaseOrderID { get; set; }
 
         public int PartnerID { get; set; }
 
-        [ForeignKey("PurchaseID")]
+
+
+        [ForeignKey("PurchaseOrderID")]
         public virtual PurchaseOrder PurchaseOrder { get; set; }
 
         [ForeignKey("PartnerID")]

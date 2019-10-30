@@ -16,7 +16,7 @@ namespace BAL.Model
 
         public int? SellingInvoiceID { get; set; }
 
-        public int? PurchaseOrderID { get; set; }
+        public int? PurchaseInvoiceID { get; set; }
 
         public int? ReceiptID { get; set; }
 

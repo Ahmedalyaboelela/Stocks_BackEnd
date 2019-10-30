@@ -4,13 +4,12 @@ using System.Text;
 
 namespace BAL.Model
 {
-   public class PurchaseInvoiceModel
+    public class PurchaseInvoiceModel
     {
         public int PurchaseInvoiceID { get; set; }
-        
+
         public string Code { get; set; }
 
-        public int PayWay { get; set; }
 
         public string PurchaseDate { get; set; }
         public string PurchaseDateHijri { get; set; }
@@ -27,13 +26,18 @@ namespace BAL.Model
         public string PortfolioNameEN { get; set; }
         public string PortfolioCode { get; set; }
 
+        public int PurchaseOrderID { get; set; }
         public int PortfolioAccount { get; set; }
         public int Count { get; set; }
+
+        public string Codepurchase { get; set; }
         public string LastCode { get; set; }
 
-        public  IEnumerable<PurchaseInvoiceDetailModel> DetailsModels { get; set; }
-        public  SettingModel SettingModel { get; set; }
-        public  EntryModel EntryModel { get; set; }
+        public float TotalStockCount { get; set; }
+
+        public IEnumerable<PurchaseInvoiceDetailModel> DetailsModels { get; set; }
+        public SettingModel SettingModel { get; set; }
+        public EntryModel EntryModel { get; set; }
 
     }
 }
