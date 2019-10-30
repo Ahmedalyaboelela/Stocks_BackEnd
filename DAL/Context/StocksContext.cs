@@ -21,7 +21,11 @@ namespace DAL.Context
 
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
 
+        public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
+
         public DbSet<Entry> Entries { get; set; }
+
+        public DbSet<PurchaseInvoiceDetail> PurchaseInvoiceDetails { get; set; }
 
         public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
         public DbSet<SellingInvoiceDetail> SellingInvoiceDetails { get; set; }
