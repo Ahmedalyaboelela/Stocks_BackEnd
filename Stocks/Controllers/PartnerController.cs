@@ -435,30 +435,47 @@ namespace Stocks.Controllers
         }
 
 
-
-        [Route("~/api/Partner/GetAllPortfolioPartners/{id}")]
-        public IEnumerable<PortfolioPartners>GetAllPortfolioPartners(int id)
+        [HttpGet]
+        [Route("~/api/Partner/GetSellingPartners/{id}")]
+        public IEnumerable<PortfolioPartners> GetSellingPartners(int id)
         {
 
 
-            // partners in portfolio transactions
-            var transPartners = unitOfWork.PortfolioTransactionsRepository.Get(filter: a => a.PortfolioID == id).Select(p => new PortfolioPartners
+            // partners in Selling
+            var transPartners = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrder.PortfolioID == id).Select(p => new PortfolioPartners
             {
                 PartnerID = p.PartnerID,
                 Code = p.Partner.Code,
                 NameAR = p.Partner.NameAR,
                 NameEN = p.Partner.NameEN,
-                StocksCount = p.CurrentStocksCount,
-                StocksValue = p.CurrentStockValue
+                
 
 
 
             });
             return transPartners;
 
+        }
+
+        [HttpGet]
+        [Route("~/api/Partner/GetPurchasePartners/{id}")]
+        public IEnumerable<PortfolioPartners> GetPurchasePartners(int id)
+        {
+
+
+            // partners in Purchase
+            var transPartners = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrder.PortfolioID == id).Select(p => new PortfolioPartners
+            {
+                PartnerID = p.PartnerID,
+                Code = p.Partner.Code,
+                NameAR = p.Partner.NameAR,
+                NameEN = p.Partner.NameEN,
 
 
 
+
+            });
+            return transPartners;
 
         }
         [HttpGet]

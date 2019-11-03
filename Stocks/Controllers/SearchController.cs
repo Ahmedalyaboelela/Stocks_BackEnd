@@ -405,29 +405,46 @@ namespace Stocks.Controllers
             {
                 #region Purchase Order
                 case 1:
-                    var PurchaseInvoiceEntitylist = unitOfWork.PurchaseInvoiceRepository.Get(NoTrack: "NoTrack", filter: a => a.Code == Code);
-                    if (PurchaseInvoiceEntitylist.Count() > 0)
+                   var PurchaseInvoiceEntitylist = unitOfWork.PurchaseInvoiceRepository.Get(filter: a => a.Code == Code).SingleOrDefault();
+                    if (PurchaseInvoiceEntitylist != null)
                     {
-                        PurchaseInvoiceModel purchaseInvoiceModel = new PurchaseInvoiceModel();
-                        purchaseInvoiceModel = _mapper.Map<PurchaseInvoiceModel>(PurchaseInvoiceEntitylist.SingleOrDefault());
+                        
+                    var purchaseInvoiceModel = _mapper.Map<PurchaseInvoiceModel>(PurchaseInvoiceEntitylist);
 
-                        purchaseInvoiceModel.PurchaseDate = PurchaseInvoiceEntitylist.SingleOrDefault().Date.Value.ToString("d/M/yyyy");
-                        purchaseInvoiceModel.PurchaseDate = DateHelper.GetHijriDate(PurchaseInvoiceEntitylist.SingleOrDefault().Date);
+                        purchaseInvoiceModel.PurchaseDate = PurchaseInvoiceEntitylist.Date.Value.ToString("d/M/yyyy");
+                        purchaseInvoiceModel.PurchaseDate = DateHelper.GetHijriDate(PurchaseInvoiceEntitylist.Date);
 
                         var EmplyeeEntity = unitOfWork.EmployeeRepository.Get(filter: e => e.EmployeeID == purchaseInvoiceModel.EmployeeID).SingleOrDefault();
                         purchaseInvoiceModel.EmpCode = EmplyeeEntity.Code;
                         purchaseInvoiceModel.EmpNameAR = EmplyeeEntity.NameAR;
-                        purchaseInvoiceModel.EmpCode = EmplyeeEntity.NameEN;
-
-                        var PortfolioEntity = unitOfWork.PortfolioRepository.Get(filter: p => p.PortfolioID == purchaseInvoiceModel.PortfolioID).SingleOrDefault();
+                        purchaseInvoiceModel.EmpNameEN = EmplyeeEntity.NameEN;
+                        var id = unitOfWork.PurchaseOrderRepository.GetEntity(filter: a => a.PurchaseOrderID == purchaseInvoiceModel.PurchaseOrderID).PortfolioID;
+                        var PortfolioEntity = unitOfWork.PortfolioRepository.GetEntity(filter: p => p.PortfolioID == id);
                         purchaseInvoiceModel.PortfolioCode = PortfolioEntity.Code;
                         purchaseInvoiceModel.PortfolioNameAR = PortfolioEntity.NameAR;
                         purchaseInvoiceModel.PortfolioNameEN = PortfolioEntity.NameEN;
 
-                        purchaseInvoiceModel.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: s => s.PortfolioID == purchaseInvoiceModel.PortfolioID).AccountID;
+                        purchaseInvoiceModel.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: s => s.PortfolioID == id).AccountID;
 
-                        var PurchaseInvoiceDitailsEntitylist = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: z => z.PurchaseInvoiceID == purchaseInvoiceModel.PurchaseInvoiceID);
-                        purchaseInvoiceModel.DetailsModels = _mapper.Map<IEnumerable<PurchaseInvoiceDetailModel>>(PurchaseInvoiceDitailsEntitylist);
+                         purchaseInvoiceModel.DetailsModels = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: z => z.PurchaseInvoiceID == purchaseInvoiceModel.PurchaseInvoiceID).Select(a=> new PurchaseInvoiceDetailModel {
+                             BankCommission=a.BankCommission,
+                             BankCommissionRate=a.BankCommissionRate,
+                             NetAmmount=a.NetAmmount,
+                             PartnerCode=a.Partner.Code,
+                             PartnerID=a.PartnerID,
+                              PartnerNameAR=a.Partner.NameAR,
+                              PartnerNameEN=a.Partner.NameEN,
+                              PurchaseInvoiceDetailID=a.PurchaseInvoiceDetailID,
+                              PurchaseInvoiceID=a.PurchaseInvoiceID,
+                              PurchasePrice=a.PurchasePrice,
+                               PurchaseValue=a.PurchaseValue,
+                               StockCount=a.StockCount,
+                               TaxOnCommission=a.TaxOnCommission,
+                               TaxRateOnCommission=a.TaxRateOnCommission,
+                               
+
+                         });
+                       
 
                       
                         purchaseInvoiceModel.SettingModel = GetSetting(2);
@@ -753,9 +770,78 @@ namespace Stocks.Controllers
 
 
                             }
-                           
-                        
-                    
+
+
+
+
+
+
+
+
+
+                #endregion
+
+                #region  Order
+
+
+                case 15:
+                    {
+
+
+
+                        var Purchaseorder = unitOfWork.PurchaseOrderRepository.Get(filter: x => x.Code == Code).SingleOrDefault();
+                        var model = _mapper.Map<PurchaseOrderModel>(Purchaseorder);
+
+                        #region Date part 
+                        if (Purchaseorder.OrderDate != null)
+                        {
+                            model.OrderDate = Purchaseorder.OrderDate.ToString("d/M/yyyy");
+                            model.OrderDateHijri = DateHelper.GetHijriDate(Purchaseorder.OrderDate);
+                        }
+
+
+
+                        #endregion
+
+                        #region  Details
+                        var Details = unitOfWork.PurchaseOrderDetailRepository
+
+                            .Get(filter: m => m.PurchaseOrderID == Purchaseorder.PurchaseOrderID)
+                            .Select(m => new PurchaseOrderDetailModel
+                            {
+                                PartnerID = m.PartnerID,
+                                PartnerNameAr = m.Partner.NameAR,
+                                PriceType = m.PriceType,
+                                PurchaseOrderID = m.PurchaseOrderID,
+                                PurchaseOrderDetailID = m.PurchaseOrderDetailID,
+                                StockCount = m.StockCount,
+                                PartnerCode = m.Partner.Code
+
+
+
+
+                            });
+
+
+
+
+                        if (Details != null)
+                        {
+                            model.purchaseInvoiceDetailsModels = Details;
+
+                        }
+
+                        #endregion
+                        model.Count = unitOfWork.PurchaseOrderRepository.Count();
+                        model.Portfoliocode = unitOfWork.PortfolioRepository.GetEntity(filter: a => a.PortfolioID == Purchaseorder.PortfolioID).Code;
+
+                        return Ok(model);
+
+
+                    }
+
+
+
 
 
 
@@ -763,6 +849,7 @@ namespace Stocks.Controllers
 
 
                     #endregion
+
 
             }
             return Ok("Error Table Number");
