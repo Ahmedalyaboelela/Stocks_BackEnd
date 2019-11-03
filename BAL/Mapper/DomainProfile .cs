@@ -29,6 +29,11 @@ namespace BAL.Mapper
                .ForMember(t => t.Date, opt=> opt.MapFrom(s=>DateTime.ParseExact(s.Date, "d/M/yyyy", CultureInfo.InvariantCulture)));
             #endregion
 
+            #region Map Partner Attachment
+            CreateMap<PartnerAttachment, PartnerAttachmentModel>();
+            CreateMap<PartnerAttachmentModel, PartnerAttachment>();
+            #endregion
+
             #region Map Country
             CreateMap<Country, CountryModel>();
             CreateMap<CountryModel, Country>();

@@ -1444,6 +1444,79 @@ namespace Stocks.Controllers
 
         }
 
+        [HttpGet]
+        [Route("~/api/PurchaseInvoice/GetAllpurchases")]
+        public IEnumerable<PurchaseComboList> GetAllpurchases()
+        {
+
+            var checks = unitOfWork.PurchaseInvoiceRepository.Get();
+            List<PurchaseComboList> sellings = unitOfWork.PurchaseOrderRepository.Get().Select(x => new PurchaseComboList
+            {
+
+                Code = x.Code,
+                PurchaseOrderID = x.PurchaseOrderID,
+
+
+            }).ToList();
+            List<PurchaseComboList> lists = new List<PurchaseComboList>();
+            foreach (var item in sellings)
+            {
+                if (!checks.Any(m => m.PurchaseOrderID == item.PurchaseOrderID))
+                {
+                    lists.Add(item);
+                }
+                if (checks.Any(m => m.PurchaseOrderID == item.PurchaseOrderID &&
+                 m.PurchaseOrder.OrderType == true))
+                {
+                    lists.Add(item);
+                }
+            }
+
+
+            return lists;
+        }
+
+
+        [HttpGet]
+        [Route("~/api/PurchaseInvoice/GetPortInfo/{id}")]
+        public IActionResult GetPortInfo(int id)
+        {
+            var Info = unitOfWork.PurchaseOrderRepository.GetEntity(filter: x => x.PurchaseOrderID == id);
+            PortfolioModel portfolio = new PortfolioModel();
+            portfolio.Code = Info.Portfolio.Code;
+            portfolio.NameAR = Info.Portfolio.NameAR;
+            portfolio.NameEN = Info.Portfolio.NameEN;
+            portfolio.PortfolioID = Info.Portfolio.PortfolioID;
+            var Debit = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.Debit; 
+            if (Debit ==null)
+            {
+                Debit = 0.0m;
+            }
+            var Credit = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.Credit;
+            if (Credit == null)
+            {
+                Credit = 0.0m;
+            }
+            var firstbalanc = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.DebitOpenningBalance;
+            if (firstbalanc == null)
+            {
+                firstbalanc = 0.0m;
+            }
+            portfolio.TotalRSBalance = firstbalanc+(Debit- Credit);
+            if (portfolio.TotalRSBalance == null)
+            {
+                portfolio.TotalRSBalance = 0.0m;
+            }
+
+
+
+
+
+
+            return Ok(portfolio);
+           
+        }
+
 
     }
 }

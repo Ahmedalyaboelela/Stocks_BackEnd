@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Stocks.Controllers
 {
-  // [Authorize(Roles = "SuperAdmin,Admin,Employee")]
+   [Authorize(Roles = "SuperAdmin,Admin,Employee")]
     [Route("api/[controller]")]
     [ApiController]
     public class SellingInvoiceController : Controller
@@ -1501,54 +1501,6 @@ namespace Stocks.Controllers
 
 
             return lists;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //var checks = unitOfWork.SellingInvoiceReposetory.Get(filter: x=> x.SellingOrder.OrderType==false).ToList();
-            //var selling = unitOfWork.SellingOrderRepository.Get().Select(x => new sellingComboList
-            //{
-
-            //    Code = x.Code,
-            //    SellingOrderID = x.SellingOrderID,
-
-
-            //}).ToList();
-            ////List<sellingComboList> lists = new List<sellingComboList>();
-            //foreach (var item in selling)
-            //{
-            //    if (checks.Any(m => m.SellingOrderID == item.SellingOrderID))
-            //    {
-            //        selling.Remove(item);
-            //    }
-            //}
-
-            //return selling;
-
-
-
-
-
-
         }
 
 

@@ -24,7 +24,7 @@ namespace BAL.Model
       
         public int Count { get; set; }
         public decimal? RSBalance { get; set; }
-
+       public decimal? TotalRSBalance { get; set; }
         public string LastCode { get; set; } 
         public int? AccountID { get; set; }
         public string AccountNameAR { get; set; }

@@ -4,14 +4,16 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(StocksContext))]
-    partial class StocksContextModelSnapshot : ModelSnapshot
+    [Migration("20191024141451_fixAttachment")]
+    partial class fixAttachment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,11 +255,11 @@ namespace DAL.Migrations
 
                     b.Property<int?>("NoticeID");
 
-                    b.Property<int?>("PurchaseInvoiceID");
+                    b.Property<int?>("PurchaseOrderID");
 
                     b.Property<int?>("ReceiptID");
 
-                    b.Property<int?>("SellingInvoiceID");
+                    b.Property<int?>("SellingOrderID");
 
                     b.Property<bool>("TransferedToAccounts");
 
@@ -267,17 +269,17 @@ namespace DAL.Migrations
                         .IsUnique()
                         .HasFilter("[NoticeID] IS NOT NULL");
 
-                    b.HasIndex("PurchaseInvoiceID")
+                    b.HasIndex("PurchaseOrderID")
                         .IsUnique()
-                        .HasFilter("[PurchaseInvoiceID] IS NOT NULL");
+                        .HasFilter("[PurchaseOrderID] IS NOT NULL");
 
                     b.HasIndex("ReceiptID")
                         .IsUnique()
                         .HasFilter("[ReceiptID] IS NOT NULL");
 
-                    b.HasIndex("SellingInvoiceID")
+                    b.HasIndex("SellingOrderID")
                         .IsUnique()
-                        .HasFilter("[SellingInvoiceID] IS NOT NULL");
+                        .HasFilter("[SellingOrderID] IS NOT NULL");
 
                     b.ToTable("Entries");
                 });
@@ -575,9 +577,9 @@ namespace DAL.Migrations
                     b.ToTable("PortfolioTransactions");
                 });
 
-            modelBuilder.Entity("DAL.Entities.PurchaseInvoice", b =>
+            modelBuilder.Entity("DAL.Entities.PurchaseOrder", b =>
                 {
-                    b.Property<int>("PurchaseInvoiceID")
+                    b.Property<int>("PurchaseOrderID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -592,72 +594,7 @@ namespace DAL.Migrations
 
                     b.Property<int>("EmployeeID");
 
-                    b.Property<int>("PurchaseOrderID");
-
-                    b.HasKey("PurchaseInvoiceID");
-
-                    b.HasIndex("EmployeeID");
-
-                    b.HasIndex("PurchaseOrderID");
-
-                    b.ToTable("PurchaseInvoices");
-                });
-
-            modelBuilder.Entity("DAL.Entities.PurchaseInvoiceDetail", b =>
-                {
-                    b.Property<int>("PurchaseInvoiceDetailID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("BankCommission")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<float>("BankCommissionRate");
-
-                    b.Property<decimal>("NetAmmount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<int>("PartnerID");
-
-                    b.Property<int>("PurchaseInvoiceID");
-
-                    b.Property<decimal>("PurchasePrice")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal>("PurchaseValue")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<float>("StockCount");
-
-                    b.Property<decimal>("TaxOnCommission")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<float>("TaxRateOnCommission");
-
-                    b.HasKey("PurchaseInvoiceDetailID");
-
-                    b.HasIndex("PartnerID");
-
-                    b.HasIndex("PurchaseInvoiceID");
-
-                    b.ToTable("PurchaseInvoiceDetails");
-                });
-
-            modelBuilder.Entity("DAL.Entities.PurchaseOrder", b =>
-                {
-                    b.Property<int>("PurchaseOrderID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("EmployeeID");
-
-                    b.Property<DateTime>("OrderDate");
-
-                    b.Property<bool>("OrderType");
+                    b.Property<int>("PayWay");
 
                     b.Property<int>("PortfolioID");
 
@@ -676,19 +613,36 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("BankCommission")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<float>("BankCommissionRate");
+
+                    b.Property<decimal>("NetAmmount")
+                        .HasColumnType("decimal(10,2)");
+
                     b.Property<int>("PartnerID");
 
-                    b.Property<int>("PriceType");
+                    b.Property<int>("PurchaseID");
 
-                    b.Property<int>("PurchaseOrderID");
+                    b.Property<decimal>("PurchasePrice")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("PurchaseValue")
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<float>("StockCount");
+
+                    b.Property<decimal>("TaxOnCommission")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<float>("TaxRateOnCommission");
 
                     b.HasKey("PurchaseOrderDetailID");
 
                     b.HasIndex("PartnerID");
 
-                    b.HasIndex("PurchaseOrderID");
+                    b.HasIndex("PurchaseID");
 
                     b.ToTable("PurchaseOrderDetails");
                 });
@@ -784,9 +738,9 @@ namespace DAL.Migrations
                     b.ToTable("ReportSettings");
                 });
 
-            modelBuilder.Entity("DAL.Entities.SellingInvoice", b =>
+            modelBuilder.Entity("DAL.Entities.SellingOrder", b =>
                 {
-                    b.Property<int>("SellingInvoiceID")
+                    b.Property<int>("SellingOrderID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -801,20 +755,22 @@ namespace DAL.Migrations
 
                     b.Property<int>("EmployeeID");
 
-                    b.Property<int>("SellingOrderID");
+                    b.Property<int>("PayWay");
 
-                    b.HasKey("SellingInvoiceID");
+                    b.Property<int>("PortfolioID");
+
+                    b.HasKey("SellingOrderID");
 
                     b.HasIndex("EmployeeID");
 
-                    b.HasIndex("SellingOrderID");
+                    b.HasIndex("PortfolioID");
 
-                    b.ToTable("SellingInvoices");
+                    b.ToTable("SellingOrders");
                 });
 
-            modelBuilder.Entity("DAL.Entities.SellingInvoiceDetail", b =>
+            modelBuilder.Entity("DAL.Entities.SellingOrderDetail", b =>
                 {
-                    b.Property<int>("SellInvoiceDetailID")
+                    b.Property<int>("SellOrderDetailID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -831,7 +787,7 @@ namespace DAL.Migrations
                     b.Property<decimal>("SelingValue")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("SellingInvoiceID");
+                    b.Property<int>("SellingOrderID");
 
                     b.Property<decimal>("SellingPrice")
                         .HasColumnType("decimal(10,2)");
@@ -843,59 +799,9 @@ namespace DAL.Migrations
 
                     b.Property<float>("TaxRateOnCommission");
 
-                    b.HasKey("SellInvoiceDetailID");
-
-                    b.HasIndex("PartnerID");
-
-                    b.HasIndex("SellingInvoiceID");
-
-                    b.ToTable("SellingInvoiceDetails");
-                });
-
-            modelBuilder.Entity("DAL.Entities.SellingOrder", b =>
-                {
-                    b.Property<int>("SellingOrderID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("OrderDate");
-
-                    b.Property<bool>("OrderType");
-
-                    b.Property<int>("PortfolioID");
-
-                    b.HasKey("SellingOrderID");
-
-                    b.HasIndex("PortfolioID");
-
-                    b.ToTable("SellingOrders");
-                });
-
-            modelBuilder.Entity("DAL.Entities.SellingOrderDetail", b =>
-                {
-                    b.Property<int>("SellOrderDetailID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("PartnerID");
-
-                    b.Property<int>("PriceType");
-
-                    b.Property<int?>("PurchaseOrderID");
-
-                    b.Property<int>("SellingOrderID");
-
-                    b.Property<float>("StockCount");
-
                     b.HasKey("SellOrderDetailID");
 
                     b.HasIndex("PartnerID");
-
-                    b.HasIndex("PurchaseOrderID");
 
                     b.HasIndex("SellingOrderID");
 
@@ -1153,17 +1059,17 @@ namespace DAL.Migrations
                         .WithOne("Entry")
                         .HasForeignKey("DAL.Entities.Entry", "NoticeID");
 
-                    b.HasOne("DAL.Entities.PurchaseInvoice", "PurchaseInvoice")
+                    b.HasOne("DAL.Entities.PurchaseOrder", "PurchaseOrder")
                         .WithOne("Entry")
-                        .HasForeignKey("DAL.Entities.Entry", "PurchaseInvoiceID");
+                        .HasForeignKey("DAL.Entities.Entry", "PurchaseOrderID");
 
                     b.HasOne("DAL.Entities.ReceiptExchange", "ReceiptExchange")
                         .WithOne("Entry")
                         .HasForeignKey("DAL.Entities.Entry", "ReceiptID");
 
-                    b.HasOne("DAL.Entities.SellingInvoice", "SellingInvoice")
+                    b.HasOne("DAL.Entities.SellingOrder", "SellingOrder")
                         .WithOne("Entry")
-                        .HasForeignKey("DAL.Entities.Entry", "SellingInvoiceID");
+                        .HasForeignKey("DAL.Entities.Entry", "SellingOrderID");
                 });
 
             modelBuilder.Entity("DAL.Entities.EntryDetail", b =>
@@ -1268,39 +1174,14 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("DAL.Entities.PurchaseInvoice", b =>
+            modelBuilder.Entity("DAL.Entities.PurchaseOrder", b =>
                 {
                     b.HasOne("DAL.Entities.Employee", "Employee")
-                        .WithMany()
+                        .WithMany("PurchaseOrders")
                         .HasForeignKey("EmployeeID")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("DAL.Entities.PurchaseOrder", "PurchaseOrder")
-                        .WithMany("PurchaseInvoices")
-                        .HasForeignKey("PurchaseOrderID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("DAL.Entities.PurchaseInvoiceDetail", b =>
-                {
-                    b.HasOne("DAL.Entities.Partner", "Partner")
-                        .WithMany("PurchaseInvoiceDetails")
-                        .HasForeignKey("PartnerID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DAL.Entities.PurchaseInvoice", "PurchaseInvoice")
-                        .WithMany("PurchaseOrderDetails")
-                        .HasForeignKey("PurchaseInvoiceID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("DAL.Entities.PurchaseOrder", b =>
-                {
-                    b.HasOne("DAL.Entities.Employee")
-                        .WithMany("PurchaseOrders")
-                        .HasForeignKey("EmployeeID");
-
-                    b.HasOne("DAL.Entities.Portfolio", "Portfolio")
+                    b.HasOne("DAL.Entities.Portfolio")
                         .WithMany("PurchaseOrders")
                         .HasForeignKey("PortfolioID")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -1314,8 +1195,8 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DAL.Entities.PurchaseOrder", "PurchaseOrder")
-                        .WithMany()
-                        .HasForeignKey("PurchaseOrderID")
+                        .WithMany("PurchaseOrderDetails")
+                        .HasForeignKey("PurchaseID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -1345,36 +1226,15 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("DAL.Entities.SellingInvoice", b =>
+            modelBuilder.Entity("DAL.Entities.SellingOrder", b =>
                 {
                     b.HasOne("DAL.Entities.Employee", "Employee")
-                        .WithMany("SellingInvoices")
+                        .WithMany("SellingOrders")
                         .HasForeignKey("EmployeeID")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("DAL.Entities.SellingOrder", "SellingOrder")
-                        .WithMany("SellingInvoices")
-                        .HasForeignKey("SellingOrderID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("DAL.Entities.SellingInvoiceDetail", b =>
-                {
-                    b.HasOne("DAL.Entities.Partner", "Partner")
-                        .WithMany("SellingInvoiceDetails")
-                        .HasForeignKey("PartnerID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DAL.Entities.SellingInvoice", "SellingInvoice")
-                        .WithMany("SellingInvoiceDetails")
-                        .HasForeignKey("SellingInvoiceID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("DAL.Entities.SellingOrder", b =>
-                {
-                    b.HasOne("DAL.Entities.Portfolio", "Portfolio")
-                        .WithMany("SellingOrders")
+                    b.HasOne("DAL.Entities.Portfolio")
+                        .WithMany("SellOrders")
                         .HasForeignKey("PortfolioID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -1386,11 +1246,7 @@ namespace DAL.Migrations
                         .HasForeignKey("PartnerID")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("DAL.Entities.PurchaseOrder")
-                        .WithMany("SellingOrderDetails")
-                        .HasForeignKey("PurchaseOrderID");
-
-                    b.HasOne("DAL.Entities.SellingOrder", "SellingOrder")
+                    b.HasOne("DAL.Entities.SellingOrder", "SellOrder")
                         .WithMany("SellingOrderDetails")
                         .HasForeignKey("SellingOrderID")
                         .OnDelete(DeleteBehavior.Cascade);
