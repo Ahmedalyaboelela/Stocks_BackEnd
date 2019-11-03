@@ -406,8 +406,17 @@ namespace Stocks.Controllers
             // get last Receipt or Exchange
             var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter:m=>m.Type==type && m.ReceiptExchangeType==ReceiptExchangeType).Last();
             if (RecExc != null) {
-                var model = GetReceiptExchange(RecExc, ReceiptExchangeType, type, numSetting);
-                return Ok(model);
+                ReceiptExchangeModel receiptExchangeModel = new ReceiptExchangeModel();
+                receiptExchangeModel= GetReceiptExchange(RecExc, ReceiptExchangeType, type, numSetting);
+                if (receiptExchangeModel != null)
+                {
+                    return Ok(receiptExchangeModel);
+                }
+                else
+                {
+                    return Ok(0);
+                }
+               
             }
                
             else

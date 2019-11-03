@@ -34,7 +34,7 @@ namespace Stocks.Controllers
         [HttpGet]
         [Route("~/api/sellingorder/FirstOpen")]
         public IActionResult FirstOpen()
-        {
+       {
             SellingOrderModel model = new SellingOrderModel();
 
             model.Count = unitOfWork.SellingOrderRepository.Count();
@@ -383,49 +383,6 @@ namespace Stocks.Controllers
         }
 
 
-        //[HttpGet]
-        //[Route("~/api/sellingorder/getsellingInvoise/{id}")]
-        //public IActionResult getsellingInvoise(int? id)
-        //{
-        //    var IncoiceModel = unitOfWork.SellingInvoiceReposetory.Get(filter: x => x.SellingOrderID == id).Select(m => new SellingInvoiceModel
-        //    {
-        //        Code=m.Code,
-        //        SellDate=m.Date.Value.ToString("d/M/yyyy"),
-        //        SellDateHijri=DateHelper.GetHijriDate(m.Date),
-        //        EmployeeID=m.EmployeeID,
-        //        EmpCode=m.Employee.Code,
-        //        EmpNameAR=m.Employee.NameAR,
-        //        EmpNameEN=m.Employee.NameEN,
-        //        SellingInvoiceID=m.SellingInvoiceID,
-        //        TotalStockCount = getTotalStocks(m.SellingInvoiceID),
-        //        DetailsModels =unitOfWork.SellingInvoiceDetailRepository.Get(filter: a=> a.SellingInvoiceID==m.SellingInvoiceID).Select(z=> new SellingInvoiceDetailsModel {
-        //            SellingInvoiceID=z.SellingInvoiceID,
-        //            SellingPrice=z.SellingPrice,
-        //            NetAmmount=z.NetAmmount,
-        //            StocksCount=z.StockCount,
-
-        //            PartnerID=z.PartnerID,
-        //            PartnerCode=z.Partner.Code,
-        //            BankCommission=z.BankCommission,
-        //            BankCommissionRate=z.BankCommissionRate,
-        //            PartnerNameAR=z.Partner.NameAR,
-        //            PartnerNameEN=z.Partner.NameEN,
-        //            SelingValue=z.SelingValue,
-        //            SellingInvoiceDetailID=z.SellInvoiceDetailID,
-        //            StockCount=z.StockCount,
-        //            TaxOnCommission=z.TaxOnCommission,
-        //            TaxRateOnCommission=z.TaxRateOnCommission,
-
-
-
-        //        }),
-
-
-        //    });
-
-        //    return Ok(IncoiceModel);
-
-        //}
 
 
         [HttpGet]

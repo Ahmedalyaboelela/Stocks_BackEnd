@@ -10,7 +10,7 @@ namespace BAL.Model
         
         public string Code { get; set; }
 
-
+        public string Portfoliocode { get; set; }
         public string OrderDate { get; set; }
         public string OrderDateHijri { get; set; }
 
@@ -32,9 +32,7 @@ namespace BAL.Model
         public string LastCode { get; set; }
         public string PortfolioAccountName { get; set; }
 
-        public  IEnumerable<PurchaseInvoiceDetailModel> purchaseInvoiceDetailsModels { get; set; }
-        public  SettingModel SettingModel { get; set; }
-        public  EntryModel EntryModel { get; set; }
-
+        public  IEnumerable<PurchaseOrderDetailModel> purchaseInvoiceDetailsModels { get; set; }
+   
     }
 }

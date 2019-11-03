@@ -27,6 +27,7 @@ namespace BAL.Model
         public string PortfolioCode { get; set; }
 
         public int PurchaseOrderID { get; set; }
+        public string PurchaseOrderCode { get; set; }
         public int PortfolioAccount { get; set; }
         public int Count { get; set; }
 
