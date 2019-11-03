@@ -73,8 +73,8 @@ WHERE RE.ReceiptID=@RecieptID1 AND RE.Credit IS NULL
 ON A.AccountID = RE.AccountID
 WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
       </Credit>
-      <Riyal_x0020_Voucher Ref="6" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
-        <Alias>Riyal Voucher</Alias>
+      <Riyal_x0020_Exchange Ref="6" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>Riyal Exchange</Alias>
         <Columns isList="true" count="4">
           <value>Code,System.String</value>
           <value>RDate,System.DateTime</value>
@@ -84,18 +84,18 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
         <CommandTimeout>30</CommandTimeout>
         <Dictionary isRef="1" />
         <Key>d1342e27ce604ffc9410329e612e2f32</Key>
-        <Name>Riyal Voucher</Name>
+        <Name>Riyal Exchange</Name>
         <NameInSource>MS SQL</NameInSource>
         <Parameters isList="true" count="1">
-          <value>_x0040_RecieptID2,_x0031_,8,32</value>
+          <value>_x0040_RecieptID2,_x0033_,8,32</value>
         </Parameters>
         <SqlCommand>SELECT  R.Code AS Code, CONVERT(DATE, R.Date,110)  AS RDate,R.Handling AS RHandle
 	,R.Description AS RDescription
 	FROM dbo.ReceiptExchanges AS R 
 
-	WHERE R.Type='false' AND R.ReceiptExchangeType='true'
+	WHERE R.Type='true' AND R.ReceiptExchangeType='true'
 	 AND R.ReceiptID=@RecieptID2</SqlCommand>
-      </Riyal_x0020_Voucher>
+      </Riyal_x0020_Exchange>
     </DataSources>
     <Relations isList="true" count="0" />
     <Report isRef="0" />
@@ -132,7 +132,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Name>Text02</Name>
               <Page isRef="7" />
               <Parent isRef="8" />
-              <Text>        سند صرف ريال</Text>
+              <Text>        سند قبض ريال</Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
@@ -232,7 +232,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Name>Text15</Name>
               <Page isRef="7" />
               <Parent isRef="8" />
-              <Text>{Riyal_Voucher.RDate}</Text>
+              <Text>{Riyal_Exchange.RDate}</Text>
               <TextBrush>Black</TextBrush>
               <TextFormat Ref="15" type="DateFormat" isKey="true">
                 <StringFormat>dd/MM/yyyy</StringFormat>
@@ -273,7 +273,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Name>Text16</Name>
               <Page isRef="7" />
               <Parent isRef="8" />
-              <Text>{Riyal_Voucher.Code}</Text>
+              <Text>{Riyal_Exchange.Code}</Text>
               <TextBrush>Black</TextBrush>
               <TextFormat Ref="18" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
@@ -350,7 +350,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Name>Text30</Name>
               <Page isRef="7" />
               <Parent isRef="20" />
-              <Text>{Riyal_Voucher.RDescription}</Text>
+              <Text>{Riyal_Exchange.RDescription}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
@@ -391,7 +391,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Name>Text13</Name>
               <Page isRef="7" />
               <Parent isRef="20" />
-              <Text>{Riyal_Voucher.RHandle}</Text>
+              <Text>{Riyal_Exchange.RHandle}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
@@ -1082,10 +1082,10 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>11/3/2019 3:19:27 PM</ReportChanged>
+  <ReportChanged>11/3/2019 3:09:47 PM</ReportChanged>
   <ReportCreated>10/24/2019 12:37:16 PM</ReportCreated>
-  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\Print_RiyalRecieptVoucher.mrt</ReportFile>
-  <ReportGuid>59b9c85060674ac989b7fabdf15c1f93</ReportGuid>
+  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\Print_RiyalExchangeVoucher.mrt</ReportFile>
+  <ReportGuid>ef92f25f1c3c4fc7b5aedb37ea1c6fde</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>HundredthsOfInch</ReportUnit>
   <ReportVersion>2019.3.5.0</ReportVersion>

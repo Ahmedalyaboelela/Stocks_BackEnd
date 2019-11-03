@@ -43,7 +43,7 @@
         <Name>Debit</Name>
         <NameInSource>MS SQL</NameInSource>
         <Parameters isList="true" count="1">
-          <value>_x0040_RecieptID1,_x0031_,8,32</value>
+          <value>_x0040_RecieptID1,_x0032_,8,32</value>
         </Parameters>
         <SqlCommand>SELECT    A.Code AS Code , A.NameAR AS AccountName,RE.Debit AS RiyalDebit
 	FROM dbo.ReceiptExchangeDetails AS RE
@@ -65,7 +65,7 @@ WHERE RE.ReceiptID=@RecieptID1 AND RE.Credit IS NULL
         <Name>Credit</Name>
         <NameInSource>MS SQL</NameInSource>
         <Parameters isList="true" count="1">
-          <value>_x0040_RecieptID3,_x0031__x000D__x000A_,8,32</value>
+          <value>_x0040_RecieptID3,_x0032_,8,32</value>
         </Parameters>
         <SqlCommand>SELECT    A.Code AS Code , A.NameAR AS AccountName,RE.Credit AS RiyalCredit
 	FROM dbo.ReceiptExchangeDetails AS RE
@@ -73,29 +73,33 @@ WHERE RE.ReceiptID=@RecieptID1 AND RE.Credit IS NULL
 ON A.AccountID = RE.AccountID
 WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
       </Credit>
-      <Riyal_x0020_Voucher Ref="6" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
-        <Alias>Riyal Voucher</Alias>
-        <Columns isList="true" count="4">
+      <Check_x0020_Exchange Ref="6" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>Check Exchange</Alias>
+        <Columns isList="true" count="7">
           <value>Code,System.String</value>
           <value>RDate,System.DateTime</value>
           <value>RHandle,System.String</value>
+          <value>CheckNum,System.Int32</value>
+          <value>CheckDate,System.DateTime</value>
+          <value>BankName,System.String</value>
           <value>RDescription,System.String</value>
         </Columns>
         <CommandTimeout>30</CommandTimeout>
         <Dictionary isRef="1" />
         <Key>d1342e27ce604ffc9410329e612e2f32</Key>
-        <Name>Riyal Voucher</Name>
+        <Name>Check Exchange</Name>
         <NameInSource>MS SQL</NameInSource>
         <Parameters isList="true" count="1">
-          <value>_x0040_RecieptID2,_x0031_,8,32</value>
+          <value>_x0040_RecieptID2,_x0034_,8,32</value>
         </Parameters>
-        <SqlCommand>SELECT  R.Code AS Code, CONVERT(DATE, R.Date,110)  AS RDate,R.Handling AS RHandle
+        <SqlCommand>SELECT  R.Code AS Code, CONVERT(DATE, R.Date,110)  AS RDate,R.Handling AS RHandle,R.ChiqueNumber AS CheckNum,
+	CONVERT(DATE,R.ChiqueDate,110)	 AS CheckDate,R.BankName AS BankName
 	,R.Description AS RDescription
 	FROM dbo.ReceiptExchanges AS R 
 
-	WHERE R.Type='false' AND R.ReceiptExchangeType='true'
-	 AND R.ReceiptID=@RecieptID2</SqlCommand>
-      </Riyal_x0020_Voucher>
+	WHERE R.Type='true' AND R.ReceiptExchangeType='false'
+	AND R.ReceiptID=@RecieptID2</SqlCommand>
+      </Check_x0020_Exchange>
     </DataSources>
     <Relations isList="true" count="0" />
     <Report isRef="0" />
@@ -116,7 +120,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
         <PageHeaderBand1 Ref="8" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,20,772,150</ClientRectangle>
-          <Components isList="true" count="9">
+          <Components isList="true" count="15">
             <Text02 Ref="9" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
@@ -132,7 +136,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Name>Text02</Name>
               <Page isRef="7" />
               <Parent isRef="8" />
-              <Text>        سند صرف ريال</Text>
+              <Text>        سند قبض شيك</Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
@@ -232,7 +236,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Name>Text15</Name>
               <Page isRef="7" />
               <Parent isRef="8" />
-              <Text>{Riyal_Voucher.RDate}</Text>
+              <Text>{Check_Exchange.RDate}</Text>
               <TextBrush>Black</TextBrush>
               <TextFormat Ref="15" type="DateFormat" isKey="true">
                 <StringFormat>dd/MM/yyyy</StringFormat>
@@ -273,7 +277,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Name>Text16</Name>
               <Page isRef="7" />
               <Parent isRef="8" />
-              <Text>{Riyal_Voucher.Code}</Text>
+              <Text>{Check_Exchange.Code}</Text>
               <TextBrush>Black</TextBrush>
               <TextFormat Ref="18" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
@@ -305,17 +309,140 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text2>
+            <Text3 Ref="20" type="Text" isKey="true">
+              <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>200,100,90,20</ClientRectangle>
+              <ComponentPlacement>ph.PageHeaderBand1</ComponentPlacement>
+              <ComponentStyle>Aqua Contact Name</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <Guid>948eec3874ce4905afe5386ec79a1b65</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>3,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="7" />
+              <Parent isRef="8" />
+              <Text>البنك</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text3>
+            <Text4 Ref="21" type="Text" isKey="true">
+              <Border>None;White;1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>210,120,80,20</ClientRectangle>
+              <ComponentPlacement>ph.PageHeaderBand1</ComponentPlacement>
+              <ComponentStyle>Aqua Company Info</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <Guid>fc49f517a4e9414d885e806997f1eb44</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,3,0,0</Margins>
+              <Name>Text4</Name>
+              <Page isRef="7" />
+              <Parent isRef="8" />
+              <Text>{Check_Exchange.BankName}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="22" type="NumberFormat" isKey="true">
+                <DecimalDigits>0</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <State>DecimalDigits</State>
+              </TextFormat>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text4>
+            <Text5 Ref="23" type="Text" isKey="true">
+              <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>110,100,90,20</ClientRectangle>
+              <ComponentPlacement>ph.PageHeaderBand1</ComponentPlacement>
+              <ComponentStyle>Aqua Contact Name</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <Guid>e43a87556c6845fc998a858bcbf5d59d</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>3,0,0,0</Margins>
+              <Name>Text5</Name>
+              <Page isRef="7" />
+              <Parent isRef="8" />
+              <Text># رقم الشيك</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text5>
+            <Text6 Ref="24" type="Text" isKey="true">
+              <Border>None;White;1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>120,120,80,20</ClientRectangle>
+              <ComponentPlacement>ph.PageHeaderBand1</ComponentPlacement>
+              <ComponentStyle>Aqua Company Info</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <Guid>42336b905d9444cc9a1f7d7dd85b2fb0</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,3,0,0</Margins>
+              <Name>Text6</Name>
+              <Page isRef="7" />
+              <Parent isRef="8" />
+              <Text>{Check_Exchange.CheckNum}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text6>
+            <Text7 Ref="25" type="Text" isKey="true">
+              <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>20,100,90,20</ClientRectangle>
+              <ComponentPlacement>ph.PageHeaderBand1</ComponentPlacement>
+              <ComponentStyle>Aqua Contact Name</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <Guid>13a198d98c3e4b0db0c70d35f85f76a0</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>3,0,0,0</Margins>
+              <Name>Text7</Name>
+              <Page isRef="7" />
+              <Parent isRef="8" />
+              <Text>تاريح الشيك</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text7>
+            <Text8 Ref="26" type="Text" isKey="true">
+              <Border>None;White;1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>20,120,90,20</ClientRectangle>
+              <ComponentPlacement>ph.PageHeaderBand1</ComponentPlacement>
+              <ComponentStyle>Aqua Company Info</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <Guid>f1a36c39743544e5b46a17d38d196aa3</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,3,0,0</Margins>
+              <Name>Text8</Name>
+              <Page isRef="7" />
+              <Parent isRef="8" />
+              <Text>{Check_Exchange.CheckDate}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="27" type="DateFormat" isKey="true">
+                <StringFormat>dd/MM/yyyy</StringFormat>
+              </TextFormat>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text8>
           </Components>
           <Conditions isList="true" count="0" />
           <Name>PageHeaderBand1</Name>
           <Page isRef="7" />
           <Parent isRef="7" />
         </PageHeaderBand1>
-        <HeaderBand1 Ref="20" type="HeaderBand" isKey="true">
+        <HeaderBand1 Ref="28" type="HeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,210,772,70</ClientRectangle>
           <Components isList="true" count="4">
-            <Text20 Ref="21" type="Text" isKey="true">
+            <Text20 Ref="29" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>440,0,330,30</ClientRectangle>
@@ -329,13 +456,13 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>3,0,0,0</Margins>
               <Name>Text20</Name>
               <Page isRef="7" />
-              <Parent isRef="20" />
+              <Parent isRef="28" />
               <Text>البيان</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text20>
-            <Text30 Ref="22" type="Text" isKey="true">
+            <Text30 Ref="30" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -349,14 +476,14 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>5,0,5,0</Margins>
               <Name>Text30</Name>
               <Page isRef="7" />
-              <Parent isRef="20" />
-              <Text>{Riyal_Voucher.RDescription}</Text>
+              <Parent isRef="28" />
+              <Text>{Check_Exchange.RDescription}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text30>
-            <Text12 Ref="23" type="Text" isKey="true">
+            <Text12 Ref="31" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>0,0,330,30</ClientRectangle>
@@ -370,13 +497,13 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>3,0,0,0</Margins>
               <Name>Text12</Name>
               <Page isRef="7" />
-              <Parent isRef="20" />
+              <Parent isRef="28" />
               <Text>تمت بمعرفة</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text12>
-            <Text13 Ref="24" type="Text" isKey="true">
+            <Text13 Ref="32" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -390,8 +517,8 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>5,0,5,0</Margins>
               <Name>Text13</Name>
               <Page isRef="7" />
-              <Parent isRef="20" />
-              <Text>{Riyal_Voucher.RHandle}</Text>
+              <Parent isRef="28" />
+              <Text>{Check_Exchange.RHandle}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
@@ -403,11 +530,11 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
           <Page isRef="7" />
           <Parent isRef="7" />
         </HeaderBand1>
-        <HeaderNoticeDetails Ref="25" type="HeaderBand" isKey="true">
+        <HeaderNoticeDetails Ref="33" type="HeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,320,772,70</ClientRectangle>
           <Components isList="true" count="6">
-            <HeaderTextNoticeDetails2 Ref="26" type="Text" isKey="true">
+            <HeaderTextNoticeDetails2 Ref="34" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -419,14 +546,14 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextNoticeDetails2</Name>
               <Page isRef="7" />
-              <Parent isRef="25" />
+              <Parent isRef="33" />
               <Text>رقم الحساب</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </HeaderTextNoticeDetails2>
-            <Text14 Ref="27" type="Text" isKey="true">
+            <Text14 Ref="35" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>EmptyBrush</Brush>
               <ClientRectangle>620,0,110,30</ClientRectangle>
@@ -440,13 +567,13 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>3,0,0,0</Margins>
               <Name>Text14</Name>
               <Page isRef="7" />
-              <Parent isRef="25" />
+              <Parent isRef="33" />
               <Text>مدين</Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text14>
-            <Text17 Ref="28" type="Text" isKey="true">
+            <Text17 Ref="36" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -459,14 +586,14 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text17</Name>
               <Page isRef="7" />
-              <Parent isRef="25" />
+              <Parent isRef="33" />
               <Text>اسم الحساب</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text17>
-            <Text18 Ref="29" type="Text" isKey="true">
+            <Text18 Ref="37" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -479,27 +606,27 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text18</Name>
               <Page isRef="7" />
-              <Parent isRef="25" />
+              <Parent isRef="33" />
               <Text>مدين </Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text18>
-            <StartPointPrimitive1 Ref="30" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+            <StartPointPrimitive1 Ref="38" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
               <ClientRectangle>610,0,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>StartPointPrimitive1</Name>
               <Page isRef="7" />
-              <Parent isRef="25" />
+              <Parent isRef="33" />
               <ReferenceToGuid>434ec0d6b965471989fd72ba655b728d</ReferenceToGuid>
             </StartPointPrimitive1>
-            <EndPointPrimitive1 Ref="31" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+            <EndPointPrimitive1 Ref="39" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
               <ClientRectangle>740,30,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>EndPointPrimitive1</Name>
               <Page isRef="7" />
-              <Parent isRef="25" />
+              <Parent isRef="33" />
               <ReferenceToGuid>434ec0d6b965471989fd72ba655b728d</ReferenceToGuid>
             </EndPointPrimitive1>
           </Components>
@@ -508,12 +635,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
           <Page isRef="7" />
           <Parent isRef="7" />
         </HeaderNoticeDetails>
-        <DataNoticeDetails Ref="32" type="DataBand" isKey="true">
+        <DataNoticeDetails Ref="40" type="DataBand" isKey="true">
           <Brush>Transparent</Brush>
           <BusinessObjectGuid isNull="true" />
           <ClientRectangle>0,430,772,30</ClientRectangle>
           <Components isList="true" count="3">
-            <DataTextNoticeDetails7 Ref="33" type="Text" isKey="true">
+            <DataTextNoticeDetails7 Ref="41" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -525,7 +652,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>DataTextNoticeDetails7</Name>
               <Page isRef="7" />
-              <Parent isRef="32" />
+              <Parent isRef="40" />
               <Text>{Debit.Code}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -533,7 +660,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </DataTextNoticeDetails7>
-            <Text21 Ref="34" type="Text" isKey="true">
+            <Text21 Ref="42" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -546,7 +673,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text21</Name>
               <Page isRef="7" />
-              <Parent isRef="32" />
+              <Parent isRef="40" />
               <Text>{Debit.AccountName}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -554,7 +681,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text21>
-            <Text23 Ref="35" type="Text" isKey="true">
+            <Text23 Ref="43" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -567,7 +694,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text23</Name>
               <Page isRef="7" />
-              <Parent isRef="32" />
+              <Parent isRef="40" />
               <Text>{Debit.RiyalDebit}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -587,11 +714,11 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
           <Parent isRef="7" />
           <Sort isList="true" count="0" />
         </DataNoticeDetails>
-        <FooterNoticeDetails Ref="36" type="FooterBand" isKey="true">
+        <FooterNoticeDetails Ref="44" type="FooterBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,500,772,60</ClientRectangle>
           <Components isList="true" count="3">
-            <Text24 Ref="37" type="Text" isKey="true">
+            <Text24 Ref="45" type="Text" isKey="true">
               <Brush>SteelBlue</Brush>
               <ClientRectangle>490,0,240,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -601,13 +728,13 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text24</Name>
               <Page isRef="7" />
-              <Parent isRef="36" />
+              <Parent isRef="44" />
               <Text>المجموع</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text24>
-            <Text26 Ref="38" type="Text" isKey="true">
+            <Text26 Ref="46" type="Text" isKey="true">
               <Brush>SteelBlue</Brush>
               <ClientRectangle>10,0,240,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -617,13 +744,13 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text26</Name>
               <Page isRef="7" />
-              <Parent isRef="36" />
+              <Parent isRef="44" />
               <Text>{Sum(Debit.RiyalDebit)}</Text>
               <TextBrush>Black</TextBrush>
               <Type>Totals</Type>
               <VertAlignment>Center</VertAlignment>
             </Text26>
-            <Text25 Ref="39" type="Text" isKey="true">
+            <Text25 Ref="47" type="Text" isKey="true">
               <Brush>SteelBlue</Brush>
               <ClientRectangle>250,0,240,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -633,7 +760,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text25</Name>
               <Page isRef="7" />
-              <Parent isRef="36" />
+              <Parent isRef="44" />
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
@@ -644,11 +771,11 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
           <Page isRef="7" />
           <Parent isRef="7" />
         </FooterNoticeDetails>
-        <HeaderCredit Ref="40" type="HeaderBand" isKey="true">
+        <HeaderCredit Ref="48" type="HeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,600,772,70</ClientRectangle>
           <Components isList="true" count="6">
-            <Text28 Ref="41" type="Text" isKey="true">
+            <Text28 Ref="49" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>EmptyBrush</Brush>
               <ClientRectangle>620,0,110,30</ClientRectangle>
@@ -662,13 +789,13 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>3,0,0,0</Margins>
               <Name>Text28</Name>
               <Page isRef="7" />
-              <Parent isRef="40" />
+              <Parent isRef="48" />
               <Text>دائن</Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text28>
-            <Text29 Ref="42" type="Text" isKey="true">
+            <Text29 Ref="50" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -681,14 +808,14 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text29</Name>
               <Page isRef="7" />
-              <Parent isRef="40" />
+              <Parent isRef="48" />
               <Text>رقم الحساب</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text29>
-            <Text31 Ref="43" type="Text" isKey="true">
+            <Text31 Ref="51" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -701,14 +828,14 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text31</Name>
               <Page isRef="7" />
-              <Parent isRef="40" />
+              <Parent isRef="48" />
               <Text>اسم الحساب</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text31>
-            <Text32 Ref="44" type="Text" isKey="true">
+            <Text32 Ref="52" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -721,27 +848,27 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text32</Name>
               <Page isRef="7" />
-              <Parent isRef="40" />
+              <Parent isRef="48" />
               <Text>دائن </Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text32>
-            <StartPointPrimitive2 Ref="45" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+            <StartPointPrimitive2 Ref="53" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
               <ClientRectangle>610,0,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>StartPointPrimitive2</Name>
               <Page isRef="7" />
-              <Parent isRef="40" />
+              <Parent isRef="48" />
               <ReferenceToGuid>0fc9fe4e7bdc49f1bcd31a9c19a51be0</ReferenceToGuid>
             </StartPointPrimitive2>
-            <EndPointPrimitive2 Ref="46" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+            <EndPointPrimitive2 Ref="54" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
               <ClientRectangle>740,30,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>EndPointPrimitive2</Name>
               <Page isRef="7" />
-              <Parent isRef="40" />
+              <Parent isRef="48" />
               <ReferenceToGuid>0fc9fe4e7bdc49f1bcd31a9c19a51be0</ReferenceToGuid>
             </EndPointPrimitive2>
           </Components>
@@ -750,12 +877,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
           <Page isRef="7" />
           <Parent isRef="7" />
         </HeaderCredit>
-        <DataCredit Ref="47" type="DataBand" isKey="true">
+        <DataCredit Ref="55" type="DataBand" isKey="true">
           <Brush>Transparent</Brush>
           <BusinessObjectGuid isNull="true" />
           <ClientRectangle>0,710,772,30</ClientRectangle>
           <Components isList="true" count="3">
-            <Text34 Ref="48" type="Text" isKey="true">
+            <Text34 Ref="56" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -768,7 +895,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text34</Name>
               <Page isRef="7" />
-              <Parent isRef="47" />
+              <Parent isRef="55" />
               <Text>{Credit.Code}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -776,7 +903,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text34>
-            <Text35 Ref="49" type="Text" isKey="true">
+            <Text35 Ref="57" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -789,7 +916,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text35</Name>
               <Page isRef="7" />
-              <Parent isRef="47" />
+              <Parent isRef="55" />
               <Text>{Credit.AccountName}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -797,7 +924,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text35>
-            <Text36 Ref="50" type="Text" isKey="true">
+            <Text36 Ref="58" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -810,7 +937,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text36</Name>
               <Page isRef="7" />
-              <Parent isRef="47" />
+              <Parent isRef="55" />
               <Text>{Credit.RiyalCredit}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -827,11 +954,11 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
           <Parent isRef="7" />
           <Sort isList="true" count="0" />
         </DataCredit>
-        <FooterCredit Ref="51" type="FooterBand" isKey="true">
+        <FooterCredit Ref="59" type="FooterBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,780,772,60</ClientRectangle>
           <Components isList="true" count="14">
-            <FooterCredit_NoticeDetailID Ref="52" type="Text" isKey="true">
+            <FooterCredit_NoticeDetailID Ref="60" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>0,0,70,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -840,12 +967,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>FooterCredit_NoticeDetailID</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </FooterCredit_NoticeDetailID>
-            <FooterCredit_NoticeID Ref="53" type="Text" isKey="true">
+            <FooterCredit_NoticeID Ref="61" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>70,0,70,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -854,12 +981,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>FooterCredit_NoticeID</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </FooterCredit_NoticeID>
-            <FooterCredit_AccountID Ref="54" type="Text" isKey="true">
+            <FooterCredit_AccountID Ref="62" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>140,0,70,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -868,12 +995,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>FooterCredit_AccountID</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </FooterCredit_AccountID>
-            <FooterCredit_Credit Ref="55" type="Text" isKey="true">
+            <FooterCredit_Credit Ref="63" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>210,0,70,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -882,12 +1009,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>FooterCredit_Credit</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </FooterCredit_Credit>
-            <FooterCredit_Debit Ref="56" type="Text" isKey="true">
+            <FooterCredit_Debit Ref="64" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>280,0,70,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -896,12 +1023,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>FooterCredit_Debit</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </FooterCredit_Debit>
-            <FooterCredit_StocksCredit Ref="57" type="Text" isKey="true">
+            <FooterCredit_StocksCredit Ref="65" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>350,0,70,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -910,12 +1037,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>FooterCredit_StocksCredit</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </FooterCredit_StocksCredit>
-            <FooterCredit_StocksDebit Ref="58" type="Text" isKey="true">
+            <FooterCredit_StocksDebit Ref="66" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>420,0,70,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -924,12 +1051,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>FooterCredit_StocksDebit</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </FooterCredit_StocksDebit>
-            <FooterCredit_PartnerID Ref="59" type="Text" isKey="true">
+            <FooterCredit_PartnerID Ref="67" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>490,0,70,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -938,12 +1065,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>FooterCredit_PartnerID</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </FooterCredit_PartnerID>
-            <FooterCredit_PartName Ref="60" type="Text" isKey="true">
+            <FooterCredit_PartName Ref="68" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>560,0,70,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -952,12 +1079,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>FooterCredit_PartName</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </FooterCredit_PartName>
-            <FooterCredit_AccountName Ref="61" type="Text" isKey="true">
+            <FooterCredit_AccountName Ref="69" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>630,0,70,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -966,12 +1093,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>FooterCredit_AccountName</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </FooterCredit_AccountName>
-            <FooterCredit_RiyalCredit Ref="62" type="Text" isKey="true">
+            <FooterCredit_RiyalCredit Ref="70" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>700,0,70,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -980,12 +1107,12 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>FooterCredit_RiyalCredit</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </FooterCredit_RiyalCredit>
-            <Text38 Ref="63" type="Text" isKey="true">
+            <Text38 Ref="71" type="Text" isKey="true">
               <Brush>SteelBlue</Brush>
               <ClientRectangle>500,0,240,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -995,13 +1122,13 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text38</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <Text>المجموع</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text38>
-            <Text39 Ref="64" type="Text" isKey="true">
+            <Text39 Ref="72" type="Text" isKey="true">
               <Brush>SteelBlue</Brush>
               <ClientRectangle>20,0,240,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -1011,13 +1138,13 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text39</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <Text>{Sum(Credit.RiyalCredit)}</Text>
               <TextBrush>Black</TextBrush>
               <Type>Totals</Type>
               <VertAlignment>Center</VertAlignment>
             </Text39>
-            <Text41 Ref="65" type="Text" isKey="true">
+            <Text41 Ref="73" type="Text" isKey="true">
               <Brush>SteelBlue</Brush>
               <ClientRectangle>260,0,240,30</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -1027,7 +1154,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
               <Margins>0,0,0,0</Margins>
               <Name>Text41</Name>
               <Page isRef="7" />
-              <Parent isRef="51" />
+              <Parent isRef="59" />
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
@@ -1038,7 +1165,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
           <Page isRef="7" />
           <Parent isRef="7" />
         </FooterCredit>
-        <RoundedRectanglePrimitive1 Ref="66" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
+        <RoundedRectanglePrimitive1 Ref="74" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
           <ClientRectangle>610,320,130,30</ClientRectangle>
           <Color>SteelBlue</Color>
           <Conditions isList="true" count="0" />
@@ -1049,7 +1176,7 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
           <Round>0.2</Round>
           <Size>3</Size>
         </RoundedRectanglePrimitive1>
-        <RoundedRectanglePrimitive2 Ref="67" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
+        <RoundedRectanglePrimitive2 Ref="75" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
           <ClientRectangle>610,600,130,30</ClientRectangle>
           <Color>SteelBlue</Color>
           <Conditions isList="true" count="0" />
@@ -1082,10 +1209,10 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>11/3/2019 3:19:27 PM</ReportChanged>
+  <ReportChanged>11/3/2019 3:04:49 PM</ReportChanged>
   <ReportCreated>10/24/2019 12:37:16 PM</ReportCreated>
-  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\Print_RiyalRecieptVoucher.mrt</ReportFile>
-  <ReportGuid>59b9c85060674ac989b7fabdf15c1f93</ReportGuid>
+  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\Print_CheckExchangeVoucher.mrt</ReportFile>
+  <ReportGuid>20ef3d3d407544729e5516eda0e688e7</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>HundredthsOfInch</ReportUnit>
   <ReportVersion>2019.3.5.0</ReportVersion>
@@ -1114,197 +1241,197 @@ namespace Reports
 </Script>
   <ScriptLanguage>CSharp</ScriptLanguage>
   <Styles isList="true" count="12">
-    <Blue_x0020_Steel_Report_Title1 Ref="68" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title1 Ref="76" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item66 Ref="69" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item72 Ref="77" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>ReportTitle</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item66>
+        </Item72>
       </Conditions>
       <Font>Arial,14,Bold</Font>
       <Name>Blue Steel_Report_Title1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Title1>
-    <Blue_x0020_Steel_Report_Title2 Ref="70" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title2 Ref="78" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item68 Ref="71" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item74 Ref="79" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>ReportTitle</Placement>
           <PlacementNestedLevel>2</PlacementNestedLevel>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item68>
+        </Item74>
       </Conditions>
       <Font>Arial,10,Bold</Font>
       <Name>Blue Steel_Report_Title2</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Title2>
-    <Blue_x0020_Steel_Report_Summary Ref="72" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Summary Ref="80" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item70 Ref="73" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item76 Ref="81" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>ReportSummary</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item70>
+        </Item76>
       </Conditions>
       <Font>Arial,10,Bold</Font>
       <Name>Blue Steel_Report_Summary</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Summary>
-    <Blue_x0020_Steel_Page_Header Ref="74" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Page_Header Ref="82" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item72 Ref="75" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item78 Ref="83" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>PageHeader</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item72>
+        </Item78>
       </Conditions>
       <Font>Arial,10</Font>
       <Name>Blue Steel_Page_Header</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Header>
-    <Blue_x0020_Steel_Page_Footer Ref="76" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Page_Footer Ref="84" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item74 Ref="77" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item80 Ref="85" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>PageFooter</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item74>
+        </Item80>
       </Conditions>
       <Font>Arial,10</Font>
       <Name>Blue Steel_Page_Footer</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Footer>
-    <Blue_x0020_Steel_Group_Header1 Ref="78" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Header1 Ref="86" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item76 Ref="79" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item82 Ref="87" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>GroupHeader</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item76>
+        </Item82>
       </Conditions>
       <Font>Arial,13,Bold</Font>
       <Name>Blue Steel_Group_Header1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Header1>
-    <Blue_x0020_Steel_Group_Footer1 Ref="80" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Footer1 Ref="88" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item78 Ref="81" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item84 Ref="89" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>GroupFooter</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item78>
+        </Item84>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Group_Footer1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Footer1>
-    <Blue_x0020_Steel_Header1 Ref="82" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Header1 Ref="90" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
       <Brush>[79:129:189]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item80 Ref="83" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item86 Ref="91" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Header</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item80>
+        </Item86>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Header1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>White</TextBrush>
     </Blue_x0020_Steel_Header1>
-    <Blue_x0020_Steel_Data1 Ref="84" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1 Ref="92" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item82 Ref="85" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item88 Ref="93" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image, CheckBox</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Data</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item82>
+        </Item88>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1>
-    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="86" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="94" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[255:255:255]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item84 Ref="87" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item90 Ref="95" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataOddStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item84>
+        </Item90>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Odd Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Odd_x0020_Style>
-    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="88" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="96" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[216:216:216]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item86 Ref="89" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item92 Ref="97" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataEvenStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item86>
+        </Item92>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Even Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Even_x0020_Style>
-    <Blue_x0020_Steel_Footer1 Ref="90" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Footer1 Ref="98" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black</Border>
       <Brush>White</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item88 Ref="91" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item94 Ref="99" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>Footer</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item88>
+        </Item94>
       </Conditions>
       <Font>Arial,8.25,Bold,Point,False,204</Font>
       <Name>Blue Steel_Footer1</Name>

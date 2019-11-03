@@ -578,7 +578,7 @@ namespace Stocks.Controllers
 
         }
 
-        // Print Notice Debit
+        // Print Riyal Reciept
         [HttpPost]
         [Route("~/api/ReportViewer/printRiyalReciept")]
         public string printRiyalReciept([FromBody] JObject data)
@@ -587,6 +587,69 @@ namespace Stocks.Controllers
             int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
             StiReport report = new StiReport();
             var path = StiNetCoreHelper.MapPath(this, "Reports/Print_RiyalRecieptVoucher.mrt");
+            report.Load(path);
+            report["@NoticeID1"] = NoticeID;
+            report["@NoticeID2"] = NoticeID;
+            report["@NoticeID3"] = NoticeID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+        // Print Check Reciept
+        [HttpPost]
+        [Route("~/api/ReportViewer/printCheckReciept")]
+        public string printCheckReciept([FromBody] JObject data)
+        {
+
+            int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_CheckRecieptVoucher.mrt");
+            report.Load(path);
+            report["@NoticeID1"] = NoticeID;
+            report["@NoticeID2"] = NoticeID;
+            report["@NoticeID3"] = NoticeID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+        // Print Riyal Exchange
+        [HttpPost]
+        [Route("~/api/ReportViewer/printRiyalExchange")]
+        public string printRiyalExchange([FromBody] JObject data)
+        {
+
+            int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_RiyalExchangeVoucher.mrt");
+            report.Load(path);
+            report["@NoticeID1"] = NoticeID;
+            report["@NoticeID2"] = NoticeID;
+            report["@NoticeID3"] = NoticeID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+        // Print Check Exchange
+        [HttpPost]
+        [Route("~/api/ReportViewer/printCheckExchange")]
+        public string printCheckExchange([FromBody] JObject data)
+        {
+
+            int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_CheckExchangeVoucher.mrt");
             report.Load(path);
             report["@NoticeID1"] = NoticeID;
             report["@NoticeID2"] = NoticeID;
