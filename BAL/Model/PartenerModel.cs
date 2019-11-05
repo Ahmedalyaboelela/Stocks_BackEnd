@@ -70,7 +70,7 @@ namespace BAL.Model
 
         #region update 14/10/2019
 
-        public int StocksCount { get; set; }
+        public float StocksCount { get; set; }
 
         public ICollection<PartnerAttachmentModel> PartnerAttachments { get; set; }
         #endregion

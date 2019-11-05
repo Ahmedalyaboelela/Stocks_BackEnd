@@ -33,6 +33,7 @@ namespace Stocks.Controllers
             this.unitOfWork = new UnitOfWork(context);
         }
         #endregion
+        
         #region  Retreive Reports
 
 
@@ -702,15 +703,6 @@ namespace Stocks.Controllers
 
         #endregion
         #endregion
-
-
-
-
-
-
-
-
-
 
     }
 }
