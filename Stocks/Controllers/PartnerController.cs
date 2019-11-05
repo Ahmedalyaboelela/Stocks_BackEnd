@@ -185,7 +185,12 @@ namespace Stocks.Controllers
                 //    NameEN = m.NameEN
 
                 //});
-
+                IEnumerable<PortfolioTransaction> StocksCountList = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PartnerID == partner.PartnerID);
+                model.StocksCount = 0;
+                for (int i = 0; i < StocksCountList.Count(); i++)
+                {
+                    model.StocksCount += StocksCountList.ElementAt(i).CurrentStocksCount;
+                        }
                 return Ok( model);
             }
             catch (NullReferenceException ex)
@@ -268,7 +273,12 @@ namespace Stocks.Controllers
 
                     model.Count = unitOfWork.PartnerRepository.Count();
 
-
+                    IEnumerable<PortfolioTransaction> StocksCountList = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PartnerID == partner.PartnerID);
+                    model.StocksCount = 0;
+                    for (int i = 0; i < StocksCountList.Count(); i++)
+                    {
+                        model.StocksCount += StocksCountList.ElementAt(i).CurrentStocksCount;
+                    }
                     return Ok(model);
                 }
                 else
@@ -350,7 +360,12 @@ namespace Stocks.Controllers
                     }
 
                     model.Count = unitOfWork.PartnerRepository.Count();
-
+                    IEnumerable<PortfolioTransaction> StocksCountList = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PartnerID == partner.PartnerID);
+                    model.StocksCount = 0;
+                    for (int i = 0; i < StocksCountList.Count(); i++)
+                    {
+                        model.StocksCount += StocksCountList.ElementAt(i).CurrentStocksCount;
+                    }
                     return Ok(model);
                 }
 
@@ -418,8 +433,13 @@ namespace Stocks.Controllers
 
                             });
                         }
-                       
 
+                        IEnumerable<PortfolioTransaction> StocksCountList = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PartnerID == partner[i].PartnerID);
+                        model[j].StocksCount = 0;
+                        for (int ii = 0; ii < StocksCountList.Count(); ii++)
+                        {
+                            model[j].StocksCount += StocksCountList.ElementAt(ii).CurrentStocksCount;
+                        }
 
                     }
                     else
