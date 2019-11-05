@@ -688,11 +688,11 @@ namespace Stocks.Controllers
         public string printPartner([FromBody] JObject data)
         {
 
-            int CountryID = Convert.ToInt32(data.GetValue("PartnerID"));
+            int PartnerID = Convert.ToInt32(data.GetValue("PartnerID"));
             StiReport report = new StiReport();
             var path = StiNetCoreHelper.MapPath(this, "Reports/Print_Partner.mrt");
             report.Load(path);
-            report["@PartnerID"] = CountryID;
+            report["@PartnerID"] = PartnerID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
             report.Render(false);

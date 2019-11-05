@@ -62,7 +62,7 @@
         <Name>Partner</Name>
         <NameInSource>MS SQL</NameInSource>
         <Parameters isList="true" count="1">
-          <value>_x0040_PartnerID,_x0031_,8,32</value>
+          <value>_x0040_PartnerID,_x0032_,8,32</value>
         </Parameters>
         <SqlCommand>SELECT  P.Code AS Code,P.NameAR  AS ARName, P.NameEN AS ENName ,
 	CASE WHEN  P.IdentityType=1
@@ -954,10 +954,10 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>11/5/2019 11:57:19 AM</ReportChanged>
+  <ReportChanged>11/5/2019 12:48:45 PM</ReportChanged>
   <ReportCreated>10/24/2019 12:37:16 PM</ReportCreated>
-  <ReportFile>C:\Users\Amr\Desktop\Print_Partner.mrt</ReportFile>
-  <ReportGuid>b37786fb6a68468c909c5ae413f82f52</ReportGuid>
+  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\Print_Partner.mrt</ReportFile>
+  <ReportGuid>cb53fd00e8d148d2ad6f5838c8af99b5</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>HundredthsOfInch</ReportUnit>
   <ReportVersion>2019.3.5.0</ReportVersion>
