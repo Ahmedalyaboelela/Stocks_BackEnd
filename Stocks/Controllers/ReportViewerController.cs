@@ -681,6 +681,24 @@ namespace Stocks.Controllers
             return report.SaveDocumentJsonToString();
 
         }
+        // Print Account
+        [HttpPost]
+        [Route("~/api/ReportViewer/PrintAccount")]
+        public string PrintAccount([FromBody] JObject data)
+        {
+
+            int AccountID = Convert.ToInt32(data.GetValue("AccountID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_Account.mrt");
+            report.Load(path);
+            report["@AccountID"] = AccountID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
 
         // Print Country
         [HttpPost]

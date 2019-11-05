@@ -88,7 +88,7 @@ namespace Stocks.Controllers
                     PortfolioNameEN = m.Portfolio.NameEN,
                     
 
-                });
+                }).ToList();
 
          
 
