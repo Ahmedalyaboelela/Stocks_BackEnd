@@ -218,6 +218,11 @@ namespace Stocks.Controllers
                 model.NoticeDate = notice.NoticeDate.Value.ToString("d/M/yyyy");
                 model.NoticeDateHijri = DateHelper.GetHijriDate(notice.NoticeDate);
             }
+            if (notice.DistributionDate != null)
+            {
+                model.DistributionDate = notice.DistributionDate.Value.ToString("d/M/yyyy");
+                model.DistributionDateHijri = DateHelper.GetHijriDate(notice.DistributionDate);
+            }
             #endregion
 
             #region Details part
@@ -530,7 +535,7 @@ namespace Stocks.Controllers
 
                 #region Notice Creditor
                 case 3:
-                    var NoticeCreditorEntityList = unitOfWork.NoticeRepository.Get(filter: a => a.Code == Code);
+                    var NoticeCreditorEntityList = unitOfWork.NoticeRepository.Get(filter: a => a.Code == Code && a.Type==false);
                     if (NoticeCreditorEntityList.Count() > 0)
                     {
                         NoticeModel noticeModel = new NoticeModel();
@@ -545,7 +550,7 @@ namespace Stocks.Controllers
 
                 #region Notice Debitor
                 case 4:
-                    var NoticeDebitorEntityList = unitOfWork.NoticeRepository.Get(filter: a => a.Code == Code);
+                    var NoticeDebitorEntityList = unitOfWork.NoticeRepository.Get(filter: a => a.Code == Code && a.Type == true);
                     if (NoticeDebitorEntityList.Count() > 0)
                     {
                         NoticeModel noticeModel = new NoticeModel();
@@ -686,6 +691,12 @@ namespace Stocks.Controllers
                             PartenerModel partnerModel = _mapper.Map<PartenerModel>(PartnerEntityList.SingleOrDefault());
                             var Countries = unitOfWork.CountryRepository.Get(filter: x => x.CountryID == partnerModel.CountryID);
                             partnerModel.Countries = _mapper.Map<IEnumerable<CountryModel>>(Countries);
+                            IEnumerable<PortfolioTransaction> StocksCountList = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PartnerID == partnerModel.PartnerID);
+                            partnerModel.StocksCount = 0;
+                            for (int ii = 0; ii < StocksCountList.Count(); ii++)
+                            {
+                                partnerModel.StocksCount += StocksCountList.ElementAt(ii).CurrentStocksCount;
+                            }
                             return Ok(partnerModel);
                         }
                         else
@@ -722,53 +733,58 @@ namespace Stocks.Controllers
                            
                                 var sellingorder = unitOfWork.SellingOrderRepository.Get(filter: x=> x.Code== Code).SingleOrDefault();
                                 var model = _mapper.Map<SellingOrderModel>(sellingorder);
+                        if (sellingorder != null)
+                        {
+                            #region Date part 
+                            if (sellingorder.OrderDate != null)
+                            {
+                                model.OrderDateGorg = sellingorder.OrderDate.ToString("d/M/yyyy");
+                                model.OrderDateHigri = DateHelper.GetHijriDate(sellingorder.OrderDate);
+                            }
 
-                                #region Date part 
-                                if (sellingorder.OrderDate != null)
+
+
+                            #endregion
+
+                            #region  Details
+                            var Details = unitOfWork.SellingOrderDetailRepository
+
+                                .Get(filter: m => m.SellingOrderID == sellingorder.SellingOrderID)
+                                .Select(m => new SellingOrderDetailModel
                                 {
-                                    model.OrderDateGorg = sellingorder.OrderDate.ToString("d/M/yyyy");
-                                    model.OrderDateHigri = DateHelper.GetHijriDate(sellingorder.OrderDate);
-                                }
-
-
-
-                                #endregion
-
-                                #region  Details
-                                var Details = unitOfWork.SellingOrderDetailRepository
-
-                                    .Get(filter: m => m.SellingOrderID == sellingorder.SellingOrderID)
-                                    .Select(m => new SellingOrderDetailModel
-                                    {
-                                        PartnerID = m.PartnerID,
-                                        PartnerNameAr = m.Partner.NameAR,
-                                        PriceType = m.PriceType,
-                                        SellingOrderID = m.SellingOrderID,
-                                        SellOrderDetailID = m.SellOrderDetailID,
-                                        StockCount = m.StockCount,
-                                        PartnerCode = m.Partner.Code
+                                    PartnerID = m.PartnerID,
+                                    PartnerNameAr = m.Partner.NameAR,
+                                    PriceType = m.PriceType,
+                                    SellingOrderID = m.SellingOrderID,
+                                    SellOrderDetailID = m.SellOrderDetailID,
+                                    StockCount = m.StockCount,
+                                    PartnerCode = m.Partner.Code
 
 
 
 
-                                    });
+                                });
 
 
 
 
-                                if (Details != null)
-                                {
-                                    model.sellingOrderDetailModels = Details;
+                            if (Details != null)
+                            {
+                                model.sellingOrderDetailModels = Details;
 
-                                }
+                            }
 
-                                #endregion
-                                model.Count = unitOfWork.SellingOrderRepository.Count();
-                                model.Portfoliocode = unitOfWork.PortfolioRepository.GetEntity(filter: a => a.PortfolioID == sellingorder.PortfolioID).Code;
+                            #endregion
+                            model.Count = unitOfWork.SellingOrderRepository.Count();
+                            model.Portfoliocode = unitOfWork.PortfolioRepository.GetEntity(filter: a => a.PortfolioID == sellingorder.PortfolioID).Code;
 
-                                return Ok(model);
+                            return Ok(model);
 
-
+                        }
+                        else
+                        {
+                            return Ok(0);
+                        }
                             }
 
 

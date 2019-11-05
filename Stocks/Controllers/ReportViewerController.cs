@@ -33,6 +33,7 @@ namespace Stocks.Controllers
             this.unitOfWork = new UnitOfWork(context);
         }
         #endregion
+        
         #region  Retreive Reports
 
 
@@ -662,17 +663,27 @@ namespace Stocks.Controllers
 
         }
 
+        // Print Check Exchange
+        [HttpPost]
+        [Route("~/api/ReportViewer/printCountry")]
+        public string printCountry([FromBody] JObject data)
+        {
+
+            int CountryID = Convert.ToInt32(data.GetValue("CountryID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_Country.mrt");
+            report.Load(path);
+            report["@CountryID"] = CountryID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
         #endregion
         #endregion
-
-
-
-
-
-
-
-
-
 
     }
 }

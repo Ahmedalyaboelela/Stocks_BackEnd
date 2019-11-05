@@ -1,4 +1,4 @@
-﻿// ............ types of returned messages .................... //
+﻿  // ............ types of returned messages .................... //
 [0]- null object found .
 [1]- invalid data entered [id, page number] .
 [2]- redundant data [code, name] .
