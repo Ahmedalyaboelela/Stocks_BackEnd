@@ -662,7 +662,7 @@ namespace Stocks.Controllers
 
         }
 
-        // Print Check Exchange
+        // Print Country
         [HttpPost]
         [Route("~/api/ReportViewer/printCountry")]
         public string printCountry([FromBody] JObject data)
@@ -673,6 +673,25 @@ namespace Stocks.Controllers
             var path = StiNetCoreHelper.MapPath(this, "Reports/Print_Country.mrt");
             report.Load(path);
             report["@CountryID"] = CountryID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+        // Print Country
+        [HttpPost]
+        [Route("~/api/ReportViewer/printPartner")]
+        public string printPartner([FromBody] JObject data)
+        {
+
+            int CountryID = Convert.ToInt32(data.GetValue("PartnerID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_Partner.mrt");
+            report.Load(path);
+            report["@PartnerID"] = CountryID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
             report.Render(false);
