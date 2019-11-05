@@ -388,6 +388,33 @@ namespace Stocks.Controllers
         }
 
 
+        [HttpGet]
+        [Route("~/api/order/getparteners/{id}")]
+        public IActionResult getparteners(int? id)
+        {
+
+            if (id != null || id != 0)
+            {
+                var p = unitOfWork.PortfolioTransactionsRepository.Get(filter: x=> x.PortfolioID==id).Select(a=> new PartenerModel {
+
+                    NameAR=a.Partner.NameAR,
+                    Code=a.Partner.Code,
+                    NameEN=a.Partner.NameEN,
+                    PartnerID=a.PartnerID,
+
+
+                });
+
+                return Ok(p);
+            }
+            else
+            {
+                return Ok();
+            }
+
+        }
+
+
 
 
         [HttpGet]

@@ -424,6 +424,47 @@ namespace Stocks.Controllers
         }
 
 
+        [HttpGet]
+        [Route("~/api/orders/getparteners/{id}")]
+        public IActionResult getparteners(int? id)
+        {
+
+            if (id != null || id != 0)
+            {
+                var p = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == id).Select(a => new PartenerModel
+                {
+
+                    NameAR = a.Partner.NameAR,
+                    Code = a.Partner.Code,
+                    NameEN = a.Partner.NameEN,
+                    PartnerID = a.PartnerID,
+
+
+                });
+
+                return Ok(p);
+            }
+            else
+            {
+                return Ok();
+            }
+
+        }
+        [Route("~/api/Order/Getname/{id}")]
+        public IActionResult Getpartenername(int id)
+        {
+            var n = unitOfWork.PartnerRepository.GetEntity(filter: x => x.PartnerID == id);
+            PortfolioPartners portfolioPartners = new PortfolioPartners();
+            portfolioPartners.NameAR = n.NameAR;
+            portfolioPartners.NameEN = n.NameEN;
+            portfolioPartners.Code = n.Code;
+            portfolioPartners.PartnerID = n.PartnerID;
+            
+
+
+            return Ok(portfolioPartners);
+
+        }
 
 
 
