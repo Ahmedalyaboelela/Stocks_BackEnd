@@ -32,7 +32,7 @@ namespace Stocks.CustomExceptionMiddleware
                     _logger.LogError($"Something went wrong: {ex}");
                     await HandleExceptionAsync(httpContext, ex);
                 }
-            }
+             }
 
             private static Task HandleExceptionAsync(HttpContext context, Exception exception)
             {
