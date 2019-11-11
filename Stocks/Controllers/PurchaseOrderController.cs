@@ -420,32 +420,79 @@ namespace Stocks.Controllers
         [HttpGet]
         [Route("~/api/PurchaseOrder/getsellingInvoise/{id}")]
         public IActionResult getsellingInvoise(int? id)
-        {
-            var IncoiceModel = unitOfWork.PurchaseInvoiceRepository.Get(filter: x => x.PurchaseOrderID == id).Select(m => new INFOInvoices
+       {
+
+
+            var IncoiceModel = unitOfWork.PurchaseInvoiceRepository.Get(filter: x => x.PurchaseOrderID == id);
+            List<IEnumerable<INFOInvoices>> list = new List<IEnumerable<INFOInvoices>>();
+            foreach (var item in IncoiceModel)
             {
+                var Details = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: x => x.PurchaseInvoiceID == item.PurchaseInvoiceID).Select(m => new INFOInvoices
+                {
 
-                Code = m.Code,
-                purchaseDate = m.Date.Value.ToString("d/M/yyyy"),
-                purchaseDateHijri = DateHelper.GetHijriDate(m.Date),
-                TotalStockCount = getTotalStocks(m.PurchaseInvoiceID),
-                purchasePrice = unitOfWork.PurchaseInvoiceDetailRepository.GetEntity(filter: x => x.PurchaseInvoiceID == m.PurchaseInvoiceID).PurchasePrice,
-                StockCount = unitOfWork.PurchaseInvoiceDetailRepository.GetEntity(filter: x => x.PurchaseInvoiceID == m.PurchaseInvoiceID).StockCount,
-                NetAmmount = unitOfWork.PurchaseInvoiceDetailRepository.GetEntity(filter: x => x.PurchaseInvoiceID == m.PurchaseInvoiceID).NetAmmount,
-
-
-
-            });
+                    Code = m.PurchaseInvoice.Code,
+                    purchaseDate = m.PurchaseInvoice.Date.Value.ToString("d/M/yyyy"),
+                    NetAmmount = m.NetAmmount,
+                    PartnerNameAR = m.Partner.NameAR,
+                    purchaseDateHijri = DateHelper.GetHijriDate(m.PurchaseInvoice.Date),
+                    PurchasePrice = m.PurchasePrice,
+                    StockCount = m.StockCount,
 
 
 
 
-            return Ok(IncoiceModel);
+                });
+
+                list.Add(Details);
+            }
+            //var IncoiceModel = unitOfWork.PurchaseInvoiceRepository.Get(filter: x => x.PurchaseOrderID == id);
+            //var Details = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: x => x.PurchaseInvoiceID == IncoiceModel.PurchaseInvoiceID)
+            //var result = from s in Details
+
+            //            select s
+            //             ;
+
+
+            //dynamic data;
+            //data = from Emp in context.HrPslEmployee
+            //       join EmpAttend in context.HrTaEmpAttendence on Emp.HrPslEmployeeID equals EmpAttend.HrPslEmployeeID
+            //       //join EmpAbbs in context.HrTaEmployeeAbsence on Emp.HrPslEmployeeID equals EmpAbbs.HrPslEmployeeId                       //join EmpAbbs in context.HrTaEmployeeAbsence on Emp.HrPslEmployeeID equals EmpAbbs.HrPslEmployeeId
+            //       orderby Emp.EmployeeFirstName
+            //       select new
+            //       {
+            //           EmployeeFirstName = Emp.EmployeeFirstName,
+            //           EmployeeSecondName = Emp.EmployeeLastName,
+            //           WorkPeriodName = (EmpAttend.CheckIn >= TS1 && EmpAttend.CheckIn <= TE1) ||
+            //                             (EmpAttend.CheckIn >= TSspace1 && EmpAttend.CheckIn <= TE1) ? 1 : 2,
+            //           Date = EmpAttend.Date.ToShortDateString(),
+            //           Day = EmpAttend.Date.DayOfWeek.ToString(),
+            //           ReqStartTime = (EmpAttend.CheckIn >= TS1 && EmpAttend.CheckIn <= TE1) ||
+            //                          (EmpAttend.CheckIn >= TSspace1 && EmpAttend.CheckIn <= TE1) ? TS1 : TS2,
+            //           ReqEndTime = (EmpAttend.CheckIn >= TS1 && EmpAttend.CheckIn <= TE1) ||
+            //                        (EmpAttend.CheckIn >= TSspace1 && EmpAttend.CheckIn <= TE1) ? TE1 : TE2,
+            //           Chckin = EmpAttend.CheckIn,
+            //           Chckout = EmpAttend.CheckOut,
+            //           DelayTime1 = (EmpAttend.CheckIn > TS1 ? (EmpAttend.CheckIn.Subtract(TS1)) : T0) + (TE1 > EmpAttend.CheckOut ? (TE1.Subtract(EmpAttend.CheckOut)) : T0),
+            //           DelayTime2 = (EmpAttend.CheckIn > TS2 ? (EmpAttend.CheckIn.Subtract(TS2)) : T0) + (TE2 > EmpAttend.CheckOut ? (TE2.Subtract(EmpAttend.CheckOut)) : T0),
+            //           //EmpAbsence = EmpAbbs.Reason
+            //           //AttendStartTime = WorkPeriodSubDetail.AttendanceStartTime,
+            //           //LeaveEndTime = WorkPeriodSubDetail.AttendanceEndTime
+
+
+            //       };
+
+
+
+            return Ok();
+
+
+
 
         }
-        public float getTotalStocks(int? id)
+        public float getTotalStocks(int? PurchaseInvoiceID, int? PartnerID)
         {
             float totalStocks = 0.0f;
-            var DetailsModels = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: a => a.PurchaseInvoiceID == id);
+            var DetailsModels = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: a => a.PurchaseInvoiceID == PurchaseInvoiceID && a.PartnerID== PartnerID);
 
             foreach (var item in DetailsModels)
             {
@@ -455,6 +502,22 @@ namespace Stocks.Controllers
             return totalStocks;
 
         }
+
+        public float getTotalStocksOrder(int? PurchaseOrderID, int? PartnerID)
+        {
+            float totalStocks = 0.0f;
+            var DetailsModels = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrderID == PurchaseOrderID && a.PartnerID == PartnerID);
+
+            foreach (var item in DetailsModels)
+            {
+                totalStocks += item.StockCount;
+            }
+
+            return totalStocks;
+
+        }
+
+
 
     }
 }

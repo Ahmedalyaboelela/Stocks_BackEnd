@@ -536,6 +536,10 @@ namespace Stocks.Controllers
                 {
                     partnerModel.IssueDate = DateTime.Now.ToString("d/M/yyyy");
                 }
+                if (partnerModel.Date == "" || partnerModel.Date == null)
+                {
+                    partnerModel.Date = DateTime.Now.ToString("d/M/yyyy");
+                }
                 var model = _mapper.Map<Partner>(partnerModel);
                 if (model == null)
                 {
