@@ -391,13 +391,13 @@ namespace Stocks.Controllers
         {
             var IncoiceModel = unitOfWork.SellingInvoiceReposetory.Get(filter: x => x.SellingOrderID == id).Select(m => new INFOInvoices {
 
-                Code = m.Code,
-                SellDate = m.Date.Value.ToString("d/M/yyyy"),
-                SellDateHijri = DateHelper.GetHijriDate(m.Date),
-                TotalStockCount = getTotalStocks(m.SellingInvoiceID),
-                SellingPrice = unitOfWork.SellingInvoiceDetailRepository.GetEntity(filter: x => x.SellingInvoiceID == m.SellingInvoiceID).SellingPrice,
-                StockCount= unitOfWork.SellingInvoiceDetailRepository.GetEntity(filter: x => x.SellingInvoiceID == m.SellingInvoiceID).StockCount,
-                NetAmmount=unitOfWork.SellingInvoiceDetailRepository.GetEntity(filter: x => x.SellingInvoiceID == m.SellingInvoiceID).NetAmmount,
+                //Code = m.Code,
+                //SellDate = m.Date.Value.ToString("d/M/yyyy"),
+                //SellDateHijri = DateHelper.GetHijriDate(m.Date),
+                //TotalStockCount = getTotalStocks(m.SellingInvoiceID),
+                //SellingPrice = unitOfWork.SellingInvoiceDetailRepository.GetEntity(filter: x => x.SellingInvoiceID == m.SellingInvoiceID).SellingPrice,
+                //StockCount= unitOfWork.SellingInvoiceDetailRepository.GetEntity(filter: x => x.SellingInvoiceID == m.SellingInvoiceID).StockCount,
+                //NetAmmount=unitOfWork.SellingInvoiceDetailRepository.GetEntity(filter: x => x.SellingInvoiceID == m.SellingInvoiceID).NetAmmount,
 
 
 

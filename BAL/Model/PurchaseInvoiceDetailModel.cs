@@ -31,5 +31,6 @@ namespace BAL.Model
         public string PartnerCode { get; set; }
         public float? StocksCount { get; set; }
         public decimal? StocksValue { get; set; }
+        public float StockBalance { get; set; }
     }
 }
