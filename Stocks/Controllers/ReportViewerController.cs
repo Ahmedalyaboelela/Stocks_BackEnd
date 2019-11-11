@@ -700,7 +700,7 @@ namespace Stocks.Controllers
 
         }
 
-        // Print Country
+        // Print Partner
         [HttpPost]
         [Route("~/api/ReportViewer/printPartner")]
         public string printPartner([FromBody] JObject data)
@@ -711,6 +711,25 @@ namespace Stocks.Controllers
             var path = StiNetCoreHelper.MapPath(this, "Reports/Print_Partner.mrt");
             report.Load(path);
             report["@PartnerID"] = PartnerID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+        // Print PurchaseOrder
+        [HttpPost]
+        [Route("~/api/ReportViewer/printPurchaseOrder")]
+        public string printPurchaseOrder([FromBody] JObject data)
+        {
+
+            int PurchaseOrderID = Convert.ToInt32(data.GetValue("PurchaseOrderID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/PurchaseOrder.mrt");
+            report.Load(path);
+            report["@PurchaseOrderID"] = PurchaseOrderID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
             report.Render(false);
