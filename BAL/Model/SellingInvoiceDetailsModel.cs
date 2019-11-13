@@ -8,8 +8,13 @@ namespace BAL.Model
     {
         public int SellingInvoiceDetailID { get; set; }
         public float StockCount { get; set; }
-       
+  
+              public float StocksCount { get; set; }
+        public string Code { get; set; }
+        public string ExeDate { get; set; }
+        public Int64 RowNum { get; set; }
 
+        public double StockBalance { get; set; }
         public decimal SellingPrice { get; set; }
 
         
@@ -24,13 +29,13 @@ namespace BAL.Model
         public decimal TaxOnCommission { get; set; }
        
         public decimal NetAmmount { get; set; }
-
+        public float RestStocks { get; set; }
         public int SellingInvoiceID { get; set; }
         public int PartnerID { get; set; }
         public string PartnerNameAR { get; set; }
         public string PartnerNameEN { get; set; }
         public string PartnerCode { get; set; }
-        public float? StocksCount { get; set; }
+       
         public decimal? StocksValue { get; set; }
 
     }
