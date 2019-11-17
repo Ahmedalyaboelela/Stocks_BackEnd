@@ -7,7 +7,10 @@ namespace BAL.Model
  public   class PurchaseInvoiceDetailModel
     {
         public int PurchaseInvoiceDetailID { get; set; }
-
+        public string Code { get; set; }
+        public string ExeDate { get; set; }
+        
+        public double StockBalance { get; set; }
         public float StockCount { get; set; }
 
         
@@ -31,6 +34,6 @@ namespace BAL.Model
         public string PartnerCode { get; set; }
         public float? StocksCount { get; set; }
         public decimal? StocksValue { get; set; }
-        public float StockBalance { get; set; }
+       
     }
 }

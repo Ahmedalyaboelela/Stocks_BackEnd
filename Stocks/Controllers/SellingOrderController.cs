@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,6 +12,7 @@ using DAL.Context;
 using DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Stocks.Controllers
 {
@@ -20,9 +23,10 @@ namespace Stocks.Controllers
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
-
-        public sellingorderController(StocksContext context, IMapper mapper)
+        private readonly ApplicationSettings _appSettings;
+        public sellingorderController(StocksContext context, IMapper mapper, IOptions<ApplicationSettings> appSettings)
         {
+            _appSettings = appSettings.Value;
             this._mapper = mapper;
             this.unitOfWork = new UnitOfWork(context);
 
@@ -387,41 +391,42 @@ namespace Stocks.Controllers
 
         [HttpGet]
         [Route("~/api/sellingorder/getsellingInvoise/{id}")]
-        public IActionResult getsellingInvoise(int? id)
+        public List<SellingInvoiceDetailsModel> getsellingInvoise(int? id)
         {
-            var IncoiceModel = unitOfWork.SellingInvoiceReposetory.Get(filter: x => x.SellingOrderID == id).Select(m => new INFOInvoices {
 
-                //Code = m.Code,
-                //SellDate = m.Date.Value.ToString("d/M/yyyy"),
-                //SellDateHijri = DateHelper.GetHijriDate(m.Date),
-                //TotalStockCount = getTotalStocks(m.SellingInvoiceID),
-                //SellingPrice = unitOfWork.SellingInvoiceDetailRepository.GetEntity(filter: x => x.SellingInvoiceID == m.SellingInvoiceID).SellingPrice,
-                //StockCount= unitOfWork.SellingInvoiceDetailRepository.GetEntity(filter: x => x.SellingInvoiceID == m.SellingInvoiceID).StockCount,
-                //NetAmmount=unitOfWork.SellingInvoiceDetailRepository.GetEntity(filter: x => x.SellingInvoiceID == m.SellingInvoiceID).NetAmmount,
+            string Con = _appSettings.Report_Connection;
 
 
-
-            });
-
-
-            
-
-            return Ok(IncoiceModel);
-
-        }
-        public float getTotalStocks(int? id)
-        {
-            float totalStocks =0.0f;
-            var DetailsModels = unitOfWork.SellingInvoiceDetailRepository.Get(filter: a => a.SellingInvoiceID == id);
-         
-            foreach (var item in DetailsModels)
+            using (SqlConnection cnn = new SqlConnection(Con))
             {
-                totalStocks += item.StockCount;
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cnn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @" WITH q2 AS                                  (SELECT ROW_NUMBER() OVER(                                 ORDER BY SN.SellingInvoiceID) AS RowNum, SN.Code AS InvoiceNum ,CONVERT(DATE, SN.Date,110)  AS ExeDate                                 ,P.NameAR AS PartnerName,SD.StockCount AS StockCount,SD.SellingPrice AS SellingPrice                                 ,SD.NetAmmount AS NetAmount,SoD.StockCount - SD.StockCount AS pp                                 FROM dbo.SellingInvoices AS SN                                 INNER JOIN dbo.SellingInvoiceDetails AS SD                                  ON SD.SellingInvoiceID = SN.SellingInvoiceID                                 INNER JOIN dbo.Partners AS P                                  ON P.PartnerID = SD.PartnerID                                 INNER JOIN dbo.SellingOrders AS SO                                 ON SO.SellingOrderID = SN.SellingOrderID                                 INNER JOIN dbo.SellingOrderDetails AS SoD                                 ON SoD.SellingOrderID = SO.SellingOrderID                                 WHERE SN.SellingOrderID = "+id+") SELECT q2.RowNum ,q2.InvoiceNum,q2.ExeDate,q2.PartnerName,q2.StockCount,q2.SellingPrice,q2.pp , q2.NetAmount,CASE WHEN q2.RowNum=1 THEN q2.pp ELSE (SUM(q2.pp)OVER ( ORDER BY q2.ExeDate ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING))-q2.StockCount END AS balance FROM q2";
+                cnn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                List<SellingInvoiceDetailsModel> SellingInvoiceDetailsModel = new List<SellingInvoiceDetailsModel>();
+                while (reader.Read())
+                {
+                    SellingInvoiceDetailsModel item = new SellingInvoiceDetailsModel();
+                    item.RowNum = reader.GetInt64(0);
+                    item.Code = reader.GetString(1);
+                    item.ExeDate = reader.GetDateTime(2).ToString("d/M/yyyy");
+                    item.PartnerNameAR = reader.GetString(3);
+                    item.StockCount = reader.GetFloat(4);
+                    item.SellingPrice = reader.GetDecimal(5);
+                    item.RestStocks = reader.GetFloat(6);
+                    item.NetAmmount = reader.GetDecimal(7);
+                    
+                    item.StockBalance = reader.GetDouble(8);
+                    SellingInvoiceDetailsModel.Add(item);
+                }
+                reader.Close();
+                cnn.Close();
+                return SellingInvoiceDetailsModel;
             }
-
-            return totalStocks;
-
         }
+
 
 
         [HttpGet]

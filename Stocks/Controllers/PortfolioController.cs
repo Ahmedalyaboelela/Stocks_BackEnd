@@ -830,5 +830,56 @@ namespace Stocks.Controllers
 
             return Ok(model);
         }
+        [Route("~/api/Portfolio/GetAccountInfo/{id}")]
+        public IActionResult GetAccountInfo(int id)
+        {
+            var account = unitOfWork.AccountRepository.GetEntity(filter:x=> x.AccountID== id);
+            var model = _mapper.Map<AccountModel>(account); 
+           
+            if (model.Debit == null)
+            {
+                model.Debit = 0.0m;
+            }
+            if (model.Credit == null)
+            {
+                model.Credit = 0.0m;
+            }
+            if (model.DebitOpenningBalance == null && model.CreditOpenningBalance != null)
+            {
+                model.RealBalance = - model.CreditOpenningBalance + (model.Debit - model.Credit);
+                if (model != null)
+                {
+                    return Ok(model);
+                }
+            } 
+            else if (model.DebitOpenningBalance != null && model.CreditOpenningBalance == null)
+            {
+                model.RealBalance = model.DebitOpenningBalance + (model.Debit - model.Credit);
+                if (model != null)
+                {
+                    return Ok(model);
+                }
+            }
+            else if (model.DebitOpenningBalance == null && model.CreditOpenningBalance == null)
+            {
+                model.RealBalance =  model.Debit - model.Credit;
+                if (model != null)
+                {
+                    return Ok(model);
+                }
+            }
+            else if (model.DebitOpenningBalance != null && model.CreditOpenningBalance != null)
+            {
+                model.RealBalance = model.DebitOpenningBalance + (model.Debit - model.Credit);
+                if (model != null)
+                {
+                    return Ok(model);
+                }
+            }
+
+
+            return Ok(0);
+        }
+
     }
 }
