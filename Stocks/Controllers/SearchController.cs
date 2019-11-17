@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Stocks.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin,Admin,Employee")]
+    [Authorize(Roles = "SuperAdmin,Admin,Employee")]
     [Route("api/[controller]")]
     [ApiController]
     public class SearchController : Controller
