@@ -11,6 +11,12 @@ using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.Sql;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
+using Stimulsoft.Report.Dictionary;
+using Stimulsoft.Report;
+using System.Data;
 
 namespace Stocks.Controllers
 {
@@ -19,10 +25,13 @@ namespace Stocks.Controllers
     
     public class PurchaseOrderController : ControllerBase
     {
+        private readonly ApplicationSettings _appSettings;
+       
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
-        public PurchaseOrderController(StocksContext context, IMapper mapper)
+        public PurchaseOrderController(StocksContext context, IMapper mapper , IOptions<ApplicationSettings> appSettings)
         {
+            _appSettings = appSettings.Value;
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
          
@@ -389,28 +398,24 @@ namespace Stocks.Controllers
 
 
         [HttpGet]
-        [Route("~/api/order/getparteners/{id}")]
-        public IActionResult getparteners(int? id)
+        [Route("~/api/order/getparteners")]
+        public IActionResult getparteners()
         {
 
-            if (id != null || id != 0)
-            {
-                var p = unitOfWork.PortfolioTransactionsRepository.Get(filter: x=> x.PortfolioID==id).Select(a=> new PartenerModel {
+           
+                var p = unitOfWork.PartnerRepository.Get().Select(a=> new PartenerModel {
 
-                    NameAR=a.Partner.NameAR,
-                    Code=a.Partner.Code,
-                    NameEN=a.Partner.NameEN,
+                    NameAR=a.NameAR,
+                    Code=a.Code,
+                    NameEN=a.NameEN,
                     PartnerID=a.PartnerID,
 
 
                 });
 
                 return Ok(p);
-            }
-            else
-            {
-                return Ok();
-            }
+            
+          
 
         }
 
@@ -418,77 +423,46 @@ namespace Stocks.Controllers
 
 
         [HttpGet]
-        [Route("~/api/PurchaseOrder/getsellingInvoise/{id}")]
-        public IActionResult getsellingInvoise(int? id)
+        [Route("~/api/PurchaseOrder/getPurchaseInvoise/{id}")]
+        public List<PurchaseInvoiceDetailModel> getsellingInvoise(int? id)
        {
+         
+            string Con = _appSettings.Report_Connection;
+           
 
-
-            var IncoiceModel = unitOfWork.PurchaseInvoiceRepository.Get(filter: x => x.PurchaseOrderID == id);
-            List<IEnumerable<INFOInvoices>> list = new List<IEnumerable<INFOInvoices>>();
-            foreach (var item in IncoiceModel)
+            using (SqlConnection cnn = new SqlConnection(Con))
             {
-                var Details = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: x => x.PurchaseInvoiceID == item.PurchaseInvoiceID).Select(m => new INFOInvoices
+               SqlCommand cmd = new SqlCommand();
+               cmd.Connection = cnn;
+               cmd.CommandType = CommandType.Text;
+               cmd.CommandText = @"SELECT  PurchaseInvoices.Code ,
+               CONVERT(DATE, PurchaseInvoices.Date, 110)   ,               Partners.NameAR ,		       PurchaseInvoiceDetails.StockCount ,		       PurchaseInvoiceDetails.PurchasePrice ,               PurchaseInvoiceDetails.NetAmmount  ,		       SUM(PurchaseInvoiceDetails.StockCount) OVER(ORDER BY PurchaseInvoices.Date ROWS BETWEEN UNBOUNDED PRECEDING AND 0 PRECEDING) as StockBalance               FROM dbo.PurchaseInvoices
+               INNER JOIN dbo.PurchaseInvoiceDetails               ON PurchaseInvoiceDetails.PurchaseInvoiceID = PurchaseInvoices.PurchaseInvoiceID               INNER JOIN dbo.Partners               ON Partners.PartnerID = PurchaseInvoiceDetails.PartnerID               WHERE PurchaseInvoices.PurchaseOrderID = "+id+"";
+
+               cnn.Open();
+               SqlDataReader reader = cmd.ExecuteReader();
+               List<PurchaseInvoiceDetailModel> PurchaseInvoices = new List<PurchaseInvoiceDetailModel>();
+               while (reader.Read())
                 {
-
-                    Code = m.PurchaseInvoice.Code,
-                    purchaseDate = m.PurchaseInvoice.Date.Value.ToString("d/M/yyyy"),
-                    NetAmmount = m.NetAmmount,
-                    PartnerNameAR = m.Partner.NameAR,
-                    purchaseDateHijri = DateHelper.GetHijriDate(m.PurchaseInvoice.Date),
-                    PurchasePrice = m.PurchasePrice,
-                    StockCount = m.StockCount,
-
-
-
-
-                });
-
-                list.Add(Details);
+                    PurchaseInvoiceDetailModel item = new PurchaseInvoiceDetailModel();
+                    item.Code = reader.GetString(0);
+                    item.ExeDate = reader.GetDateTime(1).ToString("d/M/yyyy");
+                    item.PartnerNameAR= reader.GetString(2);
+                    item.StockCount = reader.GetFloat(3);
+                    item.PurchasePrice = reader.GetDecimal(4);
+                    item.NetAmmount = reader.GetDecimal(5);
+                    item.StockBalance = reader.GetDouble(6);
+                    PurchaseInvoices.Add(item);
+                }
+                reader.Close();
+                cnn.Close();
+                return PurchaseInvoices;
             }
-            //var IncoiceModel = unitOfWork.PurchaseInvoiceRepository.Get(filter: x => x.PurchaseOrderID == id);
-            //var Details = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: x => x.PurchaseInvoiceID == IncoiceModel.PurchaseInvoiceID)
-            //var result = from s in Details
-
-            //            select s
-            //             ;
-
-
-            //dynamic data;
-            //data = from Emp in context.HrPslEmployee
-            //       join EmpAttend in context.HrTaEmpAttendence on Emp.HrPslEmployeeID equals EmpAttend.HrPslEmployeeID
-            //       //join EmpAbbs in context.HrTaEmployeeAbsence on Emp.HrPslEmployeeID equals EmpAbbs.HrPslEmployeeId                       //join EmpAbbs in context.HrTaEmployeeAbsence on Emp.HrPslEmployeeID equals EmpAbbs.HrPslEmployeeId
-            //       orderby Emp.EmployeeFirstName
-            //       select new
-            //       {
-            //           EmployeeFirstName = Emp.EmployeeFirstName,
-            //           EmployeeSecondName = Emp.EmployeeLastName,
-            //           WorkPeriodName = (EmpAttend.CheckIn >= TS1 && EmpAttend.CheckIn <= TE1) ||
-            //                             (EmpAttend.CheckIn >= TSspace1 && EmpAttend.CheckIn <= TE1) ? 1 : 2,
-            //           Date = EmpAttend.Date.ToShortDateString(),
-            //           Day = EmpAttend.Date.DayOfWeek.ToString(),
-            //           ReqStartTime = (EmpAttend.CheckIn >= TS1 && EmpAttend.CheckIn <= TE1) ||
-            //                          (EmpAttend.CheckIn >= TSspace1 && EmpAttend.CheckIn <= TE1) ? TS1 : TS2,
-            //           ReqEndTime = (EmpAttend.CheckIn >= TS1 && EmpAttend.CheckIn <= TE1) ||
-            //                        (EmpAttend.CheckIn >= TSspace1 && EmpAttend.CheckIn <= TE1) ? TE1 : TE2,
-            //           Chckin = EmpAttend.CheckIn,
-            //           Chckout = EmpAttend.CheckOut,
-            //           DelayTime1 = (EmpAttend.CheckIn > TS1 ? (EmpAttend.CheckIn.Subtract(TS1)) : T0) + (TE1 > EmpAttend.CheckOut ? (TE1.Subtract(EmpAttend.CheckOut)) : T0),
-            //           DelayTime2 = (EmpAttend.CheckIn > TS2 ? (EmpAttend.CheckIn.Subtract(TS2)) : T0) + (TE2 > EmpAttend.CheckOut ? (TE2.Subtract(EmpAttend.CheckOut)) : T0),
-            //           //EmpAbsence = EmpAbbs.Reason
-            //           //AttendStartTime = WorkPeriodSubDetail.AttendanceStartTime,
-            //           //LeaveEndTime = WorkPeriodSubDetail.AttendanceEndTime
-
-
-            //       };
-
-
-
-            return Ok();
-
-
-
-
         }
+
+
+
+        [Route("~/api/PurchaseOrder/getTotalStocks/{PurchaseInvoiceID}/{PartnerID}")]
         public float getTotalStocks(int? PurchaseInvoiceID, int? PartnerID)
         {
             float totalStocks = 0.0f;
