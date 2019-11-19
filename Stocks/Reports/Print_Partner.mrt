@@ -9,28 +9,8 @@
         <Name>MS SQL</Name>
       </MS_x0020_SQL>
     </Databases>
-    <DataSources isList="true" count="2">
-      <DataSource2 Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
-        <Alias>DataSource2</Alias>
-        <Columns isList="true" count="6">
-          <value>Code,System.String</value>
-          <value>NDate,System.DateTime</value>
-          <value>PortName,System.String</value>
-          <value>PortCode,System.String</value>
-          <value>EmpName,System.String</value>
-          <value>DistDate,System.DateTime</value>
-        </Columns>
-        <CommandTimeout>30</CommandTimeout>
-        <Dictionary isRef="1" />
-        <Key>41f4fc2234594c39a003552165ed8538</Key>
-        <Name>DataSource2</Name>
-        <NameInSource>MS SQL</NameInSource>
-        <Parameters isList="true" count="1">
-          <value>_x0040_NoticeID,,8,0</value>
-        </Parameters>
-        <SqlCommand>execute Print_NoticeCredit @NoticeID</SqlCommand>
-      </DataSource2>
-      <Partner Ref="4" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+    <DataSources isList="true" count="1">
+      <Partner Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
         <Alias>Partner</Alias>
         <Columns isList="true" count="22">
           <value>Code,System.String</value>
@@ -91,15 +71,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
   <Key>dfbca135d40e4bdc857c72ec8af730bd</Key>
   <MetaTags isList="true" count="0" />
   <Pages isList="true" count="1">
-    <Page1 Ref="5" type="Page" isKey="true">
+    <Page1 Ref="4" type="Page" isKey="true">
       <Border>None;Black;2;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <Components isList="true" count="7">
-        <PageHeaderBand1 Ref="6" type="PageHeaderBand" isKey="true">
+        <PageHeaderBand1 Ref="5" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,20,772,150</ClientRectangle>
           <Components isList="true" count="5">
-            <Text02 Ref="7" type="Text" isKey="true">
+            <Text02 Ref="6" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>0,0,400,50</ClientRectangle>
@@ -112,14 +92,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text02</Name>
-              <Page isRef="5" />
-              <Parent isRef="6" />
+              <Page isRef="4" />
+              <Parent isRef="5" />
               <Text>        بطاقة الشركة</Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text02>
-            <Text01 Ref="8" type="Text" isKey="true">
+            <Text01 Ref="7" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>400,0,370,50</ClientRectangle>
@@ -131,15 +111,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Right</HorAlignment>
               <Margins>2,0,0,0</Margins>
               <Name>Text01</Name>
-              <Page isRef="5" />
-              <Parent isRef="6" />
+              <Page isRef="4" />
+              <Parent isRef="5" />
               <Text>مؤسسة على حسين بن حمران
 </Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text01>
-            <Text10 Ref="9" type="Text" isKey="true">
+            <Text10 Ref="8" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -152,15 +132,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Right</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text10</Name>
-              <Page isRef="5" />
-              <Parent isRef="6" />
+              <Page isRef="4" />
+              <Parent isRef="5" />
               <Text>الفرع : المكتب الخاص</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text10>
-            <Text1 Ref="10" type="Text" isKey="true">
+            <Text1 Ref="9" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -173,15 +153,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Right</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text1</Name>
-              <Page isRef="5" />
-              <Parent isRef="6" />
+              <Page isRef="4" />
+              <Parent isRef="5" />
               <Text>الرقم الضريبي : 300522984600003</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text1>
-            <Text2 Ref="11" type="Text" isKey="true">
+            <Text2 Ref="10" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -194,8 +174,8 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Right</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text2</Name>
-              <Page isRef="5" />
-              <Parent isRef="6" />
+              <Page isRef="4" />
+              <Parent isRef="5" />
               <Text>المملكة العربية السعودية</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -205,14 +185,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
           </Components>
           <Conditions isList="true" count="0" />
           <Name>PageHeaderBand1</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
+          <Page isRef="4" />
+          <Parent isRef="4" />
         </PageHeaderBand1>
-        <PageHeaderBand3 Ref="12" type="PageHeaderBand" isKey="true">
+        <PageHeaderBand3 Ref="11" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,210,772,70</ClientRectangle>
           <Components isList="true" count="3">
-            <Text5 Ref="13" type="Text" isKey="true">
+            <Text5 Ref="12" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>580,10,170,30</ClientRectangle>
@@ -225,40 +205,40 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text5</Name>
-              <Page isRef="5" />
-              <Parent isRef="12" />
+              <Page isRef="4" />
+              <Parent isRef="11" />
               <Text>معلومات الشركة</Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text5>
-            <StartPointPrimitive1 Ref="14" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+            <StartPointPrimitive1 Ref="13" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
               <ClientRectangle>560,0,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>StartPointPrimitive1</Name>
-              <Page isRef="5" />
-              <Parent isRef="12" />
+              <Page isRef="4" />
+              <Parent isRef="11" />
               <ReferenceToGuid>8765264c0dd74fc185d9751dd6c931d5</ReferenceToGuid>
             </StartPointPrimitive1>
-            <EndPointPrimitive1 Ref="15" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+            <EndPointPrimitive1 Ref="14" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
               <ClientRectangle>770,50,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>EndPointPrimitive1</Name>
-              <Page isRef="5" />
-              <Parent isRef="12" />
+              <Page isRef="4" />
+              <Parent isRef="11" />
               <ReferenceToGuid>8765264c0dd74fc185d9751dd6c931d5</ReferenceToGuid>
             </EndPointPrimitive1>
           </Components>
           <Conditions isList="true" count="0" />
           <Name>PageHeaderBand3</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
+          <Page isRef="4" />
+          <Parent isRef="4" />
         </PageHeaderBand3>
-        <PageHeaderBand2 Ref="16" type="PageHeaderBand" isKey="true">
+        <PageHeaderBand2 Ref="15" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,320,772,270</ClientRectangle>
           <Components isList="true" count="20">
-            <Text20 Ref="17" type="Text" isKey="true">
+            <Text20 Ref="16" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>440,0,330,30</ClientRectangle>
@@ -271,14 +251,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text20</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>الرمز</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text20>
-            <Text30 Ref="18" type="Text" isKey="true">
+            <Text30 Ref="17" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -291,15 +271,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text30</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>{Partner.Code}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text30>
-            <Text12 Ref="19" type="Text" isKey="true">
+            <Text12 Ref="18" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>0,0,330,30</ClientRectangle>
@@ -312,14 +292,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text12</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>الإسم العربي</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text12>
-            <Text13 Ref="20" type="Text" isKey="true">
+            <Text13 Ref="19" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -332,15 +312,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text13</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>{Partner.ARName}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text13>
-            <Text3 Ref="21" type="Text" isKey="true">
+            <Text3 Ref="20" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>440,50,330,30</ClientRectangle>
@@ -353,14 +333,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text3</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>الإسم اللاتيني</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text3>
-            <Text4 Ref="22" type="Text" isKey="true">
+            <Text4 Ref="21" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -373,15 +353,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text4</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>{Partner.ENName}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text4>
-            <Text6 Ref="23" type="Text" isKey="true">
+            <Text6 Ref="22" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>0,50,330,30</ClientRectangle>
@@ -394,14 +374,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text6</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>الحساب</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text6>
-            <Text7 Ref="24" type="Text" isKey="true">
+            <Text7 Ref="23" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -414,15 +394,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text7</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>{Partner.AccountName}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text7>
-            <Text8 Ref="25" type="Text" isKey="true">
+            <Text8 Ref="24" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>440,100,330,30</ClientRectangle>
@@ -435,14 +415,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text8</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>الدولة</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text8>
-            <Text9 Ref="26" type="Text" isKey="true">
+            <Text9 Ref="25" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -455,15 +435,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text9</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>{Partner.CountryName}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text9>
-            <Text11 Ref="27" type="Text" isKey="true">
+            <Text11 Ref="26" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>0,100,330,30</ClientRectangle>
@@ -476,14 +456,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text11</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>العنوان</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text11>
-            <Text14 Ref="28" type="Text" isKey="true">
+            <Text14 Ref="27" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -496,15 +476,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text14</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>{Partner.PartAddress}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text14>
-            <Text15 Ref="29" type="Text" isKey="true">
+            <Text15 Ref="28" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>440,150,330,30</ClientRectangle>
@@ -517,14 +497,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text15</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>رأس مال الشركة</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text15>
-            <Text16 Ref="30" type="Text" isKey="true">
+            <Text16 Ref="29" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -537,15 +517,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text16</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>{Partner.Capital}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text16>
-            <Text17 Ref="31" type="Text" isKey="true">
+            <Text17 Ref="30" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>0,150,330,30</ClientRectangle>
@@ -558,14 +538,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text17</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>عدد الأسهم</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text17>
-            <Text18 Ref="32" type="Text" isKey="true">
+            <Text18 Ref="31" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -578,15 +558,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text18</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text> {Partner.CurrentStocks}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text18>
-            <Text19 Ref="33" type="Text" isKey="true">
+            <Text19 Ref="32" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>440,200,330,30</ClientRectangle>
@@ -599,14 +579,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text19</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>رقم السجل التجاري</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text19>
-            <Text21 Ref="34" type="Text" isKey="true">
+            <Text21 Ref="33" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -619,15 +599,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text21</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>{Partner.CommercialRegNo}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text21>
-            <Text22 Ref="35" type="Text" isKey="true">
+            <Text22 Ref="34" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>0,200,330,30</ClientRectangle>
@@ -640,14 +620,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text22</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>الرقم الضريبي للشركة</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text22>
-            <Text23 Ref="36" type="Text" isKey="true">
+            <Text23 Ref="35" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -660,8 +640,8 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text23</Name>
-              <Page isRef="5" />
-              <Parent isRef="16" />
+              <Page isRef="4" />
+              <Parent isRef="15" />
               <Text>{Partner.TaxNo}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -671,14 +651,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
           </Components>
           <Conditions isList="true" count="0" />
           <Name>PageHeaderBand2</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
+          <Page isRef="4" />
+          <Parent isRef="4" />
         </PageHeaderBand2>
-        <PageHeaderBand4 Ref="37" type="PageHeaderBand" isKey="true">
+        <PageHeaderBand4 Ref="36" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,630,772,70</ClientRectangle>
           <Components isList="true" count="5">
-            <Text24 Ref="38" type="Text" isKey="true">
+            <Text24 Ref="37" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>580,20,170,30</ClientRectangle>
@@ -691,57 +671,57 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text24</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
+              <Page isRef="4" />
+              <Parent isRef="36" />
               <Text>معلومات الهوية</Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text24>
-            <StartPointPrimitive3 Ref="39" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+            <StartPointPrimitive3 Ref="38" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
               <ClientRectangle>560,-20,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>StartPointPrimitive3</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
+              <Page isRef="4" />
+              <Parent isRef="36" />
               <ReferenceToGuid>47106f0de9ce4f2b97314f2304248816</ReferenceToGuid>
             </StartPointPrimitive3>
-            <EndPointPrimitive3 Ref="40" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+            <EndPointPrimitive3 Ref="39" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
               <ClientRectangle>770,30,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>EndPointPrimitive3</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
+              <Page isRef="4" />
+              <Parent isRef="36" />
               <ReferenceToGuid>47106f0de9ce4f2b97314f2304248816</ReferenceToGuid>
             </EndPointPrimitive3>
-            <StartPointPrimitive2 Ref="41" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+            <StartPointPrimitive2 Ref="40" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
               <ClientRectangle>560,10,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>StartPointPrimitive2</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
+              <Page isRef="4" />
+              <Parent isRef="36" />
               <ReferenceToGuid>324100e90a8a45178a626a7d11054246</ReferenceToGuid>
             </StartPointPrimitive2>
-            <EndPointPrimitive2 Ref="42" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+            <EndPointPrimitive2 Ref="41" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
               <ClientRectangle>770,60,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>EndPointPrimitive2</Name>
-              <Page isRef="5" />
-              <Parent isRef="37" />
+              <Page isRef="4" />
+              <Parent isRef="36" />
               <ReferenceToGuid>324100e90a8a45178a626a7d11054246</ReferenceToGuid>
             </EndPointPrimitive2>
           </Components>
           <Conditions isList="true" count="0" />
           <Guid>c1b86699912e4c97abfd0625051f9b66</Guid>
           <Name>PageHeaderBand4</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
+          <Page isRef="4" />
+          <Parent isRef="4" />
         </PageHeaderBand4>
-        <PageHeaderBand5 Ref="43" type="PageHeaderBand" isKey="true">
+        <PageHeaderBand5 Ref="42" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,740,772,140</ClientRectangle>
           <Components isList="true" count="8">
-            <Text25 Ref="44" type="Text" isKey="true">
+            <Text25 Ref="43" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>440,0,330,30</ClientRectangle>
@@ -754,14 +734,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text25</Name>
-              <Page isRef="5" />
-              <Parent isRef="43" />
+              <Page isRef="4" />
+              <Parent isRef="42" />
               <Text>نوع الهوية</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text25>
-            <Text26 Ref="45" type="Text" isKey="true">
+            <Text26 Ref="44" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -774,15 +754,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text26</Name>
-              <Page isRef="5" />
-              <Parent isRef="43" />
+              <Page isRef="4" />
+              <Parent isRef="42" />
               <Text>{Partner.IdentityType}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text26>
-            <Text27 Ref="46" type="Text" isKey="true">
+            <Text27 Ref="45" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>0,0,330,30</ClientRectangle>
@@ -795,14 +775,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text27</Name>
-              <Page isRef="5" />
-              <Parent isRef="43" />
+              <Page isRef="4" />
+              <Parent isRef="42" />
               <Text>رقم الهوية</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text27>
-            <Text28 Ref="47" type="Text" isKey="true">
+            <Text28 Ref="46" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -815,15 +795,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text28</Name>
-              <Page isRef="5" />
-              <Parent isRef="43" />
+              <Page isRef="4" />
+              <Parent isRef="42" />
               <Text>{Partner.IdentityNumber}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text28>
-            <Text29 Ref="48" type="Text" isKey="true">
+            <Text29 Ref="47" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>440,50,330,30</ClientRectangle>
@@ -836,14 +816,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text29</Name>
-              <Page isRef="5" />
-              <Parent isRef="43" />
+              <Page isRef="4" />
+              <Parent isRef="42" />
               <Text>مكان الإصدار</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text29>
-            <Text31 Ref="49" type="Text" isKey="true">
+            <Text31 Ref="48" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -856,15 +836,15 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text31</Name>
-              <Page isRef="5" />
-              <Parent isRef="43" />
+              <Page isRef="4" />
+              <Parent isRef="42" />
               <Text>{Partner.IssuePlace}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text31>
-            <Text32 Ref="50" type="Text" isKey="true">
+            <Text32 Ref="49" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>SteelBlue</Brush>
               <ClientRectangle>0,50,330,30</ClientRectangle>
@@ -877,14 +857,14 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text32</Name>
-              <Page isRef="5" />
-              <Parent isRef="43" />
+              <Page isRef="4" />
+              <Parent isRef="42" />
               <Text>تاريخ الإصدار</Text>
               <TextBrush>White</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text32>
-            <Text33 Ref="51" type="Text" isKey="true">
+            <Text33 Ref="50" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -897,8 +877,8 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
               <HorAlignment>Center</HorAlignment>
               <Margins>5,0,5,0</Margins>
               <Name>Text33</Name>
-              <Page isRef="5" />
-              <Parent isRef="43" />
+              <Page isRef="4" />
+              <Parent isRef="42" />
               <Text>{Partner.IssueDate}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -909,27 +889,27 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
           <Conditions isList="true" count="0" />
           <Guid>6a36e0f2ac004f32b1baa33e873e24d6</Guid>
           <Name>PageHeaderBand5</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
+          <Page isRef="4" />
+          <Parent isRef="4" />
         </PageHeaderBand5>
-        <RoundedRectanglePrimitive1 Ref="52" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
+        <RoundedRectanglePrimitive1 Ref="51" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
           <ClientRectangle>560,210,210,50</ClientRectangle>
           <Color>Black</Color>
           <Conditions isList="true" count="0" />
           <Guid>8765264c0dd74fc185d9751dd6c931d5</Guid>
           <Name>RoundedRectanglePrimitive1</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
+          <Page isRef="4" />
+          <Parent isRef="4" />
           <Round>0.2</Round>
         </RoundedRectanglePrimitive1>
-        <RoundedRectanglePrimitive2 Ref="53" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
+        <RoundedRectanglePrimitive2 Ref="52" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
           <ClientRectangle>560,640,210,50</ClientRectangle>
           <Color>Black</Color>
           <Conditions isList="true" count="0" />
           <Guid>324100e90a8a45178a626a7d11054246</Guid>
           <Name>RoundedRectanglePrimitive2</Name>
-          <Page isRef="5" />
-          <Parent isRef="5" />
+          <Page isRef="4" />
+          <Parent isRef="4" />
           <Round>0.2</Round>
         </RoundedRectanglePrimitive2>
       </Components>
@@ -954,13 +934,13 @@ END  AS IdentityType , P.IdentityNumber,P.IssuePlace,P.IssueDate,P.Address AS Pa
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>11/5/2019 12:48:45 PM</ReportChanged>
+  <ReportChanged>11/11/2019 5:16:41 PM</ReportChanged>
   <ReportCreated>10/24/2019 12:37:16 PM</ReportCreated>
   <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\Print_Partner.mrt</ReportFile>
-  <ReportGuid>cb53fd00e8d148d2ad6f5838c8af99b5</ReportGuid>
+  <ReportGuid>bf1c220553db441ab2ba667fd3baab3b</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>HundredthsOfInch</ReportUnit>
-  <ReportVersion>2019.3.5.0</ReportVersion>
+  <ReportVersion>2019.3.2.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -986,197 +966,197 @@ namespace Reports
 </Script>
   <ScriptLanguage>CSharp</ScriptLanguage>
   <Styles isList="true" count="12">
-    <Blue_x0020_Steel_Report_Title1 Ref="54" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title1 Ref="53" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item54 Ref="55" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item53 Ref="54" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>ReportTitle</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item54>
+        </Item53>
       </Conditions>
       <Font>Arial,14,Bold</Font>
       <Name>Blue Steel_Report_Title1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Title1>
-    <Blue_x0020_Steel_Report_Title2 Ref="56" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title2 Ref="55" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item56 Ref="57" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item55 Ref="56" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>ReportTitle</Placement>
           <PlacementNestedLevel>2</PlacementNestedLevel>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item56>
+        </Item55>
       </Conditions>
       <Font>Arial,10,Bold</Font>
       <Name>Blue Steel_Report_Title2</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Title2>
-    <Blue_x0020_Steel_Report_Summary Ref="58" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Summary Ref="57" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item58 Ref="59" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item57 Ref="58" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>ReportSummary</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item58>
+        </Item57>
       </Conditions>
       <Font>Arial,10,Bold</Font>
       <Name>Blue Steel_Report_Summary</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Summary>
-    <Blue_x0020_Steel_Page_Header Ref="60" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Page_Header Ref="59" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item60 Ref="61" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item59 Ref="60" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>PageHeader</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item60>
+        </Item59>
       </Conditions>
       <Font>Arial,10</Font>
       <Name>Blue Steel_Page_Header</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Header>
-    <Blue_x0020_Steel_Page_Footer Ref="62" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Page_Footer Ref="61" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item62 Ref="63" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item61 Ref="62" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>PageFooter</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item62>
+        </Item61>
       </Conditions>
       <Font>Arial,10</Font>
       <Name>Blue Steel_Page_Footer</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Footer>
-    <Blue_x0020_Steel_Group_Header1 Ref="64" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Header1 Ref="63" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item64 Ref="65" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item63 Ref="64" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>GroupHeader</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item64>
+        </Item63>
       </Conditions>
       <Font>Arial,13,Bold</Font>
       <Name>Blue Steel_Group_Header1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Header1>
-    <Blue_x0020_Steel_Group_Footer1 Ref="66" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Footer1 Ref="65" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item66 Ref="67" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item65 Ref="66" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>GroupFooter</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item66>
+        </Item65>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Group_Footer1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Footer1>
-    <Blue_x0020_Steel_Header1 Ref="68" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Header1 Ref="67" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
       <Brush>[79:129:189]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item68 Ref="69" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item67 Ref="68" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Header</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item68>
+        </Item67>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Header1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>White</TextBrush>
     </Blue_x0020_Steel_Header1>
-    <Blue_x0020_Steel_Data1 Ref="70" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1 Ref="69" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item70 Ref="71" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item69 Ref="70" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image, CheckBox</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Data</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item70>
+        </Item69>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1>
-    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="72" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="71" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[255:255:255]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item72 Ref="73" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item71 Ref="72" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataOddStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item72>
+        </Item71>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Odd Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Odd_x0020_Style>
-    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="74" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="73" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[216:216:216]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item74 Ref="75" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item73 Ref="74" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataEvenStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item74>
+        </Item73>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Even Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Even_x0020_Style>
-    <Blue_x0020_Steel_Footer1 Ref="76" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Footer1 Ref="75" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black</Border>
       <Brush>White</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item76 Ref="77" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item75 Ref="76" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>Footer</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item76>
+        </Item75>
       </Conditions>
       <Font>Arial,8.25,Bold,Point,False,204</Font>
       <Name>Blue Steel_Footer1</Name>

@@ -727,9 +727,66 @@ namespace Stocks.Controllers
 
             int PurchaseOrderID = Convert.ToInt32(data.GetValue("PurchaseOrderID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "Reports/PurchaseOrder.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_PurchaseOrder.mrt");
             report.Load(path);
             report["@PurchaseOrderID"] = PurchaseOrderID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+        // Print SellingOrder
+        [HttpPost]
+        [Route("~/api/ReportViewer/printSellingOrder")]
+        public string printSellingOrder([FromBody] JObject data)
+        {
+
+            int SellingOrderID = Convert.ToInt32(data.GetValue("SellingOrderID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_SellingOrder.mrt");
+            report.Load(path);
+            report["@SellingOrderID"] = SellingOrderID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+        // Print SellingInvoice
+        [HttpPost]
+        [Route("~/api/ReportViewer/printSellingInvoice")]
+        public string printSellingInvoice([FromBody] JObject data)
+        {
+
+            int SellingInvoiceID = Convert.ToInt32(data.GetValue("SellingInvoiceID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_SellingInvoice.mrt");
+            report.Load(path);
+            report["@SellingInvoiceID"] = SellingInvoiceID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+        // Print PurchaseInvoice
+        [HttpPost]
+        [Route("~/api/ReportViewer/printPurchaseInvoice")]
+        public string printPurchaseInvoice([FromBody] JObject data)
+        {
+
+            int PurchaseInvoiceID = Convert.ToInt32(data.GetValue("PurchaseInvoiceID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_PurchaseInvoice.mrt");
+            report.Load(path);
+            report["@PurchaseInvoiceID"] = PurchaseInvoiceID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
             dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
             report.Render(false);

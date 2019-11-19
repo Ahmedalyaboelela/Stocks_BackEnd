@@ -9,28 +9,8 @@
         <Name>MS SQL</Name>
       </MS_x0020_SQL>
     </Databases>
-    <DataSources isList="true" count="3">
-      <DataSource2 Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
-        <Alias>DataSource2</Alias>
-        <Columns isList="true" count="6">
-          <value>Code,System.String</value>
-          <value>NDate,System.DateTime</value>
-          <value>PortName,System.String</value>
-          <value>PortCode,System.String</value>
-          <value>EmpName,System.String</value>
-          <value>DistDate,System.DateTime</value>
-        </Columns>
-        <CommandTimeout>30</CommandTimeout>
-        <Dictionary isRef="1" />
-        <Key>41f4fc2234594c39a003552165ed8538</Key>
-        <Name>DataSource2</Name>
-        <NameInSource>MS SQL</NameInSource>
-        <Parameters isList="true" count="1">
-          <value>_x0040_NoticeID,,8,0</value>
-        </Parameters>
-        <SqlCommand>execute Print_NoticeCredit @NoticeID</SqlCommand>
-      </DataSource2>
-      <PurchaseOrder Ref="4" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+    <DataSources isList="true" count="2">
+      <PurchaseOrder Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
         <Alias>PurchaseOrder</Alias>
         <Columns isList="true" count="5">
           <value>OrderCode,System.String</value>
@@ -58,7 +38,7 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
  ON PO.PortfolioID=P.PortfolioID
  WHERE PO.PurchaseOrderID=@PurchaseOrderID</SqlCommand>
       </PurchaseOrder>
-      <PurchaseOrderDetails Ref="5" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+      <PurchaseOrderDetails Ref="4" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
         <Alias>PurchaseOrderDetails</Alias>
         <Columns isList="true" count="4">
           <value>StockCount,System.Single</value>
@@ -100,15 +80,15 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
   <Key>dfbca135d40e4bdc857c72ec8af730bd</Key>
   <MetaTags isList="true" count="0" />
   <Pages isList="true" count="1">
-    <Page1 Ref="6" type="Page" isKey="true">
+    <Page1 Ref="5" type="Page" isKey="true">
       <Border>None;Black;2;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <Components isList="true" count="1">
-        <PageHeaderBand1 Ref="7" type="PageHeaderBand" isKey="true">
+        <PageHeaderBand1 Ref="6" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,20,772,150</ClientRectangle>
           <Components isList="true" count="14">
-            <Text02 Ref="8" type="Text" isKey="true">
+            <Text02 Ref="7" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>0,0,400,50</ClientRectangle>
@@ -121,14 +101,14 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text02</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text>            أمر شراء</Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text02>
-            <Text01 Ref="9" type="Text" isKey="true">
+            <Text01 Ref="8" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>400,0,370,50</ClientRectangle>
@@ -140,15 +120,15 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Right</HorAlignment>
               <Margins>2,0,0,0</Margins>
               <Name>Text01</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text>مؤسسة على حسين بن حمران
 </Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text01>
-            <Text10 Ref="10" type="Text" isKey="true">
+            <Text10 Ref="9" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -161,15 +141,15 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Right</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text10</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text>الفرع : المكتب الخاص</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text10>
-            <Text1 Ref="11" type="Text" isKey="true">
+            <Text1 Ref="10" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -182,15 +162,15 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Right</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text1</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text>الرقم الضريبي : 300522984600003</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text1>
-            <Text15 Ref="12" type="Text" isKey="true">
+            <Text15 Ref="11" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>20,70,90,20</ClientRectangle>
@@ -202,15 +182,15 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Center</HorAlignment>
               <Margins>0,3,0,0</Margins>
               <Name>Text15</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text>{PurchaseOrder.OrderDate}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="13" type="DateFormat" isKey="true" />
+              <TextFormat Ref="12" type="DateFormat" isKey="true" />
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text15>
-            <Text61 Ref="14" type="Text" isKey="true">
+            <Text61 Ref="13" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>200,50,90,20</ClientRectangle>
@@ -222,14 +202,14 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text61</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text># رقم الأمر</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text61>
-            <Text16 Ref="15" type="Text" isKey="true">
+            <Text16 Ref="14" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>210,70,80,20</ClientRectangle>
@@ -241,11 +221,11 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Center</HorAlignment>
               <Margins>0,3,0,0</Margins>
               <Name>Text16</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text>{PurchaseOrder.OrderCode}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="16" type="NumberFormat" isKey="true">
+              <TextFormat Ref="15" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>1</NegativePattern>
@@ -254,7 +234,7 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text16>
-            <Text2 Ref="17" type="Text" isKey="true">
+            <Text2 Ref="16" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -267,15 +247,15 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Right</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text2</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text>المملكة العربية السعودية</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text2>
-            <Text5 Ref="18" type="Text" isKey="true">
+            <Text5 Ref="17" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>200,90,90,20</ClientRectangle>
@@ -287,14 +267,14 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text5</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text># رقم المحفظة</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text5>
-            <Text6 Ref="19" type="Text" isKey="true">
+            <Text6 Ref="18" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>210,110,80,20</ClientRectangle>
@@ -306,11 +286,11 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Center</HorAlignment>
               <Margins>0,3,0,0</Margins>
               <Name>Text6</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text>{PurchaseOrder.PortCode}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="20" type="NumberFormat" isKey="true">
+              <TextFormat Ref="19" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>1</NegativePattern>
@@ -319,7 +299,7 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text6>
-            <Text7 Ref="21" type="Text" isKey="true">
+            <Text7 Ref="20" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>100,90,100,20</ClientRectangle>
@@ -331,14 +311,14 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text7</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text>المحفظة</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text7>
-            <Text8 Ref="22" type="Text" isKey="true">
+            <Text8 Ref="21" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>110,110,90,20</ClientRectangle>
@@ -350,15 +330,15 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Center</HorAlignment>
               <Margins>0,3,0,0</Margins>
               <Name>Text8</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text>{PurchaseOrder.PortName}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="23" type="DateFormat" isKey="true" />
+              <TextFormat Ref="22" type="DateFormat" isKey="true" />
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text8>
-            <Text3 Ref="24" type="Text" isKey="true">
+            <Text3 Ref="23" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>110,50,90,20</ClientRectangle>
@@ -370,14 +350,14 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text3</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text># نوع الأمر</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text3>
-            <Text4 Ref="25" type="Text" isKey="true">
+            <Text4 Ref="24" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>120,70,80,20</ClientRectangle>
@@ -389,11 +369,11 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
               <HorAlignment>Center</HorAlignment>
               <Margins>0,3,0,0</Margins>
               <Name>Text4</Name>
-              <Page isRef="6" />
-              <Parent isRef="7" />
+              <Page isRef="5" />
+              <Parent isRef="6" />
               <Text>{PurchaseOrder.OrderType}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="26" type="NumberFormat" isKey="true">
+              <TextFormat Ref="25" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>1</NegativePattern>
@@ -405,8 +385,8 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
           </Components>
           <Conditions isList="true" count="0" />
           <Name>PageHeaderBand1</Name>
-          <Page isRef="6" />
-          <Parent isRef="6" />
+          <Page isRef="5" />
+          <Parent isRef="5" />
         </PageHeaderBand1>
       </Components>
       <Conditions isList="true" count="0" />
@@ -430,13 +410,13 @@ AS OrderType,P.Code AS PortCode,P.NameAR AS PortName
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>11/7/2019 2:46:40 PM</ReportChanged>
+  <ReportChanged>11/11/2019 3:49:57 PM</ReportChanged>
   <ReportCreated>10/24/2019 12:37:16 PM</ReportCreated>
   <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\Print_NoticeCredit.mrt</ReportFile>
-  <ReportGuid>edd561c5c2164075a385c4afe8c9f78a</ReportGuid>
+  <ReportGuid>595c67ac942147dda28ce2c8feb37368</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>HundredthsOfInch</ReportUnit>
-  <ReportVersion>2019.3.5.0</ReportVersion>
+  <ReportVersion>2019.3.2.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -462,197 +442,197 @@ namespace Reports
 </Script>
   <ScriptLanguage>CSharp</ScriptLanguage>
   <Styles isList="true" count="12">
-    <Blue_x0020_Steel_Report_Title1 Ref="27" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title1 Ref="26" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item22 Ref="28" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item21 Ref="27" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>ReportTitle</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item22>
+        </Item21>
       </Conditions>
       <Font>Arial,14,Bold</Font>
       <Name>Blue Steel_Report_Title1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Title1>
-    <Blue_x0020_Steel_Report_Title2 Ref="29" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title2 Ref="28" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item24 Ref="30" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item23 Ref="29" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>ReportTitle</Placement>
           <PlacementNestedLevel>2</PlacementNestedLevel>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item24>
+        </Item23>
       </Conditions>
       <Font>Arial,10,Bold</Font>
       <Name>Blue Steel_Report_Title2</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Title2>
-    <Blue_x0020_Steel_Report_Summary Ref="31" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Summary Ref="30" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item26 Ref="32" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item25 Ref="31" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>ReportSummary</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item26>
+        </Item25>
       </Conditions>
       <Font>Arial,10,Bold</Font>
       <Name>Blue Steel_Report_Summary</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Summary>
-    <Blue_x0020_Steel_Page_Header Ref="33" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Page_Header Ref="32" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item28 Ref="34" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item27 Ref="33" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>PageHeader</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item28>
+        </Item27>
       </Conditions>
       <Font>Arial,10</Font>
       <Name>Blue Steel_Page_Header</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Header>
-    <Blue_x0020_Steel_Page_Footer Ref="35" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Page_Footer Ref="34" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item30 Ref="36" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item29 Ref="35" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>PageFooter</Placement>
           <Type>ComponentType, Placement</Type>
-        </Item30>
+        </Item29>
       </Conditions>
       <Font>Arial,10</Font>
       <Name>Blue Steel_Page_Footer</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Footer>
-    <Blue_x0020_Steel_Group_Header1 Ref="37" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Header1 Ref="36" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item32 Ref="38" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item31 Ref="37" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>GroupHeader</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item32>
+        </Item31>
       </Conditions>
       <Font>Arial,13,Bold</Font>
       <Name>Blue Steel_Group_Header1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Header1>
-    <Blue_x0020_Steel_Group_Footer1 Ref="39" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Footer1 Ref="38" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item34 Ref="40" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item33 Ref="39" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>GroupFooter</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item34>
+        </Item33>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Group_Footer1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Footer1>
-    <Blue_x0020_Steel_Header1 Ref="41" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Header1 Ref="40" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
       <Brush>[79:129:189]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item36 Ref="42" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item35 Ref="41" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Header</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item36>
+        </Item35>
       </Conditions>
       <Font>Arial,9.75,Bold,Point,False,204</Font>
       <Name>Blue Steel_Header1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>White</TextBrush>
     </Blue_x0020_Steel_Header1>
-    <Blue_x0020_Steel_Data1 Ref="43" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1 Ref="42" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item38 Ref="44" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item37 Ref="43" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image, CheckBox</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Data</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item38>
+        </Item37>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1>
-    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="45" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="44" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[255:255:255]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item40 Ref="46" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item39 Ref="45" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataOddStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item40>
+        </Item39>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Odd Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Odd_x0020_Style>
-    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="47" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="46" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[216:216:216]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item42 Ref="48" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item41 Ref="47" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataEvenStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
-        </Item42>
+        </Item41>
       </Conditions>
       <Font>Arial,8</Font>
       <Name>Blue Steel_Data1_Even Style</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Even_x0020_Style>
-    <Blue_x0020_Steel_Footer1 Ref="49" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Footer1 Ref="48" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black</Border>
       <Brush>White</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item44 Ref="50" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item43 Ref="49" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>Footer</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item44>
+        </Item43>
       </Conditions>
       <Font>Arial,8.25,Bold,Point,False,204</Font>
       <Name>Blue Steel_Footer1</Name>

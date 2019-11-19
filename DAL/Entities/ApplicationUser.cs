@@ -12,5 +12,7 @@ namespace DAL.Entities
         public string FullName { get; set; }
 
         public DateTime Creationdate { get; set; }
+
+        public virtual ICollection<UserLog> UserLogs { get; set; }
     }
 }

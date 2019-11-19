@@ -64,6 +64,7 @@ namespace DAL.Context
 
         public DbSet<ReportSetting> ReportSettings { get; set; }
 
+        public DbSet<UserLog> UserLogs { get; set; }
 
     }
 }
