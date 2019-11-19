@@ -17,6 +17,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.IO;
 
+
+
 namespace Stocks.Controllers
 {
     [Authorize(Roles = "SuperAdmin,Admin")]
@@ -26,78 +28,22 @@ namespace Stocks.Controllers
     {
     
 
-        [HttpPost, DisableRequestSizeLimit]
-        //[Consumes("multipart/form-data")]
-        [Route("~/api/Partner/UploadFile/{PartnerID}")]
-        public IActionResult UploadFile(int PartnerID)
-        {
-                var partner = unitOfWork.PartnerRepository.GetByID(PartnerID);
-                if (partner != null)
-                {
-                    PartnerAttachmentModel partnerAttachmentModel = new PartnerAttachmentModel();
-                    partnerAttachmentModel.PartnerID = PartnerID;
-                    IEnumerable<IFormFile> files = Request.Form.Files;
-                    List<object> paths = new List<object>();
-                    Dictionary<string,string> temp;
-                    for (int i = 0; i < files.Count(); i++)
-                    {
-                        IFormFile file = files.ElementAt(i);
-                        temp = UploadHelper.SaveFile(file, "Partner");
-                        partnerAttachmentModel.FilePath = temp.GetValueOrDefault("dbPath");
-                        partnerAttachmentModel.FileName = temp.GetValueOrDefault("_ext");
-                        PartnerAttachment partnerAttachment = _mapper.Map<PartnerAttachment>(partnerAttachmentModel);
-                        unitOfWork.PartnerAttachmentRepository.Insert(partnerAttachment);
-                        unitOfWork.Save();
-                        paths.Add(temp);
-
-                    }
-                    return Ok(paths);
-                }  
-            return NotFound();
-        }
-
-
-        [HttpGet]
-        [Route("~/api/Partner/GetAllFiles/{PartnerID}")]
-        public IActionResult GetAllFile(int PartnerID)
-        {
-            var partner = unitOfWork.PartnerRepository.GetByID(PartnerID);
-            if (partner != null)
-            {
-                IEnumerable<PartnerAttachment> partnerAttachments = unitOfWork.PartnerAttachmentRepository.Get(filter: x => x.PartnerID == PartnerID);
-                IEnumerable<PartnerAttachmentModel> partnerAttachmentModels =_mapper.Map<IEnumerable<PartnerAttachmentModel>>(partnerAttachments);
-                return Ok(partnerAttachmentModels);
-            }
-            return Ok(0);
-        }
-
-        [HttpDelete]
-        [Route("~/api/Partner/deleteFile/{PartnerAttachID}")]
-        public IActionResult deleteFile(int PartnerAttachID)
-        {
-            var PartnerAttach = unitOfWork.PartnerAttachmentRepository.GetByID(PartnerAttachID);
-            if (PartnerAttach != null)
-            {
-                if (System.IO.File.Exists(Directory.GetCurrentDirectory()+ PartnerAttach.FilePath))
-                {
-                    System.IO.File.Delete(Directory.GetCurrentDirectory()+ PartnerAttach.FilePath);
-                }
-                unitOfWork.PartnerAttachmentRepository.Delete(PartnerAttachID);
-                unitOfWork.Save();
-                return Ok("done");
-            }
-            return Ok(0);
-        }
+       
 
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
+      
+        
 
         public PartnerController(StocksContext context,IMapper mapper)
         {
+            
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
+            
         }
+
         #endregion
 
         #region GET Methods
@@ -105,9 +51,10 @@ namespace Stocks.Controllers
         [Route("~/api/Partner/FirstOpen")]
         public IActionResult FirstOpen()
         {
+            var x= Request.Headers;
             PartenerModel model = new PartenerModel();
             var count = unitOfWork.PartnerRepository.Count();
-            // Edited By Ahmed Ayman
+            
             if (count > 0)
             {
                 model.LastCode = unitOfWork.PartnerRepository.Last().Code;
@@ -725,7 +672,75 @@ namespace Stocks.Controllers
         }
         #endregion
 
+
+        #region Attachment
+        [HttpPost, DisableRequestSizeLimit]
+        //[Consumes("multipart/form-data")]
+        [Route("~/api/Partner/UploadFile/{PartnerID}")]
+        public IActionResult UploadFile(int PartnerID)
+        {
+            var partner = unitOfWork.PartnerRepository.GetByID(PartnerID);
+            if (partner != null)
+            {
+                PartnerAttachmentModel partnerAttachmentModel = new PartnerAttachmentModel();
+                partnerAttachmentModel.PartnerID = PartnerID;
+                IEnumerable<IFormFile> files = Request.Form.Files;
+                List<object> paths = new List<object>();
+                Dictionary<string, string> temp;
+                for (int i = 0; i < files.Count(); i++)
+                {
+                    IFormFile file = files.ElementAt(i);
+                    temp = UploadHelper.SaveFile(file, "Partner");
+                    partnerAttachmentModel.FilePath = temp.GetValueOrDefault("dbPath");
+                    partnerAttachmentModel.FileName = temp.GetValueOrDefault("_ext");
+                    PartnerAttachment partnerAttachment = _mapper.Map<PartnerAttachment>(partnerAttachmentModel);
+                    unitOfWork.PartnerAttachmentRepository.Insert(partnerAttachment);
+                    unitOfWork.Save();
+                    paths.Add(temp);
+
+                }
+                return Ok(paths);
+            }
+            return NotFound();
+        }
+
+
+        [HttpGet]
+        [Route("~/api/Partner/GetAllFiles/{PartnerID}")]
+        public IActionResult GetAllFile(int PartnerID)
+        {
+            var partner = unitOfWork.PartnerRepository.GetByID(PartnerID);
+            if (partner != null)
+            {
+                IEnumerable<PartnerAttachment> partnerAttachments = unitOfWork.PartnerAttachmentRepository.Get(filter: x => x.PartnerID == PartnerID);
+                IEnumerable<PartnerAttachmentModel> partnerAttachmentModels = _mapper.Map<IEnumerable<PartnerAttachmentModel>>(partnerAttachments);
+                return Ok(partnerAttachmentModels);
+            }
+            return Ok(0);
+        }
+
+        [HttpDelete]
+        [Route("~/api/Partner/deleteFile/{PartnerAttachID}")]
+        public IActionResult deleteFile(int PartnerAttachID)
+        {
+            var PartnerAttach = unitOfWork.PartnerAttachmentRepository.GetByID(PartnerAttachID);
+            if (PartnerAttach != null)
+            {
+                if (System.IO.File.Exists(Directory.GetCurrentDirectory() + PartnerAttach.FilePath))
+                {
+                    System.IO.File.Delete(Directory.GetCurrentDirectory() + PartnerAttach.FilePath);
+                }
+                unitOfWork.PartnerAttachmentRepository.Delete(PartnerAttachID);
+                unitOfWork.Save();
+                return Ok("done");
+            }
+            return Ok(0);
+        }
+        #endregion
+
+
     }
 
-               
+
+
 }

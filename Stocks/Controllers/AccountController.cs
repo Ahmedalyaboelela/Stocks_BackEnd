@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BAL.Helper;
 using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace Stocks.Controllers
 {
@@ -36,6 +39,8 @@ namespace Stocks.Controllers
         [Route("~/api/Account/FirstOpen")]
         public IActionResult FirstOpen()
         {
+
+           
             AccountModel model = new AccountModel();
             var count = unitOfWork.AccountRepository.Count();
             if (count > 0)
@@ -43,7 +48,8 @@ namespace Stocks.Controllers
                 model.LastCode = unitOfWork.AccountRepository.Last().Code;
                 model.Count = count;
             }
-
+          
+           
             return Ok(model);
         }
 

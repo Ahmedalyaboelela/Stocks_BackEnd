@@ -123,7 +123,7 @@ namespace Stocks.Controllers
         #region Insert Methods
         [HttpPost]
         [Route("~/api/sellingorder/Add")]
-        public IActionResult PostEmp([FromBody] SellingOrderModel sellingOrderModel)
+        public IActionResult Postselling([FromBody] SellingOrderModel sellingOrderModel)
         {
 
             if (ModelState.IsValid)
@@ -402,7 +402,21 @@ namespace Stocks.Controllers
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = cnn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @" WITH q2 AS                                  (SELECT ROW_NUMBER() OVER(                                 ORDER BY SN.SellingInvoiceID) AS RowNum, SN.Code AS InvoiceNum ,CONVERT(DATE, SN.Date,110)  AS ExeDate                                 ,P.NameAR AS PartnerName,SD.StockCount AS StockCount,SD.SellingPrice AS SellingPrice                                 ,SD.NetAmmount AS NetAmount,SoD.StockCount - SD.StockCount AS pp                                 FROM dbo.SellingInvoices AS SN                                 INNER JOIN dbo.SellingInvoiceDetails AS SD                                  ON SD.SellingInvoiceID = SN.SellingInvoiceID                                 INNER JOIN dbo.Partners AS P                                  ON P.PartnerID = SD.PartnerID                                 INNER JOIN dbo.SellingOrders AS SO                                 ON SO.SellingOrderID = SN.SellingOrderID                                 INNER JOIN dbo.SellingOrderDetails AS SoD                                 ON SoD.SellingOrderID = SO.SellingOrderID                                 WHERE SN.SellingOrderID = "+id+") SELECT q2.RowNum ,q2.InvoiceNum,q2.ExeDate,q2.PartnerName,q2.StockCount,q2.SellingPrice,q2.pp , q2.NetAmount,CASE WHEN q2.RowNum=1 THEN q2.pp ELSE (SUM(q2.pp)OVER ( ORDER BY q2.ExeDate ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING))-q2.StockCount END AS balance FROM q2";
+                cmd.CommandText = @" WITH q2 AS
+                                  (SELECT ROW_NUMBER() OVER(
+                                 ORDER BY SN.SellingInvoiceID) AS RowNum, SN.Code AS InvoiceNum ,CONVERT(DATE, SN.Date,110)  AS ExeDate
+                                 ,P.NameAR AS PartnerName,SD.StockCount AS StockCount,SD.SellingPrice AS SellingPrice
+                                 ,SD.NetAmmount AS NetAmount,SoD.StockCount - SD.StockCount AS pp
+                                 FROM dbo.SellingInvoices AS SN
+                                 INNER JOIN dbo.SellingInvoiceDetails AS SD 
+                                 ON SD.SellingInvoiceID = SN.SellingInvoiceID
+                                 INNER JOIN dbo.Partners AS P 
+                                 ON P.PartnerID = SD.PartnerID
+                                 INNER JOIN dbo.SellingOrders AS SO
+                                 ON SO.SellingOrderID = SN.SellingOrderID
+                                 INNER JOIN dbo.SellingOrderDetails AS SoD
+                                 ON SoD.SellingOrderID = SO.SellingOrderID
+                                 WHERE SN.SellingOrderID = "+id+") SELECT q2.RowNum ,q2.InvoiceNum,q2.ExeDate,q2.PartnerName,q2.StockCount,q2.SellingPrice,q2.pp , q2.NetAmount,CASE WHEN q2.RowNum=1 THEN q2.pp ELSE (SUM(q2.pp)OVER ( ORDER BY q2.ExeDate ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING))-q2.StockCount END AS balance FROM q2";
                 cnn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
                 List<SellingInvoiceDetailsModel> SellingInvoiceDetailsModel = new List<SellingInvoiceDetailsModel>();

@@ -104,7 +104,7 @@ namespace Stocks.Controllers
 
                 if (Details != null)
                 {
-                    model.purchaseInvoiceDetailsModels = Details;
+                    model.purchaseOrderDetailModels = Details;
 
                 }
 
@@ -159,9 +159,9 @@ namespace Stocks.Controllers
 
 
 
-                    if (purchaseOrderModel.purchaseInvoiceDetailsModels != null)
+                    if (purchaseOrderModel.purchaseOrderDetailModels != null)
                     {
-                        foreach (var item in purchaseOrderModel.purchaseInvoiceDetailsModels)
+                        foreach (var item in purchaseOrderModel.purchaseOrderDetailModels)
                         {
                             PurchaseOrderDetailModel detail = new PurchaseOrderDetailModel();
                             detail.PartnerID = item.PartnerID;
@@ -246,10 +246,10 @@ namespace Stocks.Controllers
                         unitOfWork.PurchaseOrderDetailRepository.RemovRange(oldDetails);
 
                     }
-                    if (purchaseOrderModel.purchaseInvoiceDetailsModels != null)
+                    if (purchaseOrderModel.purchaseOrderDetailModels != null)
                     {
 
-                        foreach (var item in purchaseOrderModel.purchaseInvoiceDetailsModels)
+                        foreach (var item in purchaseOrderModel.purchaseOrderDetailModels)
                         {
                             item.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
                             item.PurchaseOrderDetailID = 0;
@@ -285,10 +285,10 @@ namespace Stocks.Controllers
                             unitOfWork.PurchaseOrderDetailRepository.RemovRange(oldDetails);
 
                         }
-                        if (purchaseOrderModel.purchaseInvoiceDetailsModels != null)
+                        if (purchaseOrderModel.purchaseOrderDetailModels != null)
                         {
 
-                            foreach (var item in purchaseOrderModel.purchaseInvoiceDetailsModels)
+                            foreach (var item in purchaseOrderModel.purchaseOrderDetailModels)
                             {
                                 item.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
                                 item.PurchaseOrderDetailID = 0;
@@ -436,8 +436,18 @@ namespace Stocks.Controllers
                cmd.Connection = cnn;
                cmd.CommandType = CommandType.Text;
                cmd.CommandText = @"SELECT  PurchaseInvoices.Code ,
-               CONVERT(DATE, PurchaseInvoices.Date, 110)   ,               Partners.NameAR ,		       PurchaseInvoiceDetails.StockCount ,		       PurchaseInvoiceDetails.PurchasePrice ,               PurchaseInvoiceDetails.NetAmmount  ,		       SUM(PurchaseInvoiceDetails.StockCount) OVER(ORDER BY PurchaseInvoices.Date ROWS BETWEEN UNBOUNDED PRECEDING AND 0 PRECEDING) as StockBalance               FROM dbo.PurchaseInvoices
-               INNER JOIN dbo.PurchaseInvoiceDetails               ON PurchaseInvoiceDetails.PurchaseInvoiceID = PurchaseInvoices.PurchaseInvoiceID               INNER JOIN dbo.Partners               ON Partners.PartnerID = PurchaseInvoiceDetails.PartnerID               WHERE PurchaseInvoices.PurchaseOrderID = "+id+"";
+               CONVERT(DATE, PurchaseInvoices.Date, 110)   ,
+               Partners.NameAR ,
+		       PurchaseInvoiceDetails.StockCount ,
+		       PurchaseInvoiceDetails.PurchasePrice ,
+               PurchaseInvoiceDetails.NetAmmount  ,
+		       SUM(PurchaseInvoiceDetails.StockCount) OVER(ORDER BY PurchaseInvoices.Date ROWS BETWEEN UNBOUNDED PRECEDING AND 0 PRECEDING) as StockBalance
+               FROM dbo.PurchaseInvoices
+               INNER JOIN dbo.PurchaseInvoiceDetails
+               ON PurchaseInvoiceDetails.PurchaseInvoiceID = PurchaseInvoices.PurchaseInvoiceID
+               INNER JOIN dbo.Partners
+               ON Partners.PartnerID = PurchaseInvoiceDetails.PartnerID
+               WHERE PurchaseInvoices.PurchaseOrderID = "+id+"";
 
                cnn.Open();
                SqlDataReader reader = cmd.ExecuteReader();
