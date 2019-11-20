@@ -30,6 +30,7 @@ using Microsoft.IdentityModel.Tokens;
 using BAL.Model;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.AspNetCore.HttpOverrides;
+using Stocks.CustomExceptionMiddleware;
 
 namespace Stocks
 {
@@ -136,9 +137,16 @@ namespace Stocks
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Reports")),
                 RequestPath = new PathString("/Reports")
             });
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                ServeUnknownFileTypes = true,
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Logs")),
+                RequestPath = new PathString("/Logs")
+            });
 
             app.ConfigureExceptionHandler(logger);
             app.ConfigureCustomExceptionMiddleware();
+           // app.UseMiddleware<RequestResponseLoggingMiddleware>();
             app.UseAuthentication();
             app.UseMvc();
         }
