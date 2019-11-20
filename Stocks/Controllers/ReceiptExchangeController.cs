@@ -27,12 +27,14 @@ namespace Stocks.Controllers
 
         private SettingController setting;
         private readonly IAccountingHelper accountingHelper;
+        private LoggerHistory loggerHistory;
         public ReceiptExchangeController(StocksContext context, IMapper mapper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
             this.setting = new SettingController(context, mapper);
             accountingHelper = new AccountingHelper(context, mapper);
+             loggerHistory = new LoggerHistory(context, mapper);
         }
 
         #endregion
@@ -632,8 +634,31 @@ namespace Stocks.Controllers
 
                     var Res = unitOfWork.Save();
                     if (Res == 200)
-                    {
+                    { 
+                        if (recExcModel.Type==true && recExcModel.ReceiptExchangeType==true)
+                        {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                            loggerHistory.InsertUserLog(UserID, " قبض الريال", "اضافه  قبض الريال", true);
+                        }
+                      else  if (recExcModel.Type == false && recExcModel.ReceiptExchangeType == true)
+                        {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                            loggerHistory.InsertUserLog(UserID, " صرف الريال", "اضافه صرف الريال", true);
+                        }
+                      else  if (recExcModel.Type == true && recExcModel.ReceiptExchangeType == false)
+                        {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                            loggerHistory.InsertUserLog(UserID, " قيود يوميه", "اضافه قيود يوميه", true);
+                        }
+                    else    if (recExcModel.Type == false && recExcModel.ReceiptExchangeType == false)
+                        {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                            loggerHistory.InsertUserLog(UserID, " صرف شيك", "اضافه صرف شيك", true);
+                        }
                         return Ok(4);
                     }
                     else if (Res == 501)
@@ -771,6 +796,30 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
+                            if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == true)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " قبض الريال", "تعديل  قبض الريال", true);
+                            }
+                            else if (receiptExchangeModel.Type == false && receiptExchangeModel.ReceiptExchangeType == true)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " صرف الريال", "تعديل صرف الريال", true);
+                            }
+                            else if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == false)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " قيود يوميه", "تعديل قيود يوميه", true);
+                            }
+                            else if (receiptExchangeModel.Type == false && receiptExchangeModel.ReceiptExchangeType == false)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " صرف شيك", "تعديل صرف شيك", true);
+                            }
 
                             return Ok(4);
                         }
@@ -871,6 +920,31 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
+                            if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == true)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " قبض الريال", "تعديل  قبض الريال", true);
+                            }
+                            else if (receiptExchangeModel.Type == false && receiptExchangeModel.ReceiptExchangeType == true)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " صرف الريال", "تعديل صرف الريال", true);
+                            }
+                            else if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == false)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " قيود يوميه", "تعديل قيود يوميه", true);
+                            }
+                            else if (receiptExchangeModel.Type == false && receiptExchangeModel.ReceiptExchangeType == false)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " صرف شيك", "تعديل صرف شيك", true);
+                            }
+
 
                             return Ok(4);
                         }
@@ -977,6 +1051,31 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
+                            if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == true)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " قبض الريال", "تعديل  قبض الريال", true);
+                            }
+                            else if (receiptExchangeModel.Type == false && receiptExchangeModel.ReceiptExchangeType == true)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " صرف الريال", "تعديل صرف الريال", true);
+                            }
+                            else if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == false)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " قيود يوميه", "تعديل قيود يوميه", true);
+                            }
+                            else if (receiptExchangeModel.Type == false && receiptExchangeModel.ReceiptExchangeType == false)
+                            {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, " صرف شيك", "تعديل صرف شيك", true);
+                            }
+
 
                             return Ok(4);
                         }
@@ -1079,6 +1178,30 @@ namespace Stocks.Controllers
                             var Res = unitOfWork.Save();
                             if (Res == 200)
                             {
+                                if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == true)
+                                {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                    loggerHistory.InsertUserLog(UserID, " قبض الريال", "تعديل  قبض الريال", true);
+                                }
+                                else if (receiptExchangeModel.Type == false && receiptExchangeModel.ReceiptExchangeType == true)
+                                {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                    loggerHistory.InsertUserLog(UserID, " صرف الريال", "تعديل صرف الريال", true);
+                                }
+                                else if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == false)
+                                {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                    loggerHistory.InsertUserLog(UserID, " قيود يوميه", "تعديل قيود يوميه", true);
+                                }
+                                else if (receiptExchangeModel.Type == false && receiptExchangeModel.ReceiptExchangeType == false)
+                                {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                    loggerHistory.InsertUserLog(UserID, " صرف شيك", "تعديل صرف شيك", true);
+                                }
 
                                 return Ok(4);
                             }
@@ -1146,6 +1269,31 @@ namespace Stocks.Controllers
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
+                    if (RecExc.Type == true && RecExc.ReceiptExchangeType == true)
+                    {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                        loggerHistory.InsertUserLog(UserID, " قبض الريال", "حذف  قبض الريال", true);
+                    }
+                    else if (RecExc.Type == false && RecExc.ReceiptExchangeType == true)
+                    {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                        loggerHistory.InsertUserLog(UserID, " صرف الريال", "حذف صرف الريال", true);
+                    }
+                    else if (RecExc.Type == true && RecExc.ReceiptExchangeType == false)
+                    {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                        loggerHistory.InsertUserLog(UserID, " قيود يوميه", "حذف قيود يوميه", true);
+                    }
+                    else if (RecExc.Type == false && RecExc.ReceiptExchangeType == false)
+                    {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                        loggerHistory.InsertUserLog(UserID, " صرف شيك", "حذف صرف شيك", true);
+                    }
+
 
                     return Ok(4);
 
