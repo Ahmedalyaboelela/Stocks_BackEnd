@@ -2773,13 +2773,15 @@ namespace Stocks.Controllers
         public IActionResult GetHistory()
         {
             var UserID = loggerHistory.getUserIdFromRequest(Request);
-            var HistoryList = unitOfWork.UserLogRepository.Get(filter: x => x.UserId == UserID && x.MobileView == false).Select(m=> new UserLogModel {
-                OperationName=m.OperationName,
-                PageName=m.PageName,
-                UserId=m.UserId,
-                MobileView=m.MobileView,
-                UserLogID=m.UserLogID,
-                UserName=m.User.UserName,
+            var HistoryList = unitOfWork.UserLogRepository.Get(filter: x => x.UserId == UserID && x.MobileView == false).Select(m => new UserLogModel {
+                OperationName = m.OperationName,
+                PageName = m.PageName,
+                UserId = m.UserId,
+                MobileView = m.MobileView,
+                UserLogID = m.UserLogID,
+                UserName = m.User.UserName,
+                OperationDate = m.OperationDate.ToString(),
+               
 
             });
 

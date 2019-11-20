@@ -49,8 +49,10 @@ namespace BAL.Helper
             userLogModel.OperationName = OperationName;
             userLogModel.PageName = PageName;
             userLogModel.UserId = UserID;
+
             var tempmapper =_mapper;
             var model = _mapper.Map<UserLog>(userLogModel);
+            model.OperationDate = DateTime.Now;
             unitOfWork.UserLogRepository.Insert(model);
             unitOfWork.Save();
 
