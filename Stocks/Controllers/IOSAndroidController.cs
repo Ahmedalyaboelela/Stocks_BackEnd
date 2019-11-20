@@ -369,7 +369,7 @@ namespace Stocks.Controllers
                     PortfolioAccountName = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).Account.NameAR,
                     Portfoliocode = m.Portfolio.Code,
                     PortfolioNameAR = m.Portfolio.NameAR,
-                    purchaseOrderDetailModels = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrderID == m.PurchaseOrderID).Select(q => new PurchaseOrderDetailModel
+                    purchaseordersDetailsModels = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrderID == m.PurchaseOrderID).Select(q => new PurchaseOrderDetailModel
                     {
                         PurchaseOrderID = q.PurchaseOrderID,
                         PurchaseOrderDetailID = q.PurchaseOrderDetailID,
@@ -2072,9 +2072,9 @@ namespace Stocks.Controllers
 
 
 
-                    if (purchaseOrderModel.purchaseOrderDetailModels != null)
+                    if (purchaseOrderModel.purchaseordersDetailsModels != null)
                     {
-                        foreach (var item in purchaseOrderModel.purchaseOrderDetailModels)
+                        foreach (var item in purchaseOrderModel.purchaseordersDetailsModels)
                         {
                             PurchaseOrderDetailModel detail = new PurchaseOrderDetailModel();
                             detail.PartnerID = item.PartnerID;
@@ -2162,10 +2162,10 @@ namespace Stocks.Controllers
                         unitOfWork.PurchaseOrderDetailRepository.RemovRange(oldDetails);
 
                     }
-                    if (purchaseOrderModel.purchaseOrderDetailModels != null)
+                    if (purchaseOrderModel.purchaseordersDetailsModels != null)
                     {
 
-                        foreach (var item in purchaseOrderModel.purchaseOrderDetailModels)
+                        foreach (var item in purchaseOrderModel.purchaseordersDetailsModels)
                         {
                             item.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
                             item.PurchaseOrderDetailID = 0;
@@ -2201,10 +2201,10 @@ namespace Stocks.Controllers
                             unitOfWork.PurchaseOrderDetailRepository.RemovRange(oldDetails);
 
                         }
-                        if (purchaseOrderModel.purchaseOrderDetailModels != null)
+                        if (purchaseOrderModel.purchaseordersDetailsModels != null)
                         {
 
-                            foreach (var item in purchaseOrderModel.purchaseOrderDetailModels)
+                            foreach (var item in purchaseOrderModel.purchaseordersDetailsModels)
                             {
                                 item.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
                                 item.PurchaseOrderDetailID = 0;
@@ -2313,8 +2313,18 @@ namespace Stocks.Controllers
                 cmd.Connection = cnn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = @"SELECT  PurchaseInvoices.Code ,
-               CONVERT(DATE, PurchaseInvoices.Date, 110)   ,               Partners.NameAR ,		       PurchaseInvoiceDetails.StockCount ,		       PurchaseInvoiceDetails.PurchasePrice ,               PurchaseInvoiceDetails.NetAmmount  ,		       SUM(PurchaseInvoiceDetails.StockCount) OVER(ORDER BY PurchaseInvoices.Date ROWS BETWEEN UNBOUNDED PRECEDING AND 0 PRECEDING) as StockBalance               FROM dbo.PurchaseInvoices
-               INNER JOIN dbo.PurchaseInvoiceDetails               ON PurchaseInvoiceDetails.PurchaseInvoiceID = PurchaseInvoices.PurchaseInvoiceID               INNER JOIN dbo.Partners               ON Partners.PartnerID = PurchaseInvoiceDetails.PartnerID               WHERE PurchaseInvoices.PurchaseOrderID = " + id + "";
+               CONVERT(DATE, PurchaseInvoices.Date, 110)   ,
+               Partners.NameAR ,
+		       PurchaseInvoiceDetails.StockCount ,
+		       PurchaseInvoiceDetails.PurchasePrice ,
+               PurchaseInvoiceDetails.NetAmmount  ,
+		       SUM(PurchaseInvoiceDetails.StockCount) OVER(ORDER BY PurchaseInvoices.Date ROWS BETWEEN UNBOUNDED PRECEDING AND 0 PRECEDING) as StockBalance
+               FROM dbo.PurchaseInvoices
+               INNER JOIN dbo.PurchaseInvoiceDetails
+               ON PurchaseInvoiceDetails.PurchaseInvoiceID = PurchaseInvoices.PurchaseInvoiceID
+               INNER JOIN dbo.Partners
+               ON Partners.PartnerID = PurchaseInvoiceDetails.PartnerID
+               WHERE PurchaseInvoices.PurchaseOrderID = " + id + "";
 
                 cnn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -2632,7 +2642,21 @@ namespace Stocks.Controllers
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = cnn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @" WITH q2 AS                                  (SELECT ROW_NUMBER() OVER(                                 ORDER BY SN.SellingInvoiceID) AS RowNum, SN.Code AS InvoiceNum ,CONVERT(DATE, SN.Date,110)  AS ExeDate                                 ,P.NameAR AS PartnerName,SD.StockCount AS StockCount,SD.SellingPrice AS SellingPrice                                 ,SD.NetAmmount AS NetAmount,SoD.StockCount - SD.StockCount AS pp                                 FROM dbo.SellingInvoices AS SN                                 INNER JOIN dbo.SellingInvoiceDetails AS SD                                  ON SD.SellingInvoiceID = SN.SellingInvoiceID                                 INNER JOIN dbo.Partners AS P                                  ON P.PartnerID = SD.PartnerID                                 INNER JOIN dbo.SellingOrders AS SO                                 ON SO.SellingOrderID = SN.SellingOrderID                                 INNER JOIN dbo.SellingOrderDetails AS SoD                                 ON SoD.SellingOrderID = SO.SellingOrderID                                 WHERE SN.SellingOrderID = " + id + ") SELECT q2.RowNum ,q2.InvoiceNum,q2.ExeDate,q2.PartnerName,q2.StockCount,q2.SellingPrice,q2.pp , q2.NetAmount,CASE WHEN q2.RowNum=1 THEN q2.pp ELSE (SUM(q2.pp)OVER ( ORDER BY q2.ExeDate ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING))-q2.StockCount END AS balance FROM q2";
+                cmd.CommandText = @" WITH q2 AS
+                                  (SELECT ROW_NUMBER() OVER(
+                                 ORDER BY SN.SellingInvoiceID) AS RowNum, SN.Code AS InvoiceNum ,CONVERT(DATE, SN.Date,110)  AS ExeDate
+                                 ,P.NameAR AS PartnerName,SD.StockCount AS StockCount,SD.SellingPrice AS SellingPrice
+                                 ,SD.NetAmmount AS NetAmount,SoD.StockCount - SD.StockCount AS pp
+                                 FROM dbo.SellingInvoices AS SN
+                                 INNER JOIN dbo.SellingInvoiceDetails AS SD 
+                                 ON SD.SellingInvoiceID = SN.SellingInvoiceID
+                                 INNER JOIN dbo.Partners AS P 
+                                 ON P.PartnerID = SD.PartnerID
+                                 INNER JOIN dbo.SellingOrders AS SO
+                                 ON SO.SellingOrderID = SN.SellingOrderID
+                                 INNER JOIN dbo.SellingOrderDetails AS SoD
+                                 ON SoD.SellingOrderID = SO.SellingOrderID
+                                 WHERE SN.SellingOrderID = " + id + ") SELECT q2.RowNum ,q2.InvoiceNum,q2.ExeDate,q2.PartnerName,q2.StockCount,q2.SellingPrice,q2.pp , q2.NetAmount,CASE WHEN q2.RowNum=1 THEN q2.pp ELSE (SUM(q2.pp)OVER ( ORDER BY q2.ExeDate ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING))-q2.StockCount END AS balance FROM q2";
                 cnn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
                 List<SellingInvoiceDetailsModel> SellingInvoiceDetailsModel = new List<SellingInvoiceDetailsModel>();
@@ -2789,8 +2813,6 @@ namespace Stocks.Controllers
             return Ok(HistoryList);
         }
         #endregion
-
-
 
 
 

@@ -14,7 +14,7 @@ namespace BAL.Model
         public string ExeDate { get; set; }
         public Int64 RowNum { get; set; }
 
-        public double StockBalance { get; set; }
+        public double? StockBalance { get; set; }
         public decimal SellingPrice { get; set; }
 
         
