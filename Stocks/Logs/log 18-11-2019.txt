@@ -1,0 +1,12 @@
+ request : http localhost:56296/api/values    Date : 18/11/2019 01:32:53 PM
+ response : 200: ["value1","value2"]
+
+ request : http localhost:56296/api/values    Date : 18/11/2019 01:32:54 PM
+ response : 200: ["value1","value2"]
+
+ request : http localhost:56296/api/Country/FirstOpen   2d92120a-d7d8-4cb7-bf94-f559df754d06 Date : 18/11/2019 01:33:17 PM
+ response : 200: {"CountryID":0,"Code":null,"NameAR":null,"NameEN":null,"newCode":null,"Count":1,"LastCode":"1"}
+
+ request : http localhost:56296/api/UserProfile/GetUserProfile   2d92120a-d7d8-4cb7-bf94-f559df754d06 Date : 18/11/2019 01:33:17 PM
+ response : 200: {"Id":null,"UserName":"shlemy","Email":"xman199775@gmail.com","Password":null,"ConfirmPassword":null,"FullName":"ahmed sayed ahmed sayed","Role":null,"CreationDate":"0001-01-01T00:00:00","Count":0,"RoleModels":null}
+
