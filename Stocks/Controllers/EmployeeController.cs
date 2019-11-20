@@ -25,11 +25,12 @@ namespace Stocks.Controllers
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
-
+        private LoggerHistory loggerHistory;
         public EmployeeController(StocksContext context, IMapper mapper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
+            loggerHistory = new LoggerHistory(context, mapper);
         }
 
         #endregion
@@ -307,6 +308,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                        loggerHistory.InsertUserLog(UserID, "بطاقه الموظف", "اضافه الموظف", true);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -390,6 +394,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                        loggerHistory.InsertUserLog(UserID, "بطاقه الموظف", "تعديل الموظف", true);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -440,6 +447,9 @@ namespace Stocks.Controllers
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                            loggerHistory.InsertUserLog(UserID, "بطاقه الموظف", "تعديل الموظف", true);
                             return Ok(4);
                         }
                         else if (Result == 501)
@@ -502,6 +512,9 @@ namespace Stocks.Controllers
             var Result = unitOfWork.Save();
             if (Result == 200)
             {
+                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                loggerHistory.InsertUserLog(UserID, "بطاقه الموظف", "حذف الموظف", true);
                 return Ok(4);
             }
             else if (Result == 501)

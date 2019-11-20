@@ -25,50 +25,16 @@ namespace Stocks.Controllers
         private readonly IMapper _mapper;
         private readonly IAccountingHelper accountingHelper;
         private readonly IStocksHelper _stocksHelper;
+        private LoggerHistory loggerHistory;
         public PurchaseInvoiceController(StocksContext context, IMapper mapper, IStocksHelper stocksHelper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
             accountingHelper = new AccountingHelper(context, mapper);
             _stocksHelper = stocksHelper;
+            loggerHistory = new LoggerHistory(context, mapper);
         }
 
-        //public EntryModel GetEntry(Entry Entry)
-        //{
-        //    EntryModel entryModel = new EntryModel();
-
-        //    if (Entry != null)
-        //    {
-        //        var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
-        //        entryModel.EntryID = Entry.EntryID;
-        //        entryModel.Code = Entry.Code;
-        //        entryModel.Date = Entry.Date.Value.ToString("d/M/yyyy");
-        //        entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
-        //        entryModel.NoticeID = Entry.NoticeID;
-        //        entryModel.PurchaseInvoiceID = Entry.PurchaseInvoiceID;
-        //        entryModel.ReceiptID = Entry.ReceiptID;
-        //        entryModel.PurchaseInvoiceID = Entry.PurchaseInvoiceID;
-        //        entryModel.EntryDetailModel = EntryDetails.Select(m => new EntryDetailModel
-        //        {
-        //            AccCode = m.Account.Code,
-        //            AccNameAR = m.Account.NameAR,
-        //            AccNameEN = m.Account.NameEN,
-        //            AccountID = m.AccountID,
-        //            ParentAccountID = m.Account.AccoutnParentID,
-        //            ParentAccCode = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.Code).FirstOrDefault(),
-        //            ParentAccNameAR = unitOfWork.AccountRepository.Get(filter: a => a.AccountID == m.Account.AccoutnParentID).Select(s => s.NameAR).FirstOrDefault(),
-        //            Credit = m.Credit,
-        //            Debit = m.Debit,
-        //            EntryDetailID = m.EntryDetailID,
-        //            EntryID = m.EntryID,
-
-
-        //        });
-        //        entryModel.TransferedToAccounts = Entry.TransferedToAccounts;
-
-        //    }
-        //    return entryModel;
-        //}
 
         [HttpGet] //القيد 
         [Route("~/api/PurchaseInvoice/GetEntry")]
@@ -717,7 +683,9 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                            loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "اضافه فاتوره شراء", false);
                             return Ok(4);
                         }
                         else if (Res == 501)
@@ -814,7 +782,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                        loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "اضافه فاتوره شراء", false);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -917,7 +887,9 @@ namespace Stocks.Controllers
                             var Res = unitOfWork.Save();
                             if (Res == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                                 return Ok(4);
                             }
                             else if (Res == 501)
@@ -984,7 +956,9 @@ namespace Stocks.Controllers
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                            loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                             return Ok(4);
                         }
                         else if (Result == 501)
@@ -1037,7 +1011,9 @@ namespace Stocks.Controllers
                                 var Res = unitOfWork.Save();
                                 if (Res == 200)
                                 {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                    loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                                     return Ok(4);
                                 }
                                 else if (Res == 501)
@@ -1094,7 +1070,9 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                                 return Ok(4);
                             }
                             else if (Result == 501)
@@ -1151,7 +1129,9 @@ namespace Stocks.Controllers
                             var Rest = unitOfWork.Save();
                             if (Rest == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                                 return Ok(4);
                             }
                             else if (Rest == 501)
@@ -1226,7 +1206,9 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                            loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                             return Ok(4);
                         }
                         else if (Res == 501)
@@ -1278,7 +1260,9 @@ namespace Stocks.Controllers
                                 var Rest = unitOfWork.Save();
                                 if (Rest == 200)
                                 {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                    loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                                     return Ok(4);
                                 }
                                 else if (Rest == 501)
@@ -1352,7 +1336,9 @@ namespace Stocks.Controllers
                             var Res = unitOfWork.Save();
                             if (Res == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
 
                                 return Ok(4);
                             }
@@ -1428,6 +1414,9 @@ namespace Stocks.Controllers
             var Result = unitOfWork.Save();
             if (Result == 200)
             {
+                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "حذف فاتوره شراء", false);
 
                 return Ok(4);
 

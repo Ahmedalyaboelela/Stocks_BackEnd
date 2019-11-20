@@ -29,12 +29,15 @@ namespace Stocks.Controllers
        
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
+        private LoggerHistory loggerHistory;
         public PurchaseOrderController(StocksContext context, IMapper mapper , IOptions<ApplicationSettings> appSettings)
         {
             _appSettings = appSettings.Value;
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
-         
+            loggerHistory = new LoggerHistory(context, mapper);
+           
+
         }
 
 
@@ -180,7 +183,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                        loggerHistory.InsertUserLog(UserID, " امر الشراء", "اضافه امر الشراء", false);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -306,6 +311,9 @@ namespace Stocks.Controllers
                 var result = unitOfWork.Save();
                 if (result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                    loggerHistory.InsertUserLog(UserID, " امر الشراء", "تعديل امر الشراء", false);
                     return Ok(4);
                 }
                 else if (result == 501)
@@ -353,7 +361,9 @@ namespace Stocks.Controllers
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                    loggerHistory.InsertUserLog(UserID, " امر الشراء", "حذف امر الشراء", false);
                     return Ok(4);
 
                 }
@@ -500,6 +510,28 @@ namespace Stocks.Controllers
             return totalStocks;
 
         }
+
+        #region GetHistory BY UserID
+        [HttpGet]
+        [Route("~/api/IOS/GetHistory")]
+        public IActionResult GetHistory()
+        {
+            var UserID = loggerHistory.getUserIdFromRequest(HttpContext.Request);
+            var HistoryList = unitOfWork.UserLogRepository.Get(filter: x => x.UserId == UserID && x.MobileView == false).Select(m => new UserLogModel
+            {
+                OperationName = m.OperationName,
+                PageName = m.PageName,
+                UserId = m.UserId,
+                MobileView = m.MobileView,
+                UserLogID = m.UserLogID,
+                UserName = m.User.UserName,
+
+            });
+
+
+            return Ok(HistoryList);
+        }
+        #endregion
 
 
 

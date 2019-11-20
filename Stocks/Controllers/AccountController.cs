@@ -26,10 +26,11 @@ namespace Stocks.Controllers
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
-
+        private LoggerHistory loggerHistory;
         public AccountController(StocksContext context, IMapper mapper)
         {
             this.unitOfWork = new UnitOfWork(context);
+            loggerHistory = new LoggerHistory(context,mapper);
             this._mapper = mapper;
         }
         #endregion
@@ -230,6 +231,13 @@ namespace Stocks.Controllers
                         if (Result == 200)
                         {
                             accountModel.Count = unitOfWork.AccountRepository.Count();
+                             
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+                            
+                             loggerHistory.InsertUserLog(UserID, "بطاقه حساب", "اضافه حساب", true);
+
+
+
 
                             return Ok(4);
                         }
@@ -286,6 +294,10 @@ namespace Stocks.Controllers
                         if (Result == 200)
                         {
                             accountModel.Count = unitOfWork.AccountRepository.Count();
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                            loggerHistory.InsertUserLog(UserID, "بطاقه حساب", "تعديل حساب", true);
+
 
                             return Ok(4);
                         }
@@ -311,6 +323,11 @@ namespace Stocks.Controllers
                             if (Result == 200)
                             {
                                 accountModel.Count = unitOfWork.AccountRepository.Count();
+
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, "بطاقه حساب", "تعديل حساب", true);
+
 
                                 return Ok(4);
                             }
@@ -368,6 +385,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                        loggerHistory.InsertUserLog(UserID, "بطاقه حساب", "حذف حساب", true);
                         return Ok(4);
                     }
                     else if (Result == 501)

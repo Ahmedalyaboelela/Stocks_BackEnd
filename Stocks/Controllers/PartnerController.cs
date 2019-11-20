@@ -33,15 +33,16 @@ namespace Stocks.Controllers
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
-      
-        
+        private LoggerHistory loggerHistory;
+
 
         public PartnerController(StocksContext context,IMapper mapper)
         {
             
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
-            
+            loggerHistory = new LoggerHistory(context, mapper);
+
         }
 
         #endregion
@@ -511,6 +512,9 @@ namespace Stocks.Controllers
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                            loggerHistory.InsertUserLog(UserID, "بطاقه الشركه", "اضافه الشركه", true);
                             partnerModel.Count = unitOfWork.PartnerRepository.Count();
 
                             return Ok(4);
@@ -577,6 +581,9 @@ namespace Stocks.Controllers
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                            loggerHistory.InsertUserLog(UserID, "بطاقه الشركه", "تعديل الشركه", true);
                             partnerModel.Count = unitOfWork.PartnerRepository.Count();
 
                             return Ok(4);
@@ -599,6 +606,9 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, "بطاقه الشركه", "تعديل الشركه", true);
                                 partnerModel.Count = unitOfWork.PartnerRepository.Count();
 
                                 return Ok(4);
@@ -656,6 +666,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                        loggerHistory.InsertUserLog(UserID, "بطاقه الشركه", "حذف الشركه", true);
                         return Ok(4);
                     }
                     else if (Result == 501)

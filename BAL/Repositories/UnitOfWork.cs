@@ -457,6 +457,25 @@ namespace BAL.Repositories
         }
         #endregion
 
+
+
+
+        #region  UserLogRepository
+        private GenericRepository<UserLog> userLogRepository;
+        public GenericRepository<UserLog> UserLogRepository
+        {
+            get
+            {
+
+                if (this.userLogRepository == null)
+                {
+                    this.userLogRepository = new GenericRepository<UserLog>(Context);
+                }
+                return userLogRepository;
+            }
+        }
+        #endregion
+
         public virtual int Save()
         {
             int returnValue = 200;

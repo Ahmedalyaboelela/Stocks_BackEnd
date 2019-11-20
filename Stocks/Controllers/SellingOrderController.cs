@@ -24,11 +24,13 @@ namespace Stocks.Controllers
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
         private readonly ApplicationSettings _appSettings;
+        private LoggerHistory loggerHistory;
         public sellingorderController(StocksContext context, IMapper mapper, IOptions<ApplicationSettings> appSettings)
         {
             _appSettings = appSettings.Value;
             this._mapper = mapper;
             this.unitOfWork = new UnitOfWork(context);
+            loggerHistory = new LoggerHistory(context, mapper);
 
         }
         #endregion
@@ -177,7 +179,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                        loggerHistory.InsertUserLog(UserID, " امر البيع", "اضافه امر البيع", false);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -303,6 +307,9 @@ namespace Stocks.Controllers
                 var result = unitOfWork.Save();
                 if (result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                    loggerHistory.InsertUserLog(UserID, " امر البيع", "تعديل امر البيع", false);
                     return Ok(4);
                 }
                 else if (result == 501)
@@ -350,7 +357,9 @@ namespace Stocks.Controllers
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                    loggerHistory.InsertUserLog(UserID, " امر البيع", "حذف امر البيع", false);
                     return Ok(4);
 
                 }

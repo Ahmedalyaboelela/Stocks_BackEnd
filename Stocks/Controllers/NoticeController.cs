@@ -27,6 +27,7 @@ namespace Stocks.Controllers
         private SettingController setting;
         private readonly IAccountingHelper accountingHelper;
         private readonly IStocksHelper _stocksHelper;
+        private LoggerHistory loggerHistory;
         public NoticeController(StocksContext context, IMapper mapper, IStocksHelper stocksHelper)
         {
             this.unitOfWork = new UnitOfWork(context);
@@ -34,6 +35,7 @@ namespace Stocks.Controllers
             this.setting = new SettingController(context, mapper);
             accountingHelper = new AccountingHelper(context, mapper);
             _stocksHelper = stocksHelper;
+            loggerHistory = new LoggerHistory(context, mapper);
         }
 
         #endregion
@@ -797,6 +799,16 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+                        if (noticeModel.Type==false)
+                        {
+                            loggerHistory.InsertUserLog(UserID, " اشعار دائن", "اضافه اشعار دائن", true);
+                        }
+                        else
+                        {
+                            loggerHistory.InsertUserLog(UserID, " اشعار مدين", "اضافه اشعار مدين", true);
+                        }
+                       
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -962,6 +974,16 @@ namespace Stocks.Controllers
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+                            if (noticeModel.Type == false)
+                            {
+                                loggerHistory.InsertUserLog(UserID, " اشعار دائن", "تعديل اشعار دائن", true);
+                            }
+                            else
+                            {
+                                loggerHistory.InsertUserLog(UserID, " اشعار مدين", "تعديل اشعار مدين", true);
+                            }
+
                             return Ok(4);
                         }
                         else if (Result == 501)
@@ -1062,6 +1084,16 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+                                if (noticeModel.Type == false)
+                                {
+                                    loggerHistory.InsertUserLog(UserID, " اشعار دائن", "تعديل اشعار دائن", true);
+                                }
+                                else
+                                {
+                                    loggerHistory.InsertUserLog(UserID, " اشعار مدين", "تعديل اشعار مدين", true);
+                                }
+
                                 return Ok(4);
                             }
                             else if (Result == 501)
@@ -1170,6 +1202,16 @@ namespace Stocks.Controllers
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+                            if (noticeModel.Type == false)
+                            {
+                                loggerHistory.InsertUserLog(UserID, " اشعار دائن", "تعديل اشعار دائن", true);
+                            }
+                            else
+                            {
+                                loggerHistory.InsertUserLog(UserID, " اشعار مدين", "تعديل اشعار مدين", true);
+                            }
+
                             return Ok(4);
                         }
                         else if (Result == 501)
@@ -1273,6 +1315,16 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+                                if (noticeModel.Type == false)
+                                {
+                                    loggerHistory.InsertUserLog(UserID, " اشعار دائن", "تعديل اشعار دائن", true);
+                                }
+                                else
+                                {
+                                    loggerHistory.InsertUserLog(UserID, " اشعار مدين", "تعديل اشعار مدين", true);
+                                }
+
                                 return Ok(4);
                             }
                             else if (Result == 501)
@@ -1345,6 +1397,16 @@ namespace Stocks.Controllers
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+                    if (notice.Type == false)
+                    {
+                        loggerHistory.InsertUserLog(UserID, " اشعار دائن", "تعديل اشعار دائن", true);
+                    }
+                    else
+                    {
+                        loggerHistory.InsertUserLog(UserID, " اشعار مدين", "تعديل اشعار مدين", true);
+                    }
+
                     return Ok(4);
                 }
                 else if (Result == 501)

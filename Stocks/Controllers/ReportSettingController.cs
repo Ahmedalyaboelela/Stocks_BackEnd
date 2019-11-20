@@ -19,11 +19,14 @@ namespace Stocks.Controllers
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
+        private LoggerHistory loggerHistory;
         public ReportSettingController(StocksContext context, IMapper mapper)
         {
             this._mapper = mapper;
             this.unitOfWork = new UnitOfWork(context);
-        }
+           
+        loggerHistory = new LoggerHistory(context, mapper);
+    }
         #endregion
 
         #region GET Methods
@@ -121,6 +124,9 @@ namespace Stocks.Controllers
                 var result = unitOfWork.Save();
                 if (result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                    loggerHistory.InsertUserLog(UserID, " اعدادات القيود", "حفظ اعدادات القيود", false);
                     return Ok(4);
                 }
                 else if (result == 501)

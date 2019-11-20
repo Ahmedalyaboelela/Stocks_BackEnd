@@ -226,6 +226,16 @@ namespace BAL.Mapper
             CreateMap<SellingOrderDetailModel, SellingOrderDetail>();
             #endregion
 
+
+            #region  UserLogs
+
+            CreateMap<UserLog, UserLogModel>();
+            CreateMap<UserLogModel, UserLog>();
+                
+
+
+            #endregion
+
         }
     }
 }

@@ -11,6 +11,7 @@ using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
 using DAL.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -26,6 +27,7 @@ namespace Stocks.Controllers
         private readonly IAccountingHelper accountingHelper;
         private readonly IStocksHelper _stocksHelper;
         private readonly ApplicationSettings _appSettings;
+        private LoggerHistory loggerHistory;
         public IOSAndroidController(StocksContext context, IMapper mapper, IStocksHelper stocksHelper, IOptions<ApplicationSettings> appSettings)
         {
             this.unitOfWork = new UnitOfWork(context);
@@ -34,7 +36,8 @@ namespace Stocks.Controllers
             accountingHelper = new AccountingHelper(context, mapper);
             _stocksHelper = stocksHelper;
             _appSettings = appSettings.Value;
-
+            loggerHistory = new LoggerHistory(context, mapper);
+           
 
         }
 
@@ -483,7 +486,9 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                            loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "اضافه فاتوره شراء", false);
                             return Ok(4);
                         }
                         else if (Res == 501)
@@ -556,7 +561,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                        loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "اضافه فاتوره شراء", false);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -683,7 +690,24 @@ namespace Stocks.Controllers
                     //==================================================لا تولد قيد ===================================
                     if (sellingInvoiceModel.SettingModel.DoNotGenerateEntry == true)
                     {
-                        unitOfWork.Save();
+                        var Resul = unitOfWork.Save();
+                        if (Resul == 200)
+                        {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                            loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "اضافه فاتوره بيع", false);
+                            return Ok(4);
+                        }
+                        else if (Resul == 501)
+                        {
+                            return Ok(5);
+
+                        }
+                        else
+                        {
+                            return Ok(6);
+                        }
+
 
                         return Ok(sellingInvoiceModel);
                     }
@@ -742,7 +766,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                        loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "اضافه فاتوره بيع", false);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -845,7 +871,9 @@ namespace Stocks.Controllers
                             var Res = unitOfWork.Save();
                             if (Res == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                                 return Ok(4);
                             }
                             else if (Res == 501)
@@ -912,7 +940,9 @@ namespace Stocks.Controllers
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                            loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                             return Ok(4);
                         }
                         else if (Result == 501)
@@ -965,7 +995,9 @@ namespace Stocks.Controllers
                                 var Res = unitOfWork.Save();
                                 if (Res == 200)
                                 {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                    loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                                     return Ok(4);
                                 }
                                 else if (Res == 501)
@@ -1022,7 +1054,9 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                                 return Ok(4);
                             }
                             else if (Result == 501)
@@ -1079,7 +1113,9 @@ namespace Stocks.Controllers
                             var Rest = unitOfWork.Save();
                             if (Rest == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                                 return Ok(4);
                             }
                             else if (Rest == 501)
@@ -1154,7 +1190,9 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                            loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                             return Ok(4);
                         }
                         else if (Res == 501)
@@ -1206,7 +1244,9 @@ namespace Stocks.Controllers
                                 var Rest = unitOfWork.Save();
                                 if (Rest == 200)
                                 {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                    loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                                     return Ok(4);
                                 }
                                 else if (Rest == 501)
@@ -1281,7 +1321,9 @@ namespace Stocks.Controllers
                             if (Res == 200)
                             {
 
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
                                 return Ok(4);
                             }
                             else if (Res == 501)
@@ -1403,7 +1445,9 @@ namespace Stocks.Controllers
                             var reslt = unitOfWork.Save();
                             if (reslt == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
                                 return Ok(4);
                             }
                             else if (reslt == 501)
@@ -1475,7 +1519,9 @@ namespace Stocks.Controllers
                         if (res == 200)
                         {
 
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                            loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
                             return Ok(4);
                         }
                         else if (res == 501)
@@ -1505,7 +1551,9 @@ namespace Stocks.Controllers
                                 var res = unitOfWork.Save();
                                 if (res == 200)
                                 {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                    loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
                                     return Ok(4);
                                 }
                                 else if (res == 501)
@@ -1542,7 +1590,9 @@ namespace Stocks.Controllers
                                 var res = unitOfWork.Save();
                                 if (res == 200)
                                 {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                    loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
                                     return Ok(4);
                                 }
                                 else if (res == 501)
@@ -1612,7 +1662,9 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
 
                                 return Ok(4);
                             }
@@ -1647,7 +1699,9 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
                                 return Ok(4);
                             }
                             else if (Result == 501)
@@ -1684,6 +1738,9 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
 
                                 return Ok(4);
                             }
@@ -1763,7 +1820,9 @@ namespace Stocks.Controllers
                         if (Res == 200)
                         {
 
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                            loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
                             return Ok(4);
                         }
                         else if (Res == 501)
@@ -1793,6 +1852,9 @@ namespace Stocks.Controllers
                                 var Result = unitOfWork.Save();
                                 if (Result == 200)
                                 {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                    loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
 
                                     return Ok(4);
                                 }
@@ -1828,7 +1890,9 @@ namespace Stocks.Controllers
                                 var Result = unitOfWork.Save();
                                 if (Result == 200)
                                 {
+                                    var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                    loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
 
                                     return Ok(4);
                                 }
@@ -1906,7 +1970,9 @@ namespace Stocks.Controllers
                             var Res = unitOfWork.Save();
                             if (Res == 200)
                             {
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                                loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
                                 return Ok(4);
                             }
                             else if (Res == 501)
@@ -2027,7 +2093,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                        loggerHistory.InsertUserLog(UserID, " امر الشراء", "اضافه امر الشراء", false);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -2154,6 +2222,9 @@ namespace Stocks.Controllers
                 var result = unitOfWork.Save();
                 if (result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                    loggerHistory.InsertUserLog(UserID, " امر الشراء", "تعديل امر الشراء", false);
                     return Ok(4);
                 }
                 else if (result == 501)
@@ -2371,7 +2442,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                        loggerHistory.InsertUserLog(UserID, " امر البيع", "اضافه امر البيع", false);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -2399,8 +2472,8 @@ namespace Stocks.Controllers
         }
         #endregion
 
+
         #region Update sellingOrder
-        
         [HttpPut]
         [Route("~/api/IOSAndroid/Update/{id}")]
         public IActionResult Update(int id, [FromBody] SellingOrderModel sellingOrderModel)
@@ -2498,6 +2571,9 @@ namespace Stocks.Controllers
                 var result = unitOfWork.Save();
                 if (result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                    loggerHistory.InsertUserLog(UserID, " امر البيع", "تعديل امر البيع", false);
                     return Ok(4);
                 }
                 else if (result == 501)
@@ -2515,6 +2591,9 @@ namespace Stocks.Controllers
             }
         }
         #endregion
+
+
+      
         
 
         #region FirstOpenSellingOrder
@@ -2684,6 +2763,28 @@ namespace Stocks.Controllers
             });
             return transPartners;
 
+        }
+        #endregion
+
+
+        #region GetHistory BY UserID
+        [HttpGet]
+        [Route("~/api/IOSAndroid/GetHistory")]
+        public IActionResult GetHistory()
+        {
+            var UserID = loggerHistory.getUserIdFromRequest(Request);
+            var HistoryList = unitOfWork.UserLogRepository.Get(filter: x => x.UserId == UserID && x.MobileView == false).Select(m=> new UserLogModel {
+                OperationName=m.OperationName,
+                PageName=m.PageName,
+                UserId=m.UserId,
+                MobileView=m.MobileView,
+                UserLogID=m.UserLogID,
+                UserName=m.User.UserName,
+
+            });
+
+
+            return Ok(HistoryList);
         }
         #endregion
 
