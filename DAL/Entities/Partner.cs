@@ -33,7 +33,7 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(150)")]
         public string TaxNo { get; set; }
 
-        public int IdentityType { get; set; }
+        public int? IdentityType { get; set; }
 
         [Column(TypeName = "nvarchar(150)")]
         public string IdentityNumber { get; set; }

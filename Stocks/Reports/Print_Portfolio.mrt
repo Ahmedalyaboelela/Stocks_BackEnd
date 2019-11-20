@@ -668,11 +668,11 @@
   <ReportAlias>Report</ReportAlias>
   <ReportChanged>11/5/2019 3:04:32 PM</ReportChanged>
   <ReportCreated>10/24/2019 12:37:16 PM</ReportCreated>
-  <ReportFile>E:\Shrouk\Stocks_Project\Stocks_BackEnd\Stocks\Reports\Print_Portfolio.mrt</ReportFile>
+  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\Print_Portfolio.mrt</ReportFile>
   <ReportGuid>c3546b012ed54041a41316468ce63c19</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>HundredthsOfInch</ReportUnit>
-  <ReportVersion>2019.3.5.0</ReportVersion>
+  <ReportVersion>2019.3.2.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;
