@@ -21,6 +21,8 @@ namespace DAL.Entities
 
         public bool MobileView { get; set; }
 
+        public DateTime OperationDate { get; set; }
+
         [Required]
         [Column(TypeName = "nvarchar(450)")]
         public string UserId { get; set; }
