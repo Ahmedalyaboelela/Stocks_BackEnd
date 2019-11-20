@@ -107,7 +107,7 @@ namespace Stocks.Controllers
 
                 if (Details != null)
                 {
-                    model.purchaseOrderDetailModels = Details;
+                    model.purchaseordersDetailsModels = Details;
 
                 }
 
@@ -162,9 +162,9 @@ namespace Stocks.Controllers
 
 
 
-                    if (purchaseOrderModel.purchaseOrderDetailModels != null)
+                    if (purchaseOrderModel.purchaseordersDetailsModels != null)
                     {
-                        foreach (var item in purchaseOrderModel.purchaseOrderDetailModels)
+                        foreach (var item in purchaseOrderModel.purchaseordersDetailsModels)
                         {
                             PurchaseOrderDetailModel detail = new PurchaseOrderDetailModel();
                             detail.PartnerID = item.PartnerID;
@@ -251,10 +251,10 @@ namespace Stocks.Controllers
                         unitOfWork.PurchaseOrderDetailRepository.RemovRange(oldDetails);
 
                     }
-                    if (purchaseOrderModel.purchaseOrderDetailModels != null)
+                    if (purchaseOrderModel.purchaseordersDetailsModels != null)
                     {
 
-                        foreach (var item in purchaseOrderModel.purchaseOrderDetailModels)
+                        foreach (var item in purchaseOrderModel.purchaseordersDetailsModels)
                         {
                             item.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
                             item.PurchaseOrderDetailID = 0;
@@ -290,10 +290,10 @@ namespace Stocks.Controllers
                             unitOfWork.PurchaseOrderDetailRepository.RemovRange(oldDetails);
 
                         }
-                        if (purchaseOrderModel.purchaseOrderDetailModels != null)
+                        if (purchaseOrderModel.purchaseordersDetailsModels != null)
                         {
 
-                            foreach (var item in purchaseOrderModel.purchaseOrderDetailModels)
+                            foreach (var item in purchaseOrderModel.purchaseordersDetailsModels)
                             {
                                 item.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
                                 item.PurchaseOrderDetailID = 0;

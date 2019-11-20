@@ -843,7 +843,7 @@ namespace Stocks.Controllers
 
                         if (Details != null)
                         {
-                            model.purchaseOrderDetailModels = Details;
+                            model.purchaseordersDetailsModels = Details;
 
                         }
 
