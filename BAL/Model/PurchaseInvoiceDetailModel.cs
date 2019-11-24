@@ -11,22 +11,22 @@ namespace BAL.Model
         public string ExeDate { get; set; }
         
         public double? StockBalance { get; set; }
-        public float? StockCount { get; set; }
+        public float StockCount { get; set; }
 
         
         public decimal? PurchasePrice { get; set; }
        
-        public decimal? PurchaseValue { get; set; }
+        public decimal PurchaseValue { get; set; }
         public float? BankCommissionRate { get; set; }
 
        
-        public decimal? BankCommission { get; set; }
+        public decimal BankCommission { get; set; }
         public float? TaxRateOnCommission { get; set; }
 
        
-        public decimal? TaxOnCommission { get; set; }
+        public decimal TaxOnCommission { get; set; }
        
-        public decimal? NetAmmount { get; set; }
+        public decimal NetAmmount { get; set; }
         public int? PurchaseInvoiceID { get; set; }
         public int? PartnerID { get; set; }
         public string PartnerNameAR { get; set; }
