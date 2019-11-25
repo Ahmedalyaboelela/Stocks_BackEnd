@@ -11,6 +11,7 @@ using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Stocks.Controllers
 {
+    [Authorize(Roles = "SuperAdmin,Admin,Employee")]
+    [Route("api/[controller]")]
+    [ApiController]
     public class IOSAndroidController : ControllerBase
     {
         private UnitOfWork unitOfWork;
@@ -2333,7 +2337,7 @@ namespace Stocks.Controllers
                 {
                     PurchaseInvoiceDetailModel item = new PurchaseInvoiceDetailModel();
                     item.Code = reader.GetString(0);
-                    item.ExeDate = reader.GetDateTime(1).ToString("d/M/yyyy");
+                    item.ExeDate = reader.GetDateTime(1).ToString(); 
                     item.PartnerNameAR = reader.GetString(2);
                     item.StockCount = reader.GetFloat(3);
                     item.PurchasePrice = reader.GetDecimal(4);
@@ -2804,8 +2808,9 @@ namespace Stocks.Controllers
                 MobileView = m.MobileView,
                 UserLogID = m.UserLogID,
                 UserName = m.User.UserName,
-                OperationDate = m.OperationDate.ToString(),
-               
+                OperationDate = m.OperationDate.ToString("d/MM/yyyy"),
+                time = m.OperationDate.ToString("HH:mm"),
+
 
             });
 

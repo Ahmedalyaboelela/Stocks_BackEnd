@@ -34,8 +34,9 @@ namespace Stocks.Controllers
         {
             var History = unitOfWork.UserLogRepository.Get().Select(z=> new UserLogModel {
                 UserName=z.User.UserName,
-                OperationDate=z.OperationDate.ToString(),
-                OperationName=z.OperationName,
+                OperationDate = z.OperationDate.ToString("d/MM/yyyy"),
+                time = z.OperationDate.ToString("HH:mm:ss"),
+                OperationName = z.OperationName,
                 PageName=z.PageName,
                 MobileView=z.MobileView,
                 UserId=z.UserId,

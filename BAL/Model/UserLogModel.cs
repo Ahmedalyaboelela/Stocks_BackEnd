@@ -18,6 +18,7 @@ public class UserLogModel
         public string UserId { get; set; }
         public string UserName { get; set; }
         public string OperationDate { get; set; }
+        public string time { get; set; }
       
 
 
