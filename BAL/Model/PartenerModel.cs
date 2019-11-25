@@ -26,7 +26,7 @@ namespace BAL.Model
 
         public string TaxNo { get; set; }
 
-        public int IdentityType { get; set; }
+        public int? IdentityType { get; set; }
         
         public string IdentityNumber { get; set; }
         

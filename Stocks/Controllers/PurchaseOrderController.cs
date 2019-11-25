@@ -466,7 +466,7 @@ namespace Stocks.Controllers
                 {
                     PurchaseInvoiceDetailModel item = new PurchaseInvoiceDetailModel();
                     item.Code = reader.GetString(0);
-                    item.ExeDate = reader.GetDateTime(1).ToString("d/M/yyyy");
+                    item.ExeDate = reader.GetDateTime(1).ToString("d/MM/yyyy"); ;
                     item.PartnerNameAR= reader.GetString(2);
                     item.StockCount = reader.GetFloat(3);
                     item.PurchasePrice = reader.GetDecimal(4);
