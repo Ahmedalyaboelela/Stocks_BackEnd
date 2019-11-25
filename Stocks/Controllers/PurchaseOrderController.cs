@@ -30,13 +30,15 @@ namespace Stocks.Controllers
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
         private LoggerHistory loggerHistory;
-        public PurchaseOrderController(StocksContext context, IMapper mapper , IOptions<ApplicationSettings> appSettings)
+        private readonly IStocksHelper _stocksHelper;
+        public PurchaseOrderController(StocksContext context, IMapper mapper , IOptions<ApplicationSettings> appSettings, IStocksHelper stocksHelper)
         {
             _appSettings = appSettings.Value;
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
             loggerHistory = new LoggerHistory(context, mapper);
-           
+            _stocksHelper = stocksHelper;
+
 
         }
 
@@ -129,7 +131,7 @@ namespace Stocks.Controllers
         #region Insert Methods
         [HttpPost]
         [Route("~/api/PurchaseOrder/Add")]
-        public IActionResult PostEmp([FromBody] PurchaseOrderModel purchaseOrderModel)
+        public IActionResult PurchaseOrderAdd([FromBody] PurchaseOrderModel purchaseOrderModel)
         {
 
             if (ModelState.IsValid)
@@ -150,6 +152,19 @@ namespace Stocks.Controllers
                     {
                         purchaseOrderModel.OrderDate = DateTime.Now.ToString("d/M/yyyy");
                     }
+
+                 //   #region Warehouse
+                 //   // Add Purchase Invoice Stocks Count To Portofolio
+                 //decimal? RialBalance=   _stocksHelper.RialBalanc(purchaseOrderModel.PortfolioID);
+                 //   if (RialBalance==null) {
+                 //       return Ok(7);
+                 //   }
+                 //   decimal totalPartenersRial=0.0m;
+                 //   foreach (var item in purchaseOrderModel.purchaseordersDetailsModels)
+                 //   {
+                 //       totalPartenersRial +=item.
+                 //   }
+                 //   #endregion
 
                     var model = _mapper.Map<PurchaseOrder>(purchaseOrderModel);
 
@@ -482,34 +497,34 @@ namespace Stocks.Controllers
 
 
 
-        [Route("~/api/PurchaseOrder/getTotalStocks/{PurchaseInvoiceID}/{PartnerID}")]
-        public float getTotalStocks(int? PurchaseInvoiceID, int? PartnerID)
-        {
-            float totalStocks = 0.0f;
-            var DetailsModels = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: a => a.PurchaseInvoiceID == PurchaseInvoiceID && a.PartnerID== PartnerID);
+        //[Route("~/api/PurchaseOrder/getTotalStocks/{PurchaseInvoiceID}/{PartnerID}")]
+        //public float getTotalStocks(int? PurchaseInvoiceID, int? PartnerID)
+        //{
+        //    float totalStocks = 0.0f;
+        //    var DetailsModels = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: a => a.PurchaseInvoiceID == PurchaseInvoiceID && a.PartnerID== PartnerID);
 
-            foreach (var item in DetailsModels)
-            {
-                totalStocks += item.StockCount;
-            }
+        //    foreach (var item in DetailsModels)
+        //    {
+        //        totalStocks += item.StockCount;
+        //    }
 
-            return totalStocks;
+        //    return totalStocks;
 
-        }
+        //}
 
-        public float getTotalStocksOrder(int? PurchaseOrderID, int? PartnerID)
-        {
-            float totalStocks = 0.0f;
-            var DetailsModels = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrderID == PurchaseOrderID && a.PartnerID == PartnerID);
+        //public float getTotalStocksOrder(int? PurchaseOrderID, int? PartnerID)
+        //{
+        //    float totalStocks = 0.0f;
+        //    var DetailsModels = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrderID == PurchaseOrderID && a.PartnerID == PartnerID);
 
-            foreach (var item in DetailsModels)
-            {
-                totalStocks += item.StockCount;
-            }
+        //    foreach (var item in DetailsModels)
+        //    {
+        //        totalStocks += item.StockCount;
+        //    }
 
-            return totalStocks;
+        //    return totalStocks;
 
-        }
+        //}
 
         #region GetHistory BY UserID
         [HttpGet]

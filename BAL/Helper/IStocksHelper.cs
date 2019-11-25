@@ -8,7 +8,9 @@ namespace BAL.Helper
 {
     public interface IStocksHelper
     {
-        bool CheckStockCountForSelling(SellingInvoiceModel sellingInvoiceModel);
+        decimal? RialBalanc(int PortfolioID);
+        bool CheckStockCountForSelling(SellingOrderModel sellingOrderModel);
+         bool CheckStockCountForSellingInvoice(SellingInvoiceModel sellingInvoiceModel);
         void TransferSellingFromStocks(SellingInvoiceModel sellingInvoiceModel);
 
         void CancelSellingFromStocks(int PortofolioId, IEnumerable<SellingInvoiceDetail> oldDetils);

@@ -654,7 +654,7 @@ namespace Stocks.Controllers
                     }
                     #region Warehouse
                     //Check Stocks Count Allowed For Selling 
-                    var Chk = _stocksHelper.CheckStockCountForSelling(sellingInvoiceModel);
+                    bool Chk = _stocksHelper.CheckStockCountForSellingInvoice(sellingInvoiceModel);
                     if (!Chk)
                         return Ok(7);
                     // Transfer From Portofolio Stocks
@@ -797,16 +797,15 @@ namespace Stocks.Controllers
                 var Newdetails = _mapper.Map<IEnumerable<SellingInvoiceDetail>>(NewdDetails);
                 var OldDetails = unitOfWork.SellingInvoiceDetailRepository.Get(NoTrack: "NoTrack",filter: m => m.SellingInvoiceID == sellingInvoice.SellingInvoiceID);
                 #region Warehouse
-                //Cancel Selling Order From Stocks 
-                _stocksHelper.CancelSellingFromStocks(sellingInvoiceModel.PortfolioID, OldDetails);
                 //Check Stocks Count Allowed For Selling 
-                var Chk = _stocksHelper.CheckStockCountForSelling(sellingInvoiceModel);
+                bool Chk = _stocksHelper.CheckStockCountForSellingInvoice(sellingInvoiceModel);
                 if (!Chk)
                     return Ok(7);
-                //Transfer From Portofolio Stocks
+                // Transfer From Portofolio Stocks
                 else
-                 _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
+                    _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
                 #endregion
+
                 var EntryCheck = unitOfWork.EntryRepository.Get(x => x.SellingInvoiceID == sellingInvoice.SellingInvoiceID, NoTrack: "NoTrack").SingleOrDefault();
               if (EntryCheck != null)
               {

@@ -23,10 +23,10 @@ namespace BAL.Helper
 
 
         //Check Stocks Count Allowed For Selling 
-        public bool CheckStockCountForSelling(SellingInvoiceModel sellingInvoiceModel)
+        public bool CheckStockCountForSelling(SellingOrderModel sellingOrderModel)
         {
-            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter:m=> m.PortfolioID== sellingInvoiceModel.PortfolioID);
-            var Details = sellingInvoiceModel.DetailsModels;
+            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter:m=> m.PortfolioID== sellingOrderModel.PortfolioID);
+            var Details = sellingOrderModel.sellingOrderDetailModels;
             foreach (var detail in Details)
             {
                 if (!PortofolioStocks.Any(m => m.PartnerID == detail.PartnerID))
@@ -50,8 +50,72 @@ namespace BAL.Helper
          
                 }
             }
+            return true; 
+        }
+
+        //Rial Balanc of portfolio 
+        public decimal? RialBalanc(int PortfolioID)
+        {
+            var accountid = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == PortfolioID).AccountID;
+            var account = unitOfWork.AccountRepository.GetEntity(filter: x => x.AccountID == accountid);
+            decimal? Debit = account.Debit;
+            decimal? Credit = account.Credit;
+            decimal? DebitOpenningBalance = account.DebitOpenningBalance;
+            decimal? CreditOpenningBalance = account.CreditOpenningBalance;
+            decimal? RealBalance = 0.0m;
+            if (Debit == null)
+            {
+                Debit = 0.0m;
+            }
+            if (Credit == null)
+            {
+                Credit = 0.0m;
+            }
+            if (DebitOpenningBalance == null && CreditOpenningBalance != null)
+            {
+                RealBalance = -CreditOpenningBalance + (Debit - Credit);
+               
+            }
+            else if (DebitOpenningBalance != null && CreditOpenningBalance == null)
+            {
+                RealBalance = DebitOpenningBalance + (Debit -Credit);
+               
+            }
+            else if (DebitOpenningBalance == null && CreditOpenningBalance == null)
+            {
+                RealBalance = Debit - Credit;
+               
+            }
+            else if (DebitOpenningBalance != null && CreditOpenningBalance != null)
+            {
+               RealBalance = DebitOpenningBalance + (Debit - Credit);
+               
+            }
+
+
+            return RealBalance;
+        }
+        //Check Stocks Count Allowed For Selling Invoice  on selling Order
+        public bool CheckStockCountForSellingInvoice(SellingInvoiceModel sellingInvoiceModel)
+        {
+            var PortofolioStocks = unitOfWork.SellingOrderDetailRepository.Get(filter: m => m.SellingOrder.PortfolioID == sellingInvoiceModel.PortfolioID);
+            var Details = sellingInvoiceModel.DetailsModels;
+            foreach (var detail in Details)
+            {
+                if (PortofolioStocks.Any(m => m.PartnerID == detail.PartnerID && detail.StockCount <= m.StockCount))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+
+                }
+            }
             return true;
         }
+
+
 
         // Discount Selling Order Stocks Count From Portofolio
         public void TransferSellingFromStocks(SellingInvoiceModel sellingInvoiceModel)
