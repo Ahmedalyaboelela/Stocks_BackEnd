@@ -195,7 +195,7 @@ namespace Stocks.Controllers
 
         [HttpPost]
         [Route("Login")]
-        //Post: /api/ApplicationUser/Login
+        //Post:/api/ApplicationUser/Login
         public async Task<IActionResult> Login(LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.LoginUserName);
