@@ -613,10 +613,12 @@ namespace Stocks.Controllers
         #region Insert sellingInvoice
         [HttpPost]
         [Route("~/api/IOSAndroid/sellingInvoice")]
-        public IActionResult Selling([FromBody] SellingInvoiceModel sellingInvoiceModel)
+        public IActionResult PostSellingInvoice([FromBody] SellingInvoiceModel sellingInvoiceModel)
         {
             if (ModelState.IsValid)
             {
+
+
                 int portofolioaccount = 0;
                 var Check = unitOfWork.SellingInvoiceReposetory.Get();
                 if (Check.Any(m => m.Code == sellingInvoiceModel.Code))
@@ -627,30 +629,6 @@ namespace Stocks.Controllers
                 }
                 else
                 {
-
-
-                    sellingInvoiceModel.SettingModel = unitOfWork.SettingRepository.Get(filter: x => x.VoucherType == 1).Select(m => new SettingModel
-                    {
-                        VoucherType = 1,
-                        AutoGenerateEntry = m.AutoGenerateEntry,
-                        Code = m.Code,
-                        DoNotGenerateEntry = m.DoNotGenerateEntry,
-                        GenerateEntry = m.GenerateEntry,
-                        SettingID = m.SettingID,
-                        TransferToAccounts = m.TransferToAccounts,
-                        SettingAccs = unitOfWork.SettingAccountRepository.Get(filter: x => x.SettingID == m.SettingID).Select(a => new SettingAccountModel
-                        {
-                            SettingID = a.SettingID,
-                            AccCode = a.Account.Code,
-                            AccNameAR = a.Account.NameAR,
-                            AccNameEN = a.Account.NameEN,
-                            AccountID = a.AccountID,
-                            SettingAccountID = a.SettingAccountID,
-                            AccountType = a.AccountType,
-
-                        })
-
-                    }).SingleOrDefault();
                     portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingInvoiceModel.PortfolioID && m.Type == true).Select(m => m.AccountID).SingleOrDefault();
                     var modelselling = _mapper.Map<SellingInvoice>(sellingInvoiceModel);
 
@@ -662,19 +640,19 @@ namespace Stocks.Controllers
                     {
                         foreach (var item in Details)
                         {
-                            SellingInvoiceDetailsModel sellingInvoiceDetailsModel = new SellingInvoiceDetailsModel();
-                            sellingInvoiceDetailsModel.SellingInvoiceID = modelselling.SellingInvoiceID;
-                            sellingInvoiceDetailsModel.NetAmmount = item.NetAmmount;
-                            sellingInvoiceDetailsModel.SelingValue = item.SelingValue;
-                            sellingInvoiceDetailsModel.SellingPrice = item.SellingPrice;
-                            sellingInvoiceDetailsModel.StockCount = item.StockCount;
-                            sellingInvoiceDetailsModel.TaxOnCommission = item.TaxOnCommission;
-                            sellingInvoiceDetailsModel.TaxRateOnCommission = item.TaxRateOnCommission;
-                            sellingInvoiceDetailsModel.BankCommission = item.BankCommission;
-                            sellingInvoiceDetailsModel.BankCommissionRate = item.BankCommissionRate;
-                            sellingInvoiceDetailsModel.PartnerID = item.PartnerID;
+                            SellingInvoiceDetailsModel selingOrderDetailsModel = new SellingInvoiceDetailsModel();
+                            selingOrderDetailsModel.SellingInvoiceID = modelselling.SellingInvoiceID;
+                            selingOrderDetailsModel.NetAmmount = item.NetAmmount;
+                            selingOrderDetailsModel.SelingValue = item.SelingValue;
+                            selingOrderDetailsModel.SellingPrice = item.SellingPrice;
+                            selingOrderDetailsModel.StockCount = item.StockCount;
+                            selingOrderDetailsModel.TaxOnCommission = item.TaxOnCommission;
+                            selingOrderDetailsModel.TaxRateOnCommission = item.TaxRateOnCommission;
+                            selingOrderDetailsModel.BankCommission = item.BankCommission;
+                            selingOrderDetailsModel.BankCommissionRate = item.BankCommissionRate;
+                            selingOrderDetailsModel.PartnerID = item.PartnerID;
 
-                            var details = _mapper.Map<SellingInvoiceDetail>(sellingInvoiceDetailsModel);
+                            var details = _mapper.Map<SellingInvoiceDetail>(selingOrderDetailsModel);
                             unitOfWork.SellingInvoiceDetailRepository.Insert(details);
 
                         }
@@ -682,7 +660,7 @@ namespace Stocks.Controllers
                     }
                     #region Warehouse
                     //Check Stocks Count Allowed For Selling 
-                    var Chk = _stocksHelper.CheckStockCountForSelling(sellingInvoiceModel);
+                    bool Chk = _stocksHelper.CheckStockCountForSellingInvoice(sellingInvoiceModel);
                     if (!Chk)
                         return Ok(7);
                     // Transfer From Portofolio Stocks
@@ -713,7 +691,6 @@ namespace Stocks.Controllers
                         }
 
 
-                        return Ok(sellingInvoiceModel);
                     }
 
                     //===============================================================توليد قيد مع ترحيل تلقائي============================
@@ -753,7 +730,7 @@ namespace Stocks.Controllers
                         }
                         else
                         {
-                            Entry.TransferedToAccounts = true;
+                            Entry.TransferedToAccounts = false;
                             unitOfWork.EntryRepository.Insert(Entry);
                             foreach (var item in DetailEnt)
                             {
@@ -765,7 +742,6 @@ namespace Stocks.Controllers
                             }
                         }
                     }
-                 
 
                     var Result = unitOfWork.Save();
                     if (Result == 200)
@@ -1393,16 +1369,15 @@ namespace Stocks.Controllers
                 var Newdetails = _mapper.Map<IEnumerable<SellingInvoiceDetail>>(NewdDetails);
                 var OldDetails = unitOfWork.SellingInvoiceDetailRepository.Get(NoTrack: "NoTrack", filter: m => m.SellingInvoiceID == sellingInvoice.SellingInvoiceID);
                 #region Warehouse
-                //Cancel Selling Order From Stocks 
-                _stocksHelper.CancelSellingFromStocks(sellingInvoiceModel.PortfolioID, OldDetails);
                 //Check Stocks Count Allowed For Selling 
-                var Chk = _stocksHelper.CheckStockCountForSelling(sellingInvoiceModel);
+                bool Chk = _stocksHelper.CheckStockCountForSellingInvoice(sellingInvoiceModel);
                 if (!Chk)
                     return Ok(7);
-                //Transfer From Portofolio Stocks
+                // Transfer From Portofolio Stocks
                 else
                     _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
                 #endregion
+
                 var EntryCheck = unitOfWork.EntryRepository.Get(x => x.SellingInvoiceID == sellingInvoice.SellingInvoiceID, NoTrack: "NoTrack").SingleOrDefault();
                 if (EntryCheck != null)
                 {
@@ -1451,7 +1426,7 @@ namespace Stocks.Controllers
                             {
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
-                                loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
+                                loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
                                 return Ok(4);
                             }
                             else if (reslt == 501)
@@ -1522,10 +1497,10 @@ namespace Stocks.Controllers
                         var res = unitOfWork.Save();
                         if (res == 200)
                         {
-
                             var UserID = loggerHistory.getUserIdFromRequest(Request);
 
-                            loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
+                            loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
+
                             return Ok(4);
                         }
                         else if (res == 501)
@@ -1557,7 +1532,7 @@ namespace Stocks.Controllers
                                 {
                                     var UserID = loggerHistory.getUserIdFromRequest(Request);
 
-                                    loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
+                                    loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
                                     return Ok(4);
                                 }
                                 else if (res == 501)
@@ -1596,7 +1571,7 @@ namespace Stocks.Controllers
                                 {
                                     var UserID = loggerHistory.getUserIdFromRequest(Request);
 
-                                    loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
+                                    loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
                                     return Ok(4);
                                 }
                                 else if (res == 501)
@@ -1666,10 +1641,10 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
-                                loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
-
+                                loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
                                 return Ok(4);
                             }
                             else if (Result == 501)
@@ -1705,7 +1680,7 @@ namespace Stocks.Controllers
                             {
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
-                                loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
+                                loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
                                 return Ok(4);
                             }
                             else if (Result == 501)
@@ -1744,7 +1719,7 @@ namespace Stocks.Controllers
                             {
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
-                                loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
+                                loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
 
                                 return Ok(4);
                             }
@@ -1826,7 +1801,7 @@ namespace Stocks.Controllers
 
                             var UserID = loggerHistory.getUserIdFromRequest(Request);
 
-                            loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
+                            loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
                             return Ok(4);
                         }
                         else if (Res == 501)
@@ -1858,8 +1833,7 @@ namespace Stocks.Controllers
                                 {
                                     var UserID = loggerHistory.getUserIdFromRequest(Request);
 
-                                    loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
-
+                                    loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
                                     return Ok(4);
                                 }
                                 else if (Result == 501)
@@ -1896,7 +1870,7 @@ namespace Stocks.Controllers
                                 {
                                     var UserID = loggerHistory.getUserIdFromRequest(Request);
 
-                                    loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
+                                    loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
 
                                     return Ok(4);
                                 }
@@ -1976,7 +1950,7 @@ namespace Stocks.Controllers
                             {
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
-                                loggerHistory.InsertUserLog(UserID, "بطاقه فاتوره بيع", "تعديل فاتوره بيع", false);
+                                loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
                                 return Ok(4);
                             }
                             else if (Res == 501)
@@ -2042,8 +2016,8 @@ namespace Stocks.Controllers
 
         #region Insert PurchaseOrder
         [HttpPost]
-        [Route("~/api/IOSAndroid/Add")]
-        public IActionResult PostEmp([FromBody] PurchaseOrderModel purchaseOrderModel)
+        [Route("~/api/IOSAndroid/PurchaseOrder")]
+        public IActionResult PurchaseOrder([FromBody] PurchaseOrderModel purchaseOrderModel)
         {
 
             if (ModelState.IsValid)
@@ -2424,9 +2398,19 @@ namespace Stocks.Controllers
                         sellingOrderModel.OrderDateGorg = DateTime.Now.ToString("d/M/yyyy");
                     }
 
+
+
+
+
                     var model = _mapper.Map<SellingOrder>(sellingOrderModel);
 
+                    #region Warehouse
+                    //Check Stocks Count Allowed For Selling 
+                    var Chk = _stocksHelper.CheckStockCountForSelling(sellingOrderModel);
+                    if (!Chk)
+                        return Ok(7);
 
+                    #endregion
 
 
                     unitOfWork.SellingOrderRepository.Insert(model);
@@ -2506,6 +2490,14 @@ namespace Stocks.Controllers
                 }
 
                 var model = _mapper.Map<SellingOrder>(sellingOrderModel);
+                #region Warehouse
+                //Check Stocks Count Allowed For Selling 
+                var Chk = _stocksHelper.CheckStockCountForSelling(sellingOrderModel);
+                if (!Chk)
+                    return Ok(7);
+
+                #endregion
+
 
                 var Check = unitOfWork.SellingOrderRepository.Get(NoTrack: "NoTrack");
 
@@ -2607,8 +2599,8 @@ namespace Stocks.Controllers
         #endregion
 
 
-      
-        
+
+
 
         #region FirstOpenSellingOrder
         [HttpGet]

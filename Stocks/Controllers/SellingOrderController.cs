@@ -25,12 +25,14 @@ namespace Stocks.Controllers
         private readonly IMapper _mapper;
         private readonly ApplicationSettings _appSettings;
         private LoggerHistory loggerHistory;
-        public sellingorderController(StocksContext context, IMapper mapper, IOptions<ApplicationSettings> appSettings)
+        private readonly IStocksHelper _stocksHelper;
+        public sellingorderController(StocksContext context, IMapper mapper, IOptions<ApplicationSettings> appSettings, IStocksHelper stocksHelper)
         {
             _appSettings = appSettings.Value;
             this._mapper = mapper;
             this.unitOfWork = new UnitOfWork(context);
             loggerHistory = new LoggerHistory(context, mapper);
+            _stocksHelper = stocksHelper;
 
         }
         #endregion
@@ -147,9 +149,19 @@ namespace Stocks.Controllers
                         sellingOrderModel.OrderDateGorg = DateTime.Now.ToString("d/M/yyyy");
                     }
 
+
+                 
+
+
                     var model = _mapper.Map<SellingOrder>(sellingOrderModel);
 
-
+                    #region Warehouse
+                    //Check Stocks Count Allowed For Selling 
+                    var Chk = _stocksHelper.CheckStockCountForSelling(sellingOrderModel);
+                    if (!Chk)
+                        return Ok(7);
+                   
+                    #endregion
 
 
                     unitOfWork.SellingOrderRepository.Insert(model);
@@ -228,6 +240,14 @@ namespace Stocks.Controllers
                 }
 
                 var model = _mapper.Map<SellingOrder>(sellingOrderModel);
+                #region Warehouse
+                //Check Stocks Count Allowed For Selling 
+                var Chk = _stocksHelper.CheckStockCountForSelling(sellingOrderModel);
+                if (!Chk)
+                    return Ok(7);
+               
+                #endregion
+
 
                 var Check = unitOfWork.SellingOrderRepository.Get(NoTrack: "NoTrack");
 

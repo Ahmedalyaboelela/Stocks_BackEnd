@@ -674,8 +674,32 @@ namespace Stocks.Controllers
 
 
                     #region Warehouse
+
+                    #endregion
+
+                    #region Warehouse
                     // Add Purchase Invoice Stocks Count To Portofolio
-                    _stocksHelper.TransferPurchaseToStocks(purchaseInvoiceModel);
+                    decimal? RialBalance = _stocksHelper.RialBalanc(purchaseInvoiceModel.PortfolioID);
+                  
+                    if (RialBalance == null)
+                    {
+                        return Ok(8);
+                    }
+                    else
+                    {
+                        decimal totalPartenersRial = 0.0m;
+                        foreach (var item in purchaseInvoiceModel.DetailsModels)
+                        {
+                            totalPartenersRial += item.NetAmmount;
+                        }
+
+                        // Add Purchase Invoice Stocks Count To Portofolio
+                        _stocksHelper.TransferPurchaseToStocks(purchaseInvoiceModel);
+                        if (RialBalance < totalPartenersRial) {
+                            return Ok(8);
+                        }
+                    }
+                  
                     #endregion
                     //==================================================لا تولد قيد ===================================
                     if (purchaseInvoiceModel.SettingModel.DoNotGenerateEntry == true)
@@ -1486,16 +1510,38 @@ namespace Stocks.Controllers
             {
                 Credit = 0.0m;
             }
-            var firstbalanc = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.DebitOpenningBalance;
-            if (firstbalanc == null)
+            var DebitOpenningBalance = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.DebitOpenningBalance;
+            if (DebitOpenningBalance == null)
             {
-                firstbalanc = 0.0m;
+                DebitOpenningBalance = 0.0m; 
             }
-            portfolio.TotalRSBalance = firstbalanc+(Debit- Credit);
-            if (portfolio.TotalRSBalance == null)
+        var CreditOpenningBalance = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.CreditOpenningBalance;
+            if (CreditOpenningBalance==null)
             {
-                portfolio.TotalRSBalance = 0.0m;
+                CreditOpenningBalance = 0.0m;
             }
+            if (DebitOpenningBalance == null && CreditOpenningBalance != null)
+            {
+                portfolio.TotalRSBalance = -CreditOpenningBalance + (Debit - Credit);
+
+            }
+            else if (DebitOpenningBalance != null && CreditOpenningBalance == null)
+            {
+                portfolio.TotalRSBalance = DebitOpenningBalance + (Debit - Credit);
+
+            }
+            else if (DebitOpenningBalance == null && CreditOpenningBalance == null)
+            {
+                portfolio.TotalRSBalance = Debit - Credit;
+
+            }
+            else if (DebitOpenningBalance != null && CreditOpenningBalance != null)
+            {
+                portfolio.TotalRSBalance = DebitOpenningBalance + (Debit - Credit);
+
+            }
+
+
 
 
 
