@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BAL.Helper;
 using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace Stocks.Controllers
 {
@@ -23,10 +26,11 @@ namespace Stocks.Controllers
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
-
+        private LoggerHistory loggerHistory;
         public AccountController(StocksContext context, IMapper mapper)
         {
             this.unitOfWork = new UnitOfWork(context);
+            loggerHistory = new LoggerHistory(context,mapper);
             this._mapper = mapper;
         }
         #endregion
@@ -36,6 +40,8 @@ namespace Stocks.Controllers
         [Route("~/api/Account/FirstOpen")]
         public IActionResult FirstOpen()
         {
+
+           
             AccountModel model = new AccountModel();
             var count = unitOfWork.AccountRepository.Count();
             if (count > 0)
@@ -43,7 +49,8 @@ namespace Stocks.Controllers
                 model.LastCode = unitOfWork.AccountRepository.Last().Code;
                 model.Count = count;
             }
-
+          
+           
             return Ok(model);
         }
 
@@ -224,6 +231,13 @@ namespace Stocks.Controllers
                         if (Result == 200)
                         {
                             accountModel.Count = unitOfWork.AccountRepository.Count();
+                             
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+                            
+                             loggerHistory.InsertUserLog(UserID, "بطاقه حساب", "اضافه حساب", true);
+
+
+
 
                             return Ok(4);
                         }
@@ -280,6 +294,10 @@ namespace Stocks.Controllers
                         if (Result == 200)
                         {
                             accountModel.Count = unitOfWork.AccountRepository.Count();
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                            loggerHistory.InsertUserLog(UserID, "بطاقه حساب", "تعديل حساب", true);
+
 
                             return Ok(4);
                         }
@@ -305,6 +323,11 @@ namespace Stocks.Controllers
                             if (Result == 200)
                             {
                                 accountModel.Count = unitOfWork.AccountRepository.Count();
+
+                                var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                                loggerHistory.InsertUserLog(UserID, "بطاقه حساب", "تعديل حساب", true);
+
 
                                 return Ok(4);
                             }
@@ -362,6 +385,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                        loggerHistory.InsertUserLog(UserID, "بطاقه حساب", "حذف حساب", true);
                         return Ok(4);
                     }
                     else if (Result == 501)

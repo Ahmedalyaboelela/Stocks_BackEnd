@@ -29,12 +29,17 @@ namespace Stocks.Controllers
        
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
-        public PurchaseOrderController(StocksContext context, IMapper mapper , IOptions<ApplicationSettings> appSettings)
+        private LoggerHistory loggerHistory;
+        private readonly IStocksHelper _stocksHelper;
+        public PurchaseOrderController(StocksContext context, IMapper mapper , IOptions<ApplicationSettings> appSettings, IStocksHelper stocksHelper)
         {
             _appSettings = appSettings.Value;
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
-         
+            loggerHistory = new LoggerHistory(context, mapper);
+            _stocksHelper = stocksHelper;
+
+
         }
 
 
@@ -104,7 +109,7 @@ namespace Stocks.Controllers
 
                 if (Details != null)
                 {
-                    model.purchaseInvoiceDetailsModels = Details;
+                    model.purchaseordersDetailsModels = Details;
 
                 }
 
@@ -126,7 +131,7 @@ namespace Stocks.Controllers
         #region Insert Methods
         [HttpPost]
         [Route("~/api/PurchaseOrder/Add")]
-        public IActionResult PostEmp([FromBody] PurchaseOrderModel purchaseOrderModel)
+        public IActionResult PurchaseOrderAdd([FromBody] PurchaseOrderModel purchaseOrderModel)
         {
 
             if (ModelState.IsValid)
@@ -148,6 +153,19 @@ namespace Stocks.Controllers
                         purchaseOrderModel.OrderDate = DateTime.Now.ToString("d/M/yyyy");
                     }
 
+                 //   #region Warehouse
+                 //   // Add Purchase Invoice Stocks Count To Portofolio
+                 //decimal? RialBalance=   _stocksHelper.RialBalanc(purchaseOrderModel.PortfolioID);
+                 //   if (RialBalance==null) {
+                 //       return Ok(7);
+                 //   }
+                 //   decimal totalPartenersRial=0.0m;
+                 //   foreach (var item in purchaseOrderModel.purchaseordersDetailsModels)
+                 //   {
+                 //       totalPartenersRial +=item.
+                 //   }
+                 //   #endregion
+
                     var model = _mapper.Map<PurchaseOrder>(purchaseOrderModel);
 
 
@@ -159,9 +177,9 @@ namespace Stocks.Controllers
 
 
 
-                    if (purchaseOrderModel.purchaseInvoiceDetailsModels != null)
+                    if (purchaseOrderModel.purchaseordersDetailsModels != null)
                     {
-                        foreach (var item in purchaseOrderModel.purchaseInvoiceDetailsModels)
+                        foreach (var item in purchaseOrderModel.purchaseordersDetailsModels)
                         {
                             PurchaseOrderDetailModel detail = new PurchaseOrderDetailModel();
                             detail.PartnerID = item.PartnerID;
@@ -180,7 +198,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                        loggerHistory.InsertUserLog(UserID, " امر الشراء", "اضافه امر الشراء", false);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -246,10 +266,10 @@ namespace Stocks.Controllers
                         unitOfWork.PurchaseOrderDetailRepository.RemovRange(oldDetails);
 
                     }
-                    if (purchaseOrderModel.purchaseInvoiceDetailsModels != null)
+                    if (purchaseOrderModel.purchaseordersDetailsModels != null)
                     {
 
-                        foreach (var item in purchaseOrderModel.purchaseInvoiceDetailsModels)
+                        foreach (var item in purchaseOrderModel.purchaseordersDetailsModels)
                         {
                             item.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
                             item.PurchaseOrderDetailID = 0;
@@ -285,10 +305,10 @@ namespace Stocks.Controllers
                             unitOfWork.PurchaseOrderDetailRepository.RemovRange(oldDetails);
 
                         }
-                        if (purchaseOrderModel.purchaseInvoiceDetailsModels != null)
+                        if (purchaseOrderModel.purchaseordersDetailsModels != null)
                         {
 
-                            foreach (var item in purchaseOrderModel.purchaseInvoiceDetailsModels)
+                            foreach (var item in purchaseOrderModel.purchaseordersDetailsModels)
                             {
                                 item.PurchaseOrderID = purchaseOrderModel.PurchaseOrderID;
                                 item.PurchaseOrderDetailID = 0;
@@ -306,6 +326,9 @@ namespace Stocks.Controllers
                 var result = unitOfWork.Save();
                 if (result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                    loggerHistory.InsertUserLog(UserID, " امر الشراء", "تعديل امر الشراء", false);
                     return Ok(4);
                 }
                 else if (result == 501)
@@ -353,7 +376,9 @@ namespace Stocks.Controllers
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                    loggerHistory.InsertUserLog(UserID, " امر الشراء", "حذف امر الشراء", false);
                     return Ok(4);
 
                 }
@@ -436,8 +461,18 @@ namespace Stocks.Controllers
                cmd.Connection = cnn;
                cmd.CommandType = CommandType.Text;
                cmd.CommandText = @"SELECT  PurchaseInvoices.Code ,
-               CONVERT(DATE, PurchaseInvoices.Date, 110)   ,               Partners.NameAR ,		       PurchaseInvoiceDetails.StockCount ,		       PurchaseInvoiceDetails.PurchasePrice ,               PurchaseInvoiceDetails.NetAmmount  ,		       SUM(PurchaseInvoiceDetails.StockCount) OVER(ORDER BY PurchaseInvoices.Date ROWS BETWEEN UNBOUNDED PRECEDING AND 0 PRECEDING) as StockBalance               FROM dbo.PurchaseInvoices
-               INNER JOIN dbo.PurchaseInvoiceDetails               ON PurchaseInvoiceDetails.PurchaseInvoiceID = PurchaseInvoices.PurchaseInvoiceID               INNER JOIN dbo.Partners               ON Partners.PartnerID = PurchaseInvoiceDetails.PartnerID               WHERE PurchaseInvoices.PurchaseOrderID = "+id+"";
+               CONVERT(DATE, PurchaseInvoices.Date, 110)   ,
+               Partners.NameAR ,
+		       PurchaseInvoiceDetails.StockCount ,
+		       PurchaseInvoiceDetails.PurchasePrice ,
+               PurchaseInvoiceDetails.NetAmmount  ,
+		       SUM(PurchaseInvoiceDetails.StockCount) OVER(ORDER BY PurchaseInvoices.Date ROWS BETWEEN UNBOUNDED PRECEDING AND 0 PRECEDING) as StockBalance
+               FROM dbo.PurchaseInvoices
+               INNER JOIN dbo.PurchaseInvoiceDetails
+               ON PurchaseInvoiceDetails.PurchaseInvoiceID = PurchaseInvoices.PurchaseInvoiceID
+               INNER JOIN dbo.Partners
+               ON Partners.PartnerID = PurchaseInvoiceDetails.PartnerID
+               WHERE PurchaseInvoices.PurchaseOrderID = "+id+"";
 
                cnn.Open();
                SqlDataReader reader = cmd.ExecuteReader();
@@ -446,7 +481,7 @@ namespace Stocks.Controllers
                 {
                     PurchaseInvoiceDetailModel item = new PurchaseInvoiceDetailModel();
                     item.Code = reader.GetString(0);
-                    item.ExeDate = reader.GetDateTime(1).ToString("d/M/yyyy");
+                    item.ExeDate = reader.GetDateTime(1).ToString("d/MM/yyyy"); ;
                     item.PartnerNameAR= reader.GetString(2);
                     item.StockCount = reader.GetFloat(3);
                     item.PurchasePrice = reader.GetDecimal(4);
@@ -462,34 +497,56 @@ namespace Stocks.Controllers
 
 
 
-        [Route("~/api/PurchaseOrder/getTotalStocks/{PurchaseInvoiceID}/{PartnerID}")]
-        public float getTotalStocks(int? PurchaseInvoiceID, int? PartnerID)
+        //[Route("~/api/PurchaseOrder/getTotalStocks/{PurchaseInvoiceID}/{PartnerID}")]
+        //public float getTotalStocks(int? PurchaseInvoiceID, int? PartnerID)
+        //{
+        //    float totalStocks = 0.0f;
+        //    var DetailsModels = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: a => a.PurchaseInvoiceID == PurchaseInvoiceID && a.PartnerID== PartnerID);
+
+        //    foreach (var item in DetailsModels)
+        //    {
+        //        totalStocks += item.StockCount;
+        //    }
+
+        //    return totalStocks;
+
+        //}
+
+        //public float getTotalStocksOrder(int? PurchaseOrderID, int? PartnerID)
+        //{
+        //    float totalStocks = 0.0f;
+        //    var DetailsModels = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrderID == PurchaseOrderID && a.PartnerID == PartnerID);
+
+        //    foreach (var item in DetailsModels)
+        //    {
+        //        totalStocks += item.StockCount;
+        //    }
+
+        //    return totalStocks;
+
+        //}
+
+        #region GetHistory BY UserID
+        [HttpGet]
+        [Route("~/api/IOS/GetHistory")]
+        public IActionResult GetHistory()
         {
-            float totalStocks = 0.0f;
-            var DetailsModels = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: a => a.PurchaseInvoiceID == PurchaseInvoiceID && a.PartnerID== PartnerID);
-
-            foreach (var item in DetailsModels)
+            var UserID = loggerHistory.getUserIdFromRequest(HttpContext.Request);
+            var HistoryList = unitOfWork.UserLogRepository.Get(filter: x => x.UserId == UserID && x.MobileView == false).Select(m => new UserLogModel
             {
-                totalStocks += item.StockCount;
-            }
+                OperationName = m.OperationName,
+                PageName = m.PageName,
+                UserId = m.UserId,
+                MobileView = m.MobileView,
+                UserLogID = m.UserLogID,
+                UserName = m.User.UserName,
 
-            return totalStocks;
+            });
 
+
+            return Ok(HistoryList);
         }
-
-        public float getTotalStocksOrder(int? PurchaseOrderID, int? PartnerID)
-        {
-            float totalStocks = 0.0f;
-            var DetailsModels = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrderID == PurchaseOrderID && a.PartnerID == PartnerID);
-
-            foreach (var item in DetailsModels)
-            {
-                totalStocks += item.StockCount;
-            }
-
-            return totalStocks;
-
-        }
+        #endregion
 
 
 

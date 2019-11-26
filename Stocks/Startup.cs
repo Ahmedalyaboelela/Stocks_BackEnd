@@ -137,12 +137,12 @@ namespace Stocks
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Reports")),
                 RequestPath = new PathString("/Reports")
             });
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                ServeUnknownFileTypes = true,
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Logs")),
-                RequestPath = new PathString("/Logs")
-            });
+            //app.UseStaticFiles(new StaticFileOptions()
+            //{
+            //    ServeUnknownFileTypes = true,
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Logs")),
+            //    RequestPath = new PathString("/Logs")
+            //});
 
             app.ConfigureExceptionHandler(logger);
             app.ConfigureCustomExceptionMiddleware();

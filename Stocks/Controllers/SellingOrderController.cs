@@ -24,11 +24,15 @@ namespace Stocks.Controllers
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
         private readonly ApplicationSettings _appSettings;
-        public sellingorderController(StocksContext context, IMapper mapper, IOptions<ApplicationSettings> appSettings)
+        private LoggerHistory loggerHistory;
+        private readonly IStocksHelper _stocksHelper;
+        public sellingorderController(StocksContext context, IMapper mapper, IOptions<ApplicationSettings> appSettings, IStocksHelper stocksHelper)
         {
             _appSettings = appSettings.Value;
             this._mapper = mapper;
             this.unitOfWork = new UnitOfWork(context);
+            loggerHistory = new LoggerHistory(context, mapper);
+            _stocksHelper = stocksHelper;
 
         }
         #endregion
@@ -123,7 +127,7 @@ namespace Stocks.Controllers
         #region Insert Methods
         [HttpPost]
         [Route("~/api/sellingorder/Add")]
-        public IActionResult PostEmp([FromBody] SellingOrderModel sellingOrderModel)
+        public IActionResult Postselling([FromBody] SellingOrderModel sellingOrderModel)
         {
 
             if (ModelState.IsValid)
@@ -145,9 +149,19 @@ namespace Stocks.Controllers
                         sellingOrderModel.OrderDateGorg = DateTime.Now.ToString("d/M/yyyy");
                     }
 
+
+                 
+
+
                     var model = _mapper.Map<SellingOrder>(sellingOrderModel);
 
-
+                    #region Warehouse
+                    //Check Stocks Count Allowed For Selling 
+                    var Chk = _stocksHelper.CheckStockCountForSelling(sellingOrderModel);
+                    if (!Chk)
+                        return Ok(7);
+                   
+                    #endregion
 
 
                     unitOfWork.SellingOrderRepository.Insert(model);
@@ -177,7 +191,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                        loggerHistory.InsertUserLog(UserID, " امر البيع", "اضافه امر البيع", false);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -224,6 +240,14 @@ namespace Stocks.Controllers
                 }
 
                 var model = _mapper.Map<SellingOrder>(sellingOrderModel);
+                #region Warehouse
+                //Check Stocks Count Allowed For Selling 
+                var Chk = _stocksHelper.CheckStockCountForSelling(sellingOrderModel);
+                if (!Chk)
+                    return Ok(7);
+               
+                #endregion
+
 
                 var Check = unitOfWork.SellingOrderRepository.Get(NoTrack: "NoTrack");
 
@@ -303,6 +327,9 @@ namespace Stocks.Controllers
                 var result = unitOfWork.Save();
                 if (result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                    loggerHistory.InsertUserLog(UserID, " امر البيع", "تعديل امر البيع", false);
                     return Ok(4);
                 }
                 else if (result == 501)
@@ -350,7 +377,9 @@ namespace Stocks.Controllers
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
+                    var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                    loggerHistory.InsertUserLog(UserID, " امر البيع", "حذف امر البيع", false);
                     return Ok(4);
 
                 }
@@ -402,7 +431,21 @@ namespace Stocks.Controllers
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = cnn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @" WITH q2 AS                                  (SELECT ROW_NUMBER() OVER(                                 ORDER BY SN.SellingInvoiceID) AS RowNum, SN.Code AS InvoiceNum ,CONVERT(DATE, SN.Date,110)  AS ExeDate                                 ,P.NameAR AS PartnerName,SD.StockCount AS StockCount,SD.SellingPrice AS SellingPrice                                 ,SD.NetAmmount AS NetAmount,SoD.StockCount - SD.StockCount AS pp                                 FROM dbo.SellingInvoices AS SN                                 INNER JOIN dbo.SellingInvoiceDetails AS SD                                  ON SD.SellingInvoiceID = SN.SellingInvoiceID                                 INNER JOIN dbo.Partners AS P                                  ON P.PartnerID = SD.PartnerID                                 INNER JOIN dbo.SellingOrders AS SO                                 ON SO.SellingOrderID = SN.SellingOrderID                                 INNER JOIN dbo.SellingOrderDetails AS SoD                                 ON SoD.SellingOrderID = SO.SellingOrderID                                 WHERE SN.SellingOrderID = "+id+") SELECT q2.RowNum ,q2.InvoiceNum,q2.ExeDate,q2.PartnerName,q2.StockCount,q2.SellingPrice,q2.pp , q2.NetAmount,CASE WHEN q2.RowNum=1 THEN q2.pp ELSE (SUM(q2.pp)OVER ( ORDER BY q2.ExeDate ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING))-q2.StockCount END AS balance FROM q2";
+                cmd.CommandText = @" WITH q2 AS
+                                  (SELECT ROW_NUMBER() OVER(
+                                 ORDER BY SN.SellingInvoiceID) AS RowNum, SN.Code AS InvoiceNum ,CONVERT(DATE, SN.Date,110)  AS ExeDate
+                                 ,P.NameAR AS PartnerName,SD.StockCount AS StockCount,SD.SellingPrice AS SellingPrice
+                                 ,SD.NetAmmount AS NetAmount,SoD.StockCount - SD.StockCount AS pp
+                                 FROM dbo.SellingInvoices AS SN
+                                 INNER JOIN dbo.SellingInvoiceDetails AS SD 
+                                 ON SD.SellingInvoiceID = SN.SellingInvoiceID
+                                 INNER JOIN dbo.Partners AS P 
+                                 ON P.PartnerID = SD.PartnerID
+                                 INNER JOIN dbo.SellingOrders AS SO
+                                 ON SO.SellingOrderID = SN.SellingOrderID
+                                 INNER JOIN dbo.SellingOrderDetails AS SoD
+                                 ON SoD.SellingOrderID = SO.SellingOrderID
+                                 WHERE SN.SellingOrderID = "+id+") SELECT q2.RowNum ,q2.InvoiceNum,q2.ExeDate,q2.PartnerName,q2.StockCount,q2.SellingPrice,q2.pp , q2.NetAmount,CASE WHEN q2.RowNum=1 THEN q2.pp ELSE (SUM(q2.pp)OVER ( ORDER BY q2.ExeDate ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING))-q2.StockCount END AS balance FROM q2";
                 cnn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
                 List<SellingInvoiceDetailsModel> SellingInvoiceDetailsModel = new List<SellingInvoiceDetailsModel>();

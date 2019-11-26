@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BAL.Helper;
 using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
@@ -23,11 +24,13 @@ namespace Stocks.Controllers
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
+        private LoggerHistory loggerHistory;
 
         public CountryController(StocksContext context, IMapper mapper)
         {
             this._mapper = mapper;
             this.unitOfWork = new UnitOfWork(context);
+            loggerHistory = new LoggerHistory(context, mapper);
 
         }
         #endregion
@@ -183,6 +186,10 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                        loggerHistory.InsertUserLog(UserID, "بطاقه الدوله", "اضافه الدوله", true);
                         return Ok(4);
                     }
                     else if (Result == 501)
@@ -228,6 +235,9 @@ namespace Stocks.Controllers
                     var result = unitOfWork.Save();
                     if (result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                        loggerHistory.InsertUserLog(UserID, "بطاقه الدوله", "تعديل الدوله", true);
                         return Ok(4);
                     }
                     else if (result == 501)
@@ -249,6 +259,9 @@ namespace Stocks.Controllers
                         var result = unitOfWork.Save();
                         if (result == 200)
                         {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
+
+                            loggerHistory.InsertUserLog(UserID, "بطاقه الدوله", "تعديل الدوله", true);
                             return Ok(4);
                         }
                         else if (result == 501)
@@ -296,7 +309,9 @@ namespace Stocks.Controllers
                     var Result = unitOfWork.Save();
                     if (Result == 200)
                     {
+                        var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                        loggerHistory.InsertUserLog(UserID, "بطاقه الدوله", "حذف الدوله", true);
                         return Ok(4);
                     }
                     else if(Result == 501)
