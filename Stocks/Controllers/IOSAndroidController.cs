@@ -329,13 +329,6 @@ namespace Stocks.Controllers
 
 
                     }),
-
-
-
-
-
-
-
                 });
                 return model;
             }
@@ -352,7 +345,7 @@ namespace Stocks.Controllers
         [Route("~/api/IOSAndroid/GetAllPurchaseOrders/{pageNumber}")]
         public IEnumerable<PurchaseOrderModel> GetAllPurchaseOrders(int pageNumber)
         {
-            if (unitOfWork.SellingOrderRepository.GetMobilApp(page: pageNumber).Count() != 0)
+            if (unitOfWork.PurchaseOrderRepository.GetMobilApp(page: pageNumber).Count() != 0)
             {
                 var model = unitOfWork.PurchaseOrderRepository.GetMobilApp(page: pageNumber).Select(m => new PurchaseOrderModel
                 {
@@ -387,6 +380,146 @@ namespace Stocks.Controllers
                 return null;
             }
 
+        }
+        #endregion
+
+        #region GetAllSellingInvoice{pageNumber}
+        [HttpGet]
+        [Route("~/api/IOSAndroid/GetAllSelingInvoice/{pageNumber}")]
+        public IEnumerable<SellingInvoiceModel> GetAllSelingInvoice(int pageNumber)
+        {
+            if (unitOfWork.SellingInvoiceReposetory.GetMobilApp(page: pageNumber).Count() != 0)
+            {
+                var model = unitOfWork.SellingInvoiceReposetory.GetMobilApp(page: pageNumber).Select(m => new SellingInvoiceModel
+                {
+                    Code = m.Code,
+                    EmployeeID = m.EmployeeID,
+                    EmpCode = m.Employee.Code,
+                    EmpNameAR = m.Employee.NameAR,
+                    EmpNameEN = m.Employee.NameEN,
+                    PortfolioID = m.SellingOrder.PortfolioID,
+                    PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == m.SellingOrder.PortfolioID).AccountID,
+                    Codeselling = m.SellingOrder.Code,
+                    PortfolioCode = m.SellingOrder.Portfolio.Code,
+                    PortfolioNameAR = m.SellingOrder.Portfolio.NameAR,
+                    PortfolioNameEN = m.SellingOrder.Portfolio.NameEN,
+                    SellingInvoiceID = m.SellingInvoiceID,
+                    SellingOrderID = m.SellingOrderID,
+
+                    SellDate = m.Date.Value.ToString("d/M/yyyy"),
+                    SellDateHijri = DateHelper.GetHijriDate(m.Date),
+                    DetailsModels = unitOfWork.SellingInvoiceDetailRepository.Get(filter: a => a.SellingInvoiceID == m.SellingInvoiceID)
+                                .Select(z => new SellingInvoiceDetailsModel
+                                {
+
+                                    SellingInvoiceDetailID = z.SellInvoiceDetailID,
+                                    SellingInvoiceID=z.SellingInvoiceID,
+                                    BankCommission = z.BankCommission,
+                                    NetAmmount = z.NetAmmount,
+                                    SelingValue=z.SelingValue,
+                                    BankCommissionRate = z.BankCommissionRate,
+                                   SellingPrice=z.SellingPrice,
+                                    StockCount = z.StockCount,
+                                    TaxOnCommission = z.TaxOnCommission,
+                                    TaxRateOnCommission = z.TaxRateOnCommission,
+                                    PartnerID = z.PartnerID,
+                                    PartnerCode = z.Partner.Code,
+                                    PartnerNameAR = z.Partner.NameAR,
+                                    PartnerNameEN = z.Partner.NameEN,
+                                    
+                                    StocksCount = unitOfWork.PortfolioTransactionsRepository.Get(filter: a => a.PartnerID == z.PartnerID).Select(p => p.CurrentStocksCount).FirstOrDefault(),
+                                    StocksValue = unitOfWork.PortfolioTransactionsRepository.Get(filter: a => a.PartnerID == z.PartnerID).Select(p => p.CurrentStockValue).FirstOrDefault()
+
+                                }),
+                });
+                return model;
+
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+        #endregion
+
+
+        #region GetAllPurchaseInvoice{pageNumber}
+        [HttpGet]
+        [Route("~/api/IOSAndroid/GetAllPurchaseInvoice/{pageNumber}")]
+        public IEnumerable<PurchaseInvoiceModel> GetAllPurchaseInvoice(int pageNumber)
+        {
+            if (unitOfWork.PurchaseInvoiceRepository.GetMobilApp(page: pageNumber).Count() != 0)
+            {
+                var model = unitOfWork.PurchaseInvoiceRepository.GetMobilApp(page: pageNumber).Select(m => new PurchaseInvoiceModel
+                {
+                    Code = m.Code,
+                    EmployeeID = m.EmployeeID,
+                    EmpCode = m.Employee.Code,
+                    EmpNameAR = m.Employee.NameAR,
+                    EmpNameEN = m.Employee.NameEN,
+                    PortfolioID = m.PurchaseOrder.PortfolioID,
+                    PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == m.PurchaseOrder.PortfolioID).AccountID,
+                    Codepurchase = m.PurchaseOrder.Code,
+                    PortfolioCode = m.PurchaseOrder.Portfolio.Code,
+                    PortfolioNameAR = m.PurchaseOrder.Portfolio.NameAR,
+                    PortfolioNameEN = m.PurchaseOrder.Portfolio.NameEN,
+                    PurchaseInvoiceID = m.PurchaseInvoiceID,
+                    PurchaseOrderID = m.PurchaseOrderID,
+                    PurchaseDate = m.Date.Value.ToString("d/M/yyyy"),
+                    PurchaseDateHijri = DateHelper.GetHijriDate(m.Date),
+                    DetailsModels = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: a => a.PurchaseInvoiceID == m.PurchaseInvoiceID)
+                                .Select(z => new PurchaseInvoiceDetailModel
+                                {
+
+                                    PurchaseInvoiceID = z.PurchaseInvoiceID,
+                                    BankCommission = z.BankCommission,
+                                    NetAmmount = z.NetAmmount,
+                                    PurchaseInvoiceDetailID = z.PurchaseInvoiceDetailID,
+                                    BankCommissionRate = z.BankCommissionRate,
+                                    PurchasePrice = z.PurchasePrice,
+                                    PurchaseValue = z.PurchaseValue,
+                                    StockCount = z.StockCount,
+                                    TaxOnCommission = z.TaxOnCommission,
+                                    TaxRateOnCommission = z.TaxRateOnCommission,
+                                    PartnerID = z.PartnerID,
+                                    PartnerCode = z.Partner.Code,
+                                    PartnerNameAR = z.Partner.NameAR,
+                                    PartnerNameEN = z.Partner.NameEN,
+                                    StocksCount = unitOfWork.PortfolioTransactionsRepository.Get(filter: a => a.PartnerID == z.PartnerID).Select(p => p.CurrentStocksCount).FirstOrDefault(),
+                                    StocksValue = unitOfWork.PortfolioTransactionsRepository.Get(filter: a => a.PartnerID == z.PartnerID).Select(p => p.CurrentStockValue).FirstOrDefault()
+
+                                }),
+                    newRialBalance= GetAllNetAmounts(m.PurchaseInvoiceID,m.PurchaseOrder.PortfolioID),
+                    
+
+
+
+
+
+
+            });
+                return model;
+
+            }
+            else
+            {
+                    return null;
+            }
+        }
+
+     public decimal?   GetAllNetAmounts( int PurchaseInvoiceID,int PortfolioID) {
+
+            decimal? oldNetAmmount = 0.0m;
+          var  Details = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: a => a.PurchaseInvoiceID == PurchaseInvoiceID);
+            foreach (var item in Details)
+            {
+                oldNetAmmount += item.NetAmmount;
+
+            }
+            decimal? newRialBalance = _stocksHelper.RialBalancUpdate(PortfolioID, oldNetAmmount);
+            return newRialBalance;
         }
         #endregion
 
@@ -3069,53 +3202,9 @@ namespace Stocks.Controllers
         }
         #endregion
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
