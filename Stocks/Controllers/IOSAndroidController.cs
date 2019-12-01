@@ -102,7 +102,11 @@ namespace Stocks.Controllers
         {
 
             if (id > 0)
-            {
+            { 
+                if (unitOfWork.PortfolioRepository.GetByID(id)==null)
+                {
+                    return null;
+                }
                 var portfolio = unitOfWork.PortfolioRepository.GetByID(id);
                 var model = _mapper.Map<PortfolioModel>(portfolio);
                 if (model == null)
@@ -527,7 +531,11 @@ namespace Stocks.Controllers
         [HttpGet]
         [Route("~/api/IOSAndroid/GetAllParteners")]
         public IEnumerable<PartenerModel> GetAllParteners()
-        {
+        { 
+            if (unitOfWork.PartnerRepository.Get().Count()==0)
+            {
+                return null;
+            }
             var parteners = unitOfWork.PartnerRepository.Get().Select(m=> new PartenerModel{
             
                 PartnerID=m.PartnerID,
@@ -542,7 +550,7 @@ namespace Stocks.Controllers
 
         #region  FirstPurchaseInvoice
         [HttpGet]
-        [Route("~/api/IOSAndroid/CodePur")]
+        [Route("~/api/IOSAndroid/CodePurchaseInvoice")]
         public string CodePur()
         {
             var LastCode = "";
@@ -557,8 +565,8 @@ namespace Stocks.Controllers
 
         #region FirstOpenPurchaseOrder
         [HttpGet]
-        [Route("~/api/IOSAndroid/FirstOpen")]
-        public IActionResult FirstOpen()
+        [Route("~/api/IOSAndroid/CodePurchaseOrder")]
+        public IActionResult CodePurchaseOrder()
         {
             var LastCode = "";
 
@@ -576,7 +584,7 @@ namespace Stocks.Controllers
 
         #region  FirstOpensellingInvoice
         [HttpGet]
-        [Route("~/api/IOSAndroid/CodeSell")]
+        [Route("~/api/IOSAndroid/CodeSellingInvoice")]
         public string CodeSell()
         {
 
@@ -592,13 +600,38 @@ namespace Stocks.Controllers
 
         }
         #endregion
-        
-        #region GetCompoPurchasesOrders
+
+        #region FirstOpenSellingOrder
         [HttpGet]
-        [Route("~/api/IOSAndroid/GetAllpurchases")]
-        public IEnumerable<PurchaseComboList> GetAllpurchases()
+        [Route("~/api/IOSAndroid/CodeSellingOrder")]
+        public IActionResult CodeSellingOrder()
         {
 
+            var LastCode = "";
+
+
+            if (unitOfWork.SellingOrderRepository.Count() != 0)
+            {
+
+                LastCode = unitOfWork.SellingOrderRepository.Last().Code;
+            }
+
+
+            return Ok(LastCode);
+        }
+
+        #endregion
+
+
+        #region GetCompoPurchasesOrders
+        [HttpGet]
+        [Route("~/api/IOSAndroid/GetCompoPurchasesOrders")]
+        public IEnumerable<PurchaseComboList> GetAllpurchases()
+        { 
+            if (unitOfWork.PurchaseInvoiceRepository.Get().Count()==0)
+            {
+                return null;
+            }
             var checks = unitOfWork.PurchaseInvoiceRepository.Get();
             List<PurchaseComboList> sellings = unitOfWork.PurchaseOrderRepository.Get().Select(x => new PurchaseComboList
             {
@@ -627,9 +660,47 @@ namespace Stocks.Controllers
         }
         #endregion
 
+        #region Get CompoListSellingOrders
+        [HttpGet]
+        [Route("~/api/IOSAndroid/CompoListSellingOrders")]
+        public IEnumerable<sellingComboList> GetAllSelling()
+        { 
+            if (unitOfWork.SellingInvoiceReposetory.Get().Count()==0)
+            {
+                return null;
+            }
+            var checks = unitOfWork.SellingInvoiceReposetory.Get();
+            List<sellingComboList> sellings = unitOfWork.SellingOrderRepository.Get().Select(x => new sellingComboList
+            {
+
+                Code = x.Code,
+                SellingOrderID = x.SellingOrderID,
+
+
+            }).ToList();
+            List<sellingComboList> lists = new List<sellingComboList>();
+            foreach (var item in sellings)
+            {
+                if (!checks.Any(m => m.SellingOrderID == item.SellingOrderID))
+                {
+                    lists.Add(item);
+                }
+                if (checks.Any(m => m.SellingOrderID == item.SellingOrderID &&
+                 m.SellingOrder.OrderType == true))
+                {
+                    lists.Add(item);
+                }
+            }
+
+
+            return lists;
+        }
+        #endregion
+
+
         #region Get PurchaseInvoices by orderID
         [HttpGet]
-        [Route("~/api/IOSAndroid/getPurchaseInvoise/{id}")]
+        [Route("~/api/IOSAndroid/PurchaseInvoicesbyorderID/{id}")]
         public List<PurchaseInvoiceDetailModel> getpurchaseInvoise(int? id)
         {
 
@@ -677,73 +748,9 @@ namespace Stocks.Controllers
         }
         #endregion
 
-        #region Get purchaseInvoiseportfolioInfo By orderID
-        [HttpGet]
-        [Route("~/api/IOSAndroid/GetPortInfo/{id}")]
-        public IActionResult GetPortInfo(int id)
-        {
-            var Info = unitOfWork.PurchaseOrderRepository.GetEntity(filter: x => x.PurchaseOrderID == id);
-            PortfolioModel portfolio = new PortfolioModel();
-            portfolio.Code = Info.Portfolio.Code;
-            portfolio.NameAR = Info.Portfolio.NameAR;
-            portfolio.NameEN = Info.Portfolio.NameEN;
-            portfolio.PortfolioID = Info.Portfolio.PortfolioID;
-            var Debit = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.Debit;
-            if (Debit == null)
-            {
-                Debit = 0.0m;
-            }
-            var Credit = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.Credit;
-            if (Credit == null)
-            {
-                Credit = 0.0m;
-            }
-            var firstbalanc = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.DebitOpenningBalance;
-            if (firstbalanc == null)
-            {
-                firstbalanc = 0.0m;
-            }
-            portfolio.TotalRSBalance = firstbalanc + (Debit - Credit);
-            if (portfolio.TotalRSBalance == null)
-            {
-                portfolio.TotalRSBalance = 0.0m;
-            }
-
-
-
-
-
-
-            return Ok(portfolio);
-
-        }
-        #endregion
-        
-        #region FirstOpenSellingOrder
-        [HttpGet]
-        [Route("~/api/IOSAndroid/FirstOpen")]
-        public IActionResult First()
-        {
-
-            var LastCode = "";
-
-
-            if (unitOfWork.SellingOrderRepository.Count() != 0)
-            {
-
-                LastCode = unitOfWork.SellingOrderRepository.Last().Code;
-            }
-
-
-            return Ok(LastCode);
-        }
-
-        #endregion
-
-
         #region Get sellingInvoises By orderID
         [HttpGet]
-        [Route("~/api/IOSAndroid/getsellingInvoise/{id}")]
+        [Route("~/api/IOSAndroid/sellingInvoisesByorderID/{id}")]
         public List<SellingInvoiceDetailsModel> getsellingInvoise(int? id)
         {
 
@@ -795,46 +802,80 @@ namespace Stocks.Controllers
         }
         #endregion
 
-
-        #region Get CompoListSellingOrders
+        #region Get purchaseInvoiseportfolioInfo By orderID
         [HttpGet]
-        [Route("~/api/IOSAndroid/GetAllSellings")]
-        public IEnumerable<sellingComboList> GetAllSelling()
-        {
-
-            var checks = unitOfWork.SellingInvoiceReposetory.Get();
-            List<sellingComboList> sellings = unitOfWork.SellingOrderRepository.Get().Select(x => new sellingComboList
+        [Route("~/api/IOSAndroid/purchaseInvoiseportfolioInfo/{id}")]
+        public IActionResult GetPortInfo(int id)
+        { 
+            if (unitOfWork.PurchaseOrderRepository.GetEntity(filter: x => x.PurchaseOrderID == id)==null)
             {
-
-                Code = x.Code,
-                SellingOrderID = x.SellingOrderID,
-
-
-            }).ToList();
-            List<sellingComboList> lists = new List<sellingComboList>();
-            foreach (var item in sellings)
+                return null;
+            }
+            var Info = unitOfWork.PurchaseOrderRepository.GetEntity(filter: x => x.PurchaseOrderID == id);
+            PortfolioModel portfolio = new PortfolioModel();
+            portfolio.Code = Info.Portfolio.Code;
+            portfolio.NameAR = Info.Portfolio.NameAR;
+            portfolio.NameEN = Info.Portfolio.NameEN;
+            portfolio.PortfolioID = Info.Portfolio.PortfolioID;
+            var Debit = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.Debit;
+            if (Debit == null)
             {
-                if (!checks.Any(m => m.SellingOrderID == item.SellingOrderID))
-                {
-                    lists.Add(item);
-                }
-                if (checks.Any(m => m.SellingOrderID == item.SellingOrderID &&
-                 m.SellingOrder.OrderType == true))
-                {
-                    lists.Add(item);
-                }
+                Debit = 0.0m;
+            }
+            var Credit = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.Credit;
+            if (Credit == null)
+            {
+                Credit = 0.0m;
+            }
+            var DebitOpenningBalance = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.DebitOpenningBalance;
+            if (DebitOpenningBalance == null)
+            {
+                DebitOpenningBalance = 0.0m;
+            }
+            var CreditOpenningBalance = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == Info.PortfolioID).Account.CreditOpenningBalance;
+            if (CreditOpenningBalance == null)
+            {
+                CreditOpenningBalance = 0.0m;
+            }
+         
+
+            if (DebitOpenningBalance == null && CreditOpenningBalance != null)
+            {
+                portfolio.TotalRSBalance = -CreditOpenningBalance + (Debit - Credit);
+
+            }
+            else if (DebitOpenningBalance != null && CreditOpenningBalance == null)
+            {
+                portfolio.TotalRSBalance = DebitOpenningBalance + (Debit - Credit);
+
+            }
+            else if (DebitOpenningBalance == null && CreditOpenningBalance == null)
+            {
+                portfolio.TotalRSBalance = Debit - Credit;
+
+            }
+            else if (DebitOpenningBalance != null && CreditOpenningBalance != null)
+            {
+                portfolio.TotalRSBalance = DebitOpenningBalance + (Debit - Credit);
+
             }
 
 
-            return lists;
+            return Ok(portfolio);
+
         }
         #endregion
-
+        
+     
         #region Get sellingInvoisePortfolioInfoBy orderID
         [HttpGet]
-        [Route("~/api/IOSAndroid/GetPortfolioINFO/{id}")]
+        [Route("~/api/IOSAndroid/sellingInvoisePortfolioInfoByorderID/{id}")]
         public IActionResult GetPortfolioINFO(int id)
-        {
+        { 
+            if (unitOfWork.SellingOrderRepository.Get(filter: x => x.SellingOrderID == id).SingleOrDefault()==null)
+            {
+                return null;
+            }
             var Info = unitOfWork.SellingOrderRepository.Get(filter: x => x.SellingOrderID == id).SingleOrDefault();
             SellingOrderModel sellingOrderModel = new SellingOrderModel();
             sellingOrderModel.SellingOrderID = Info.SellingOrderID;
@@ -859,10 +900,13 @@ namespace Stocks.Controllers
         [Route("~/api/IOSAndroid/GetSellingPartners/{id}")]
         public IEnumerable<PortfolioPartners> GetSellingPartners(int id)
         {
-
-
+             
+            if (unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrder.SellingOrderID == id).Count()==0)
+            {
+                return null;
+            }
             // partners in Selling
-            var transPartners = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrder.PortfolioID == id).Select(p => new PortfolioPartners
+            var transPartners = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrder.SellingOrderID == id).Select(p => new PortfolioPartners
             {
                 PartnerID = p.PartnerID,
                 Code = p.Partner.Code,
@@ -881,13 +925,16 @@ namespace Stocks.Controllers
 
         #region GetpurchasePartners
         [HttpGet]
-        [Route("~/api/IOSAndroid/GetSellingPartners/{id}")]
+        [Route("~/api/IOSAndroid/GetpurchasePartners/{id}")]
         public IEnumerable<PortfolioPartners> GetpurchasePartners(int id)
-        {
-
+        { 
+            if (unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrder.PurchaseOrderID == id).Count()==0)
+            {
+                return null;
+            }
 
             // partners in purchase
-            var transPartners = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrder.PortfolioID == id).Select(p => new PortfolioPartners
+            var transPartners = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrder.PurchaseOrderID == id).Select(p => new PortfolioPartners
             {
                 PartnerID = p.PartnerID,
                 Code = p.Partner.Code,
@@ -898,6 +945,7 @@ namespace Stocks.Controllers
 
 
             });
+            
             return transPartners;
 
         }
@@ -906,7 +954,7 @@ namespace Stocks.Controllers
         #region Insert sellingorder
 
         [HttpPost]
-        [Route("~/api/IOSAndroid/Add")]
+        [Route("~/api/IOSAndroid/Postselling")]
         public IActionResult Postselling([FromBody] SellingOrderModel sellingOrderModel)
         {
 
@@ -1004,7 +1052,7 @@ namespace Stocks.Controllers
 
         #region Update sellingOrder
         [HttpPut]
-        [Route("~/api/IOSAndroid/Update/{id}")]
+        [Route("~/api/IOSAndroid/UpdatesellingOrder/{id}")]
         public IActionResult Update(int id, [FromBody] SellingOrderModel sellingOrderModel)
         {
             if (id != sellingOrderModel.SellingOrderID)
@@ -1471,7 +1519,7 @@ namespace Stocks.Controllers
 
         #region Insert sellingInvoice
         [HttpPost]
-        [Route("~/api/IOSAndroid/sellingInvoice")]
+        [Route("~/api/IOSAndroid/PostSellingInvoice")]
         public IActionResult PostSellingInvoice([FromBody] SellingInvoiceModel sellingInvoiceModel)
         {
             if (ModelState.IsValid)
@@ -2315,7 +2363,7 @@ namespace Stocks.Controllers
 
         #region Delete SellingInvoice
         [HttpDelete]
-        [Route("~/api/IOSAndroid/DeleteSelling/{id}")]
+        [Route("~/api/IOSAndroid/DeleteSellingInvoice/{id}")]
         public IActionResult DeleteSelling(int? id)
         {
 
@@ -2379,7 +2427,7 @@ namespace Stocks.Controllers
 
         #region Insert PurchaseInvoice
         [HttpPost]
-        [Route("~/api/IOSAndroid/purchaseInvoice")]
+        [Route("~/api/IOSAndroid/PostPurchaseInvoice")]
         public IActionResult PostPurchaseInvoice([FromBody] PurchaseInvoiceModel purchaseInvoiceModel)
         {
             if (ModelState.IsValid)
@@ -3183,7 +3231,11 @@ namespace Stocks.Controllers
         [Route("~/api/IOSAndroid/GetHistory")]
         public IActionResult GetHistory()
         {
-            var UserID = loggerHistory.getUserIdFromRequest(Request);
+            var UserID = loggerHistory.getUserIdFromRequest(Request); 
+            if ((unitOfWork.UserLogRepository.Get(filter: x => x.UserId == UserID && x.MobileView == false)).Count()==0)
+            {
+                return null;
+            }
             var HistoryList = unitOfWork.UserLogRepository.Get(filter: x => x.UserId == UserID && x.MobileView == false).Select(m => new UserLogModel {
                 OperationName = m.OperationName,
                 PageName = m.PageName,
@@ -3195,10 +3247,13 @@ namespace Stocks.Controllers
                 time = m.OperationDate.ToString("HH:mm"),
 
 
-            });
+            }); 
+         
 
-
-            return Ok(HistoryList);
+           
+                return Ok(HistoryList);
+            
+           
         }
         #endregion
 
