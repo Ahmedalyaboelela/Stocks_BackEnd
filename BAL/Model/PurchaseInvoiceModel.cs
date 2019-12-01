@@ -20,7 +20,7 @@ namespace BAL.Model
         public string EmpNameEN { get; set; }
         public string EmpCode { get; set; }
 
-
+        
         public int PortfolioID { get; set; }
         public string PortfolioNameAR { get; set; }
         public string PortfolioNameEN { get; set; }
