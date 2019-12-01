@@ -699,7 +699,43 @@ namespace Stocks.Controllers
             return report.SaveDocumentJsonToString();
 
         }
+        // Print Employee
+        [HttpPost]
+        [Route("~/api/ReportViewer/PrintEmployee")]
+        public string PrintEmployee([FromBody] JObject data)
+        {
 
+            int EmployeeID = Convert.ToInt32(data.GetValue("EmployeeID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_Emplyee.mrt");
+            report.Load(path);
+            report["@EmployeeID"] = EmployeeID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
+        // Print Employee
+        [HttpPost]
+        [Route("~/api/ReportViewer/PrintPortfolio")]
+        public string PrintPortfolio([FromBody] JObject data)
+        {
+
+            int PortfolioID = Convert.ToInt32(data.GetValue("PortfolioID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Print_Portfolio.mrt");
+            report.Load(path);
+            report["@PortfolioID"] = PortfolioID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        } 
         // Print Partner
         [HttpPost]
         [Route("~/api/ReportViewer/printPartner")]

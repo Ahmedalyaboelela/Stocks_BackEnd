@@ -799,8 +799,6 @@ namespace Stocks.Controllers
 
             if (ModelState.IsValid)
             {
-               
-
                 var Check = unitOfWork.SellingInvoiceReposetory.Get(NoTrack: "NoTrack");
                 portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == sellingInvoiceModel.PortfolioID && m.Type == true)
                         .Select(m => m.AccountID).SingleOrDefault();
