@@ -363,7 +363,11 @@ namespace Stocks.Controllers
                 {
                     return Ok(6);
                 }
-
+                var Invoives = unitOfWork.SellingInvoiceReposetory.Get(filter: x=> x.SellingOrderID==id); 
+                if (Invoives!=null)
+                {
+                    return Ok(5);
+                }
                 var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: x => x.SellingOrderID == sellingorder.SellingOrderID);
                 if (Details != null)
                 {
@@ -454,7 +458,7 @@ namespace Stocks.Controllers
                     SellingInvoiceDetailsModel item = new SellingInvoiceDetailsModel();
                     item.RowNum = reader.GetInt64(0);
                     item.Code = reader.GetString(1);
-                    item.ExeDate = reader.GetDateTime(2).ToString("d/M/yyyy");
+                    item.ExeDate = reader.GetDateTime(2).ToString();
                     item.PartnerNameAR = reader.GetString(3);
                     item.StockCount = reader.GetFloat(4);
                     item.SellingPrice = reader.GetDecimal(5);

@@ -410,7 +410,7 @@ namespace Stocks.Controllers
 
 
             // partners in Selling
-            var transPartners = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrder.PortfolioID == id).Select(p => new PortfolioPartners
+            var transPartners = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrder.SellingOrderID == id).Select(p => new PortfolioPartners
             {
                 PartnerID = p.PartnerID,
                 Code = p.Partner.Code,
@@ -432,7 +432,7 @@ namespace Stocks.Controllers
 
 
             // partners in Purchase
-            var transPartners = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrder.PortfolioID == id).Select(p => new PortfolioPartners
+            var transPartners = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrder.PurchaseOrderID == id).Select(p => new PortfolioPartners
             {
                 PartnerID = p.PartnerID,
                 Code = p.Partner.Code,

@@ -654,12 +654,24 @@ namespace Stocks.Controllers
                     }
                     #region Warehouse
                     //Check Stocks Count Allowed For Selling 
-                    bool Chk = _stocksHelper.CheckStockCountForSellingInvoice(sellingInvoiceModel);
-                    if (!Chk)
-                        return Ok(7);
-                    // Transfer From Portofolio Stocks
-                    else
-                        _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
+                    float? totalStocksInvoices = 0.0f;
+                  
+                        foreach (var item in sellingInvoiceModel.DetailsModels)
+                        {
+                        float stocksPartener = unitOfWork.SellingOrderDetailRepository.GetEntity(filter: a => a.SellingOrderID == sellingInvoiceModel.SellingOrderID && a.PartnerID == item.PartnerID).StockCount;
+                            totalStocksInvoices = _stocksHelper.sumOfstocksOnInvoice(sellingInvoiceModel.SellingOrderID, item.PartnerID); 
+                        if (totalStocksInvoices < stocksPartener)
+                        {
+                            _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
+                        }
+                        else
+                        {
+                            return Ok(7);
+                        }
+                        }
+                    
+                     
+                      
                     #endregion
 
 
@@ -797,14 +809,30 @@ namespace Stocks.Controllers
                 var Newdetails = _mapper.Map<IEnumerable<SellingInvoiceDetail>>(NewdDetails);
                 var OldDetails = unitOfWork.SellingInvoiceDetailRepository.Get(NoTrack: "NoTrack",filter: m => m.SellingInvoiceID == sellingInvoice.SellingInvoiceID);
                 #region Warehouse
-                //Check Stocks Count Allowed For Selling 
-                bool Chk = _stocksHelper.CheckStockCountForSellingInvoice(sellingInvoiceModel);
-                if (!Chk)
-                    return Ok(7);
-                // Transfer From Portofolio Stocks
-                else
-                    _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
-                #endregion
+                
+                float? totalStocksInvoices = 0.0f; 
+                if (OldDetails != null)
+                {
+                    _stocksHelper.CancelSellingFromStocks(sellingInvoiceModel.PortfolioID,OldDetails);
+                }
+                foreach (var item in sellingInvoiceModel.DetailsModels)
+                {
+                    float stocksPartener = unitOfWork.SellingOrderDetailRepository.GetEntity(filter: a => a.SellingOrderID == sellingInvoiceModel.SellingOrderID && a.PartnerID == item.PartnerID).StockCount;
+                    totalStocksInvoices = _stocksHelper.sumOfstocksOnInvoiceUpdate(sellingInvoiceModel.SellingOrderID, item.PartnerID,item.SellingInvoiceDetailID);
+                    if (totalStocksInvoices < stocksPartener)
+                    {
+                        _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
+                    }
+                    else
+                    {
+                        return Ok(7);
+                    }
+                }
+
+
+
+              #endregion
+             
 
                 var EntryCheck = unitOfWork.EntryRepository.Get(x => x.SellingInvoiceID == sellingInvoice.SellingInvoiceID, NoTrack: "NoTrack").SingleOrDefault();
               if (EntryCheck != null)
@@ -1437,7 +1465,7 @@ namespace Stocks.Controllers
             var Details = unitOfWork.SellingInvoiceDetailRepository.Get(filter: m => m.SellingInvoiceID == id);
             #region Warehouse
             //Cancel Selling Order From Stocks 
-        //    _stocksHelper.CancelSellingFromStocks(modelSelling.PortfolioID, Details);
+           _stocksHelper.CancelSellingFromStocks(modelSelling.SellingOrder.PortfolioID, Details);
             #endregion
             unitOfWork.SellingInvoiceDetailRepository.RemovRange(Details);
 
