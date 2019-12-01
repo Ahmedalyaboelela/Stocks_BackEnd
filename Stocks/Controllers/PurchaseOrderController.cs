@@ -362,7 +362,12 @@ namespace Stocks.Controllers
                 {
                     return Ok(6);
                 }
-
+                var Invoices = unitOfWork.PurchaseInvoiceRepository.Get(filter: x => x.PurchaseOrderID == id).Count();
+    
+                if (Invoices>0)
+                {
+                    return Ok(5);
+                }
                 var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: x => x.PurchaseOrderID == purchaseorder.PurchaseOrderID);
                 if (Details != null)
                 {
@@ -372,7 +377,7 @@ namespace Stocks.Controllers
 
 
 
-                unitOfWork.SellingOrderRepository.Delete(purchaseorder);
+                unitOfWork.PurchaseOrderRepository.Delete(purchaseorder);
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {

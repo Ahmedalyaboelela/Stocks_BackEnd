@@ -35,6 +35,7 @@ namespace BAL.Model
         public string LastCode { get; set; }
 
         public float TotalStockCount { get; set; }
+        public decimal? newRialBalance { get; set; }
 
         public IEnumerable<PurchaseInvoiceDetailModel> DetailsModels { get; set; }
         public SettingModel SettingModel { get; set; }
