@@ -20,7 +20,7 @@ using System.Data;
 
 namespace Stocks.Controllers
 {
-  //  [Authorize(Roles = "SuperAdmin,Admin,Employee")]
+   [Authorize(Roles = "SuperAdmin,Admin,Employee")]
     [Route("api/[controller]")]
     
     public class PurchaseOrderController : ControllerBase
@@ -364,7 +364,7 @@ namespace Stocks.Controllers
                 }
                 var Invoices = unitOfWork.PurchaseInvoiceRepository.Get(filter: x => x.PurchaseOrderID == id).Count();
     
-                if (Invoices>0)
+                if (Invoices!=0)
                 {
                     return Ok(5);
                 }

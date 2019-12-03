@@ -517,7 +517,7 @@ namespace Stocks.Controllers
             if (pageNumber > 0)
             {
 
-
+                var UserID = loggerHistory.getUserIdFromRequest(Request);
                 var purchase = unitOfWork.PurchaseInvoiceRepository.Get(page: pageNumber).FirstOrDefault();
                 var model = _mapper.Map<PurchaseInvoiceModel>(purchase);
                 model.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(x => x.PortfolioID == purchase.PurchaseOrder.PortfolioID && x.Type == true).AccountID;
