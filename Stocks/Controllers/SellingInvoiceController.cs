@@ -658,7 +658,7 @@ namespace Stocks.Controllers
                   
                         foreach (var item in sellingInvoiceModel.DetailsModels)
                         {
-                        float stocksPartener = unitOfWork.SellingOrderDetailRepository.GetEntity(filter: a => a.SellingOrderID == sellingInvoiceModel.SellingOrderID && a.PartnerID == item.PartnerID).StockCount;
+                        float stocksPartener = unitOfWork.PortfolioTransactionsRepository.GetEntity(filter: a => a.PortfolioID == sellingInvoiceModel.PortfolioID && a.PartnerID == item.PartnerID).CurrentStocksCount;
                             totalStocksInvoices = _stocksHelper.sumOfstocksOnInvoice(sellingInvoiceModel.SellingOrderID, item.PartnerID); 
                         if (totalStocksInvoices < stocksPartener)
                         {
@@ -815,7 +815,7 @@ namespace Stocks.Controllers
                 }
                 foreach (var item in sellingInvoiceModel.DetailsModels)
                 {
-                    float stocksPartener = unitOfWork.SellingOrderDetailRepository.GetEntity(filter: a => a.SellingOrderID == sellingInvoiceModel.SellingOrderID && a.PartnerID == item.PartnerID).StockCount;
+                    float stocksPartener = unitOfWork.PortfolioTransactionsRepository.GetEntity(filter: a => a.PortfolioID == sellingInvoiceModel.PortfolioID && a.PartnerID == item.PartnerID).CurrentStocksCount;
                     totalStocksInvoices = _stocksHelper.sumOfstocksOnInvoiceUpdate(sellingInvoiceModel.SellingOrderID, item.PartnerID,item.SellingInvoiceDetailID);
                     if (totalStocksInvoices < stocksPartener)
                     {

@@ -10,12 +10,14 @@ using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace Stocks.Controllers
 {
+    [Authorize(Roles = "SuperAdmin,Admin,Employee")]
     [Route("api/[controller]")]
     [ApiController]
     public class sellingorderController : ControllerBase
@@ -363,8 +365,8 @@ namespace Stocks.Controllers
                 {
                     return Ok(6);
                 }
-                var Invoives = unitOfWork.SellingInvoiceReposetory.Get(filter: x=> x.SellingOrderID==id); 
-                if (Invoives!=null)
+                int Invoives = unitOfWork.SellingInvoiceReposetory.Get(filter: x=> x.SellingOrderID==id).Count(); 
+                if (Invoives != 0)
                 {
                     return Ok(5);
                 }
