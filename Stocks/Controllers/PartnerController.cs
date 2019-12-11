@@ -416,6 +416,8 @@ namespace Stocks.Controllers
                 Code = p.Partner.Code,
                 NameAR = p.Partner.NameAR,
                 NameEN = p.Partner.NameEN,
+                StocksCount=unitOfWork.PortfolioTransactionsRepository.GetEntity(filter: x=> x.PartnerID==p.PartnerID && x.PortfolioID==p.SellingOrder.PortfolioID).CurrentStocksCount,
+
                 
 
 
