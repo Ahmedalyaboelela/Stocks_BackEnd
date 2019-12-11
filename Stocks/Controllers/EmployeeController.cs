@@ -76,56 +76,7 @@ namespace Stocks.Controllers
 
         #region GET Methods
 
-        public EmployeeModel GetEmployee(Employee employee)
-        {
-            var model = _mapper.Map<EmployeeModel>(employee);
-            if (model == null)
-            {
-                return model;
-            }
-            #region Date part
-            if(employee.BirthDate!=null)
-            {
-
-                model.BirthDate = employee.BirthDate.Value.ToString("d/M/yyyy");
-                model.BirthDateHijri = DateHelper.GetHijriDate(employee.BirthDate);
-            }
-            #endregion
-
-            #region Cards part
-            var empCard = unitOfWork.EmployeeCardRepository
-
-                .Get(filter: m => m.EmployeeID == employee.EmployeeID);
-                if(empCard !=null)
-                {
-                    var EmpCard=empCard.Select(m => new EmployeeCardModel()
-                    {
-                        EmpCardId = m.EmpCardId,
-                        CardType = m.CardType,
-                        IssuePlace = m.IssuePlace,
-                        Code = m.Code,
-                        IssueDate = m.IssueDate!=null? m.IssueDate.Value.ToString("d/M/yyyy"):null,
-                        IssueDateHigri = m.IssueDate != null ? DateHelper.GetHijriDate(m.IssueDate): null,
-                        EndDate = m.EndDate!=null? m.EndDate.Value.ToString("d/M/yyyy"): null,
-                        EndDateHigri = m.EndDate != null ? DateHelper.GetHijriDate(m.EndDate): null,
-                        RenewalDate = m.RenewalDate !=null? m.RenewalDate.Value.ToString("d/M/yyyy"): null,
-                        RenewalDateHigri = m.RenewalDate != null ? DateHelper.GetHijriDate(m.RenewalDate): null,
-                        Notes = m.Notes,
-                        EmployeeID = m.EmployeeID,
-                        Fees = m.Fees,
-
-                    });
-                    model.emplCards = EmpCard;
-            }
-                
-         
-
-            #endregion
-
-            model.Count = unitOfWork.EmployeeRepository.Count();
-
-            return model;
-        }
+      
 
         [HttpGet]
         [Route("~/api/Employee/FirstOpen")]
@@ -142,14 +93,7 @@ namespace Stocks.Controllers
             return Ok(model);
         }
 
-        [HttpGet]
-        [Route("~/api/Employee/GetLast")]
-        public IActionResult GetLastEmp()
-        {
-            var employee = unitOfWork.EmployeeRepository.Last();
-            return Ok(GetEmployee(employee));
-        }
-
+        
 
         [HttpGet]
         [Route("~/api/Employee/Paging/{pageNumber}")]
@@ -158,31 +102,39 @@ namespace Stocks.Controllers
             if (pageNumber > 0)
             {
                 var employee = unitOfWork.EmployeeRepository.Get(page: pageNumber).FirstOrDefault();
-                return Ok(GetEmployee(employee));
+                var model = _mapper.Map<EmployeeModel>(employee);
+                string date = employee.BirthDate.Value.ToString("d/M/yyyy");
+                model.BirthDate = date;
+                model.BirthDateHijri = DateHelper.GetHijriDate(employee.BirthDate);
+                var Cards = unitOfWork.EmployeeCardRepository.Get(filter: x => x.EmployeeID == employee.EmployeeID).Select(a=> new EmployeeCardModel {
+                    Code=a.Code,
+                    CardType=a.CardType,
+                    EmpCardId=a.EmpCardId,
+                    EmployeeID=a.EmployeeID,
+                    EndDate=a.EndDate.Value.ToString("d/M/yyyy"),
+                    Fees=a.Fees,
+                    IssueDate=a.IssueDate.Value.ToString("d/M/yyyy"),
+                    EndDateHigri=DateHelper.GetHijriDate(a.EndDate),
+                    IssueDateHigri=DateHelper.GetHijriDate(a.IssueDate),
+                    IssuePlace=a.IssuePlace,
+                    Notes=a.Notes,
+                    RenewalDate=a.RenewalDate.Value.ToString("d/M/yyyy"),
+                    RenewalDateHigri=DateHelper.GetHijriDate(a.RenewalDate)
+                    
+                }); 
+                if (Cards != null)
+                {
+                    model.emplCards = Cards;
+                }
+
+                return Ok(model);
             }
             else
                 return Ok(1);
         }
 
 
-        [HttpGet]
-        [Route("~/api/Employee/Get/{id}")]
-
-        public IActionResult GetEmployeeById(int id)
-        {
-
-            if (id > 0)
-            {
-                var employee = unitOfWork.EmployeeRepository.GetByID(id);
-
-
-                return Ok(GetEmployee(employee));
-
-
-            }
-            else
-                return Ok(1);
-        }
+     
 
 
         [Route("~/api/Employee/GetAll")]

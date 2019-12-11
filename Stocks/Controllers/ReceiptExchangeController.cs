@@ -434,7 +434,7 @@ namespace Stocks.Controllers
             if (pageNumber > 0)
             {
 
-                var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type&&m.ReceiptExchangeType==ReceiptExchangeType, page: pageNumber).FirstOrDefault();
+                var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType==ReceiptExchangeType, page: pageNumber).FirstOrDefault();
                 if(RecExc != null)
                     return Ok(GetReceiptExchange(RecExc,ReceiptExchangeType, type, numSetting));
                 else

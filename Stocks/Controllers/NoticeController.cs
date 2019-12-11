@@ -1042,7 +1042,7 @@ namespace Stocks.Controllers
                                 if (noticeModel.SettingModel.TransferToAccounts == true)
                                 {
                                     Entry.TransferedToAccounts = true;
-                                    unitOfWork.EntryRepository.Update(Entry);
+                                    unitOfWork.EntryRepository.Insert(Entry);
                                     foreach (var item in EntryDitails)
                                     {
                                         item.EntryID = Entry.EntryID;
