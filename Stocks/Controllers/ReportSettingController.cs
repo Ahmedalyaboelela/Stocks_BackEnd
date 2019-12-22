@@ -35,7 +35,7 @@ namespace Stocks.Controllers
 
         public IActionResult GetAllPortfolios([FromBody] JObject data)
         {
-
+          //  string date2 = data.GetValue("DayDate").ToString("d/M/yyyy");
             DateTime date = DateHelper.ChangeDateFormat(data.GetValue("DayDate").ToString());
             int portID= Convert.ToInt32(data.GetValue("PortfolioID"));
 
@@ -98,29 +98,46 @@ namespace Stocks.Controllers
         [Route("~/api/ReportSetting/AddReportSetting/{portID}/{DayDate}")]
         public IActionResult PostReportSetting([FromBody] ReportSettingModel [] reportSettingModels, int portID, string DayDate)
         {
-            DayDate = DayDate.Replace('-', '/');
-            DateTime date = DateHelper.ChangeDateFormat(DayDate) ;
+             DayDate = DayDate.Replace('-', '/');
+              DateTime date = DateHelper.ChangeDateFormat(DayDate) ;
+            // DateTime date = DateTime.Parse(DayDate); 
+            if (unitOfWork.ReportSettingRepository.Get().Count() != 0)
+            { 
+                if (unitOfWork.ReportSettingRepository.Get(filter: x => x.CurrentDate == date && x.PortfolioID == portID).Count() != 0)
+                {
+                    var oldreportSettings = unitOfWork.ReportSettingRepository.Get(filter: x => x.CurrentDate == date && x.PortfolioID == portID);
 
-            var Check = unitOfWork.ReportSettingRepository.Get(NoTrack: "NoTrack");
-
-            if((Check.Any(m => m.PortfolioID == portID && m.CurrentDate==date))==true)
+                    unitOfWork.ReportSettingRepository.RemovRange(oldreportSettings);
+                    foreach (var item in reportSettingModels)
+                    {
+                        var detail = _mapper.Map<ReportSetting>(item);
+                        detail.ReportSettingID = 0;
+                        unitOfWork.ReportSettingRepository.Insert(detail);
+                    }
+                }
+                else
+                {
+                    foreach (var item in reportSettingModels)
+                    {
+                        var detail = _mapper.Map<ReportSetting>(item);
+                        detail.ReportSettingID = 0;
+                        unitOfWork.ReportSettingRepository.Insert(detail);
+                    }
+                }
+            }
+            else
             {
-                unitOfWork.ReportSettingRepository.RemovRange(Check);
-               
                 if (reportSettingModels != null)
                 {
                     foreach (var item in reportSettingModels)
                     {
-                        ReportSetting reportSetting = new ReportSetting();
-                        reportSetting.CurrentDate = DateTime.Parse(item.CurrentDate);
-                        reportSetting.DailyStockValue = item.DailyStockValue;
-                        reportSetting.PartnerID = item.PartnerID;
-                        reportSetting.PortfolioID = item.PortfolioID;
-                        reportSetting.ReportSettingID = item.ReportSettingID;
-                        unitOfWork.ReportSettingRepository.Insert(reportSetting);
+                        var detail = _mapper.Map<ReportSetting>(item);
+                        detail.ReportSettingID = 0;
+                        unitOfWork.ReportSettingRepository.Insert(detail);
                     }
-                   
+
                 }
+            }     
                 var result = unitOfWork.Save();
                 if (result == 200)
                 {
@@ -137,37 +154,8 @@ namespace Stocks.Controllers
                 {
                     return Ok(6);
                 }
-            }
-            else
-            {
-                if (reportSettingModels != null)
-                {
-                    foreach (var item in reportSettingModels)
-                    {
-                        ReportSetting reportSetting = new ReportSetting();
-                        reportSetting.CurrentDate = DateTime.Parse(item.CurrentDate);
-                        reportSetting.DailyStockValue = item.DailyStockValue;
-                        reportSetting.PartnerID = item.PartnerID;
-                        reportSetting.PortfolioID = item.PortfolioID;
-                        reportSetting.ReportSettingID = item.ReportSettingID;
-                        unitOfWork.ReportSettingRepository.Insert(reportSetting);
-                    }
-
-                }
-                var result = unitOfWork.Save();
-                if (result == 200)
-                {
-                    return Ok(4);
-                }
-                else if (result == 501)
-                {
-                    return Ok(5);
-                }
-                else
-                {
-                    return Ok(6);
-                }
-            }
+            
+          
 
                 
 
