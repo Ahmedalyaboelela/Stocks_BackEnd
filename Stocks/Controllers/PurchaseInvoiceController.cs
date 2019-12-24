@@ -642,6 +642,7 @@ namespace Stocks.Controllers
         {
             if (ModelState.IsValid)
             {
+               
                 var Check = unitOfWork.PurchaseInvoiceRepository.Get();
                 if (Check.Any(m => m.Code == purchaseInvoiceModel.Code))
                 {

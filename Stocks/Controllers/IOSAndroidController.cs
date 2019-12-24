@@ -48,8 +48,9 @@ namespace Stocks.Controllers
         #region GetAllPortfolios{pageNumber}
         [HttpGet]
         [Route("~/api/IOSAndroid/GetAllPortfolios/{pageNumber}")]
-        public IEnumerable<PortfolioModel> GetAllPortfolios(int pageNumber)
+        public IActionResult GetAllPortfolios(int pageNumber)
         {
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if ( unitOfWork.PortfolioRepository.GetMobilApp(page: pageNumber).Count() !=0)
             {
                 var model = unitOfWork.PortfolioRepository.GetMobilApp(page: pageNumber).Select(m => new PortfolioModel
@@ -84,11 +85,11 @@ namespace Stocks.Controllers
 
 
                 });
-                return model;
+                return  Ok(model);
             }
             else
             {
-                return null;
+                return Ok(EmptyModel);
             }
           
         }
@@ -209,7 +210,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return null;
+                return Ok(0);
             }
         }
         #endregion
@@ -218,7 +219,8 @@ namespace Stocks.Controllers
         [HttpGet]
         [Route("~/api/IOSAndroid/GetAllEmps")]
         public IActionResult GetAllEmps()
-        { 
+        {
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if ( unitOfWork.EmployeeRepository.Get().Count() !=0)
             {
                 var Emps = unitOfWork.EmployeeRepository.Get(filter: x => x.IsInternal == true).Select(m => new EmployeeModel
@@ -241,7 +243,7 @@ namespace Stocks.Controllers
             }
             else
             {
-                return null;
+                return Ok(EmptyModel);
             }
            
         }
@@ -251,8 +253,9 @@ namespace Stocks.Controllers
         #region GetAllPortfolios
         [HttpGet]
         [Route("~/api/IOSAndroid/GetAllports")] 
-        public IEnumerable<GetAllPortsIOS> GetAllports()
-        { 
+        public IActionResult GetAllports()
+        {
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if (unitOfWork.PortfolioRepository.Get().Count()!=0)
             {
                 var model = unitOfWork.PortfolioRepository.Get().Select(m => new GetAllPortsIOS
@@ -263,11 +266,11 @@ namespace Stocks.Controllers
                     NameEN = m.NameEN,
                     PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == m.PortfolioID).AccountID
                 });
-                return model;
+                return Ok(model);
             }
             else
             {
-                return null;
+                return Ok(EmptyModel);
             }
            
         }
@@ -277,10 +280,14 @@ namespace Stocks.Controllers
         #region GetpartenersByport
         [HttpGet]
         [Route("~/api/IOSAndroid/GetpartenersByport/{portID}")]
-        public IEnumerable<PortfolioTransactionModel> GetAllparteners(int portID)
+        public IActionResult GetAllparteners(int portID)
         {
+
+
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if (unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == portID).Count() !=0)
             {
+               
                 var model = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PortfolioID == portID).Select(m => new PortfolioTransactionModel
                 {
                     PortfolioID = portID,
@@ -292,11 +299,11 @@ namespace Stocks.Controllers
                     partenerNameEN = unitOfWork.PartnerRepository.GetEntity(filter: a => a.PartnerID == m.PartnerID).NameEN,
                     PortTransID = m.PortTransID
                 });
-                return model;
+                return Ok(model);
             }
             else
             {
-                return null;
+                return Ok(EmptyModel);
             }
            
         }
@@ -305,8 +312,9 @@ namespace Stocks.Controllers
         #region GetAllsellingOrders{pageNumber}
         [HttpGet]
         [Route("~/api/IOSAndroid/GetAllsellingOrders/{pageNumber}")]
-        public IEnumerable<SellingOrderModel> GetAllsellingOrders(int pageNumber)
+        public IActionResult GetAllsellingOrders(int pageNumber)
         {
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if (unitOfWork.SellingOrderRepository.GetMobilApp(page: pageNumber).Count() != 0)
             {
                 var model = unitOfWork.SellingOrderRepository.GetMobilApp(page: pageNumber).Select(m => new SellingOrderModel
@@ -315,11 +323,11 @@ namespace Stocks.Controllers
                     Code = m.Code,
                    
                 });
-                return model;
+                return Ok(model);
             }
             else
             {
-                return null;
+                return Ok(EmptyModel);
             }
 
         }
@@ -328,8 +336,9 @@ namespace Stocks.Controllers
         #region GetAllPurchaseOrders{pageNumber}
         [HttpGet]
         [Route("~/api/IOSAndroid/GetAllPurchaseOrders/{pageNumber}")]
-        public IEnumerable<PurchaseOrderModel> GetAllPurchaseOrders(int pageNumber)
+        public IActionResult GetAllPurchaseOrders(int pageNumber)
         {
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if (unitOfWork.PurchaseOrderRepository.GetMobilApp(page: pageNumber).Count() != 0)
             {
                 var model = unitOfWork.PurchaseOrderRepository.GetMobilApp(page: pageNumber).Select(m => new PurchaseOrderModel
@@ -338,11 +347,11 @@ namespace Stocks.Controllers
                     Code = m.Code,
                     
                 });
-                return model;
+                return Ok(model);
             }
             else
             {
-                return null;
+                return Ok(EmptyModel);
             }
 
         }
@@ -351,8 +360,9 @@ namespace Stocks.Controllers
         #region GetAllSellingInvoice{pageNumber}
         [HttpGet]
         [Route("~/api/IOSAndroid/GetAllSelingInvoice/{pageNumber}")]
-        public IEnumerable<SellingInvoiceModel> GetAllSelingInvoice(int pageNumber)
+        public IActionResult GetAllSelingInvoice(int pageNumber)
         {
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if (unitOfWork.SellingInvoiceReposetory.GetMobilApp(page: pageNumber).Count() != 0)
             {
                 var model = unitOfWork.SellingInvoiceReposetory.GetMobilApp(page: pageNumber).Select(m => new SellingInvoiceModel
@@ -361,12 +371,12 @@ namespace Stocks.Controllers
                     Code = m.Code,
                    
                 });
-                return model;
+                return  Ok(model);
 
             }
             else
             {
-                return null;
+                return Ok(EmptyModel);
             }
         }
 
@@ -377,8 +387,9 @@ namespace Stocks.Controllers
         #region GetAllPurchaseInvoice{pageNumber}
         [HttpGet]
         [Route("~/api/IOSAndroid/GetAllPurchaseInvoice/{pageNumber}")]
-        public IEnumerable<PurchaseInvoiceModel> GetAllPurchaseInvoice(int pageNumber)
+        public IActionResult GetAllPurchaseInvoice(int pageNumber)
         {
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if (unitOfWork.PurchaseInvoiceRepository.GetMobilApp(page: pageNumber).Count() != 0)
             {
                 var model = unitOfWork.PurchaseInvoiceRepository.GetMobilApp(page: pageNumber).Select(m => new PurchaseInvoiceModel
@@ -394,12 +405,12 @@ namespace Stocks.Controllers
 
 
             });
-                return model;
+                return Ok(model);
 
             }
             else
             {
-                    return null;
+                    return Ok(EmptyModel);
             }
         }
 
@@ -420,11 +431,12 @@ namespace Stocks.Controllers
         #region GetAllParteners
         [HttpGet]
         [Route("~/api/IOSAndroid/GetAllParteners")]
-        public IEnumerable<PartenerModel> GetAllParteners()
-        { 
+        public IActionResult GetAllParteners()
+        {
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if (unitOfWork.PartnerRepository.Get().Count()==0)
             {
-                return null;
+                return Ok(EmptyModel);
             }
             var parteners = unitOfWork.PartnerRepository.Get().Select(m=> new PartenerModel{
             
@@ -433,7 +445,7 @@ namespace Stocks.Controllers
                 NameEN=m.NameEN,
                 Code=m.Code,
 });
-            return parteners;
+            return Ok(parteners);
 
         }
         #endregion
@@ -516,11 +528,12 @@ namespace Stocks.Controllers
         #region GetCompoPurchasesOrders
         [HttpGet]
         [Route("~/api/IOSAndroid/GetCompoPurchasesOrders")]
-        public IEnumerable<PurchaseComboList> GetAllpurchases()
-        { 
+        public IActionResult GetAllpurchases()
+        {
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if (unitOfWork.PurchaseInvoiceRepository.Get().Count()==0)
             {
-                return null;
+                return Ok(EmptyModel);
             }
             var checks = unitOfWork.PurchaseInvoiceRepository.Get();
             List<PurchaseComboList> sellings = unitOfWork.PurchaseOrderRepository.Get().Select(x => new PurchaseComboList
@@ -546,18 +559,19 @@ namespace Stocks.Controllers
             }
 
 
-            return lists;
+            return Ok(lists);
         }
         #endregion
 
         #region Get CompoListSellingOrders
         [HttpGet]
         [Route("~/api/IOSAndroid/CompoListSellingOrders")]
-        public IEnumerable<sellingComboList> GetAllSelling()
-        { 
+        public IActionResult GetAllSelling()
+        {
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if (unitOfWork.SellingInvoiceReposetory.Get().Count()==0)
             {
-                return null;
+                return Ok(EmptyModel);
             }
             var checks = unitOfWork.SellingInvoiceReposetory.Get();
             List<sellingComboList> sellings = unitOfWork.SellingOrderRepository.Get().Select(x => new sellingComboList
@@ -583,7 +597,7 @@ namespace Stocks.Controllers
             }
 
 
-            return lists;
+            return Ok(lists);
         }
         #endregion
 
@@ -699,7 +713,7 @@ namespace Stocks.Controllers
         { 
             if (unitOfWork.PurchaseOrderRepository.GetEntity(filter: x => x.PurchaseOrderID == id)==null)
             {
-                return null;
+                return Ok(0);
             }
             var Info = unitOfWork.PurchaseOrderRepository.GetEntity(filter: x => x.PurchaseOrderID == id);
             PortfolioModel portfolio = new PortfolioModel();
@@ -764,7 +778,7 @@ namespace Stocks.Controllers
         { 
             if (unitOfWork.SellingOrderRepository.Get(filter: x => x.SellingOrderID == id).SingleOrDefault()==null)
             {
-                return null;
+                return Ok(0);
             }
             var Info = unitOfWork.SellingOrderRepository.Get(filter: x => x.SellingOrderID == id).SingleOrDefault();
             SellingOrderModel sellingOrderModel = new SellingOrderModel();
@@ -788,12 +802,13 @@ namespace Stocks.Controllers
         #region GetSellingPartners
         [HttpGet]
         [Route("~/api/IOSAndroid/GetSellingPartners/{id}")]
-        public IEnumerable<PortfolioPartners> GetSellingPartners(int id)
+        public IActionResult GetSellingPartners(int id)
         {
-             
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
+
             if (unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrder.SellingOrderID == id).Count()==0)
             {
-                return null;
+                return Ok(EmptyModel);
             }
             // partners in Selling
             var transPartners = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrder.SellingOrderID == id).Select(p => new PortfolioPartners
@@ -808,7 +823,7 @@ namespace Stocks.Controllers
 
 
             });
-            return transPartners;
+            return Ok(transPartners);
 
         }
         #endregion
@@ -817,11 +832,12 @@ namespace Stocks.Controllers
         #region GetpurchasePartners
         [HttpGet]
         [Route("~/api/IOSAndroid/GetpurchasePartners/{id}")]
-        public IEnumerable<PortfolioPartners> GetpurchasePartners(int id)
-        { 
+        public IActionResult GetpurchasePartners(int id)
+        {
+            List<EmptyModel> EmptyModel = new List<EmptyModel>();
             if (unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrder.PurchaseOrderID == id).Count()==0)
             {
-                return null;
+                return Ok(EmptyModel);
             }
 
             // partners in purchase
@@ -837,7 +853,7 @@ namespace Stocks.Controllers
 
             });
             
-            return transPartners;
+            return Ok(transPartners);
 
         }
         #endregion
