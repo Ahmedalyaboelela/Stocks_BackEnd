@@ -782,6 +782,7 @@ namespace Stocks.Controllers
                                     SellingOrderID = m.SellingOrderID,
                                     SellOrderDetailID = m.SellOrderDetailID,
                                     StockCount = m.StockCount,
+                                    TradingValue=m.TradingValue,
                                     PartnerCode = m.Partner.Code
 
 
@@ -855,6 +856,7 @@ namespace Stocks.Controllers
                                 PurchaseOrderID = m.PurchaseOrderID,
                                 PurchaseOrderDetailID = m.PurchaseOrderDetailID,
                                 StockCount = m.StockCount,
+                                TradingValue=m.TradingValue,
                                 PartnerCode = m.Partner.Code
 
 

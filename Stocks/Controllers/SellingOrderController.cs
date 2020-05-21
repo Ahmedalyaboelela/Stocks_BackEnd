@@ -94,6 +94,7 @@ namespace Stocks.Controllers
                         SellingOrderID = m.SellingOrderID,
                         SellOrderDetailID = m.SellOrderDetailID,
                         StockCount = m.StockCount,
+                        TradingValue=m.TradingValue,
                         PartnerCode=m.Partner.Code
 
 
@@ -182,6 +183,7 @@ namespace Stocks.Controllers
                             detail.PriceType = item.PriceType;
                             detail.StockCount = item.StockCount;
                             detail.SellOrderDetailID = 0;
+                            detail.TradingValue = item.TradingValue;
                             var ob = _mapper.Map<SellingOrderDetail>(detail);
                             unitOfWork.SellingOrderDetailRepository.Insert(ob);
                         }

@@ -5,7 +5,7 @@
     <Databases isList="true" count="1">
       <MS_x0020_SQL Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
         <Alias>MS SQL</Alias>
-        <ConnectionStringEncrypted>9FRTz08IWplsW7Xwd9gpY9FaxYlIa7vN+Vrt8PCId17HcPsLS13CReJN6IBjSaRG1BjVSWFLst3iR6W9asyxT9NaywtWS1qZahWE7GNUpKv5ePUpSEr7pPJB7dxh7KJe</ConnectionStringEncrypted>
+        <ConnectionStringEncrypted>9PrRSNcI08VsW7XkcuykP9F4aYhFXbtJYknobE30YaPHxGXJ1EqxmXFNodRNhGAP0VqFic1c8wlBXDmY8AThP4tw981IVpKF+UeEvW9s9jrCcPcpVkx7bWJ40QTP2OjnkPLLzMlrc4HLbA==</ConnectionStringEncrypted>
         <Name>MS SQL</Name>
       </MS_x0020_SQL>
     </Databases>
@@ -528,13 +528,19 @@ TkSuQmCC</ImageBytes>
               <Name>DataTextDataSource22</Name>
               <Page isRef="4" />
               <Parent isRef="14" />
-              <Text>{DataSource2.StockCount}</Text>
+              <Text>{Stimulsoft.Report.Export.StiExportUtils.ConvertDigitsToArabic(DataSource2.StockCount.ToString(), StiArabicDigitsType.Standard)}</Text>
               <TextBrush>[0:0:0]</TextBrush>
+              <TextFormat Ref="18" type="NumberFormat" isKey="true">
+                <DecimalDigits>2</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+              </TextFormat>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
+              <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </DataTextDataSource22>
-            <DataTextDataSource23 Ref="18" type="Text" isKey="true">
+            <DataTextDataSource23 Ref="19" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -566,11 +572,11 @@ TkSuQmCC</ImageBytes>
           <Parent isRef="4" />
           <Sort isList="true" count="0" />
         </DataDataSource2>
-        <FooterDataSource2 Ref="19" type="FooterBand" isKey="true">
+        <FooterDataSource2 Ref="20" type="FooterBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,9.9,19.59,0.51</ClientRectangle>
           <Components isList="true" count="4">
-            <Text1 Ref="20" type="Text" isKey="true">
+            <Text1 Ref="21" type="Text" isKey="true">
               <Brush>SteelBlue</Brush>
               <ClientRectangle>14.73,0,4.83,0.76</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -579,13 +585,13 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text1</Name>
               <Page isRef="4" />
-              <Parent isRef="19" />
+              <Parent isRef="20" />
               <Text>المجموع</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text1>
-            <Text2 Ref="21" type="Text" isKey="true">
+            <Text2 Ref="22" type="Text" isKey="true">
               <Brush>SteelBlue</Brush>
               <ClientRectangle>9.91,0,4.82,0.76</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -594,13 +600,13 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text2</Name>
               <Page isRef="4" />
-              <Parent isRef="19" />
+              <Parent isRef="20" />
               <Text>{SumD(DataSource2.StockCount)}</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text2>
-            <Text3 Ref="22" type="Text" isKey="true">
+            <Text3 Ref="23" type="Text" isKey="true">
               <Brush>SteelBlue</Brush>
               <ClientRectangle>5.08,0,4.83,0.76</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -609,13 +615,13 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text3</Name>
               <Page isRef="4" />
-              <Parent isRef="19" />
+              <Parent isRef="20" />
               <Text>{Sum(DataSource2.DailyValue)}</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text3>
-            <Text4 Ref="23" type="Text" isKey="true">
+            <Text4 Ref="24" type="Text" isKey="true">
               <Brush>SteelBlue</Brush>
               <ClientRectangle>0,0,5.08,0.76</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -624,7 +630,7 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text4</Name>
               <Page isRef="4" />
-              <Parent isRef="19" />
+              <Parent isRef="20" />
               <Text>{Sum(DataSource2.MarketValue)}</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
@@ -636,11 +642,11 @@ TkSuQmCC</ImageBytes>
           <Page isRef="4" />
           <Parent isRef="4" />
         </FooterDataSource2>
-        <ReportSummaryBand1 Ref="24" type="ReportSummaryBand" isKey="true">
+        <ReportSummaryBand1 Ref="25" type="ReportSummaryBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,11.21,19.59,7.88</ClientRectangle>
           <Components isList="true" count="4">
-            <Text6 Ref="25" type="Text" isKey="true">
+            <Text6 Ref="26" type="Text" isKey="true">
               <Brush>EmptyBrush</Brush>
               <ClientRectangle>1.2,3.03,14.29,1.78</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -649,12 +655,12 @@ TkSuQmCC</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text6</Name>
               <Page isRef="4" />
-              <Parent isRef="24" />
+              <Parent isRef="25" />
               <Text>{Sum(DataSource2.MarketValue)+RiyalBalance+
 Sum(DataSource2.ReyalDebit)-RiyalOpenBalance
 -StocksValue}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="26" type="NumberFormat" isKey="true">
+              <TextFormat Ref="27" type="NumberFormat" isKey="true">
                 <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
@@ -663,7 +669,7 @@ Sum(DataSource2.ReyalDebit)-RiyalOpenBalance
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text6>
-            <Text5 Ref="27" type="Text" isKey="true">
+            <Text5 Ref="28" type="Text" isKey="true">
               <Brush>EmptyBrush</Brush>
               <ClientRectangle>15.49,3.03,2.96,1.78</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -672,26 +678,26 @@ Sum(DataSource2.ReyalDebit)-RiyalOpenBalance
               <Margins>0,0,0,0</Margins>
               <Name>Text5</Name>
               <Page isRef="4" />
-              <Parent isRef="24" />
+              <Parent isRef="25" />
               <Text>= الإجمالي</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text5>
-            <StartPointPrimitive1 Ref="28" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+            <StartPointPrimitive1 Ref="29" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
               <ClientRectangle>0.4,2.59,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>StartPointPrimitive1</Name>
               <Page isRef="4" />
-              <Parent isRef="24" />
+              <Parent isRef="25" />
               <ReferenceToGuid>24b85a3c8292429e94a429f6b711bbff</ReferenceToGuid>
             </StartPointPrimitive1>
-            <EndPointPrimitive1 Ref="29" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+            <EndPointPrimitive1 Ref="30" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
               <ClientRectangle>19,5.19,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>EndPointPrimitive1</Name>
               <Page isRef="4" />
-              <Parent isRef="24" />
+              <Parent isRef="25" />
               <ReferenceToGuid>24b85a3c8292429e94a429f6b711bbff</ReferenceToGuid>
             </EndPointPrimitive1>
           </Components>
@@ -700,7 +706,7 @@ Sum(DataSource2.ReyalDebit)-RiyalOpenBalance
           <Page isRef="4" />
           <Parent isRef="4" />
         </ReportSummaryBand1>
-        <RoundedRectanglePrimitive1 Ref="30" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
+        <RoundedRectanglePrimitive1 Ref="31" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
           <ClientRectangle>0.4,13.8,18.6,2.6</ClientRectangle>
           <Color>0, 0, 39</Color>
           <Conditions isList="true" count="0" />
@@ -733,13 +739,13 @@ Sum(DataSource2.ReyalDebit)-RiyalOpenBalance
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>9/17/2019 11:59:47 AM</ReportChanged>
+  <ReportChanged>4/23/2020 12:02:49 AM</ReportChanged>
   <ReportCreated>9/8/2019 12:02:27 PM</ReportCreated>
-  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\RPT_ResultOfPortofolioWork.mrt</ReportFile>
-  <ReportGuid>27e3dc43cbd74d1e9e31eea35328ee81</ReportGuid>
+  <ReportFile>E:\Malaz\Malaz_Systems\Stocks\SourceCode\Stocks_BackEnd\Stocks\Reports\RPT_ResultOfPortofolioWork.mrt</ReportFile>
+  <ReportGuid>d84f0b0f1c7047cf9633023a7566a617</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Centimeters</ReportUnit>
-  <ReportVersion>2019.3.5.0</ReportVersion>
+  <ReportVersion>2020.2.1.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -765,12 +771,12 @@ namespace Reports
 </Script>
   <ScriptLanguage>CSharp</ScriptLanguage>
   <Styles isList="true" count="12">
-    <Blue_x0020_Steel_Report_Title1 Ref="31" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title1 Ref="32" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item30 Ref="32" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item30 Ref="33" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>ReportTitle</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
@@ -781,12 +787,12 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Title1>
-    <Blue_x0020_Steel_Report_Title2 Ref="33" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Title2 Ref="34" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item32 Ref="34" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item32 Ref="35" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>ReportTitle</Placement>
@@ -799,12 +805,12 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Title2>
-    <Blue_x0020_Steel_Report_Summary Ref="35" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Report_Summary Ref="36" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item34 Ref="36" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item34 Ref="37" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>ReportSummary</Placement>
           <Type>ComponentType, Placement</Type>
@@ -815,12 +821,12 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Report_Summary>
-    <Blue_x0020_Steel_Page_Header Ref="37" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Page_Header Ref="38" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item36 Ref="38" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item36 Ref="39" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>PageHeader</Placement>
           <Type>ComponentType, Placement</Type>
@@ -831,12 +837,12 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Header>
-    <Blue_x0020_Steel_Page_Footer Ref="39" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Page_Footer Ref="40" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item38 Ref="40" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item38 Ref="41" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>PageFooter</Placement>
           <Type>ComponentType, Placement</Type>
@@ -847,12 +853,12 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Blue_x0020_Steel_Page_Footer>
-    <Blue_x0020_Steel_Group_Header1 Ref="41" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Header1 Ref="42" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item40 Ref="42" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item40 Ref="43" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>GroupHeader</Placement>
@@ -864,12 +870,12 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Header1>
-    <Blue_x0020_Steel_Group_Footer1 Ref="43" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Group_Footer1 Ref="44" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item42 Ref="44" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item42 Ref="45" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>GroupFooter</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>
@@ -880,12 +886,12 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[79:129:189]</TextBrush>
     </Blue_x0020_Steel_Group_Footer1>
-    <Blue_x0020_Steel_Header1 Ref="45" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Header1 Ref="46" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
       <Brush>[79:129:189]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item44 Ref="46" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item44 Ref="47" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Header</Placement>
@@ -897,12 +903,12 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>White</TextBrush>
     </Blue_x0020_Steel_Header1>
-    <Blue_x0020_Steel_Data1 Ref="47" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1 Ref="48" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item46 Ref="48" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item46 Ref="49" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image, CheckBox</ComponentType>
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>Data</Placement>
@@ -914,12 +920,12 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1>
-    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="49" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="50" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[255:255:255]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item48 Ref="50" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item48 Ref="51" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataOddStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
@@ -930,12 +936,12 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Odd_x0020_Style>
-    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="51" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="52" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
       <Brush>[216:216:216]</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item50 Ref="52" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item50 Ref="53" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
           <Placement>DataEvenStyle</Placement>
           <Type>Placement, PlacementNestedLevel</Type>
@@ -946,12 +952,12 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[0:0:0]</TextBrush>
     </Blue_x0020_Steel_Data1_Even_x0020_Style>
-    <Blue_x0020_Steel_Footer1 Ref="53" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Blue_x0020_Steel_Footer1 Ref="54" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black</Border>
       <Brush>White</Brush>
       <CollectionName>Blue Steel</CollectionName>
       <Conditions isList="true" count="1">
-        <Item52 Ref="54" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item52 Ref="55" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentType>Text, Primitive, Image</ComponentType>
           <Placement>Footer</Placement>
           <Type>ComponentType, Placement, PlacementNestedLevel</Type>

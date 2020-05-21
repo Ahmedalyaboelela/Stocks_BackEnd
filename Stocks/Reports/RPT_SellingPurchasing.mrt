@@ -5,7 +5,7 @@
     <Databases isList="true" count="1">
       <MS_x0020_SQL Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
         <Alias>MS SQL</Alias>
-        <ConnectionStringEncrypted>9FyXz01KcoH5CE34+ADhJ9FsUw1IAwGk4kztOOH84RfFVN3rVlP63UVGZZjDdOEn9HD3iEZrSpl5FSnseszge/la+c9PXVJdaVyEKHc9rGfJJFMCxV3DAexEvZh6+Pbr12CB</ConnectionStringEncrypted>
+        <ConnectionStringEncrypted>9PrRSNcI08VsW7XkcuykP9F4aYhFXbtJYknobE30YaPHxGXJ1EqxmXFNodRNhGAP0VqFic1c8wlBXDmY8AThP4tw981IVpKF+UeEvW9s9jrCcPcpVkx7bWJ40QTP2OjnkPLLzMlrc4HLbA==</ConnectionStringEncrypted>
         <Name>MS SQL</Name>
       </MS_x0020_SQL>
     </Databases>
@@ -40,16 +40,16 @@
         </Columns>
         <CommandTimeout>30</CommandTimeout>
         <Dictionary isRef="1" />
-        <Key>cf710954f99b45ca8c0609b702a2f0cc</Key>
+        <Key>8570dccc62b145bfb540287e481e4302</Key>
         <Name>DataSource2</Name>
         <NameInSource>MS SQL</NameInSource>
         <Parameters isList="true" count="4">
-          <value>_x0040_portID,_x0031_008,8,32</value>
-          <value>_x0040_partenerID,_x0035_,8,32</value>
-          <value>_x0040_StartDate,_x0022_2018_x002F_8_x002F_15_x0022_,33,7</value>
-          <value>_x0040_EndDate,_x0022_2019_x002F_9_x002F_30_x0022_,33,7</value>
+          <value>_x0040_FromDate,,33,7</value>
+          <value>_x0040_ToDate,,33,7</value>
+          <value>_x0040_portID,,8,32</value>
+          <value>_x0040_partenerID,,8,32</value>
         </Parameters>
-        <SqlCommand>EXeC [dbo].[RPT_but_sell_Stocks] @StartDate,@EndDate,@portID,@partenerID</SqlCommand>
+        <SqlCommand>exec RPT_but_sell_Stocks @FromDate,@ToDate,@portID,@partenerID</SqlCommand>
       </DataSource2>
     </DataSources>
     <Relations isList="true" count="0" />
@@ -59,7 +59,7 @@
   </Dictionary>
   <EngineVersion>EngineV2</EngineVersion>
   <GlobalizationStrings isList="true" count="0" />
-  <Key>4858d9ca511440a98f0d48e616988df3</Key>
+  <Key>768d77d9e3c44d3c93a5da3e28ba7f3c</Key>
   <MetaTags isList="true" count="0" />
   <Pages isList="true" count="1">
     <Page1 Ref="4" type="Page" isKey="true">
@@ -74,7 +74,7 @@
               <Brush>Transparent</Brush>
               <ClientRectangle>1.1,0.08,9.29,1.42</ClientRectangle>
               <Conditions isList="true" count="0" />
-              <Guid>7920b114fa714fb5842a5e9a13259782</Guid>
+              <Guid>d3a275a421694246aeef22f3eedf3b7c</Guid>
               <ImageBytes>iVBORw0KGgoAAAANSUhEUgAAA1IAAAB9CAMAAACf6qJLAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
 bWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp
 bj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6
@@ -388,16 +388,16 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
             </Image2>
           </Components>
           <Conditions isList="true" count="0" />
-          <Guid>71c15c677ea5468fbe8be9a4ef868627</Guid>
+          <Guid>feb0afb33cc347be976cad434b44acca</Guid>
           <Name>PageHeaderBand2</Name>
           <Page isRef="4" />
           <Parent isRef="4" />
         </PageHeaderBand2>
-        <ReportTitle Ref="7" type="ReportTitleBand" isKey="true">
+        <ReportTitleBand1 Ref="7" type="ReportTitleBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,2.01,10.22,0.5</ClientRectangle>
           <Components isList="true" count="1">
-            <ReportTitleText Ref="8" type="Text" isKey="true">
+            <Text1 Ref="8" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>0,0,10.22,0.5</ClientRectangle>
@@ -407,20 +407,20 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <GrowToHeight>True</GrowToHeight>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>ReportTitleText</Name>
+              <Name>Text1</Name>
               <Page isRef="4" />
               <Parent isRef="7" />
               <Text>بيع وشراء اسهم الشركة</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
-            </ReportTitleText>
+            </Text1>
           </Components>
           <Conditions isList="true" count="0" />
-          <Name>ReportTitle</Name>
+          <Name>ReportTitleBand1</Name>
           <Page isRef="4" />
           <Parent isRef="4" />
-        </ReportTitle>
+        </ReportTitleBand1>
         <HeaderDataSource2 Ref="9" type="HeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,2.91,10.22,0.2</ClientRectangle>
@@ -431,7 +431,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <ClientRectangle>6.9,-0.11,3.31,0.31</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,10,Bold</Font>
-              <Guid>28d3559e00ee400fa178ec47aec5f353</Guid>
+              <Guid>0d36e58280384cf189f6ed2cdf225870</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text8</Name>
@@ -448,7 +448,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <ClientRectangle>3.6,-0.11,3.31,0.31</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,10,Bold</Font>
-              <Guid>8892bf8eda6145b38f151cbea0e3de36</Guid>
+              <Guid>bceab4518903452b886f262f86008881</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text9</Name>
@@ -465,7 +465,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <ClientRectangle>2.4,-0.11,1.28,0.31</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,10,Bold</Font>
-              <Guid>c2b3512dfb2d41be8a6d6da49cb25807</Guid>
+              <Guid>fd53b0113bdb427aac35036fc4ed1577</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text11</Name>
@@ -485,7 +485,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>3e915920f2a943bfa4a32a02ad7f8da9</Guid>
+              <Guid>0ec8930e000f4fbebf1bb46fc4245983</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource22</Name>
@@ -506,7 +506,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>c11e2bd3c03741b7821cd966b1e71532</Guid>
+              <Guid>dbdb90436b71426c88580a2acbec6a21</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource23</Name>
@@ -527,7 +527,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>83ba59f60d0f42d79a91aa4645c6e440</Guid>
+              <Guid>3524221ca4c6446a85afd09ea63081f4</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource26</Name>
@@ -548,7 +548,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>4c2e2df372074b9281fc214dae83cdd3</Guid>
+              <Guid>48732d2c896b45e48346c6ee96333e99</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource27</Name>
@@ -569,7 +569,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>dab1b8f7f1d84676b8ff9e10a0c16e15</Guid>
+              <Guid>d5c4399a93364462907126f42fc3e873</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource28</Name>
@@ -590,7 +590,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>c6399bd337d746e39c07caed176f03ae</Guid>
+              <Guid>0bc4449b259a4953b5d4c8c1286219b0</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource29</Name>
@@ -611,7 +611,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>ba445e701f214559a60118c00cea4f67</Guid>
+              <Guid>e7115d7e84fe4098a51bc18795f180bd</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource210</Name>
@@ -632,7 +632,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>e40b77e3941c4feea4398911173f554d</Guid>
+              <Guid>77cf9d0cc9384d2681daf51ec8213141</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource211</Name>
@@ -653,7 +653,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>6defdf2889cf4536be46b60058d46060</Guid>
+              <Guid>21c59198acdd419392f6360c560a307c</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource213</Name>
@@ -674,7 +674,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>9630aa3533114a30838f91da2c67242b</Guid>
+              <Guid>21e4ce73403a4732b12d71202ab0e2ed</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource214</Name>
@@ -695,7 +695,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>7f1dcecc46dd497a861b47ec5450a07c</Guid>
+              <Guid>cb6aaff733e14cc4bf960e62de62a531</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource215</Name>
@@ -716,7 +716,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>db0da25e168c4e369f597525d5450a8d</Guid>
+              <Guid>5b02a536ce3e427fb4312a67e8a4f522</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource216</Name>
@@ -737,7 +737,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>4055a8ccf1764346ab1c3e97a055fff1</Guid>
+              <Guid>c90bbdfbb7344941ac3ad3f30e434625</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource217</Name>
@@ -758,7 +758,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>f7e8626a0ef840d4bae3cb5e9d249ad5</Guid>
+              <Guid>07b73c89be2f43ffb5d9bda72c90ce36</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource21</Name>
@@ -779,7 +779,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>a661d375ff1046db8ababb43e7f35593</Guid>
+              <Guid>7d445eea37094b85b6d8ed49a1685f40</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource218</Name>
@@ -800,7 +800,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>dd0126db52994adc965c63b51b77de7e</Guid>
+              <Guid>f16251959a894bf38c06cac9c9227307</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource219</Name>
@@ -821,7 +821,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>a4f09383737349e5813f43f706599c1c</Guid>
+              <Guid>c3da89d209e948d2b9739dd3a6c2071e</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextDataSource212</Name>
@@ -842,7 +842,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Conditions isList="true" count="0" />
               <Font>Arial,9.75,Bold,Point,False,204</Font>
               <GrowToHeight>True</GrowToHeight>
-              <Guid>8879c51939234e338c956aec54184fe1</Guid>
+              <Guid>c191e84fc91a4a7aa4ec2653ccc8fd75</Guid>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text21</Name>
@@ -937,18 +937,18 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.PTotal}</Text>
               <TextBrush>Black</TextBrush>
             </Text7>
-            <Text1 Ref="38" type="Text" isKey="true">
+            <Text23 Ref="38" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>6.4,0.09,0.4,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Font>Arial,8</Font>
               <Margins>0,0,0,0</Margins>
-              <Name>Text1</Name>
+              <Name>Text23</Name>
               <Page isRef="4" />
               <Parent isRef="31" />
               <Text>{DataSource2.SCount}</Text>
               <TextBrush>Black</TextBrush>
-            </Text1>
+            </Text23>
             <Text10 Ref="39" type="Text" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>5.9,0.09,0.5,0.2</ClientRectangle>
@@ -1104,10 +1104,9 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
         </FooterDataSource2>
       </Components>
       <Conditions isList="true" count="0" />
-      <Guid>302d7e058a5b4e03a53df605d0970a03</Guid>
+      <Guid>27c699e1f21d4f158d9bcbb6e9701eaa</Guid>
       <Margins>0.39,0.39,0.39,0.39</Margins>
       <Name>Page1</Name>
-      <Orientation>Landscape</Orientation>
       <PageHeight>8.5</PageHeight>
       <PageWidth>11</PageWidth>
       <PaperSize>Letter</PaperSize>
@@ -1125,13 +1124,13 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>10/17/2019 12:36:46 PM</ReportChanged>
-  <ReportCreated>10/17/2019 11:39:51 AM</ReportCreated>
-  <ReportFile>D:\Stocks\Back\Stocks\Reports\RPT_SellingPurchasing.mrt</ReportFile>
-  <ReportGuid>fa57de7ecaa84e07b458cc13913321cb</ReportGuid>
+  <ReportChanged>5/12/2020 3:11:54 PM</ReportChanged>
+  <ReportCreated>3/30/2020 12:00:14 AM</ReportCreated>
+  <ReportFile>E:\Malaz\Malaz_Systems\Stocks\SourceCode\Stocks_BackEnd\Stocks\Reports\RPT_SellingPurchasing.mrt</ReportFile>
+  <ReportGuid>b0656165aa004da4a14eefae83a8ce44</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Inches</ReportUnit>
-  <ReportVersion>2019.3.4.0</ReportVersion>
+  <ReportVersion>2020.2.1.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;

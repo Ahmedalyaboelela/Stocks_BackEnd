@@ -187,6 +187,9 @@ namespace BAL.Mapper
             CreateMap<SettingAccount, SettingAccountModel>();
             CreateMap<SettingAccountModel, SettingAccount>();
 
+            // setting kilo
+            CreateMap<SettingKiloConnection, SettingKiloModel>();
+            CreateMap<SettingKiloModel, SettingKiloConnection>();
 
             #endregion
 

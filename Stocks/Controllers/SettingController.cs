@@ -136,6 +136,20 @@ namespace Stocks.Controllers
 
             return Ok(model);
         }
+        [HttpGet]
+        [Route("~/api/Setting/GetSettingKilo")]
+        public IActionResult GetSettingKilo()
+        {
+            var settingkilo = unitOfWork.SettingKiloRepository.Get().SingleOrDefault();
+            var model = _mapper.Map<SettingKiloModel>(settingkilo);
+
+            if (model == null)
+            {
+                return Ok(0);
+            }
+
+            return Ok(model);
+        }
         #endregion
 
 
@@ -291,8 +305,85 @@ namespace Stocks.Controllers
             }
         }
 
-        #endregion
+        [HttpPost]
+        [Route("~/api/Setting/SaveSettingKilo")]
+        public IActionResult SaveSettingKilo([FromBody] SettingKiloModel settingKiloModel)
+        {
+            if (ModelState.IsValid)
+            {
 
-    
+                var model = _mapper.Map<SettingKiloConnection> (settingKiloModel);
+                if (model == null)
+                {
+                    return Ok(0);
+                }
+
+                var Check = unitOfWork.SettingKiloRepository.Get(NoTrack: "NoTrack");
+                // check if there is already data
+                // insert case
+                #region Insert new setting
+                if (Check.Count() == 0)
+                {
+
+                    unitOfWork.SettingKiloRepository.Insert(model);
+
+                    var reslt = unitOfWork.Save();
+                    if (reslt == 200)
+                    {
+
+                        return Ok(4);
+                    }
+                    else if (reslt == 501)
+                    {
+                        return Ok(5);
+                    }
+                    else
+                    {
+                        return Ok(6);
+                    }
+
+                }
+                #endregion
+                #region Update exist data as remove old and add new setting
+                else
+                {
+                    var oldSettingKilo = unitOfWork.SettingKiloRepository.Get(NoTrack: "NoTrack").SingleOrDefault();
+
+
+                    unitOfWork.SettingKiloRepository.Delete(oldSettingKilo);
+                    unitOfWork.SettingKiloRepository.Insert(model);
+
+
+                    #endregion
+                    var reslt = unitOfWork.Save();
+                    if (reslt == 200)
+                    {
+
+                        return Ok(4);
+                    }
+                    else if (reslt == 501)
+                    {
+                        return Ok(5);
+                    }
+                    else
+                    {
+                        return Ok(6);
+                    }
+
+                }
+
+
+                #endregion
+
+            }
+            else
+            {
+                return Ok(3);
+            }
+        }
+
+
+
+
     }
 }

@@ -213,7 +213,7 @@ namespace Stocks.Controllers
             report.Load(path);
             report["@portID"] = portId;
             report["@partenerID"] = partId;
-            report["@StartDate"] = StartDate;
+            report["@FromDate"] = StartDate;
             report["@ToDate"] = EndDate;
 
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
