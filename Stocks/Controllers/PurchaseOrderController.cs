@@ -97,6 +97,7 @@ namespace Stocks.Controllers
                         PurchaseOrderID = m.PurchaseOrderID,
                         PurchaseOrderDetailID = m.PurchaseOrderDetailID,
                         StockCount = m.StockCount,
+                        TradingValue=m.TradingValue,
                         PartnerCode = m.Partner.Code
 
 
@@ -187,6 +188,7 @@ namespace Stocks.Controllers
                             detail.PriceType = item.PriceType;
                             detail.StockCount = item.StockCount;
                             detail.PurchaseOrderDetailID = 0;
+                            detail.TradingValue = item.TradingValue;
                             var ob = _mapper.Map<PurchaseOrderDetail>(detail);
                             unitOfWork.PurchaseOrderDetailRepository.Insert(ob);
                         }

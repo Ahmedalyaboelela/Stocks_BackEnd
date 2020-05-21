@@ -19,7 +19,8 @@ namespace DAL.Entities
 
         public int PartnerID { get; set; }
 
-
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal? TradingValue { get; set; }
 
         [ForeignKey("PurchaseOrderID")]
         public virtual PurchaseOrder PurchaseOrder { get; set; }

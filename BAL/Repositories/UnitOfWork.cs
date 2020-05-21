@@ -205,6 +205,18 @@ namespace BAL.Repositories
                 return settingRepository;
             }
         }
+        private GenericRepository<SettingKiloConnection> settingKiloRepository;
+        public GenericRepository<SettingKiloConnection> SettingKiloRepository
+        {
+            get
+            {
+                if (this.settingKiloRepository == null)
+                {
+                    this.settingKiloRepository = new GenericRepository<SettingKiloConnection>(Context);
+                }
+                return settingKiloRepository;
+            }
+        }
 
         private GenericRepository<SettingAccount> settingAccountRepository;
         public GenericRepository<SettingAccount> SettingAccountRepository

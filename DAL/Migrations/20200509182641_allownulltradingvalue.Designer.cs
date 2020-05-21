@@ -4,14 +4,16 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(StocksContext))]
-    partial class StocksContextModelSnapshot : ModelSnapshot
+    [Migration("20200509182641_allownulltradingvalue")]
+    partial class allownulltradingvalue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -952,31 +954,6 @@ namespace DAL.Migrations
                     b.HasIndex("SettingID");
 
                     b.ToTable("SettingAccounts");
-                });
-
-            modelBuilder.Entity("DAL.Entities.SettingKiloConnection", b =>
-                {
-                    b.Property<int>("SettingKiloID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("DatabaseName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("ServerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(250)");
-
-                    b.HasKey("SettingKiloID");
-
-                    b.ToTable("SettingKiloConnections");
                 });
 
             modelBuilder.Entity("DAL.Entities.TestTable", b =>

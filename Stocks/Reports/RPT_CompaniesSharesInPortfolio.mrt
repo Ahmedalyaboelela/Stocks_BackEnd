@@ -5,7 +5,7 @@
     <Databases isList="true" count="1">
       <MS_x0020_SQL Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
         <Alias>MS SQL</Alias>
-        <ConnectionStringEncrypted>9FyBz00DQ835CE3U+wDhY9Fk0cJISquk4kzt/eHkol7fdLULZXx6fUVGnPTDSaJ/8lb7K0Vd8nVoQf3setjte9Fas6FiS3sR4WE93PdMJV6NdMHJXUvz9XprOdx6LKQ=</ConnectionStringEncrypted>
+        <ConnectionStringEncrypted>9FRTz08IWplsW7Xwd9gpY9FaxYlIa7vN+Vrt8PCId17HcPsLS13CReJN6IBjSaRG1BjVSWFLst3iR6W9asyxT9NaywtWS1qZahWE7GNUpKv5ePUpSEr7pPJB7dxh7KJe</ConnectionStringEncrypted>
         <Name>MS SQL</Name>
       </MS_x0020_SQL>
     </Databases>
@@ -92,7 +92,7 @@
             </Image1>
             <Image2 Ref="8" type="Image" isKey="true">
               <Brush>Transparent</Brush>
-              <ClientRectangle>0.9,0,8.5,1.25</ClientRectangle>
+              <ClientRectangle>0.7,0,9.1,1.25</ClientRectangle>
               <Conditions isList="true" count="0" />
               <ImageBytes>iVBORw0KGgoAAAANSUhEUgAAA1IAAAB9CAMAAACf6qJLAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
 bWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp
@@ -869,7 +869,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.PurchaseStockCount}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="34" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -895,7 +895,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.PurchasePrice}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="36" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -921,7 +921,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.PurchaseValue}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="38" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -947,7 +947,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.PurchaseBankCommission}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="40" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -973,7 +973,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.PurchaseTaxOnCommission}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="42" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -999,7 +999,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.TotalCost}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="44" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1025,7 +1025,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.SellingStockCount}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="46" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1051,7 +1051,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.SellingPrice}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="48" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1077,7 +1077,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.SellingBankCommission}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="50" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1103,7 +1103,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.SellingTaxOnCommission}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="52" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1129,7 +1129,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.NetAmmount}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="54" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1155,7 +1155,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.BalanceNumber}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="56" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1181,7 +1181,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.BalanceSR}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="58" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1207,7 +1207,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.SellingValue}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="60" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1233,7 +1233,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.DailyStockValue}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="62" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1259,7 +1259,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.MarketValue}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="64" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1285,7 +1285,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{DataSource2.Evaluation}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="66" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1328,7 +1328,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.PurchaseStockCount)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="69" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1356,7 +1356,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.PurchasePrice)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="71" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1384,7 +1384,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.PurchaseValue)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="73" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1412,7 +1412,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.PurchaseBankCommission)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="75" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1440,7 +1440,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.PurchaseBankCommission)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="77" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1468,7 +1468,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.TotalCost)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="79" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1496,7 +1496,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.SellingStockCount)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="81" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1524,7 +1524,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.SellingPrice)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="83" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1552,7 +1552,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.SellingValue)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="85" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1580,7 +1580,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.SellingBankCommission)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="87" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1608,7 +1608,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.SellingTaxOnCommission)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="89" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1636,7 +1636,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.NetAmmount)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="91" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1664,7 +1664,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.BalanceNumber)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="93" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1692,7 +1692,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.BalanceSR)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="95" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1720,7 +1720,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.DailyStockValue)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="97" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1748,7 +1748,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.MarketValue)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="99" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1776,7 +1776,7 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
               <Text>{Sum(DataDataSource2,DataSource2.Evaluation)}</Text>
               <TextBrush>[79:129:189]</TextBrush>
               <TextFormat Ref="101" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
+                <DecimalDigits>2</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>0</NegativePattern>
                 <State>DecimalDigits, NegativePattern, NegativeInRed</State>
@@ -1836,13 +1836,13 @@ pHDhwpHChQsXjhQuXDhSuHDhSOHC9VPT/xdgACTbLQNS4V41AAAAAElFTkSuQmCC</ImageBytes>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>9/24/2019 5:07:05 PM</ReportChanged>
+  <ReportChanged>1/6/2020 5:17:46 PM</ReportChanged>
   <ReportCreated>9/9/2019 4:25:15 PM</ReportCreated>
-  <ReportFile>D:\Stocks\Back\Stocks\Reports\RPT_CompaniesSharesInPortfolio.mrt</ReportFile>
-  <ReportGuid>6b58756b0d6d4443b66655f62c5d59f7</ReportGuid>
+  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\RPT_CompaniesSharesInPortfolio.mrt</ReportFile>
+  <ReportGuid>2c7318f45b47489ea85729535a1e186b</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Inches</ReportUnit>
-  <ReportVersion>2019.3.4.0</ReportVersion>
+  <ReportVersion>2019.3.2.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;
