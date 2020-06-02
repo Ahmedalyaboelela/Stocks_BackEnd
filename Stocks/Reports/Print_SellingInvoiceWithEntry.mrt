@@ -1322,7 +1322,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
         </DataNoticeDetails>
         <FooterNoticeDetails Ref="78" type="FooterBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,610,922,60</ClientRectangle>
+          <ClientRectangle>0,610,922,40</ClientRectangle>
           <Components isList="true" count="3">
             <Text40 Ref="79" type="Text" isKey="true">
               <Brush>SteelBlue</Brush>
@@ -1380,7 +1380,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
         </FooterNoticeDetails>
         <HeaderBand3 Ref="82" type="HeaderBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,710,922,70</ClientRectangle>
+          <ClientRectangle>0,690,922,70</ClientRectangle>
           <Components isList="true" count="9">
             <Text47 Ref="83" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
@@ -1512,7 +1512,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
         <DataCredit Ref="92" type="DataBand" isKey="true">
           <Brush>Transparent</Brush>
           <BusinessObjectGuid isNull="true" />
-          <ClientRectangle>0,820,922,30</ClientRectangle>
+          <ClientRectangle>0,800,922,30</ClientRectangle>
           <Components isList="true" count="4">
             <Text44 Ref="93" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
@@ -1597,7 +1597,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
         </DataCredit>
         <FooterCredit Ref="97" type="FooterBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,890,922,60</ClientRectangle>
+          <ClientRectangle>0,870,922,60</ClientRectangle>
           <Components isList="true" count="13">
             <FooterCredit_NoticeID Ref="98" type="Text" isKey="true">
               <Brush>Transparent</Brush>
@@ -1826,7 +1826,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
           <Size>3</Size>
         </RoundedRectanglePrimitive2>
         <RoundedRectanglePrimitive3 Ref="113" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
-          <ClientRectangle>770,720,150,30</ClientRectangle>
+          <ClientRectangle>770,700,150,30</ClientRectangle>
           <Color>SteelBlue</Color>
           <Conditions isList="true" count="0" />
           <Guid>f59572238bdb4ea09a1f83f6f19341fc</Guid>
@@ -1859,11 +1859,11 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
   </ReferencedAssemblies>
   <ReportAlias>Purchase Order</ReportAlias>
   <ReportAuthor>Stimulsoft</ReportAuthor>
-  <ReportChanged>6/2/2020 11:00:17 AM</ReportChanged>
+  <ReportChanged>6/2/2020 11:22:33 AM</ReportChanged>
   <ReportCreated>11/12/2017 10:11:55 PM</ReportCreated>
   <ReportDescription>The sample demonstrates how to create Purchase Order</ReportDescription>
   <ReportFile>C:\MohamedFahmy\work\StocksLatest\BackEnd\Stocks_BackEnd\Stocks\Reports\Print_SellingInvoiceWithEntry.mrt</ReportFile>
-  <ReportGuid>9e4e5f17b8564745abd8d52adab320c1</ReportGuid>
+  <ReportGuid>6c7dbc28cffc491392ea126921102ba3</ReportGuid>
   <ReportName>Purchase Order</ReportName>
   <ReportUnit>HundredthsOfInch</ReportUnit>
   <ReportVersion>2019.3.5.0</ReportVersion>

@@ -813,15 +813,15 @@ namespace Stocks.Controllers
 
         }
 
-        // Print PurchaseInvoice
+        // Print PurchaseInvoiceWithEntry
         [HttpPost]
-        [Route("~/api/ReportViewer/printPurchaseInvoice")]
+        [Route("~/api/ReportViewer/printSellingInvoiceWithEntry")]
         public string printPurchaseInvoice([FromBody] JObject data)
         {
 
             int PurchaseInvoiceID = Convert.ToInt32(data.GetValue("PurchaseInvoiceID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_PurchaseInvoice.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_SellingInvoiceWithEntry.mrt");
             report.Load(path);
             report["@PurchaseInvoiceID"] = PurchaseInvoiceID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
