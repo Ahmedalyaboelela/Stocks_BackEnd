@@ -1809,11 +1809,11 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
   </ReferencedAssemblies>
   <ReportAlias>Purchase Order</ReportAlias>
   <ReportAuthor>Stimulsoft</ReportAuthor>
-  <ReportChanged>6/2/2020 5:55:43 AM</ReportChanged>
+  <ReportChanged>6/2/2020 10:59:21 AM</ReportChanged>
   <ReportCreated>11/12/2017 10:11:55 PM</ReportCreated>
   <ReportDescription>The sample demonstrates how to create Purchase Order</ReportDescription>
   <ReportFile>C:\MohamedFahmy\work\StocksLatest\BackEnd\Stocks_BackEnd\Stocks\Reports\Print_PurchaseInvoiceWithEntry.mrt</ReportFile>
-  <ReportGuid>582d7c59ac9b475ea27ae8513c7481f7</ReportGuid>
+  <ReportGuid>d2254cadd58b4f10bd56206ba866cb06</ReportGuid>
   <ReportName>Purchase Order</ReportName>
   <ReportUnit>HundredthsOfInch</ReportUnit>
   <ReportVersion>2019.3.5.0</ReportVersion>

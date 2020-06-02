@@ -195,7 +195,7 @@ namespace Stocks.Controllers
             StreamReader rd = new StreamReader(path);
             string data = rd.ReadToEnd();
             rd.Close();
-            return data;
+            return data; 
         }
 
         [HttpPost]

@@ -13,11 +13,11 @@
       </Invoice_Data>
       <MS_x0020_SQL Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
         <Alias>MS SQL</Alias>
-        <ConnectionStringEncrypted>9Fzdz+9K89n5YYTEchxtf9EgaYlIXdnVRlvtvcPMJReQOrVIxnqymfNG2QhpbOFGwlq3KE1R84VqQeXc6QB3O+RUaYnFWTGtf1xl3Ol0Y17lWveJyA==</ConnectionStringEncrypted>
+        <ConnectionStringEncrypted>9HTRSE8IAZ3iW7VYStikP9F4aStFXbsFRVvoAPCIY0bDfIHJV0yjzWJL1YDlhKR7gkCNKMYYos16eD29epigY9Vwac1MTJKBeUvtvXBM4SfyxHOjWkzZWWlGzf3PfGI/1GD1aF1rAe3hCE0=</ConnectionStringEncrypted>
         <Name>MS SQL</Name>
       </MS_x0020_SQL>
     </Databases>
-    <DataSources isList="true" count="6">
+    <DataSources isList="true" count="8">
       <Statement Ref="4" type="DataTableSource" isKey="true">
         <Alias>Statement</Alias>
         <Columns isList="true" count="8">
@@ -159,7 +159,7 @@ WHERE SN.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
         <Name>SellingInvoiceDetails</Name>
         <NameInSource>MS SQL</NameInSource>
         <Parameters isList="true" count="1">
-          <value>_x0040_SellingInvoiceID,_x0031_,8,32</value>
+          <value>_x0040_SellingInvoiceID,_x0033_,8,32</value>
         </Parameters>
         <SqlCommand>SELECT P.NameAR AS PartName,SND.StockCount AS StockCount
 	,SND.SellingPrice AS SellPrice,SND.SelingValue AS SellValue
@@ -173,6 +173,42 @@ WHERE SN.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
 ON P.PartnerID = SND.PartnerID
 WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
       </SellingInvoiceDetails>
+      <Credit Ref="10" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>Credit</Alias>
+        <Columns isList="true" count="3">
+          <value>Code,System.String</value>
+          <value>AccountName,System.String</value>
+          <value>RiyalCredit,System.Decimal</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <Key>ab853a7cb5814837a862809216553283</Key>
+        <Name>Credit</Name>
+        <NameInSource>MS SQL</NameInSource>
+        <Parameters isList="true" count="1">
+          <value>_x0040_SellingInvoiceID,_x0033_,8,32</value>
+        </Parameters>
+        <SqlCommand>select A.Code as Code,A.NameAR as AccountName,ED.Credit as RiyalCredit from dbo.Entries as E join dbo.EntryDetails as ED on e.EntryID = ed.EntryID join dbo.Accounts as A on ED.AccountID = A.AccountID where e.SellingInvoiceID = @SellingInvoiceID AND ED.Debit is null
+</SqlCommand>
+      </Credit>
+      <Debit Ref="11" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>Debit</Alias>
+        <Columns isList="true" count="3">
+          <value>Code,System.String</value>
+          <value>AccountName,System.String</value>
+          <value>RiyalDebit,System.Decimal</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <Key>c7710181f1c54d54ab0db7017aa197ca</Key>
+        <Name>Debit</Name>
+        <NameInSource>MS SQL</NameInSource>
+        <Parameters isList="true" count="1">
+          <value>_x0040_SellingInvoiceID,_x0033_,8,32</value>
+        </Parameters>
+        <SqlCommand>select A.Code as Code,A.NameAR as AccountName,ED.Debit as RiyalDebit from dbo.Entries as E join dbo.EntryDetails as ED on e.EntryID = ed.EntryID join dbo.Accounts as A on ED.AccountID = A.AccountID where e.SellingInvoiceID = @SellingInvoiceID	AND ED.Credit is null
+</SqlCommand>
+      </Debit>
     </DataSources>
     <Relations isList="true" count="0" />
     <Report isRef="0" />
@@ -216,11 +252,11 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
   </Dictionary>
   <EngineVersion>EngineV2</EngineVersion>
   <GlobalizationStrings isList="true" count="3">
-    <Item9 Ref="10" type="Stimulsoft.Report.StiGlobalizationContainer" isKey="true">
+    <Item11 Ref="12" type="Stimulsoft.Report.StiGlobalizationContainer" isKey="true">
       <CultureName>en</CultureName>
       <Items isList="true" count="0" />
-    </Item9>
-    <Item10 Ref="11" type="Stimulsoft.Report.StiGlobalizationContainer" isKey="true">
+    </Item11>
+    <Item12 Ref="13" type="Stimulsoft.Report.StiGlobalizationContainer" isKey="true">
       <CultureName>ru</CultureName>
       <Items isList="true" count="9">
         <value>ReportAlias,Заказ_x0020_на_x0020_покупку</value>
@@ -233,8 +269,8 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
         <value>Text70.Text,ИТОГО</value>
         <value>Variable.Thanks,Благодарим_x0020_за_x0020_сотрудничество</value>
       </Items>
-    </Item10>
-    <Item11 Ref="12" type="Stimulsoft.Report.StiGlobalizationContainer" isKey="true">
+    </Item12>
+    <Item13 Ref="14" type="Stimulsoft.Report.StiGlobalizationContainer" isKey="true">
       <CultureName>de</CultureName>
       <Items isList="true" count="18">
         <value>ReportAlias,Kaufauftrag</value>
@@ -256,21 +292,21 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
         <value>Variable.Thanks,Vielen_x0020_Dank_x0020_für_x0020_Ihren_x0020_Auftrag_x0021_</value>
         <value>Variable.VendorCompanyName,Firmenname</value>
       </Items>
-    </Item11>
+    </Item13>
   </GlobalizationStrings>
   <Key>508cb527b3f84ff4874c89525984f4bf</Key>
   <MetaTags isList="true" count="0" />
   <Pages isList="true" count="1">
-    <Page1 Ref="13" type="Page" isKey="true">
+    <Page1 Ref="15" type="Page" isKey="true">
       <Border>None;Black;2;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
-      <Components isList="true" count="4">
-        <PageHeaderBand1 Ref="14" type="PageHeaderBand" isKey="true">
+      <Components isList="true" count="12">
+        <PageHeaderBand1 Ref="16" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,20,922,180</ClientRectangle>
           <ComponentPlacement>ph.Page1</ComponentPlacement>
           <Components isList="true" count="17">
-            <Text2 Ref="15" type="Text" isKey="true">
+            <Text2 Ref="17" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>550,0,370,50</ClientRectangle>
@@ -282,15 +318,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Right</HorAlignment>
               <Margins>2,0,0,0</Margins>
               <Name>Text2</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>مؤسسة على حسين بن حمران
 </Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text2>
-            <Text02 Ref="16" type="Text" isKey="true">
+            <Text02 Ref="18" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>0,0,380,50</ClientRectangle>
@@ -303,14 +339,14 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text02</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>            فاتورة بيع</Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text02>
-            <Text3 Ref="17" type="Text" isKey="true">
+            <Text3 Ref="19" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -323,15 +359,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Right</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text3</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>الفرع : المكتب الخاص</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text3>
-            <Text4 Ref="18" type="Text" isKey="true">
+            <Text4 Ref="20" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -344,15 +380,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Right</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text4</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>الرقم الضريبي : 300522984600003</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text4>
-            <Text5 Ref="19" type="Text" isKey="true">
+            <Text5 Ref="21" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -365,15 +401,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Right</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text5</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>المملكة العربية السعودية</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text5>
-            <Text15 Ref="20" type="Text" isKey="true">
+            <Text15 Ref="22" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>10,70,90,20</ClientRectangle>
@@ -385,15 +421,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,3,0,0</Margins>
               <Name>Text15</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>{SellingInvoice.INVDate}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="21" type="DateFormat" isKey="true" />
+              <TextFormat Ref="23" type="DateFormat" isKey="true" />
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text15>
-            <Text61 Ref="22" type="Text" isKey="true">
+            <Text61 Ref="24" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>190,50,90,20</ClientRectangle>
@@ -405,14 +441,14 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text61</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text># رقم الفاتورة</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text61>
-            <Text16 Ref="23" type="Text" isKey="true">
+            <Text16 Ref="25" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>200,70,80,20</ClientRectangle>
@@ -424,11 +460,11 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,3,0,0</Margins>
               <Name>Text16</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>{SellingInvoice.INVCode}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="24" type="NumberFormat" isKey="true">
+              <TextFormat Ref="26" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>1</NegativePattern>
@@ -437,7 +473,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text16>
-            <Text1 Ref="25" type="Text" isKey="true">
+            <Text1 Ref="27" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>190,90,90,20</ClientRectangle>
@@ -449,14 +485,14 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text1</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text># رقم المحفظة</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text1>
-            <Text6 Ref="26" type="Text" isKey="true">
+            <Text6 Ref="28" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>200,110,80,20</ClientRectangle>
@@ -468,11 +504,11 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,3,0,0</Margins>
               <Name>Text6</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>{SellingInvoice.PortCode}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="27" type="NumberFormat" isKey="true">
+              <TextFormat Ref="29" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>1</NegativePattern>
@@ -481,7 +517,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text6>
-            <Text7 Ref="28" type="Text" isKey="true">
+            <Text7 Ref="30" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>100,90,90,20</ClientRectangle>
@@ -493,14 +529,14 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text7</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>المحفظة</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text7>
-            <Text8 Ref="29" type="Text" isKey="true">
+            <Text8 Ref="31" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>100,110,90,20</ClientRectangle>
@@ -512,15 +548,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,3,0,0</Margins>
               <Name>Text8</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>{SellingInvoice.PortName}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="30" type="DateFormat" isKey="true" />
+              <TextFormat Ref="32" type="DateFormat" isKey="true" />
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text8>
-            <Text9 Ref="31" type="Text" isKey="true">
+            <Text9 Ref="33" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>100,50,90,20</ClientRectangle>
@@ -532,14 +568,14 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text9</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text># رقم الأمر</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text9>
-            <Text10 Ref="32" type="Text" isKey="true">
+            <Text10 Ref="34" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>110,70,80,20</ClientRectangle>
@@ -551,11 +587,11 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,3,0,0</Margins>
               <Name>Text10</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>{SellingInvoice.SOCode}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="33" type="NumberFormat" isKey="true">
+              <TextFormat Ref="35" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>1</NegativePattern>
@@ -564,7 +600,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text10>
-            <Text17 Ref="34" type="Text" isKey="true">
+            <Text17 Ref="36" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>10,50,90,20</ClientRectangle>
@@ -576,14 +612,14 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text17</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>التاريخ</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text17>
-            <Text33 Ref="35" type="Text" isKey="true">
+            <Text33 Ref="37" type="Text" isKey="true">
               <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>10,90,90,20</ClientRectangle>
@@ -595,14 +631,14 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text33</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>الموظف</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text33>
-            <Text34 Ref="36" type="Text" isKey="true">
+            <Text34 Ref="38" type="Text" isKey="true">
               <Border>None;White;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <ClientRectangle>10,110,90,20</ClientRectangle>
@@ -614,27 +650,27 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,3,0,0</Margins>
               <Name>Text34</Name>
-              <Page isRef="13" />
-              <Parent isRef="14" />
+              <Page isRef="15" />
+              <Parent isRef="16" />
               <Text>{SellingInvoice.EmpName}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="37" type="DateFormat" isKey="true" />
+              <TextFormat Ref="39" type="DateFormat" isKey="true" />
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text34>
           </Components>
           <Conditions isList="true" count="0" />
           <Name>PageHeaderBand1</Name>
-          <Page isRef="13" />
-          <Parent isRef="13" />
+          <Page isRef="15" />
+          <Parent isRef="15" />
           <PrintOn>OnlyFirstPage</PrintOn>
         </PageHeaderBand1>
-        <HeaderBand2 Ref="38" type="HeaderBand" isKey="true">
+        <HeaderBand2 Ref="40" type="HeaderBand" isKey="true">
           <Brush>Transparent</Brush>
           <ClientRectangle>0,240,922,80</ClientRectangle>
           <ComponentPlacement>h.ap.Page1</ComponentPlacement>
           <Components isList="true" count="12">
-            <Text28 Ref="39" type="Text" isKey="true">
+            <Text28 Ref="41" type="Text" isKey="true">
               <Border>Left;White;1;Solid;False;4;Black</Border>
               <Brush>EmptyBrush</Brush>
               <ClientRectangle>770,0,140,30</ClientRectangle>
@@ -647,14 +683,14 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>3,0,0,0</Margins>
               <Name>Text28</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <Text>بيانات الفاتورة</Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text28>
-            <HeaderTextNoticeDetails2 Ref="40" type="Text" isKey="true">
+            <HeaderTextNoticeDetails2 Ref="42" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -666,15 +702,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>HeaderTextNoticeDetails2</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <Text>الشركة</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </HeaderTextNoticeDetails2>
-            <Text23 Ref="41" type="Text" isKey="true">
+            <Text23 Ref="43" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -686,15 +722,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text23</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <Text>سعر البيع</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text23>
-            <Text12 Ref="42" type="Text" isKey="true">
+            <Text12 Ref="44" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -706,15 +742,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text12</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <Text>عمولة البنك</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text12>
-            <Text13 Ref="43" type="Text" isKey="true">
+            <Text13 Ref="45" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -726,15 +762,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text13</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <Text>نسبة عمولة الضرائب</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text13>
-            <Text14 Ref="44" type="Text" isKey="true">
+            <Text14 Ref="46" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -746,15 +782,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text14</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <Text>عمولة الضرائب</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text14>
-            <Text18 Ref="45" type="Text" isKey="true">
+            <Text18 Ref="47" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -766,15 +802,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text18</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <Text>الصافي</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text18>
-            <Text22 Ref="46" type="Text" isKey="true">
+            <Text22 Ref="48" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -786,15 +822,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text22</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <Text>عدد الأسهم</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text22>
-            <Text24 Ref="47" type="Text" isKey="true">
+            <Text24 Ref="49" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -806,15 +842,15 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text24</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <Text>قيمة البيع</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text24>
-            <Text11 Ref="48" type="Text" isKey="true">
+            <Text11 Ref="50" type="Text" isKey="true">
               <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
               <Brush>SteelBlue</Brush>
               <CanGrow>True</CanGrow>
@@ -826,44 +862,44 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text11</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <Text>نسبة عمولة البنك</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text11>
-            <StartPointPrimitive1 Ref="49" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+            <StartPointPrimitive1 Ref="51" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
               <ClientRectangle>770,0,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>StartPointPrimitive1</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <ReferenceToGuid>7927bf881c4b43ad92a1ec08e91e3fd3</ReferenceToGuid>
             </StartPointPrimitive1>
-            <EndPointPrimitive1 Ref="50" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+            <EndPointPrimitive1 Ref="52" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
               <ClientRectangle>920,30,0,0</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Name>EndPointPrimitive1</Name>
-              <Page isRef="13" />
-              <Parent isRef="38" />
+              <Page isRef="15" />
+              <Parent isRef="40" />
               <ReferenceToGuid>7927bf881c4b43ad92a1ec08e91e3fd3</ReferenceToGuid>
             </EndPointPrimitive1>
           </Components>
           <Conditions isList="true" count="0" />
           <Name>HeaderBand2</Name>
-          <Page isRef="13" />
-          <Parent isRef="13" />
+          <Page isRef="15" />
+          <Parent isRef="15" />
         </HeaderBand2>
-        <DataBand1 Ref="51" type="DataBand" isKey="true">
+        <DataBand1 Ref="53" type="DataBand" isKey="true">
           <Border>None;[43:43:43];1;Solid;False;4;Black</Border>
           <Brush>Transparent</Brush>
           <BusinessObjectGuid isNull="true" />
           <ClientRectangle>0,360,922,30</ClientRectangle>
           <ComponentPlacement>d.Page1</ComponentPlacement>
           <Components isList="true" count="9">
-            <DataTextNoticeDetails7 Ref="52" type="Text" isKey="true">
+            <DataTextNoticeDetails7 Ref="54" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -875,8 +911,8 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>DataTextNoticeDetails7</Name>
-              <Page isRef="13" />
-              <Parent isRef="51" />
+              <Page isRef="15" />
+              <Parent isRef="53" />
               <Text>{SellingInvoiceDetails.PartName}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -884,7 +920,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </DataTextNoticeDetails7>
-            <Text19 Ref="53" type="Text" isKey="true">
+            <Text19 Ref="55" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -896,8 +932,8 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text19</Name>
-              <Page isRef="13" />
-              <Parent isRef="51" />
+              <Page isRef="15" />
+              <Parent isRef="53" />
               <Text>{SellingInvoiceDetails.StockCount}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -905,7 +941,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text19>
-            <Text20 Ref="54" type="Text" isKey="true">
+            <Text20 Ref="56" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -917,8 +953,8 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text20</Name>
-              <Page isRef="13" />
-              <Parent isRef="51" />
+              <Page isRef="15" />
+              <Parent isRef="53" />
               <Text>{SellingInvoiceDetails.SellPrice}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -926,7 +962,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text20>
-            <Text37 Ref="55" type="Text" isKey="true">
+            <Text37 Ref="57" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -938,8 +974,8 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text37</Name>
-              <Page isRef="13" />
-              <Parent isRef="51" />
+              <Page isRef="15" />
+              <Parent isRef="53" />
               <Text>{SellingInvoiceDetails.SellValue}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -947,7 +983,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text37>
-            <Text38 Ref="56" type="Text" isKey="true">
+            <Text38 Ref="58" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -959,8 +995,8 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text38</Name>
-              <Page isRef="13" />
-              <Parent isRef="51" />
+              <Page isRef="15" />
+              <Parent isRef="53" />
               <Text>{SellingInvoiceDetails.BankCommRate}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -968,7 +1004,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text38>
-            <Text21 Ref="57" type="Text" isKey="true">
+            <Text21 Ref="59" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -980,8 +1016,8 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text21</Name>
-              <Page isRef="13" />
-              <Parent isRef="51" />
+              <Page isRef="15" />
+              <Parent isRef="53" />
               <Text>{SellingInvoiceDetails.BankComm}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -989,7 +1025,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text21>
-            <Text25 Ref="58" type="Text" isKey="true">
+            <Text25 Ref="60" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -1001,8 +1037,8 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text25</Name>
-              <Page isRef="13" />
-              <Parent isRef="51" />
+              <Page isRef="15" />
+              <Parent isRef="53" />
               <Text>{SellingInvoiceDetails.TaxRate}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -1010,7 +1046,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text25>
-            <Text39 Ref="59" type="Text" isKey="true">
+            <Text39 Ref="61" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -1022,8 +1058,8 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text39</Name>
-              <Page isRef="13" />
-              <Parent isRef="51" />
+              <Page isRef="15" />
+              <Parent isRef="53" />
               <Text>{SellingInvoiceDetails.Tax}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -1031,7 +1067,7 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text39>
-            <Text26 Ref="60" type="Text" isKey="true">
+            <Text26 Ref="62" type="Text" isKey="true">
               <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -1043,8 +1079,8 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text26</Name>
-              <Page isRef="13" />
-              <Parent isRef="51" />
+              <Page isRef="15" />
+              <Parent isRef="53" />
               <Text>{SellingInvoiceDetails.NetAmount}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
@@ -1059,21 +1095,747 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
           <EvenStyle>Lime Data Even</EvenStyle>
           <Filters isList="true" count="0" />
           <Name>DataBand1</Name>
-          <Page isRef="13" />
-          <Parent isRef="13" />
+          <Page isRef="15" />
+          <Parent isRef="15" />
           <Sort isList="true" count="0" />
         </DataBand1>
-        <RoundedRectanglePrimitive1 Ref="61" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
+        <HeaderBand1 Ref="63" type="HeaderBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,430,922,70</ClientRectangle>
+          <Components isList="true" count="9">
+            <Text30 Ref="64" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>SteelBlue</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>620,60,300,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>561c86505b7941b8bd12e978270e96b4</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text30</Name>
+              <Page isRef="15" />
+              <Parent isRef="63" />
+              <Text>رقم الحساب</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text30>
+            <Text31 Ref="65" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>SteelBlue</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>310,60,310,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>fb1ba4d131a04b6589f0c6d93d53617e</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text31</Name>
+              <Page isRef="15" />
+              <Parent isRef="63" />
+              <Text>اسم الحساب</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text31>
+            <Text43 Ref="66" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>SteelBlue</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>0,60,310,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>722e1e8fab9a44a68bb04dd182a3b48a</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text43</Name>
+              <Page isRef="15" />
+              <Parent isRef="63" />
+              <Text>مدين </Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text43>
+            <Text27 Ref="67" type="Text" isKey="true">
+              <Border>Left;White;1;Solid;False;4;Black</Border>
+              <Brush>EmptyBrush</Brush>
+              <ClientRectangle>780,10,130,30</ClientRectangle>
+              <ComponentPlacement>h.ap.HeaderBand1</ComponentPlacement>
+              <ComponentStyle>Aqua Bill To</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Editable>True</Editable>
+              <Font>Microsoft Sans Serif,16,Bold</Font>
+              <Guid>a5b0fabc49cd4fccaef8433c87902d3e</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>3,0,0,0</Margins>
+              <Name>Text27</Name>
+              <Page isRef="15" />
+              <Parent isRef="63" />
+              <Text>مدين</Text>
+              <TextBrush>SteelBlue</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text27>
+            <StartPointPrimitive4 Ref="68" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+              <ClientRectangle>770,40,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>StartPointPrimitive4</Name>
+              <Page isRef="15" />
+              <Parent isRef="63" />
+              <ReferenceToGuid>c803d56cd14c477badceb866a3781745</ReferenceToGuid>
+            </StartPointPrimitive4>
+            <EndPointPrimitive4 Ref="69" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+              <ClientRectangle>920,70,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>EndPointPrimitive4</Name>
+              <Page isRef="15" />
+              <Parent isRef="63" />
+              <ReferenceToGuid>c803d56cd14c477badceb866a3781745</ReferenceToGuid>
+            </EndPointPrimitive4>
+            <StartPointPrimitive6 Ref="70" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+              <ClientRectangle>770,60,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>StartPointPrimitive6</Name>
+              <Page isRef="15" />
+              <Parent isRef="63" />
+              <ReferenceToGuid>e7b0969178fe44a78b060bbecc563428</ReferenceToGuid>
+            </StartPointPrimitive6>
+            <StartPointPrimitive2 Ref="71" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+              <ClientRectangle>770,10,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>StartPointPrimitive2</Name>
+              <Page isRef="15" />
+              <Parent isRef="63" />
+              <ReferenceToGuid>7c1035ed0c92473ab0e146a1a49e5a76</ReferenceToGuid>
+            </StartPointPrimitive2>
+            <EndPointPrimitive2 Ref="72" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+              <ClientRectangle>920,40,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>EndPointPrimitive2</Name>
+              <Page isRef="15" />
+              <Parent isRef="63" />
+              <ReferenceToGuid>7c1035ed0c92473ab0e146a1a49e5a76</ReferenceToGuid>
+            </EndPointPrimitive2>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>b04d227d09904d2696af9df04896c147</Guid>
+          <Name>HeaderBand1</Name>
+          <Page isRef="15" />
+          <Parent isRef="15" />
+        </HeaderBand1>
+        <DataNoticeDetails Ref="73" type="DataBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
+          <ClientRectangle>0,540,922,30</ClientRectangle>
+          <Components isList="true" count="4">
+            <Text32 Ref="74" type="Text" isKey="true">
+              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>480,0,440,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>1cca5739ca1e4a61846aeb606c4591a1</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text32</Name>
+              <Page isRef="15" />
+              <Parent isRef="73" />
+              <Text>{Debit.Code}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <TextQuality>Wysiwyg</TextQuality>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text32>
+            <Text35 Ref="75" type="Text" isKey="true">
+              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>240,0,240,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>8ab09a2d06814133b3cab9b8ae0b43c7</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text35</Name>
+              <Page isRef="15" />
+              <Parent isRef="73" />
+              <Text>{Debit.AccountName}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <TextQuality>Wysiwyg</TextQuality>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text35>
+            <Text36 Ref="76" type="Text" isKey="true">
+              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>0,0,240,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>e3f6e9001a9f4cfd9a5ac2fab75c1b7d</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text36</Name>
+              <Page isRef="15" />
+              <Parent isRef="73" />
+              <Text>{Debit.RiyalDebit}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <TextQuality>Wysiwyg</TextQuality>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text36>
+            <EndPointPrimitive6 Ref="77" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+              <ClientRectangle>920,-20,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>EndPointPrimitive6</Name>
+              <Page isRef="15" />
+              <Parent isRef="73" />
+              <ReferenceToGuid>e7b0969178fe44a78b060bbecc563428</ReferenceToGuid>
+            </EndPointPrimitive6>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataRelationName isNull="true" />
+          <DataSourceName>Debit</DataSourceName>
+          <EvenStyle>Blue Steel_Data1_Even Style</EvenStyle>
+          <FilterMode>Or</FilterMode>
+          <Filters isList="true" count="0" />
+          <Guid>d4ab1b0318e447bca827f81cbde2df99</Guid>
+          <Name>DataNoticeDetails</Name>
+          <OddStyle>Blue Steel_Data1_Odd Style</OddStyle>
+          <Page isRef="15" />
+          <Parent isRef="15" />
+          <Sort isList="true" count="0" />
+        </DataNoticeDetails>
+        <FooterNoticeDetails Ref="78" type="FooterBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,610,922,60</ClientRectangle>
+          <Components isList="true" count="3">
+            <Text40 Ref="79" type="Text" isKey="true">
+              <Brush>SteelBlue</Brush>
+              <ClientRectangle>500,0,420,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <Guid>7aaeecda68d04cf4b6bf1e4f00f8f67e</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text40</Name>
+              <Page isRef="15" />
+              <Parent isRef="78" />
+              <Text>المجموع</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text40>
+            <Text41 Ref="80" type="Text" isKey="true">
+              <Brush>SteelBlue</Brush>
+              <ClientRectangle>0,0,250,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <Guid>2234cae51c4b4d9fada17fef9a54e17c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text41</Name>
+              <Page isRef="15" />
+              <Parent isRef="78" />
+              <Text>{Sum(Debit.RiyalDebit)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text41>
+            <Text42 Ref="81" type="Text" isKey="true">
+              <Brush>SteelBlue</Brush>
+              <ClientRectangle>250,0,250,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8,Bold</Font>
+              <Guid>2247615ca6884041b27b2805a66e9b04</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text42</Name>
+              <Page isRef="15" />
+              <Parent isRef="78" />
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text42>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>11095f98485b45c0af7c606ea6e32b51</Guid>
+          <Name>FooterNoticeDetails</Name>
+          <Page isRef="15" />
+          <Parent isRef="15" />
+        </FooterNoticeDetails>
+        <HeaderBand3 Ref="82" type="HeaderBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,710,922,70</ClientRectangle>
+          <Components isList="true" count="9">
+            <Text47 Ref="83" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>SteelBlue</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>600,60,320,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>e4d9f640be6d4484bca97a4571a89845</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text47</Name>
+              <Page isRef="15" />
+              <Parent isRef="82" />
+              <Text>رقم الحساب</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text47>
+            <Text48 Ref="84" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>SteelBlue</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>300,60,300,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>94d20de844f64fa6b3a305a26a8f56d5</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text48</Name>
+              <Page isRef="15" />
+              <Parent isRef="82" />
+              <Text>اسم الحساب</Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text48>
+            <Text49 Ref="85" type="Text" isKey="true">
+              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
+              <Brush>SteelBlue</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>0,60,300,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>e25c41f522454ff4aceee5768ab742c8</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text49</Name>
+              <Page isRef="15" />
+              <Parent isRef="82" />
+              <Text>مدين </Text>
+              <TextBrush>White</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text49>
+            <Text29 Ref="86" type="Text" isKey="true">
+              <Border>Left;White;1;Solid;False;4;Black</Border>
+              <Brush>EmptyBrush</Brush>
+              <ClientRectangle>780,10,130,30</ClientRectangle>
+              <ComponentPlacement>h.ap.HeaderBand1</ComponentPlacement>
+              <ComponentStyle>Aqua Bill To</ComponentStyle>
+              <Conditions isList="true" count="0" />
+              <Editable>True</Editable>
+              <Font>Microsoft Sans Serif,16,Bold</Font>
+              <Guid>db9b5f819cff4adba477fc0d61ddd44a</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>3,0,0,0</Margins>
+              <Name>Text29</Name>
+              <Page isRef="15" />
+              <Parent isRef="82" />
+              <Text>دائن</Text>
+              <TextBrush>SteelBlue</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text29>
+            <StartPointPrimitive5 Ref="87" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+              <ClientRectangle>770,40,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>StartPointPrimitive5</Name>
+              <Page isRef="15" />
+              <Parent isRef="82" />
+              <ReferenceToGuid>e81fb7049dc248ba95413e06173bd4f3</ReferenceToGuid>
+            </StartPointPrimitive5>
+            <EndPointPrimitive5 Ref="88" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+              <ClientRectangle>920,70,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>EndPointPrimitive5</Name>
+              <Page isRef="15" />
+              <Parent isRef="82" />
+              <ReferenceToGuid>e81fb7049dc248ba95413e06173bd4f3</ReferenceToGuid>
+            </EndPointPrimitive5>
+            <StartPointPrimitive7 Ref="89" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+              <ClientRectangle>770,60,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>StartPointPrimitive7</Name>
+              <Page isRef="15" />
+              <Parent isRef="82" />
+              <ReferenceToGuid>b07949b9ab1f449f8a126c96c4f08631</ReferenceToGuid>
+            </StartPointPrimitive7>
+            <StartPointPrimitive3 Ref="90" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+              <ClientRectangle>770,10,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>StartPointPrimitive3</Name>
+              <Page isRef="15" />
+              <Parent isRef="82" />
+              <ReferenceToGuid>f59572238bdb4ea09a1f83f6f19341fc</ReferenceToGuid>
+            </StartPointPrimitive3>
+            <EndPointPrimitive3 Ref="91" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+              <ClientRectangle>920,40,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>EndPointPrimitive3</Name>
+              <Page isRef="15" />
+              <Parent isRef="82" />
+              <ReferenceToGuid>f59572238bdb4ea09a1f83f6f19341fc</ReferenceToGuid>
+            </EndPointPrimitive3>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>687269fc48834f5e8a9ed1aa4847c1ff</Guid>
+          <Name>HeaderBand3</Name>
+          <Page isRef="15" />
+          <Parent isRef="15" />
+        </HeaderBand3>
+        <DataCredit Ref="92" type="DataBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
+          <ClientRectangle>0,820,922,30</ClientRectangle>
+          <Components isList="true" count="4">
+            <Text44 Ref="93" type="Text" isKey="true">
+              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>480,0,440,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>7ba0a83df1b344fa85a1f465cc750c4a</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text44</Name>
+              <Page isRef="15" />
+              <Parent isRef="92" />
+              <Text>{Credit.Code}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <TextQuality>Wysiwyg</TextQuality>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text44>
+            <Text35 Ref="94" type="Text" isKey="true">
+              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>240,0,240,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>0a3f0f5480ea471981a3f8f2453c6afb</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text35</Name>
+              <Page isRef="15" />
+              <Parent isRef="92" />
+              <Text>{Credit.AccountName}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <TextQuality>Wysiwyg</TextQuality>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text35>
+            <Text36 Ref="95" type="Text" isKey="true">
+              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>0,0,240,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>607c0fc8734441afa21406d19830ab8c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text36</Name>
+              <Page isRef="15" />
+              <Parent isRef="92" />
+              <Text>{Credit.RiyalCredit}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <TextQuality>Wysiwyg</TextQuality>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text36>
+            <EndPointPrimitive7 Ref="96" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+              <ClientRectangle>920,-20,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>EndPointPrimitive7</Name>
+              <Page isRef="15" />
+              <Parent isRef="92" />
+              <ReferenceToGuid>b07949b9ab1f449f8a126c96c4f08631</ReferenceToGuid>
+            </EndPointPrimitive7>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataSourceName>Credit</DataSourceName>
+          <Filters isList="true" count="0" />
+          <Guid>9f63c47bca5946319e238a152af9a2d1</Guid>
+          <Name>DataCredit</Name>
+          <Page isRef="15" />
+          <Parent isRef="15" />
+          <Sort isList="true" count="0" />
+        </DataCredit>
+        <FooterCredit Ref="97" type="FooterBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,890,922,60</ClientRectangle>
+          <Components isList="true" count="13">
+            <FooterCredit_NoticeID Ref="98" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>50,0,70,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,10,Bold</Font>
+              <Guid>20eeb0b735fa4a228cfe687fc777467c</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>FooterCredit_NoticeID</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </FooterCredit_NoticeID>
+            <FooterCredit_AccountID Ref="99" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>120,0,70,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,10,Bold</Font>
+              <Guid>9f97428d8f6a47718426916d0ca60f79</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>FooterCredit_AccountID</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </FooterCredit_AccountID>
+            <FooterCredit_Credit Ref="100" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>190,0,70,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,10,Bold</Font>
+              <Guid>ce638aedf489486db94ff62537017c84</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>FooterCredit_Credit</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </FooterCredit_Credit>
+            <FooterCredit_Debit Ref="101" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>260,0,70,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,10,Bold</Font>
+              <Guid>e155f146aa0a40f4af1048b350ab49f0</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>FooterCredit_Debit</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </FooterCredit_Debit>
+            <FooterCredit_StocksCredit Ref="102" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>330,0,70,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,10,Bold</Font>
+              <Guid>0c5cf11d8c86404d896ad543ff59d17b</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>FooterCredit_StocksCredit</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </FooterCredit_StocksCredit>
+            <FooterCredit_StocksDebit Ref="103" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>400,0,70,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,10,Bold</Font>
+              <Guid>6750d3890cd547018dfbc43a7a0f9470</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>FooterCredit_StocksDebit</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </FooterCredit_StocksDebit>
+            <FooterCredit_PartnerID Ref="104" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>470,0,70,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,10,Bold</Font>
+              <Guid>9f45d4d388a94fb9a2079eb1eadfb379</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>FooterCredit_PartnerID</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </FooterCredit_PartnerID>
+            <FooterCredit_PartName Ref="105" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>540,0,70,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,10,Bold</Font>
+              <Guid>7009628e80ca4d6f93aca58b7cba28f5</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>FooterCredit_PartName</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </FooterCredit_PartName>
+            <FooterCredit_AccountName Ref="106" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>610,0,70,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,10,Bold</Font>
+              <Guid>defd91ee67b245dea727c8a848823f26</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>FooterCredit_AccountName</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </FooterCredit_AccountName>
+            <FooterCredit_RiyalCredit Ref="107" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>680,0,70,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,10,Bold</Font>
+              <Guid>fa309fc289d24584b9d4b83e61a5fa69</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>FooterCredit_RiyalCredit</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </FooterCredit_RiyalCredit>
+            <Text45 Ref="108" type="Text" isKey="true">
+              <Brush>SteelBlue</Brush>
+              <ClientRectangle>480,0,440,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Microsoft Sans Serif,11,Bold</Font>
+              <Guid>cb21519fc3a34b83a689ab4e3b05a25f</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text45</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <Text>المجموع</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text45>
+            <Text46 Ref="109" type="Text" isKey="true">
+              <Brush>SteelBlue</Brush>
+              <ClientRectangle>0,0,240,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,11,Bold</Font>
+              <Guid>71979ae33d8744d598a6a53d95bf7c2e</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text46</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <Text>{Sum(Credit.RiyalCredit)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text46>
+            <Text41 Ref="110" type="Text" isKey="true">
+              <Brush>SteelBlue</Brush>
+              <ClientRectangle>240,0,240,30</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8,Bold</Font>
+              <Guid>00c75f6c362b433d863f144fbb8ec1d2</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text41</Name>
+              <Page isRef="15" />
+              <Parent isRef="97" />
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text41>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>28a032db0d144491a99f47e97ef3a3ef</Guid>
+          <Name>FooterCredit</Name>
+          <Page isRef="15" />
+          <Parent isRef="15" />
+        </FooterCredit>
+        <RoundedRectanglePrimitive1 Ref="111" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
           <ClientRectangle>770,240,150,30</ClientRectangle>
           <Color>SteelBlue</Color>
           <Conditions isList="true" count="0" />
           <Guid>7927bf881c4b43ad92a1ec08e91e3fd3</Guid>
           <Name>RoundedRectanglePrimitive1</Name>
-          <Page isRef="13" />
-          <Parent isRef="13" />
+          <Page isRef="15" />
+          <Parent isRef="15" />
           <Round>0.2</Round>
           <Size>3</Size>
         </RoundedRectanglePrimitive1>
+        <RoundedRectanglePrimitive2 Ref="112" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
+          <ClientRectangle>770,440,150,30</ClientRectangle>
+          <Color>SteelBlue</Color>
+          <Conditions isList="true" count="0" />
+          <Guid>7c1035ed0c92473ab0e146a1a49e5a76</Guid>
+          <Name>RoundedRectanglePrimitive2</Name>
+          <Page isRef="15" />
+          <Parent isRef="15" />
+          <Round>0.2</Round>
+          <Size>3</Size>
+        </RoundedRectanglePrimitive2>
+        <RoundedRectanglePrimitive3 Ref="113" type="Stimulsoft.Report.Components.StiRoundedRectanglePrimitive" isKey="true">
+          <ClientRectangle>770,720,150,30</ClientRectangle>
+          <Color>SteelBlue</Color>
+          <Conditions isList="true" count="0" />
+          <Guid>f59572238bdb4ea09a1f83f6f19341fc</Guid>
+          <Name>RoundedRectanglePrimitive3</Name>
+          <Page isRef="15" />
+          <Parent isRef="15" />
+          <Round>0.2</Round>
+          <Size>3</Size>
+        </RoundedRectanglePrimitive3>
       </Components>
       <Conditions isList="true" count="0" />
       <Guid>8f656f441095463eae730f959911dad0</Guid>
@@ -1097,14 +1859,14 @@ WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
   </ReferencedAssemblies>
   <ReportAlias>Purchase Order</ReportAlias>
   <ReportAuthor>Stimulsoft</ReportAuthor>
-  <ReportChanged>11/13/2019 12:55:07 PM</ReportChanged>
+  <ReportChanged>6/2/2020 11:00:17 AM</ReportChanged>
   <ReportCreated>11/12/2017 10:11:55 PM</ReportCreated>
   <ReportDescription>The sample demonstrates how to create Purchase Order</ReportDescription>
-  <ReportFile>C:\Users\Amr\Desktop\Print_SellingInvoice.mrt</ReportFile>
-  <ReportGuid>2bb120d5090c4cc1bc61135fbcbd36eb</ReportGuid>
+  <ReportFile>C:\MohamedFahmy\work\StocksLatest\BackEnd\Stocks_BackEnd\Stocks\Reports\Print_SellingInvoiceWithEntry.mrt</ReportFile>
+  <ReportGuid>9e4e5f17b8564745abd8d52adab320c1</ReportGuid>
   <ReportName>Purchase Order</ReportName>
   <ReportUnit>HundredthsOfInch</ReportUnit>
-  <ReportVersion>2019.3.2.0</ReportVersion>
+  <ReportVersion>2019.3.5.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -1130,17 +1892,17 @@ namespace Reports
 </Script>
   <ScriptLanguage>CSharp</ScriptLanguage>
   <Styles isList="true" count="14">
-    <Lime_x0020_Company_x0020_Name Ref="62" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Company_x0020_Name Ref="114" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item56 Ref="63" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item108 Ref="115" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text01</ComponentName>
           <Location>MiddleLeft</Location>
           <Placement>PageHeader</Placement>
           <Type>ComponentName</Type>
-        </Item56>
+        </Item108>
       </Conditions>
       <Font>Microsoft Sans Serif,18,Bold,Point,False,0</Font>
       <HorAlignment>Center</HorAlignment>
@@ -1148,205 +1910,205 @@ namespace Reports
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Lime_x0020_Company_x0020_Name>
-    <Lime_x0020_Company_x0020_Info Ref="64" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Company_x0020_Info Ref="116" type="Stimulsoft.Report.StiStyle" isKey="true">
       <AllowUseBorderFormatting>False</AllowUseBorderFormatting>
       <AllowUseBorderSides>False</AllowUseBorderSides>
       <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item58 Ref="65" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item110 Ref="117" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text1</ComponentName>
           <OperationComponentName>BeginningWith</OperationComponentName>
           <Type>ComponentName</Type>
-        </Item58>
+        </Item110>
       </Conditions>
       <Font>Microsoft Sans Serif,9.75,Regular,Point,False,0</Font>
       <Name>Lime Company Info</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Lime_x0020_Company_x0020_Info>
-    <Lime_x0020_Bill_x0020_To Ref="66" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Bill_x0020_To Ref="118" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Left;White;1;Solid;False;4;Black</Border>
       <Brush>[145:200:83]</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item60 Ref="67" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item112 Ref="119" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text2</ComponentName>
           <OperationComponentName>BeginningWith</OperationComponentName>
           <Type>ComponentName</Type>
-        </Item60>
+        </Item112>
       </Conditions>
       <Font>Microsoft Sans Serif,14.25,Bold,Point,False,0</Font>
       <Name>Lime Bill To</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>White</TextBrush>
     </Lime_x0020_Bill_x0020_To>
-    <Lime_x0020_Bill_x0020_To_x0020_Info Ref="68" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Bill_x0020_To_x0020_Info Ref="120" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item62 Ref="69" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item114 Ref="121" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text3</ComponentName>
           <OperationComponentName>BeginningWith</OperationComponentName>
           <Type>ComponentName</Type>
-        </Item62>
+        </Item114>
       </Conditions>
       <Font>Microsoft Sans Serif,9.75,Regular,Point,False,204</Font>
       <Name>Lime Bill To Info</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[60:63:70]</TextBrush>
     </Lime_x0020_Bill_x0020_To_x0020_Info>
-    <Lime_x0020_Requisites Ref="70" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Requisites Ref="122" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
       <Brush>[60:63:70]</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item64 Ref="71" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item116 Ref="123" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>ReportTitleBand1</ComponentName>
           <Type>ComponentName</Type>
-        </Item64>
+        </Item116>
       </Conditions>
       <Font>Microsoft Sans Serif,12,Regular,Point,False,0</Font>
       <Name>Lime Requisites</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>White</TextBrush>
     </Lime_x0020_Requisites>
-    <Lime_x0020_Title Ref="72" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Title Ref="124" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[155:155:155];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item66 Ref="73" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item118 Ref="125" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text02</ComponentName>
           <Type>ComponentName</Type>
-        </Item66>
+        </Item118>
       </Conditions>
       <Font>Microsoft Sans Serif,18,Bold,Point,False,204</Font>
       <Name>Lime Title</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[145:200:83]</TextBrush>
     </Lime_x0020_Title>
-    <Lime_x0020_Headers Ref="74" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Headers Ref="126" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Left;White;1;Solid;False;4;Black</Border>
       <Brush>[145:200:83]</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item68 Ref="75" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item120 Ref="127" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text4</ComponentName>
           <OperationComponentName>BeginningWith</OperationComponentName>
           <Type>ComponentName</Type>
-        </Item68>
+        </Item120>
       </Conditions>
       <Font>Microsoft Sans Serif,12,Bold,Point,False,0</Font>
       <Name>Lime Headers</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>White</TextBrush>
     </Lime_x0020_Headers>
-    <Lime_x0020_Data_x0020_Even Ref="76" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Data_x0020_Even Ref="128" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[43:43:43];1;Solid;False;4;Black</Border>
       <Brush>[236:240:241]</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item70 Ref="77" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item122 Ref="129" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Data</ComponentName>
           <Placement>DataEvenStyle</Placement>
-        </Item70>
+        </Item122>
       </Conditions>
       <Font>Microsoft Sans Serif,9.75,Regular,Point,False,0</Font>
       <Name>Lime Data Even</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[43:43:43]</TextBrush>
     </Lime_x0020_Data_x0020_Even>
-    <Lime_x0020_Data Ref="78" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Data Ref="130" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[145:145:145];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item72 Ref="79" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item124 Ref="131" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text5</ComponentName>
           <OperationComponentName>BeginningWith</OperationComponentName>
           <Type>ComponentName</Type>
-        </Item72>
+        </Item124>
       </Conditions>
       <Font>Microsoft Sans Serif,9.75,Regular,Point,False,0</Font>
       <Name>Lime Data</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[120:120:120]</TextBrush>
     </Lime_x0020_Data>
-    <Lime_x0020_Contact_x0020_Name Ref="80" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Contact_x0020_Name Ref="132" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item74 Ref="81" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item126 Ref="133" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text6</ComponentName>
           <OperationComponentName>BeginningWith</OperationComponentName>
           <Type>ComponentName</Type>
-        </Item74>
+        </Item126>
       </Conditions>
       <Font>Microsoft Sans Serif,9.75,Bold,Point,False,0</Font>
       <Name>Lime Contact Name</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>Black</TextBrush>
     </Lime_x0020_Contact_x0020_Name>
-    <Lime_x0020_Discount Ref="82" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Discount Ref="134" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[145:145:145];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item76 Ref="83" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item128 Ref="135" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text05</ComponentName>
           <Type>ComponentName</Type>
-        </Item76>
+        </Item128>
       </Conditions>
       <Font>Microsoft Sans Serif,9.75,Regular,Point,False,0</Font>
       <Name>Lime Discount</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[130:191:62]</TextBrush>
     </Lime_x0020_Discount>
-    <Lime_x0020_Total Ref="84" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Total Ref="136" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
       <Brush>[145:200:83]</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item78 Ref="85" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item130 Ref="137" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text7</ComponentName>
           <OperationComponentName>BeginningWith</OperationComponentName>
           <Type>ComponentName</Type>
-        </Item78>
+        </Item130>
       </Conditions>
       <Font>Microsoft Sans Serif,12,Bold,Point,False,204</Font>
       <Name>Lime Total</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>White</TextBrush>
     </Lime_x0020_Total>
-    <Lime_x0020_Thanks Ref="86" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Thanks Ref="138" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>Bottom;[155:155:155];1;Solid;False;4;Black</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item80 Ref="87" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item132 Ref="139" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text03</ComponentName>
           <Type>ComponentName</Type>
-        </Item80>
+        </Item132>
       </Conditions>
       <Font>Microsoft Sans Serif,12,Regular,Point,False,0</Font>
       <Name>Lime Thanks</Name>
       <NegativeTextBrush>Red</NegativeTextBrush>
       <TextBrush>[130:191:62]</TextBrush>
     </Lime_x0020_Thanks>
-    <Lime_x0020_Notes Ref="88" type="Stimulsoft.Report.StiStyle" isKey="true">
+    <Lime_x0020_Notes Ref="140" type="Stimulsoft.Report.StiStyle" isKey="true">
       <Border>None;[155:155:155];1;Solid;False;4;Black;True</Border>
       <Brush>Transparent</Brush>
       <CollectionName>Lime</CollectionName>
       <Conditions isList="true" count="1">
-        <Item82 Ref="89" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
+        <Item134 Ref="141" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
           <ComponentName>Text04</ComponentName>
           <OperationComponentName>BeginningWith</OperationComponentName>
           <Type>ComponentName</Type>
-        </Item82>
+        </Item134>
       </Conditions>
       <Font>Microsoft Sans Serif,9.75,Regular,Point,False,0</Font>
       <Name>Lime Notes</Name>
