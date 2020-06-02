@@ -26,7 +26,7 @@ namespace Stocks.Controllers
         #region CTOR & Definitions
         private readonly ApplicationSettings _appSettings;
         private UnitOfWork unitOfWork;
-        string ReportPath = "C:/MohamedFahmy/work/StocksLatest/BackEnd/Stocks_FrontEnd/src/reports/";
+        
         public ReportViewerController(IOptions<ApplicationSettings> appSettings
         , StocksContext context)
         {
@@ -78,7 +78,7 @@ namespace Stocks.Controllers
             #endregion
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"RPT_ResultOfPortofolioWork.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/RPT_ResultOfPortofolioWork.mrt");
             report.Load(path);
             report["@ToDate"] = ToDate;
             report["@PortofolioID"] = portofolioid;
@@ -100,7 +100,7 @@ namespace Stocks.Controllers
         //{
         //    var report = StiNetCoreDesigner.GetReportObject(this);
 
-        //    var path = StiNetCoreHelper.MapWebRootPath(this, ReportPath+"RPT_ResultOfPortofolioWork.mrt");
+        //    var path = StiNetCoreHelper.MapWebRootPath(this, "/Reports/RPT_ResultOfPortofolioWork.mrt");
         //    report.Save(path);
 
         //    return StiNetCoreDesigner.SaveReportResult(this);
@@ -163,7 +163,7 @@ namespace Stocks.Controllers
             #endregion
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"RPT_CashMovementReyalPortofolio.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/RPT_CashMovementReyalPortofolio.mrt");
             report.Load(path);
             report["@FromDate"] = FromDate;
             report["@ToDate"] = ToDate;
@@ -210,7 +210,7 @@ namespace Stocks.Controllers
 
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"RPT_SellingPurchasing.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/RPT_SellingPurchasing.mrt");
             report.Load(path);
             report["@portID"] = portId;
             report["@partenerID"] = partId;
@@ -263,7 +263,7 @@ namespace Stocks.Controllers
             }
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"RPT_Evaluateport.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/RPT_Evaluateport.mrt");
             report.Load(path);
             report["@enddate"] = ToDate;
             report["@portID"] = portID;
@@ -318,7 +318,7 @@ namespace Stocks.Controllers
 
 
                 StiReport report = new StiReport();
-                var path = StiNetCoreHelper.MapPath(this, ReportPath+"RPT_Earnings.mrt");
+                var path = StiNetCoreHelper.MapPath(this, "/Reports/RPT_Earnings.mrt");
                 report.Load(path);
                 report["@todate"] = ToDate;
                 report["@startdate"] = Firstdate;
@@ -349,7 +349,7 @@ namespace Stocks.Controllers
                 return "Bad Request";
             }
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"RPT_ProfitsOnSameYear.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/RPT_ProfitsOnSameYear.mrt");
             report.Load(path);
             report["@PortfolioID"] = portfolioID;
             report["@FromDate"] = fDate.ToString("yyyy-MM-dd");
@@ -399,7 +399,7 @@ namespace Stocks.Controllers
             }
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"RPT_TotalProfitsInYears.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/RPT_TotalProfitsInYears.mrt");
             report.Load(path);
             report["@portfolioId"] = portID;
             report["@startdate"] = StartDate;
@@ -445,7 +445,7 @@ namespace Stocks.Controllers
             }
             #endregion
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"RPT_CompaniesSharesInPortfolio.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/RPT_CompaniesSharesInPortfolio.mrt");
 
 
 
@@ -486,7 +486,7 @@ namespace Stocks.Controllers
 
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"RPT_ProfitsDistributor.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/RPT_ProfitsDistributor.mrt");
             report.Load(path);
             report["@enddate"] = Enddate;
             report["@startdate"] = Startdate;
@@ -518,7 +518,7 @@ namespace Stocks.Controllers
 
 
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"RPT_Earningscollected.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/RPT_Earningscollected.mrt");
             report.Load(path);
             report["@Year"] = year;
 
@@ -545,7 +545,7 @@ namespace Stocks.Controllers
 
             int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_NoticeCredit.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_NoticeCredit.mrt");
             report.Load(path);
             report["@NoticeID1"] = NoticeID;
             report["@NoticeID2"] = NoticeID;
@@ -567,7 +567,7 @@ namespace Stocks.Controllers
 
             int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_NoticeDebit.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_NoticeDebit.mrt");
             report.Load(path);
             report["@NoticeID1"] = NoticeID;
             report["@NoticeID2"] = NoticeID;
@@ -588,7 +588,7 @@ namespace Stocks.Controllers
 
             int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_RiyalRecieptVoucher.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_RiyalRecieptVoucher.mrt");
             report.Load(path);
             report["@NoticeID1"] = NoticeID;
             report["@NoticeID2"] = NoticeID;
@@ -609,7 +609,7 @@ namespace Stocks.Controllers
 
             int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_CheckRecieptVoucher.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_CheckRecieptVoucher.mrt");
             report.Load(path);
             report["@NoticeID1"] = NoticeID;
             report["@NoticeID2"] = NoticeID;
@@ -630,7 +630,7 @@ namespace Stocks.Controllers
 
             int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_RiyalExchangeVoucher.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_RiyalExchangeVoucher.mrt");
             report.Load(path);
             report["@NoticeID1"] = NoticeID;
             report["@NoticeID2"] = NoticeID;
@@ -651,7 +651,7 @@ namespace Stocks.Controllers
 
             int NoticeID = Convert.ToInt32(data.GetValue("NoticeID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_CheckExchangeVoucher.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_CheckExchangeVoucher.mrt");
             report.Load(path);
             report["@NoticeID1"] = NoticeID;
             report["@NoticeID2"] = NoticeID;
@@ -672,7 +672,7 @@ namespace Stocks.Controllers
 
             int CountryID = Convert.ToInt32(data.GetValue("CountryID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_Country.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_Country.mrt");
             report.Load(path);
             report["@CountryID"] = CountryID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
@@ -690,7 +690,7 @@ namespace Stocks.Controllers
 
             int AccountID = Convert.ToInt32(data.GetValue("AccountID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_Account.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_Account.mrt");
             report.Load(path);
             report["@AccountID"] = AccountID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
@@ -708,7 +708,7 @@ namespace Stocks.Controllers
 
             int EmployeeID = Convert.ToInt32(data.GetValue("EmployeeID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_Emplyee.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_Emplyee.mrt");
             report.Load(path);
             report["@EmployeeID"] = EmployeeID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
@@ -727,7 +727,7 @@ namespace Stocks.Controllers
 
             int PortfolioID = Convert.ToInt32(data.GetValue("PortfolioID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_Portfolio.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_Portfolio.mrt");
             report.Load(path);
             report["@PortfolioID"] = PortfolioID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
@@ -745,7 +745,7 @@ namespace Stocks.Controllers
 
             int PartnerID = Convert.ToInt32(data.GetValue("PartnerID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_Partner.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_Partner.mrt");
             report.Load(path);
             report["@PartnerID"] = PartnerID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
@@ -764,7 +764,7 @@ namespace Stocks.Controllers
 
             int PurchaseOrderID = Convert.ToInt32(data.GetValue("PurchaseOrderID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_PurchaseOrder.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_PurchaseOrder.mrt");
             report.Load(path);
             report["@PurchaseOrderID"] = PurchaseOrderID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
@@ -783,7 +783,7 @@ namespace Stocks.Controllers
 
             int SellingOrderID = Convert.ToInt32(data.GetValue("SellingOrderID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_SellingOrder.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_SellingOrder.mrt");
             report.Load(path);
             report["@SellingOrderID"] = SellingOrderID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
@@ -802,7 +802,7 @@ namespace Stocks.Controllers
 
             int SellingInvoiceID = Convert.ToInt32(data.GetValue("SellingInvoiceID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_SellingInvoice.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_SellingInvoice.mrt");
             report.Load(path);
             report["@SellingInvoiceID"] = SellingInvoiceID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
@@ -821,7 +821,25 @@ namespace Stocks.Controllers
 
             int PurchaseInvoiceID = Convert.ToInt32(data.GetValue("PurchaseInvoiceID"));
             StiReport report = new StiReport();
-            var path = StiNetCoreHelper.MapPath(this, ReportPath+"Print_PurchaseInvoice.mrt");
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_PurchaseInvoice.mrt");
+            report.Load(path);
+            report["@PurchaseInvoiceID"] = PurchaseInvoiceID;
+            var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];
+            dbMS_SQL.ConnectionString = _appSettings.Report_Connection;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+        // Print PurchaseInvoiceWithEntry
+        [HttpPost]
+        [Route("~/api/ReportViewer/PrintPurchaseInvoiceWithEntry")]
+        public string PrintPurchaseInvoiceWithEntry([FromBody] JObject data)
+        {
+
+            int PurchaseInvoiceID = Convert.ToInt32(data.GetValue("PurchaseInvoiceID"));
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/Print_PurchaseInvoiceWithEntry.mrt");
             report.Load(path);
             report["@PurchaseInvoiceID"] = PurchaseInvoiceID;
             var dbMS_SQL = (StiSqlDatabase)report.Dictionary.Databases["MS SQL"];

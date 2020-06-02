@@ -109,11 +109,11 @@
         <Name>Contacts</Name>
         <NameInSource>Invoice_Data.Contacts</NameInSource>
       </Contacts>
-      <PurchaseInvoice Ref="8" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
-        <Alias>PurchaseInvoice</Alias>
+      <SellingInvoice Ref="8" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>SellingInvoice</Alias>
         <Columns isList="true" count="7">
           <value>INVCode,System.String</value>
-          <value>POCode,System.String</value>
+          <value>SOCode,System.String</value>
           <value>INVDate,System.DateTime</value>
           <value>PortName,System.String</value>
           <value>PortCode,System.String</value>
@@ -123,31 +123,30 @@
         <CommandTimeout>30</CommandTimeout>
         <Dictionary isRef="1" />
         <Key>3e299bb645db4582a4d65ac76efa95f2</Key>
-        <Name>PurchaseInvoice</Name>
+        <Name>SellingInvoice</Name>
         <NameInSource>MS SQL</NameInSource>
         <Parameters isList="true" count="1">
-          <value>_x0040_PurchaseInvoiceID,_x0031_,8,32</value>
+          <value>_x0040_SellingInvoiceID,_x0031_,8,32</value>
         </Parameters>
-        <SqlCommand>SELECT PN.Code AS INVCode,PO.Code AS POCode
-	,CONVERT(DATE, PN.Date,110)  AS INVDate
+        <SqlCommand>SELECT SN.Code AS INVCode,SO.Code AS SOCode,CONVERT(DATE, SN.Date,110)  AS INVDate
 	,P.NameAR AS PortName,P.Code AS PortCode,E.NameAR AS EmpName
-	,PN.Description AS INVDesc
-	FROM dbo.PurchaseInvoices AS PN
-	INNER JOIN dbo.PurchaseOrders AS PO
-ON PO.PurchaseOrderID = PN.PurchaseOrderID
+	,SN.Description AS INVDesc
+	FROM dbo.SellingInvoices AS SN
+	INNER JOIN dbo.SellingOrders AS SO
+ON SO.SellingOrderID = SN.SellingOrderID
 INNER JOIN dbo.Portfolios AS P
-ON P.PortfolioID = PO.PortfolioID
+ON P.PortfolioID = SO.PortfolioID
 INNER JOIN dbo.Employees AS E
-ON E.EmployeeID = PN.EmployeeID
-WHERE PN.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
-      </PurchaseInvoice>
-      <PurchaseInvoiceDetails Ref="9" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
-        <Alias>PurchaseInvoiceDetails</Alias>
+ON E.EmployeeID = SN.EmployeeID
+WHERE SN.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
+      </SellingInvoice>
+      <SellingInvoiceDetails Ref="9" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>SellingInvoiceDetails</Alias>
         <Columns isList="true" count="9">
           <value>PartName,System.String</value>
           <value>StockCount,System.Single</value>
-          <value>PurchasePrice,System.Decimal</value>
-          <value>PurchaseValue,System.Decimal</value>
+          <value>SellPrice,System.Decimal</value>
+          <value>SellValue,System.Decimal</value>
           <value>BankCommRate,System.Single</value>
           <value>BankComm,System.Decimal</value>
           <value>TaxRate,System.Single</value>
@@ -157,23 +156,23 @@ WHERE PN.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
         <CommandTimeout>30</CommandTimeout>
         <Dictionary isRef="1" />
         <Key>a3763eeece0d441580ce6bd75a845d18</Key>
-        <Name>PurchaseInvoiceDetails</Name>
+        <Name>SellingInvoiceDetails</Name>
         <NameInSource>MS SQL</NameInSource>
         <Parameters isList="true" count="1">
-          <value>_x0040_PurchaseInvoiceID,_x0031_,8,32</value>
+          <value>_x0040_SellingInvoiceID,_x0031_,8,32</value>
         </Parameters>
-        <SqlCommand>SELECT P.NameAR AS PartName,PND.StockCount AS StockCount
-	,PND.PurchasePrice AS PurchasePrice,PND.PurchaseValue AS PurchaseValue
-	,PND.BankCommissionRate AS BankCommRate
-	,PND.BankCommission AS BankComm
-	,PND.TaxRateOnCommission AS TaxRate
-	,PND.TaxOnCommission AS Tax
-	,PND.NetAmmount AS NetAmount 
-	FROM dbo.PurchaseInvoiceDetails AS PND
+        <SqlCommand>SELECT P.NameAR AS PartName,SND.StockCount AS StockCount
+	,SND.SellingPrice AS SellPrice,SND.SelingValue AS SellValue
+	,SND.BankCommissionRate AS BankCommRate
+	,SND.BankCommission AS BankComm
+	,SND.TaxRateOnCommission AS TaxRate
+	,SND.TaxOnCommission AS Tax
+	,SND.NetAmmount AS NetAmount 
+	FROM dbo.SellingInvoiceDetails AS SND
 	INNER JOIN dbo.Partners AS P
-ON P.PartnerID = PND.PartnerID
-WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
-      </PurchaseInvoiceDetails>
+ON P.PartnerID = SND.PartnerID
+WHERE SND.SellingInvoiceID=@SellingInvoiceID</SqlCommand>
+      </SellingInvoiceDetails>
     </DataSources>
     <Relations isList="true" count="0" />
     <Report isRef="0" />
@@ -306,7 +305,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text02</Name>
               <Page isRef="13" />
               <Parent isRef="14" />
-              <Text>            فاتورة شراء</Text>
+              <Text>            فاتورة بيع</Text>
               <TextBrush>SteelBlue</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
@@ -388,7 +387,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text15</Name>
               <Page isRef="13" />
               <Parent isRef="14" />
-              <Text>{PurchaseInvoice.INVDate}</Text>
+              <Text>{SellingInvoice.INVDate}</Text>
               <TextBrush>Black</TextBrush>
               <TextFormat Ref="21" type="DateFormat" isKey="true" />
               <Type>Expression</Type>
@@ -427,7 +426,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text16</Name>
               <Page isRef="13" />
               <Parent isRef="14" />
-              <Text>{PurchaseInvoice.INVCode}</Text>
+              <Text>{SellingInvoice.INVCode}</Text>
               <TextBrush>Black</TextBrush>
               <TextFormat Ref="24" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
@@ -471,7 +470,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text6</Name>
               <Page isRef="13" />
               <Parent isRef="14" />
-              <Text>{PurchaseInvoice.PortCode}</Text>
+              <Text>{SellingInvoice.PortCode}</Text>
               <TextBrush>Black</TextBrush>
               <TextFormat Ref="27" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
@@ -515,7 +514,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text8</Name>
               <Page isRef="13" />
               <Parent isRef="14" />
-              <Text>{PurchaseInvoice.PortName}</Text>
+              <Text>{SellingInvoice.PortName}</Text>
               <TextBrush>Black</TextBrush>
               <TextFormat Ref="30" type="DateFormat" isKey="true" />
               <Type>Expression</Type>
@@ -554,7 +553,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text10</Name>
               <Page isRef="13" />
               <Parent isRef="14" />
-              <Text>{PurchaseInvoice.POCode}</Text>
+              <Text>{SellingInvoice.SOCode}</Text>
               <TextBrush>Black</TextBrush>
               <TextFormat Ref="33" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
@@ -617,7 +616,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text34</Name>
               <Page isRef="13" />
               <Parent isRef="14" />
-              <Text>{PurchaseInvoice.EmpName}</Text>
+              <Text>{SellingInvoice.EmpName}</Text>
               <TextBrush>Black</TextBrush>
               <TextFormat Ref="37" type="DateFormat" isKey="true" />
               <Type>Expression</Type>
@@ -689,7 +688,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text23</Name>
               <Page isRef="13" />
               <Parent isRef="38" />
-              <Text>سعر الشراء</Text>
+              <Text>سعر البيع</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
@@ -809,7 +808,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text24</Name>
               <Page isRef="13" />
               <Parent isRef="38" />
-              <Text>قيمة الشراء</Text>
+              <Text>قيمة البيع</Text>
               <TextBrush>White</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
@@ -878,7 +877,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>DataTextNoticeDetails7</Name>
               <Page isRef="13" />
               <Parent isRef="51" />
-              <Text>{PurchaseInvoiceDetails.PartName}</Text>
+              <Text>{SellingInvoiceDetails.PartName}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
@@ -899,7 +898,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text19</Name>
               <Page isRef="13" />
               <Parent isRef="51" />
-              <Text>{PurchaseInvoiceDetails.StockCount}</Text>
+              <Text>{SellingInvoiceDetails.StockCount}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
@@ -920,7 +919,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text20</Name>
               <Page isRef="13" />
               <Parent isRef="51" />
-              <Text>{PurchaseInvoiceDetails.PurchasePrice}</Text>
+              <Text>{SellingInvoiceDetails.SellPrice}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
@@ -941,7 +940,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text37</Name>
               <Page isRef="13" />
               <Parent isRef="51" />
-              <Text>{PurchaseInvoiceDetails.PurchaseValue}</Text>
+              <Text>{SellingInvoiceDetails.SellValue}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
@@ -962,7 +961,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text38</Name>
               <Page isRef="13" />
               <Parent isRef="51" />
-              <Text>{PurchaseInvoiceDetails.BankCommRate}</Text>
+              <Text>{SellingInvoiceDetails.BankCommRate}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
@@ -983,7 +982,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text21</Name>
               <Page isRef="13" />
               <Parent isRef="51" />
-              <Text>{PurchaseInvoiceDetails.BankComm}</Text>
+              <Text>{SellingInvoiceDetails.BankComm}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
@@ -1004,7 +1003,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text25</Name>
               <Page isRef="13" />
               <Parent isRef="51" />
-              <Text>{PurchaseInvoiceDetails.TaxRate}</Text>
+              <Text>{SellingInvoiceDetails.TaxRate}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
@@ -1025,7 +1024,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text39</Name>
               <Page isRef="13" />
               <Parent isRef="51" />
-              <Text>{PurchaseInvoiceDetails.Tax}</Text>
+              <Text>{SellingInvoiceDetails.Tax}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
@@ -1046,7 +1045,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
               <Name>Text26</Name>
               <Page isRef="13" />
               <Parent isRef="51" />
-              <Text>{PurchaseInvoiceDetails.NetAmount}</Text>
+              <Text>{SellingInvoiceDetails.NetAmount}</Text>
               <TextBrush>[0:0:0]</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <TextQuality>Wysiwyg</TextQuality>
@@ -1056,7 +1055,7 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
           </Components>
           <Conditions isList="true" count="0" />
           <DataRelationName isNull="true" />
-          <DataSourceName>PurchaseInvoiceDetails</DataSourceName>
+          <DataSourceName>SellingInvoiceDetails</DataSourceName>
           <EvenStyle>Lime Data Even</EvenStyle>
           <Filters isList="true" count="0" />
           <Name>DataBand1</Name>
@@ -1098,14 +1097,14 @@ WHERE PND.PurchaseInvoiceID=@PurchaseInvoiceID</SqlCommand>
   </ReferencedAssemblies>
   <ReportAlias>Purchase Order</ReportAlias>
   <ReportAuthor>Stimulsoft</ReportAuthor>
-  <ReportChanged>6/2/2020 3:38:21 AM</ReportChanged>
+  <ReportChanged>11/13/2019 12:55:07 PM</ReportChanged>
   <ReportCreated>11/12/2017 10:11:55 PM</ReportCreated>
   <ReportDescription>The sample demonstrates how to create Purchase Order</ReportDescription>
-  <ReportFile>C:\MohamedFahmy\work\StocksLatest\BackEnd\Stocks_BackEnd\Stocks\Reports\Print_PurchaseInvoice.mrt</ReportFile>
-  <ReportGuid>d81377cbf9f84828a825b2591538167a</ReportGuid>
+  <ReportFile>C:\Users\Amr\Desktop\Print_SellingInvoice.mrt</ReportFile>
+  <ReportGuid>2bb120d5090c4cc1bc61135fbcbd36eb</ReportGuid>
   <ReportName>Purchase Order</ReportName>
   <ReportUnit>HundredthsOfInch</ReportUnit>
-  <ReportVersion>2019.3.5.0</ReportVersion>
+  <ReportVersion>2019.3.2.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;

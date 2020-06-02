@@ -187,6 +187,16 @@ namespace Stocks.Controllers
             return data;
         }
 
+        [HttpGet]
+        [Route("~/api/ReportSetting/getReportForDesigner")]
+        public string getReportForDesigner(string reportName)
+        {
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/" + reportName + ".mrt");
+            StreamReader rd = new StreamReader(path);
+            string data = rd.ReadToEnd();
+            rd.Close();
+            return data;
+        }
 
         [HttpPost]
         [Route("~/api/ReportSetting/SaveFile")]
@@ -196,7 +206,7 @@ namespace Stocks.Controllers
             var reportName = jsonString.fileName;
             try
             {
-                string filePath = StiNetCoreHelper.MapPath(this, "C:/MohamedFahmy/work/StocksLatest/BackEnd/Stocks_FrontEnd/src/reports/" + reportName + ".mrt");
+                string filePath = StiNetCoreHelper.MapPath(this, "/Reports/" + reportName + ".mrt");
                 StreamWriter wr = new StreamWriter(filePath);
                 wr.Write(jsonString.data);
                 wr.Close();
