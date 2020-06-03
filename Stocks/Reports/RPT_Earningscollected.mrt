@@ -1,1524 +1,1430 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<StiSerializer version="1.02" type="Net" application="StiReport">
-  <Dictionary Ref="1" type="Dictionary" isKey="true">
-    <BusinessObjects isList="true" count="0" />
-    <Databases isList="true" count="1">
-      <MS_x0020_SQL Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
-        <Alias>MS SQL</Alias>
-        <ConnectionStringEncrypted>9FyXz01KcoH5CE34+ADhJ9FsUw1IAwGk4kztOOH84RfFVN3rVlP63UVGZZjDdOEn9HD3iEZrSpl5FSnseszge/la+c9PXVJdaVyEKHc9rGfJJFMCxV3DAexEvZh6+Pbr12CB</ConnectionStringEncrypted>
-        <Name>MS SQL</Name>
-      </MS_x0020_SQL>
-    </Databases>
-    <DataSources isList="true" count="1">
-      <DataSource2 Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
-        <Alias>DataSource2</Alias>
-        <Columns isList="true" count="13">
-          <value>PartnerID,System.Int32</value>
-          <value>PartnerName,System.String</value>
-          <value>StockCountinfirstQUter,System.Decimal</value>
-          <value>StockCountinSecondQUter,System.Decimal</value>
-          <value>StockCountinthirdQUter,System.Nullable`1[System.Decimal]</value>
-          <value>StockCountinFOurthQUter,System.Decimal</value>
-          <value>R1,System.Decimal</value>
-          <value>R2,System.Decimal</value>
-          <value>R3,System.Decimal</value>
-          <value>R4,System.Decimal</value>
-          <value>Y,System.Int32</value>
-          <value>TotalStocks,System.Double</value>
-          <value>TotalRial,System.Decimal</value>
-        </Columns>
-        <CommandTimeout>30</CommandTimeout>
-        <Dictionary isRef="1" />
-        <Key>72a5147dbe71470989e31f2fbdbb1cba</Key>
-        <Name>DataSource2</Name>
-        <NameInSource>MS SQL</NameInSource>
-        <Parameters isList="true" count="2">
-          <value>_x0040_Year,_x0032_018,18,10</value>
-          <value>_x0040_portID,_x0031_008,8,32</value>
-        </Parameters>
-        <SqlCommand>EXEC [dbo].[RPT_Earningscollected] @Year,@portID</SqlCommand>
-      </DataSource2>
-    </DataSources>
-    <Relations isList="true" count="0" />
-    <Report isRef="0" />
-    <Resources isList="true" count="0" />
-    <Variables isList="true" count="0" />
-  </Dictionary>
-  <EngineVersion>EngineV2</EngineVersion>
-  <GlobalizationStrings isList="true" count="0" />
-  <Key>bd7d8daad9d349fb8a8b65a52daabfc7</Key>
-  <MetaTags isList="true" count="0" />
-  <Pages isList="true" count="1">
-    <Page1 Ref="4" type="Page" isKey="true">
-      <Border>None;Black;2;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <Components isList="true" count="6">
-        <PageHeaderBand2 Ref="5" type="PageHeaderBand" isKey="true">
-          <Brush>Transparent</Brush>
-          <ClientRectangle>0,0.2,10.22,1.41</ClientRectangle>
-          <Components isList="true" count="1">
-            <Image2 Ref="6" type="Image" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>0.9,0.18,9.29,1.42</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Guid>7fc9a8237fe54a278cb6247775e8ab2e</Guid>
-              <ImageBytes>iVBORw0KGgoAAAANSUhEUgAAA1IAAAB9CAMAAACf6qJLAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
-bWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp
-bj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6
-eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2
-MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJo
-dHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlw
-dGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAv
-IiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RS
-ZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpD
-cmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0
-YW5jZUlEPSJ4bXAuaWlkOjE1RTdBNUE0REVENzExRTlBNTE0ODlGQzI3OEM2RTY1IiB4bXBNTTpE
-b2N1bWVudElEPSJ4bXAuZGlkOjE1RTdBNUE1REVENzExRTlBNTE0ODlGQzI3OEM2RTY1Ij4gPHht
-cE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MTVFN0E1QTJERUQ3MTFF
-OUE1MTQ4OUZDMjc4QzZFNjUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MTVFN0E1QTNERUQ3
-MTFFOUE1MTQ4OUZDMjc4QzZFNjUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94
-OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5vTyLIAAADAFBMVEVTfKvh6P96nP71+P8YU/2D
-osPS3v/d5f9Acf06bP2swf4US4sjW/2SrMpskf09b/3t8faMqf4HJXL+/v+xxf4yZJvo7v/7/P9E
-cqSas878/f+swdfM2ebR3en2+PtkirQkWpR6mr5xlLrc5e7h6fHB0f4NRYehuf69zf5Rfv1xlf3N
-2v5Zga7m7P/o7vSIpcWRrf5JdKYqXJZpjbUcVJE8bKDB0eHJ1uVhif1Gdf3W4OtVgP00aP2Bof6x
-xdnW4P/4+v9ljf0sYv1tkbj4+vzY4uyhuNJOeanq8PXu8v8tYZkxZv2dtv6pvtV1mP3w9PgqYP3F
-1P7Y4v+1yP62yNyOqsjl7PO5yt3j6v9chv3I1v7w9P99ncCVsP44a/1Bb6K4yv5Mev3n7fMuZP02
-av28zd9dhbH8/v4YUI5JeP06aZ6lvP6mvNT09/8FO4AwZf2WsMz09/nr8P+FpP5EZ50yXJaettAh
-VpLH1eTT3uqkutLa5O3y9v9ahP2ovv7E0uJkeqnK2P+zxtqFmr6LqMfO2+g2aJ6Ipv7q7/86ZJvj
-6vIiUY6atP7y9vl2mL3t9Pj6+/wjSoqht9E+b/1yiLKBnsHF1OPa5P++zuC6zN6Xsv5oj/1hh7G6
-zP5Xgv0qX5h7lrvD0v7y9fhHdv3g5/8qVZHe6PA2af36+//e5u8wZv1OfP37/P1eiP2vw9js8v/y
-9f/g5O7R2+iku/7z9vrv8/+lu9O1x9v3+fvS2+e6xNnu8/e/0OFJd6fP3P9phrEyaP3Az+F/oP5l
-gK2gs82/0P6wwdf3+f+PpcXw9vn4+fyAoMGDo/61w9m2udHv8/eku9OdsMxji/2/z/7u8//v9Pff
-5/9Cc/39/f/0+fvy9fnk7/S8yt0zZ/1Ec/2fuP7t8f/w8/jf5/A1av3///7F0+PD0/6TqMdLeKh+
-nv79/v5yj7d9kbjm8PXh6/I/Xpfy+fw+T44nXpfAz+DD1OOiutOgrcpjjP1qj7fa3uq5yNuLp8fu
-8v0/cP08bv3///8pRkT9AAA9fUlEQVR42uydCUBTV/7vEyiQEMNiSICwBdBAgLBIwhrZl7Aja9jC
-zgRkVwnI4uBIQMQMldYdGCsW/LP8GQGlz+K8ccbSf/H/7GgLjP9BKVMdZebNvEfHV9/4kvvOuTco
-WrEuXdDe7/8/FcJN7s2553N+y/mdcwnIdyya+jzR3uDo3WNd2cqAdW+tixV0eHrrXI6MT71wiFGy
-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</ImageBytes>
-              <Margins>0,0,0,0</Margins>
-              <Name>Image2</Name>
-              <Page isRef="4" />
-              <Parent isRef="5" />
-            </Image2>
-          </Components>
-          <Conditions isList="true" count="0" />
-          <Guid>9482f948aa794debb4f9afd0089bc8d6</Guid>
-          <Name>PageHeaderBand2</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-        </PageHeaderBand2>
-        <Text26 Ref="7" type="Text" isKey="true">
-          <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-          <Brush>[79:129:189]</Brush>
-          <CanGrow>True</CanGrow>
-          <ClientRectangle>2.2,8.8,0.9,0.2</ClientRectangle>
-          <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-          <Conditions isList="true" count="0" />
-          <Font>Arial,9.75,Bold,Point,False,204</Font>
-          <GrowToHeight>True</GrowToHeight>
-          <Guid>961debbf5d2948a5a5fc375c98d66309</Guid>
-          <HorAlignment>Center</HorAlignment>
-          <Margins>0,0,0,0</Margins>
-          <Name>Text26</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-          <Text>اسم الشركة</Text>
-          <TextBrush>White</TextBrush>
-          <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-          <Type>Expression</Type>
-          <VertAlignment>Center</VertAlignment>
-        </Text26>
-        <ReportTitle Ref="8" type="ReportTitleBand" isKey="true">
-          <Brush>Transparent</Brush>
-          <ClientRectangle>0,2.01,10.22,0.5</ClientRectangle>
-          <Components isList="true" count="1">
-            <ReportTitleText Ref="9" type="Text" isKey="true">
-              <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <ClientRectangle>1.4,0,7.72,0.5</ClientRectangle>
-              <ComponentStyle>Blue Steel_Report_Title1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,14,Bold</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>ReportTitleText</Name>
-              <Page isRef="4" />
-              <Parent isRef="8" />
-              <Text>توزيع الارباح المحصلة على السنة موزعة على الارباع</Text>
-              <TextBrush>[79:129:189]</TextBrush>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </ReportTitleText>
-          </Components>
-          <Conditions isList="true" count="0" />
-          <Name>ReportTitle</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-        </ReportTitle>
-        <HeaderDataSource2 Ref="10" type="HeaderBand" isKey="true">
-          <Brush>Transparent</Brush>
-          <ClientRectangle>0,2.91,10.22,0.2</ClientRectangle>
-          <Components isList="true" count="12">
-            <Text1 Ref="11" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>9.1,0.02,1.1,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>e52244666f9c416a8ee1700bb9733364</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text1</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>الشركه
-</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text1>
-            <Text2 Ref="12" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>8.6,0.02,0.8,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>53a126e928ae41ceb1d7f823822a8760</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text2</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>اسهم الربع الاول</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text2>
-            <Text4 Ref="13" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>7.7,0.02,0.9,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>48e01e0daba047c39c6ab1e81909c54a</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text4</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>اسهم الربع الثاني</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text4>
-            <Text3 Ref="14" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>6.8,0.02,0.9,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>3e479c2b5c5d459eb20708e6ad33eaf9</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text3</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>اسهم الربع الثالث</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text3>
-            <Text6 Ref="15" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>6,0.02,0.9,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>454655f0c58149718a9293c1b9c140ea</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text6</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>اسهم الربع الرابع</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text6>
-            <Text9 Ref="16" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>5.1,0.02,0.9,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>66d1e77955e6491f9457a87c94681151</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text9</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>ارباح الربع الاول</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text9>
-            <Text10 Ref="17" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>4.1,0.02,1,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>191d464b1ea14b798453b1801fb13c4a</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text10</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>ارباح الربع الثاني</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text10>
-            <Text7 Ref="18" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>3.3,0.02,0.9,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>c447c78fd70f47f3af12f911722fa30e</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text7</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>ارباح الربع الثالث</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text7>
-            <Text8 Ref="19" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>2.2,0.02,1.1,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>ffadbf1805294940920c90d23d44316a</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text8</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>ارباح الربع الرابع</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text8>
-            <Text13 Ref="20" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>0,0.02,0.8,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>6fac046d3260450a88b016b320dd1ca0</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text13</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>المتوسط</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text13>
-            <Text21 Ref="21" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>1.4,0.02,0.8,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>f485286716f04b12addcc42ce8104125</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text21</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>اجمالي اسهم</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text21>
-            <Text11 Ref="22" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>0.6,0.02,0.8,0.4</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>b43bcee1bda24fe79ea980666f7e9c01</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text11</Name>
-              <Page isRef="4" />
-              <Parent isRef="10" />
-              <Text>اجمالي ارباح
-</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text11>
-          </Components>
-          <Conditions isList="true" count="0" />
-          <Name>HeaderDataSource2</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-        </HeaderDataSource2>
-        <DataDataSource2 Ref="23" type="DataBand" isKey="true">
-          <Brush>Transparent</Brush>
-          <BusinessObjectGuid isNull="true" />
-          <ClientRectangle>0,3.51,10.22,0.6</ClientRectangle>
-          <Components isList="true" count="12">
-            <Text5 Ref="24" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>9.5,0.02,0.7,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text5</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{DataSource2.PartnerName}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="25" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-            </Text5>
-            <Text12 Ref="26" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>8.8,0.02,0.6,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text12</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{DataSource2.StockCountinfirstQUter}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="27" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-            </Text12>
-            <Text14 Ref="28" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>8,0.02,0.6,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text14</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{DataSource2.StockCountinSecondQUter}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="29" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-            </Text14>
-            <Text15 Ref="30" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>7.1,0.02,0.6,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text15</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{DataSource2.StockCountinthirdQUter}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="31" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-            </Text15>
-            <Text16 Ref="32" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>6.2,0.02,0.5,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text16</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{DataSource2.StockCountinFOurthQUter}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="33" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-            </Text16>
-            <Text17 Ref="34" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>5.3,0.02,0.6,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text17</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{DataSource2.R1}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="35" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-            </Text17>
-            <Text18 Ref="36" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>4.5,0.02,0.6,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text18</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{DataSource2.R2}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="37" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-            </Text18>
-            <Text19 Ref="38" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>3.5,0.02,0.7,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text19</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{DataSource2.R3}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="39" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-            </Text19>
-            <Text20 Ref="40" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>2.5,0.02,0.7,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text20</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{DataSource2.R4}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="41" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-            </Text20>
-            <Text22 Ref="42" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>1.6,0.02,0.7,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Guid>2e8deabcb410470b9a80723d514b9a3b</Guid>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text22</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{DataSource2.TotalStocks}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="43" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <Type>Expression</Type>
-            </Text22>
-            <Text23 Ref="44" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>0.8,0.02,0.7,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Guid>b8b06a6166f64b0996cb8a5c92f2c356</Guid>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text23</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{DataSource2.TotalRial}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="45" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <Type>Expression</Type>
-            </Text23>
-            <Text24 Ref="46" type="Text" isKey="true">
-              <Brush>Transparent</Brush>
-              <ClientRectangle>0,0.02,0.7,0.2</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,8</Font>
-              <Guid>8d2f5cd8fd634519b793cec0650aafd2</Guid>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text24</Name>
-              <Page isRef="4" />
-              <Parent isRef="23" />
-              <Text>{Div(Div(DataSource2.R1,DataSource2.StockCountinfirstQUter)+
-Div(DataSource2.R2,DataSource2.StockCountinSecondQUter)+
-Div(DataSource2.R3,DataSource2.StockCountinthirdQUter)+
-Div(DataSource2.R4,DataSource2.StockCountinFOurthQUter)
-,4)}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="47" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <Type>Expression</Type>
-            </Text24>
-          </Components>
-          <Conditions isList="true" count="0" />
-          <DataSourceName>DataSource2</DataSourceName>
-          <EvenStyle>Blue Steel_Data1_Even Style</EvenStyle>
-          <FilterMode>Or</FilterMode>
-          <Filters isList="true" count="0" />
-          <Name>DataDataSource2</Name>
-          <OddStyle>Blue Steel_Data1_Odd Style</OddStyle>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-          <Sort isList="true" count="0" />
-        </DataDataSource2>
-        <FooterDataSource2 Ref="48" type="FooterBand" isKey="true">
-          <Brush>Transparent</Brush>
-          <ClientRectangle>0,4.51,10.22,0.4</ClientRectangle>
-          <Components isList="true" count="12">
-            <Text36 Ref="49" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>8.4,0,0.9,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>6a3033010c4b4860a23e15de714171fd</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text36</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>{Sum(DataSource2.StockCountinfirstQUter)}</Text>
-              <TextBrush>White</TextBrush>
-              <TextFormat Ref="50" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Totals</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text36>
-            <Text27 Ref="51" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>0,0,0.7,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>9dbf082cf2494cf7b2951d28ec6256e5</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text27</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>{Sum(Div(Div(DataSource2.R1,DataSource2.StockCountinfirstQUter)+
-Div(DataSource2.R2,DataSource2.StockCountinSecondQUter)+
-Div(DataSource2.R3,DataSource2.StockCountinthirdQUter)+
-Div(DataSource2.R4,DataSource2.StockCountinFOurthQUter)
-,4))}</Text>
-              <TextBrush>White</TextBrush>
-              <TextFormat Ref="52" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text27>
-            <Text44 Ref="53" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>0.7,0,0.8,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>fd3587b2ed6949ec875d5671be786a29</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text44</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>{Sum(DataSource2.TotalStocks)}</Text>
-              <TextBrush>White</TextBrush>
-              <TextFormat Ref="54" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Totals</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text44>
-            <Text37 Ref="55" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>7.5,0,0.9,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>ea564cc0f5e8477b862d641e9737c5a4</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text37</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>{Sum(DataSource2.StockCountinSecondQUter)}</Text>
-              <TextBrush>White</TextBrush>
-              <TextFormat Ref="56" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Totals</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text37>
-            <Text38 Ref="57" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>6.6,0,0.9,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>01f16e6b4883492ea0d533129e70f494</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text38</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>{Sum(DataSource2.StockCountinthirdQUter)}</Text>
-              <TextBrush>White</TextBrush>
-              <TextFormat Ref="58" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Totals</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text38>
-            <Text39 Ref="59" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>5.7,0,0.9,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>7e6b7e1d488644ec84da5ccace6b7807</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text39</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>{Sum(DataSource2.StockCountinFOurthQUter)}</Text>
-              <TextBrush>White</TextBrush>
-              <TextFormat Ref="60" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Totals</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text39>
-            <Text40 Ref="61" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>4.7,0,1,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>38ab828831464fb6b4fa7473757ca9d6</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text40</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>{Sum(DataSource2.R1)}</Text>
-              <TextBrush>White</TextBrush>
-              <TextFormat Ref="62" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Totals</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text40>
-            <Text41 Ref="63" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>3.8,0,0.9,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>af61f952abca4181a4c4d330050d6bb4</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text41</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>{Sum(DataSource2.R2)}</Text>
-              <TextBrush>White</TextBrush>
-              <TextFormat Ref="64" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Totals</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text41>
-            <Text43 Ref="65" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>3,0,0.8,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>bab71cb2746743f4bfd97a4aec50c614</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text43</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>{Sum(DataSource2.R3)}</Text>
-              <TextBrush>White</TextBrush>
-              <TextFormat Ref="66" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Totals</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text43>
-            <Text42 Ref="67" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>2.3,0,0.7,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>ab426bbaa78749b09a70e1b92af3a5d4</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text42</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>{Sum(DataSource2.R4)}</Text>
-              <TextBrush>White</TextBrush>
-              <TextFormat Ref="68" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Totals</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text42>
-            <Text45 Ref="69" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>1.5,0,0.8,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>9b5b0b70e2b849f49591575115bc2a36</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text45</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>{Sum(DataSource2.TotalRial)}</Text>
-              <TextBrush>White</TextBrush>
-              <TextFormat Ref="70" type="NumberFormat" isKey="true">
-                <DecimalDigits>2</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <State>DecimalDigits</State>
-              </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Totals</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text45>
-            <Text25 Ref="71" type="Text" isKey="true">
-              <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-              <Brush>[79:129:189]</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>9.3,0,0.9,0.2</ClientRectangle>
-              <ComponentStyle>Blue Steel_Header1</ComponentStyle>
-              <Conditions isList="true" count="0" />
-              <Font>Arial,9.75,Bold,Point,False,204</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <Guid>72902fc948664caabebb2b2fa8e6e097</Guid>
-              <HorAlignment>Center</HorAlignment>
-              <Margins>0,0,0,0</Margins>
-              <Name>Text25</Name>
-              <Page isRef="4" />
-              <Parent isRef="48" />
-              <Text>المجموع</Text>
-              <TextBrush>White</TextBrush>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Center</VertAlignment>
-            </Text25>
-          </Components>
-          <Conditions isList="true" count="0" />
-          <Name>FooterDataSource2</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-        </FooterDataSource2>
-      </Components>
-      <Conditions isList="true" count="0" />
-      <Guid>8b21c8c57a8546c68af10a1062db23df</Guid>
-      <Margins>0.39,0.39,0.39,0.39</Margins>
-      <Name>Page1</Name>
-      <Orientation>Landscape</Orientation>
-      <PageHeight>8.5</PageHeight>
-      <PageWidth>11</PageWidth>
-      <PaperSize>Letter</PaperSize>
-      <Report isRef="0" />
-    </Page1>
-  </Pages>
-  <ReferencedAssemblies isList="true" count="8">
-    <value>System.Dll</value>
-    <value>System.Drawing.Dll</value>
-    <value>System.Windows.Forms.Dll</value>
-    <value>System.Data.Dll</value>
-    <value>System.Xml.Dll</value>
-    <value>Stimulsoft.Controls.Dll</value>
-    <value>Stimulsoft.Base.Dll</value>
-    <value>Stimulsoft.Report.Dll</value>
-  </ReferencedAssemblies>
-  <ReportAlias>Report</ReportAlias>
-  <ReportChanged>10/15/2019 2:25:13 PM</ReportChanged>
-  <ReportCreated>10/2/2019 12:39:03 PM</ReportCreated>
-  <ReportFile>D:\Stocks\Back\Stocks\Reports\RPT_Earningscollected.mrt</ReportFile>
-  <ReportGuid>2ef5f0220ee540b681358c0707fbd864</ReportGuid>
-  <ReportName>Report</ReportName>
-  <ReportUnit>Inches</ReportUnit>
-  <ReportVersion>2019.3.4.0</ReportVersion>
-  <Script>using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Data;
-using Stimulsoft.Controls;
-using Stimulsoft.Base.Drawing;
-using Stimulsoft.Report;
-using Stimulsoft.Report.Dialogs;
-using Stimulsoft.Report.Components;
-
-namespace Reports
 {
-    public class Report : Stimulsoft.Report.StiReport
-    {
-        public Report()        {
-            this.InitializeComponent();
+  "ReportGuid": "2ef5f0220ee540b681358c0707fbd864",
+  "ReportName": "Report",
+  "ReportAlias": "Report",
+  "ReportFile": "RPT_Earningscollected.mrt",
+  "ReportCreated": "/Date(-14400000+0200)/",
+  "ReportChanged": "/Date(-14400000+0200)/",
+  "EngineVersion": "EngineV2",
+  "CalculationMode": "Interpretation",
+  "ReportUnit": "Inches",
+  "PreviewSettings": 268435455,
+  "Styles": {
+    "0": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "ComponentType, Placement, PlacementNestedLevel",
+          "Placement": "ReportTitle",
+          "ComponentType": "Text, Primitive, Image"
         }
-
-        #region StiReport Designer generated code - do not modify
-		#endregion StiReport Designer generated code - do not modify
+      },
+      "Name": "Blue Steel_Report_Title1",
+      "Font": ";14;Bold;",
+      "Border": ";0,0,39;;;;;;solid:Black",
+      "Brush": "solid:",
+      "TextBrush": "solid:79,129,189",
+      "NegativeTextBrush": "solid:Red"
+    },
+    "1": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "ComponentType, Placement, PlacementNestedLevel",
+          "OperationPlacementNestedLevel": "GreaterThanOrEqualTo",
+          "Placement": "ReportTitle",
+          "PlacementNestedLevel": 2,
+          "ComponentType": "Text, Primitive, Image"
+        }
+      },
+      "Name": "Blue Steel_Report_Title2",
+      "Font": ";10;Bold;",
+      "Border": ";0,0,39;;;;;;solid:Black",
+      "Brush": "solid:",
+      "TextBrush": "solid:79,129,189",
+      "NegativeTextBrush": "solid:Red"
+    },
+    "2": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "ComponentType, Placement",
+          "Placement": "ReportSummary",
+          "ComponentType": "Text, Primitive, Image"
+        }
+      },
+      "Name": "Blue Steel_Report_Summary",
+      "Font": ";10;Bold;",
+      "Border": ";0,0,39;;;;;;solid:Black",
+      "Brush": "solid:",
+      "TextBrush": "solid:79,129,189",
+      "NegativeTextBrush": "solid:Red"
+    },
+    "3": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "ComponentType, Placement",
+          "Placement": "PageHeader",
+          "ComponentType": "Text, Primitive, Image"
+        }
+      },
+      "Name": "Blue Steel_Page_Header",
+      "Font": ";10;;",
+      "Border": ";0,0,39;;;;;;solid:Black",
+      "Brush": "solid:",
+      "TextBrush": "solid:Black",
+      "NegativeTextBrush": "solid:Red"
+    },
+    "4": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "ComponentType, Placement",
+          "Placement": "PageFooter",
+          "ComponentType": "Text, Primitive, Image"
+        }
+      },
+      "Name": "Blue Steel_Page_Footer",
+      "Font": ";10;;",
+      "Border": ";0,0,39;;;;;;solid:Black",
+      "Brush": "solid:",
+      "TextBrush": "solid:Black",
+      "NegativeTextBrush": "solid:Red"
+    },
+    "5": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "ComponentType, Placement, PlacementNestedLevel",
+          "OperationPlacementNestedLevel": "GreaterThanOrEqualTo",
+          "Placement": "GroupHeader",
+          "ComponentType": "Text, Primitive, Image"
+        }
+      },
+      "Name": "Blue Steel_Group_Header1",
+      "Font": ";13;Bold;",
+      "Border": "Top, Bottom;0,0,39;;;;;;solid:Black",
+      "Brush": "solid:",
+      "TextBrush": "solid:79,129,189",
+      "NegativeTextBrush": "solid:Red"
+    },
+    "6": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "ComponentType, Placement, PlacementNestedLevel",
+          "Placement": "GroupFooter",
+          "ComponentType": "Text, Primitive, Image"
+        }
+      },
+      "Name": "Blue Steel_Group_Footer1",
+      "Font": ";9.75;Bold;",
+      "Border": "Top, Bottom;0,0,39;;;;;;solid:Black",
+      "Brush": "solid:",
+      "TextBrush": "solid:79,129,189",
+      "NegativeTextBrush": "solid:Red"
+    },
+    "7": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "ComponentType, Placement, PlacementNestedLevel",
+          "OperationPlacementNestedLevel": "GreaterThanOrEqualTo",
+          "Placement": "Header",
+          "ComponentType": "Text, Primitive, Image"
+        }
+      },
+      "Name": "Blue Steel_Header1",
+      "Font": ";9.75;Bold;",
+      "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+      "Brush": "solid:79,129,189",
+      "TextBrush": "solid:White",
+      "NegativeTextBrush": "solid:Red"
+    },
+    "8": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "ComponentType, Placement, PlacementNestedLevel",
+          "OperationPlacementNestedLevel": "GreaterThanOrEqualTo",
+          "Placement": "Data",
+          "ComponentType": "Text, Primitive, Image, CheckBox"
+        }
+      },
+      "Name": "Blue Steel_Data1",
+      "Border": ";0,0,39;;;;;;solid:Black",
+      "Brush": "solid:",
+      "TextBrush": "solid:0,0,0",
+      "NegativeTextBrush": "solid:Red"
+    },
+    "9": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "Placement, PlacementNestedLevel",
+          "OperationPlacementNestedLevel": "GreaterThanOrEqualTo",
+          "Placement": "DataOddStyle"
+        }
+      },
+      "Name": "Blue Steel_Data1_Odd Style",
+      "Border": ";0,0,39;;;;;;solid:Black",
+      "Brush": "solid:255,255,255",
+      "TextBrush": "solid:0,0,0",
+      "NegativeTextBrush": "solid:Red"
+    },
+    "10": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "Placement, PlacementNestedLevel",
+          "OperationPlacementNestedLevel": "GreaterThanOrEqualTo",
+          "Placement": "DataEvenStyle"
+        }
+      },
+      "Name": "Blue Steel_Data1_Even Style",
+      "Border": ";0,0,39;;;;;;solid:Black",
+      "Brush": "solid:216,216,216",
+      "TextBrush": "solid:0,0,0",
+      "NegativeTextBrush": "solid:Red"
+    },
+    "11": {
+      "Ident": "StiStyle",
+      "CollectionName": "Blue Steel",
+      "Conditions": {
+        "0": {
+          "Ident": "StiStyleCondition",
+          "Type": "ComponentType, Placement, PlacementNestedLevel",
+          "Placement": "Footer",
+          "ComponentType": "Text, Primitive, Image"
+        }
+      },
+      "Name": "Blue Steel_Footer1",
+      "Font": ";8.25;Bold;",
+      "Border": "Top, Bottom;0,0,39;2;;;;;solid:Black",
+      "Brush": "solid:White",
+      "TextBrush": "solid:Black",
+      "NegativeTextBrush": "solid:Red"
     }
+  },
+  "Dictionary": {
+    "DataSources": {
+      "0": {
+        "Ident": "StiSqlSource",
+        "Name": "DataSource2",
+        "Alias": "DataSource2",
+        "Key": "72a5147dbe71470989e31f2fbdbb1cba",
+        "Columns": {
+          "0": {
+            "Name": "PartnerID",
+            "Index": -1,
+            "NameInSource": "PartnerID",
+            "Alias": "PartnerID",
+            "Type": "System.Int32"
+          },
+          "1": {
+            "Name": "PartnerName",
+            "Index": -1,
+            "NameInSource": "PartnerName",
+            "Alias": "PartnerName",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "StockCountinfirstQUter",
+            "Index": -1,
+            "NameInSource": "StockCountinfirstQUter",
+            "Alias": "StockCountinfirstQUter",
+            "Type": "System.Decimal"
+          },
+          "3": {
+            "Name": "StockCountinSecondQUter",
+            "Index": -1,
+            "NameInSource": "StockCountinSecondQUter",
+            "Alias": "StockCountinSecondQUter",
+            "Type": "System.Decimal"
+          },
+          "4": {
+            "Name": "StockCountinthirdQUter",
+            "Index": -1,
+            "NameInSource": "StockCountinthirdQUter",
+            "Alias": "StockCountinthirdQUter",
+            "Type": "System.Nullable`1[System.Decimal]"
+          },
+          "5": {
+            "Name": "StockCountinFOurthQUter",
+            "Index": -1,
+            "NameInSource": "StockCountinFOurthQUter",
+            "Alias": "StockCountinFOurthQUter",
+            "Type": "System.Decimal"
+          },
+          "6": {
+            "Name": "R1",
+            "Index": -1,
+            "NameInSource": "R1",
+            "Alias": "R1",
+            "Type": "System.Decimal"
+          },
+          "7": {
+            "Name": "R2",
+            "Index": -1,
+            "NameInSource": "R2",
+            "Alias": "R2",
+            "Type": "System.Decimal"
+          },
+          "8": {
+            "Name": "R3",
+            "Index": -1,
+            "NameInSource": "R3",
+            "Alias": "R3",
+            "Type": "System.Decimal"
+          },
+          "9": {
+            "Name": "R4",
+            "Index": -1,
+            "NameInSource": "R4",
+            "Alias": "R4",
+            "Type": "System.Decimal"
+          },
+          "10": {
+            "Name": "Y",
+            "Index": -1,
+            "NameInSource": "Y",
+            "Alias": "Y",
+            "Type": "System.Int32"
+          },
+          "11": {
+            "Name": "TotalStocks",
+            "Index": -1,
+            "NameInSource": "TotalStocks",
+            "Alias": "TotalStocks",
+            "Type": "System.Double"
+          },
+          "12": {
+            "Name": "TotalRial",
+            "Index": -1,
+            "NameInSource": "TotalRial",
+            "Alias": "TotalRial",
+            "Type": "System.Decimal"
+          }
+        },
+        "NameInSource": "MS SQL",
+        "SqlCommand": "EXEC [dbo].[RPT_Earningscollected] @Year,@portID",
+        "Parameters": {
+          "0": {
+            "Name": "@Year",
+            "Expression": "2018",
+            "Type": 18,
+            "Size": 10
+          },
+          "1": {
+            "Name": "@portID",
+            "Expression": "1008",
+            "Type": 8,
+            "Size": 32
+          }
+        }
+      }
+    },
+    "Databases": {
+      "0": {
+        "Ident": "StiSqlDatabase",
+        "Name": "MS SQL",
+        "Alias": "MS SQL",
+        "ConnectionStringEncrypted": "9FyXz01KcoH5CE34+ADhJ9FsUw1IAwGk4kztOOH84RfFVN3rVlP63UVGZZjDdOEn9HD3iEZrSpl5FSnseszge/la+c9PXVJdaVyEKHc9rGfJJFMCxV3DAexEvZh6+Pbr12CB"
+      }
+    }
+  },
+  "Pages": {
+    "0": {
+      "Ident": "StiPage",
+      "Name": "Page1",
+      "Guid": "8b21c8c57a8546c68af10a1062db23df",
+      "Interaction": {
+        "Ident": "StiInteraction"
+      },
+      "Border": ";;2;;;;;solid:Black",
+      "Brush": "solid:",
+      "Components": {
+        "0": {
+          "Ident": "StiPageHeaderBand",
+          "Name": "PageHeaderBand2",
+          "Guid": "9482f948aa794debb4f9afd0089bc8d6",
+          "ClientRectangle": "0,0.2,10.22,1.41",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiImage",
+              "Name": "Image2",
+              "Guid": "7fc9a8237fe54a278cb6247775e8ab2e",
+              "ClientRectangle": "0.9,0.18,9.29,1.42",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "ImageBytes": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA1IAAAB9CAMAAACf6qJLAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ\r\nbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp\r\nbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6\r\neD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2\r\nMzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJo\r\ndHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlw\r\ndGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAv\r\nIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RS\r\nZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpD\r\ncmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0\r\nYW5jZUlEPSJ4bXAuaWlkOjE1RTdBNUE0REVENzExRTlBNTE0ODlGQzI3OEM2RTY1IiB4bXBNTTpE\r\nb2N1bWVudElEPSJ4bXAuZGlkOjE1RTdBNUE1REVENzExRTlBNTE0ODlGQzI3OEM2RTY1Ij4gPHht\r\ncE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MTVFN0E1QTJERUQ3MTFF\r\nOUE1MTQ4OUZDMjc4QzZFNjUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MTVFN0E1QTNERUQ3\r\nMTFFOUE1MTQ4OUZDMjc4QzZFNjUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94\r\nOnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5vTyLIAAADAFBMVEVTfKvh6P96nP71+P8YU/2D\r\nosPS3v/d5f9Acf06bP2swf4US4sjW/2SrMpskf09b/3t8faMqf4HJXL+/v+xxf4yZJvo7v/7/P9E\r\ncqSas878/f+swdfM2ebR3en2+PtkirQkWpR6mr5xlLrc5e7h6fHB0f4NRYehuf69zf5Rfv1xlf3N\r\n2v5Zga7m7P/o7vSIpcWRrf5JdKYqXJZpjbUcVJE8bKDB0eHJ1uVhif1Gdf3W4OtVgP00aP2Bof6x\r\nxdnW4P/4+v9ljf0sYv1tkbj4+vzY4uyhuNJOeanq8PXu8v8tYZkxZv2dtv6pvtV1mP3w9PgqYP3F\r\n1P7Y4v+1yP62yNyOqsjl7PO5yt3j6v9chv3I1v7w9P99ncCVsP44a/1Bb6K4yv5Mev3n7fMuZP02\r\nav28zd9dhbH8/v4YUI5JeP06aZ6lvP6mvNT09/8FO4AwZf2WsMz09/nr8P+FpP5EZ50yXJaettAh\r\nVpLH1eTT3uqkutLa5O3y9v9ahP2ovv7E0uJkeqnK2P+zxtqFmr6LqMfO2+g2aJ6Ipv7q7/86ZJvj\r\n6vIiUY6atP7y9vl2mL3t9Pj6+/wjSoqht9E+b/1yiLKBnsHF1OPa5P++zuC6zN6Xsv5oj/1hh7G6\r\nzP5Xgv0qX5h7lrvD0v7y9fhHdv3g5/8qVZHe6PA2af36+//e5u8wZv1OfP37/P1eiP2vw9js8v/y\r\n9f/g5O7R2+iku/7z9vrv8/+lu9O1x9v3+fvS2+e6xNnu8/e/0OFJd6fP3P9phrEyaP3Az+F/oP5l\r\ngK2gs82/0P6wwdf3+f+PpcXw9vn4+fyAoMGDo/61w9m2udHv8/eku9OdsMxji/2/z/7u8//v9Pff\r\n5/9Cc/39/f/0+fvy9fnk7/S8yt0zZ/1Ec/2fuP7t8f/w8/jf5/A1av3///7F0+PD0/6TqMdLeKh+\r\nnv79/v5yj7d9kbjm8PXh6/I/Xpfy+fw+T44nXpfAz+DD1OOiutOgrcpjjP1qj7fa3uq5yNuLp8fu\r\n8v0/cP08bv3///8pRkT9AAA9fUlEQVR42uydCUBTV/7vEyiQEMNiSICwBdBAgLBIwhrZl7Aja9jC\r\nzgRkVwnI4uBIQMQMldYdGCsW/LP8GQGlz+K8ccbSf/H/7GgLjP9BKVMdZebNvEfHV9/4kvvOuTco\r\nWrEuXdDe7/8/FcJN7s2553N+y/mdcwnIdyya+jzR3uDo3WNd2cqAdW+tixV0eHrrXI6MT71wiFGy\r\n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"
+            }
+          }
+        },
+        "1": {
+          "Ident": "StiText",
+          "Name": "Text26",
+          "Guid": "961debbf5d2948a5a5fc375c98d66309",
+          "CanGrow": true,
+          "GrowToHeight": true,
+          "ClientRectangle": "2.2,8.8,0.9,0.2",
+          "ComponentStyle": "Blue Steel_Header1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Text": {
+            "Value": "اسم الشركة"
+          },
+          "HorAlignment": "Center",
+          "VertAlignment": "Center",
+          "Font": ";9.75;Bold;",
+          "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+          "Brush": "solid:79,129,189",
+          "TextBrush": "solid:White",
+          "TextOptions": {
+            "WordWrap": true
+          },
+          "Type": "Expression"
+        },
+        "2": {
+          "Ident": "StiReportTitleBand",
+          "Name": "ReportTitle",
+          "ClientRectangle": "0,2.01,10.22,0.5",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiText",
+              "Name": "ReportTitleText",
+              "Guid": "008b71410a7481ab52b8ba23eb16c163",
+              "GrowToHeight": true,
+              "ClientRectangle": "1.4,0,7.72,0.5",
+              "ComponentStyle": "Blue Steel_Report_Title1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "توزيع الارباح المحصلة على السنة موزعة على الارباع"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";14;Bold;",
+              "Border": ";0,0,39;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:79,129,189",
+              "Type": "Expression"
+            }
+          }
+        },
+        "3": {
+          "Ident": "StiHeaderBand",
+          "Name": "HeaderDataSource2",
+          "ClientRectangle": "0,2.91,10.22,0.2",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiText",
+              "Name": "Text1",
+              "Guid": "e52244666f9c416a8ee1700bb9733364",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "9.1,0.02,1.1,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "الشركه\r\n"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "1": {
+              "Ident": "StiText",
+              "Name": "Text2",
+              "Guid": "53a126e928ae41ceb1d7f823822a8760",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "8.6,0.02,0.8,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "اسهم الربع الاول"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "2": {
+              "Ident": "StiText",
+              "Name": "Text4",
+              "Guid": "48e01e0daba047c39c6ab1e81909c54a",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "7.7,0.02,0.9,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "اسهم الربع الثاني"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "3": {
+              "Ident": "StiText",
+              "Name": "Text3",
+              "Guid": "3e479c2b5c5d459eb20708e6ad33eaf9",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "6.8,0.02,0.9,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "اسهم الربع الثالث"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "4": {
+              "Ident": "StiText",
+              "Name": "Text6",
+              "Guid": "454655f0c58149718a9293c1b9c140ea",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "6,0.02,0.9,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "اسهم الربع الرابع"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "5": {
+              "Ident": "StiText",
+              "Name": "Text9",
+              "Guid": "66d1e77955e6491f9457a87c94681151",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "5.1,0.02,0.9,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "ارباح الربع الاول"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "6": {
+              "Ident": "StiText",
+              "Name": "Text10",
+              "Guid": "191d464b1ea14b798453b1801fb13c4a",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "4.1,0.02,1,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "ارباح الربع الثاني"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "7": {
+              "Ident": "StiText",
+              "Name": "Text7",
+              "Guid": "c447c78fd70f47f3af12f911722fa30e",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "3.3,0.02,0.9,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "ارباح الربع الثالث"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "8": {
+              "Ident": "StiText",
+              "Name": "Text8",
+              "Guid": "ffadbf1805294940920c90d23d44316a",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "2.2,0.02,1.1,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "ارباح الربع الرابع"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "9": {
+              "Ident": "StiText",
+              "Name": "Text13",
+              "Guid": "6fac046d3260450a88b016b320dd1ca0",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "0,0.02,0.8,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "المتوسط"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "10": {
+              "Ident": "StiText",
+              "Name": "Text21",
+              "Guid": "f485286716f04b12addcc42ce8104125",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "1.4,0.02,0.8,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "اجمالي اسهم"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            },
+            "11": {
+              "Ident": "StiText",
+              "Name": "Text11",
+              "Guid": "b43bcee1bda24fe79ea980666f7e9c01",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "0.6,0.02,0.8,0.4",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "اجمالي ارباح\r\n"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            }
+          }
+        },
+        "4": {
+          "Ident": "StiDataBand",
+          "Name": "DataDataSource2",
+          "ClientRectangle": "0,3.51,10.22,0.6",
+          "Interaction": {
+            "Ident": "StiBandInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiText",
+              "Name": "Text5",
+              "Guid": "5f8ec18322e213a1ad61455bcddd403f",
+              "ClientRectangle": "9.5,0.02,0.7,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{DataSource2.PartnerName}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              }
+            },
+            "1": {
+              "Ident": "StiText",
+              "Name": "Text12",
+              "Guid": "0871f1fec81fb669b8de3e07f4e2e40b",
+              "ClientRectangle": "8.8,0.02,0.6,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{DataSource2.StockCountinfirstQUter}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              }
+            },
+            "2": {
+              "Ident": "StiText",
+              "Name": "Text14",
+              "Guid": "c2a9949360cb51004fa3f94ca7a22e2a",
+              "ClientRectangle": "8,0.02,0.6,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{DataSource2.StockCountinSecondQUter}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              }
+            },
+            "3": {
+              "Ident": "StiText",
+              "Name": "Text15",
+              "Guid": "f5ba3d8bb4dba86190bd00c78de93f53",
+              "ClientRectangle": "7.1,0.02,0.6,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{DataSource2.StockCountinthirdQUter}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              }
+            },
+            "4": {
+              "Ident": "StiText",
+              "Name": "Text16",
+              "Guid": "f5de4ebf983f39ca12406320d9a08e88",
+              "ClientRectangle": "6.2,0.02,0.5,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{DataSource2.StockCountinFOurthQUter}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              }
+            },
+            "5": {
+              "Ident": "StiText",
+              "Name": "Text17",
+              "Guid": "f5e597932b78bafc1d4886a2a8406ef0",
+              "ClientRectangle": "5.3,0.02,0.6,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{DataSource2.R1}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              }
+            },
+            "6": {
+              "Ident": "StiText",
+              "Name": "Text18",
+              "Guid": "c1cf239fd82039c7b725f7ca23636499",
+              "ClientRectangle": "4.5,0.02,0.6,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{DataSource2.R2}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              }
+            },
+            "7": {
+              "Ident": "StiText",
+              "Name": "Text19",
+              "Guid": "9c91de9852e8ddacb6b4f5dcef9aaf9e",
+              "ClientRectangle": "3.5,0.02,0.7,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{DataSource2.R3}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              }
+            },
+            "8": {
+              "Ident": "StiText",
+              "Name": "Text20",
+              "Guid": "47ad64554754961e3b724451662febe9",
+              "ClientRectangle": "2.5,0.02,0.7,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{DataSource2.R4}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              }
+            },
+            "9": {
+              "Ident": "StiText",
+              "Name": "Text22",
+              "Guid": "2e8deabcb410470b9a80723d514b9a3b",
+              "ClientRectangle": "1.6,0.02,0.7,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{DataSource2.TotalStocks}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Expression"
+            },
+            "10": {
+              "Ident": "StiText",
+              "Name": "Text23",
+              "Guid": "b8b06a6166f64b0996cb8a5c92f2c356",
+              "ClientRectangle": "0.8,0.02,0.7,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{DataSource2.TotalRial}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Expression"
+            },
+            "11": {
+              "Ident": "StiText",
+              "Name": "Text24",
+              "Guid": "8d2f5cd8fd634519b793cec0650aafd2",
+              "ClientRectangle": "0,0.02,0.7,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Div(Div(DataSource2.R1,DataSource2.StockCountinfirstQUter)+\r\nDiv(DataSource2.R2,DataSource2.StockCountinSecondQUter)+\r\nDiv(DataSource2.R3,DataSource2.StockCountinthirdQUter)+\r\nDiv(DataSource2.R4,DataSource2.StockCountinFOurthQUter)\r\n,4)}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Expression"
+            }
+          },
+          "DataSourceName": "DataSource2",
+          "FilterMode": "Or",
+          "EvenStyle": "Blue Steel_Data1_Even Style",
+          "OddStyle": "Blue Steel_Data1_Odd Style"
+        },
+        "5": {
+          "Ident": "StiFooterBand",
+          "Name": "FooterDataSource2",
+          "ClientRectangle": "0,4.51,10.22,0.4",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiText",
+              "Name": "Text36",
+              "Guid": "6a3033010c4b4860a23e15de714171fd",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "8.4,0,0.9,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataSource2.StockCountinfirstQUter)}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Totals"
+            },
+            "1": {
+              "Ident": "StiText",
+              "Name": "Text27",
+              "Guid": "9dbf082cf2494cf7b2951d28ec6256e5",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "0,0,0.7,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(Div(Div(DataSource2.R1,DataSource2.StockCountinfirstQUter)+\r\nDiv(DataSource2.R2,DataSource2.StockCountinSecondQUter)+\r\nDiv(DataSource2.R3,DataSource2.StockCountinthirdQUter)+\r\nDiv(DataSource2.R4,DataSource2.StockCountinFOurthQUter)\r\n,4))}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Expression"
+            },
+            "2": {
+              "Ident": "StiText",
+              "Name": "Text44",
+              "Guid": "fd3587b2ed6949ec875d5671be786a29",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "0.7,0,0.8,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataSource2.TotalStocks)}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Totals"
+            },
+            "3": {
+              "Ident": "StiText",
+              "Name": "Text37",
+              "Guid": "ea564cc0f5e8477b862d641e9737c5a4",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "7.5,0,0.9,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataSource2.StockCountinSecondQUter)}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Totals"
+            },
+            "4": {
+              "Ident": "StiText",
+              "Name": "Text38",
+              "Guid": "01f16e6b4883492ea0d533129e70f494",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "6.6,0,0.9,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataSource2.StockCountinthirdQUter)}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Totals"
+            },
+            "5": {
+              "Ident": "StiText",
+              "Name": "Text39",
+              "Guid": "7e6b7e1d488644ec84da5ccace6b7807",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "5.7,0,0.9,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataSource2.StockCountinFOurthQUter)}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Totals"
+            },
+            "6": {
+              "Ident": "StiText",
+              "Name": "Text40",
+              "Guid": "38ab828831464fb6b4fa7473757ca9d6",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "4.7,0,1,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataSource2.R1)}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Totals"
+            },
+            "7": {
+              "Ident": "StiText",
+              "Name": "Text41",
+              "Guid": "af61f952abca4181a4c4d330050d6bb4",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "3.8,0,0.9,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataSource2.R2)}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Totals"
+            },
+            "8": {
+              "Ident": "StiText",
+              "Name": "Text43",
+              "Guid": "bab71cb2746743f4bfd97a4aec50c614",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "3,0,0.8,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataSource2.R3)}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Totals"
+            },
+            "9": {
+              "Ident": "StiText",
+              "Name": "Text42",
+              "Guid": "ab426bbaa78749b09a70e1b92af3a5d4",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "2.3,0,0.7,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataSource2.R4)}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Totals"
+            },
+            "10": {
+              "Ident": "StiText",
+              "Name": "Text45",
+              "Guid": "9b5b0b70e2b849f49591575115bc2a36",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "1.5,0,0.8,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataSource2.TotalRial)}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ",",
+                "State": "DecimalDigits"
+              },
+              "Type": "Totals"
+            },
+            "11": {
+              "Ident": "StiText",
+              "Name": "Text25",
+              "Guid": "72902fc948664caabebb2b2fa8e6e097",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "9.3,0,0.9,0.2",
+              "ComponentStyle": "Blue Steel_Header1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "المجموع"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9.75;Bold;",
+              "Border": "Top, Bottom;0,0,39;2;;;;true;solid:Black",
+              "Brush": "solid:79,129,189",
+              "TextBrush": "solid:White",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Type": "Expression"
+            }
+          }
+        }
+      },
+      "PaperSize": "Letter",
+      "Orientation": "Landscape",
+      "PageWidth": 11,
+      "PageHeight": 8.5,
+      "Watermark": {
+        "TextBrush": "solid:50,0,0,0"
+      },
+      "Margins": {
+        "Left": 0.39,
+        "Right": 0.39,
+        "Top": 0.39,
+        "Bottom": 0.39
+      }
+    }
+  }
 }
-</Script>
-  <ScriptLanguage>CSharp</ScriptLanguage>
-  <Styles isList="true" count="12">
-    <Blue_x0020_Steel_Report_Title1 Ref="72" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item49 Ref="73" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>ReportTitle</Placement>
-          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item49>
-      </Conditions>
-      <Font>Arial,14,Bold</Font>
-      <Name>Blue Steel_Report_Title1</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Report_Title1>
-    <Blue_x0020_Steel_Report_Title2 Ref="74" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item51 Ref="75" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
-          <Placement>ReportTitle</Placement>
-          <PlacementNestedLevel>2</PlacementNestedLevel>
-          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item51>
-      </Conditions>
-      <Font>Arial,10,Bold</Font>
-      <Name>Blue Steel_Report_Title2</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Report_Title2>
-    <Blue_x0020_Steel_Report_Summary Ref="76" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item53 Ref="77" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>ReportSummary</Placement>
-          <Type>ComponentType, Placement</Type>
-        </Item53>
-      </Conditions>
-      <Font>Arial,10,Bold</Font>
-      <Name>Blue Steel_Report_Summary</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Report_Summary>
-    <Blue_x0020_Steel_Page_Header Ref="78" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item55 Ref="79" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>PageHeader</Placement>
-          <Type>ComponentType, Placement</Type>
-        </Item55>
-      </Conditions>
-      <Font>Arial,10</Font>
-      <Name>Blue Steel_Page_Header</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>Black</TextBrush>
-    </Blue_x0020_Steel_Page_Header>
-    <Blue_x0020_Steel_Page_Footer Ref="80" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item57 Ref="81" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>PageFooter</Placement>
-          <Type>ComponentType, Placement</Type>
-        </Item57>
-      </Conditions>
-      <Font>Arial,10</Font>
-      <Name>Blue Steel_Page_Footer</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>Black</TextBrush>
-    </Blue_x0020_Steel_Page_Footer>
-    <Blue_x0020_Steel_Group_Header1 Ref="82" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item59 Ref="83" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
-          <Placement>GroupHeader</Placement>
-          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item59>
-      </Conditions>
-      <Font>Arial,13,Bold</Font>
-      <Name>Blue Steel_Group_Header1</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Group_Header1>
-    <Blue_x0020_Steel_Group_Footer1 Ref="84" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>Top, Bottom;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item61 Ref="85" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>GroupFooter</Placement>
-          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item61>
-      </Conditions>
-      <Font>Arial,9.75,Bold,Point,False,204</Font>
-      <Name>Blue Steel_Group_Footer1</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[79:129:189]</TextBrush>
-    </Blue_x0020_Steel_Group_Footer1>
-    <Blue_x0020_Steel_Header1 Ref="86" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black;True</Border>
-      <Brush>[79:129:189]</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item63 Ref="87" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
-          <Placement>Header</Placement>
-          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item63>
-      </Conditions>
-      <Font>Arial,9.75,Bold,Point,False,204</Font>
-      <Name>Blue Steel_Header1</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>White</TextBrush>
-    </Blue_x0020_Steel_Header1>
-    <Blue_x0020_Steel_Data1 Ref="88" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>Transparent</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item65 Ref="89" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image, CheckBox</ComponentType>
-          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
-          <Placement>Data</Placement>
-          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item65>
-      </Conditions>
-      <Font>Arial,8</Font>
-      <Name>Blue Steel_Data1</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[0:0:0]</TextBrush>
-    </Blue_x0020_Steel_Data1>
-    <Blue_x0020_Steel_Data1_Odd_x0020_Style Ref="90" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>[255:255:255]</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item67 Ref="91" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
-          <Placement>DataOddStyle</Placement>
-          <Type>Placement, PlacementNestedLevel</Type>
-        </Item67>
-      </Conditions>
-      <Font>Arial,8</Font>
-      <Name>Blue Steel_Data1_Odd Style</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[0:0:0]</TextBrush>
-    </Blue_x0020_Steel_Data1_Odd_x0020_Style>
-    <Blue_x0020_Steel_Data1_Even_x0020_Style Ref="92" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>None;[0:0:39];1;Solid;False;4;Black</Border>
-      <Brush>[216:216:216]</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item69 Ref="93" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <OperationPlacementNestedLevel>GreaterThanOrEqualTo</OperationPlacementNestedLevel>
-          <Placement>DataEvenStyle</Placement>
-          <Type>Placement, PlacementNestedLevel</Type>
-        </Item69>
-      </Conditions>
-      <Font>Arial,8</Font>
-      <Name>Blue Steel_Data1_Even Style</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>[0:0:0]</TextBrush>
-    </Blue_x0020_Steel_Data1_Even_x0020_Style>
-    <Blue_x0020_Steel_Footer1 Ref="94" type="Stimulsoft.Report.StiStyle" isKey="true">
-      <Border>Top, Bottom;[0:0:39];2;Solid;False;4;Black</Border>
-      <Brush>White</Brush>
-      <CollectionName>Blue Steel</CollectionName>
-      <Conditions isList="true" count="1">
-        <Item71 Ref="95" type="Stimulsoft.Report.StiStyleCondition" isKey="true">
-          <ComponentType>Text, Primitive, Image</ComponentType>
-          <Placement>Footer</Placement>
-          <Type>ComponentType, Placement, PlacementNestedLevel</Type>
-        </Item71>
-      </Conditions>
-      <Font>Arial,8.25,Bold,Point,False,204</Font>
-      <Name>Blue Steel_Footer1</Name>
-      <NegativeTextBrush>Red</NegativeTextBrush>
-      <TextBrush>Black</TextBrush>
-    </Blue_x0020_Steel_Footer1>
-  </Styles>
-</StiSerializer>
