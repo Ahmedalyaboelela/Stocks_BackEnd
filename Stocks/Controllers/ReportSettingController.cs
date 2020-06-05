@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using BAL.Helper;
@@ -9,17 +11,22 @@ using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
 using DAL.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Mvc;
+using Stocks.Models;
 
 namespace Stocks.Controllers
 {
-    public class ReportSettingController : ControllerBase
+    public class ReportSettingController : Controller
     {
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
         private LoggerHistory loggerHistory;
+       
         public ReportSettingController(StocksContext context, IMapper mapper)
         {
             this._mapper = mapper;
@@ -160,7 +167,86 @@ namespace Stocks.Controllers
                 
 
         }
-            #endregion
+        #endregion
+        [HttpGet]
+        public string GetFile(int id)
+
+        {
+            StiReport report = new StiReport();
+            report.Dictionary.DataStore.Clear();
+            report.Load(Path.GetFullPath("SimpleList.mrt"));
+            report.Dictionary.Variables["id"].ValueObject = id;
+            string data = report.SaveToJsonString();
+
+            //string filePath = Path.GetFullPath("SimpleList.mrt");
+
+            //StreamReader rd = new StreamReader(filePath);
+            //string data = rd.ReadToEnd();
+            //rd.Close();
+
+            return data;
+        }
+
+        [HttpGet]
+        [Route("~/api/ReportSetting/getReportForDesigner")]
+        public string getReportForDesigner(string reportName)
+        {
+            var path = StiNetCoreHelper.MapPath(this, "/Reports/" + reportName + ".mrt");
+            StreamReader rd = new StreamReader(path);
+            string data = rd.ReadToEnd();
+            rd.Close();
+            return data; 
+        }
+
+        [HttpPost]
+        [Route("~/api/ReportSetting/SaveFile")]
+        public string SaveFile([FromBody] DemoData jsonString)
+        {
+
+            var reportName = jsonString.fileName;
+            try
+            {
+                string filePath = StiNetCoreHelper.MapPath(this, "/Reports/" + reportName + ".mrt");
+                StreamWriter wr = new StreamWriter(filePath);
+                wr.Write(jsonString.data);
+                wr.Close();
+                return "Report Saved Successfully";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+
+        [HttpPost]
+        [Route("GetDataSource")]
+        public void GetDataSource()
+        {
+
+
+            try
+            {
+                var command = (CommandJson)new DataContractJsonSerializer(typeof(CommandJson)).ReadObject(HttpContext.Request.Body);
+                Result result = new Result();
+
+                if (command.Database == "MS SQL")
+                {
+                    result = MSSQLAdapter.Process(command);
+                }
+                //if (command.Database == "PostgreSQL") result = PostgreSQLAdapter.Process(command);
+
+                var serializer = new DataContractJsonSerializer(typeof(Result));
+
+                serializer.WriteObject(HttpContext.Response.Body, result);
+                
+
+                HttpContext.Response.Body.Flush();
+            }
+            catch { }
+
 
         }
+
+    }
 }
