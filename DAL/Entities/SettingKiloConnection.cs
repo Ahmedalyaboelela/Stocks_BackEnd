@@ -23,6 +23,12 @@ namespace DAL.Entities
         public string UserId { get; set; }
         [Column(TypeName = "nvarchar(250)")]
         public string Password { get; set; }
-       
+
+        [Required]
+        [Column(TypeName = "nvarchar(250)")]
+        public string TimerJobStartTime { get; set; }
+
+
+
     }
 }

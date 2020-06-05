@@ -382,6 +382,152 @@ namespace Stocks.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("~/api/Setting/SyncNow")]
+        public IActionResult SyncNow()
+        {
+            var LinkedAccName = "";
+            int linkedparentacc = 0;
+            string connectionString = "";
+    
+              //  var dbContext = scope.ServiceProvider.GetRequiredService<StocksContext>();
+                var checkKlioconnection = unitOfWork.SettingKiloRepository.Get().SingleOrDefault();
+                if (checkKlioconnection != null)
+                {
+                    List<Account> AccountList = new List<Account>();
+                    if (checkKlioconnection.UserId != null && checkKlioconnection.Password != null)
+                    {
+                        connectionString = "Server='" + checkKlioconnection.ServerName + "';Database='" + checkKlioconnection.DatabaseName + "';" +
+                           "User Id= '" + checkKlioconnection.UserId + "';password='" + checkKlioconnection.Password + "';MultipleActiveResultSets=true;trusted_connection=true";
+                    }
+                    else
+                    {
+                        connectionString = "Server='" + checkKlioconnection.ServerName + "';Database='" + checkKlioconnection.DatabaseName + "';" +
+                            "Integrated Security=true;MultipleActiveResultSets=true;trusted_connection=true";
+                    }
+                    try
+                    {
+                        using (SqlConnection connection = new SqlConnection(connectionString))
+                        {
+                            //SqlDataReader
+                            connection.Open();
+                            string sql = "Select * From ACCOUNTS"; SqlCommand command = new SqlCommand(sql, connection);
+                            using (SqlDataReader dataReader = command.ExecuteReader())
+                            {
+                                while (dataReader.Read())
+                                {
+                                    Account account = new Account();
+                                    account.Code = dataReader["ACC_CODE"].ToString();
+                                    account.NameAR = dataReader["ACC_AR_NAME"].ToString();
+                                    account.NameEN = dataReader["ACC_EN_NAME"].ToString();
+                                    if (Convert.ToInt16(dataReader["ACC_STATE"]) == 1)
+                                    {
+                                        account.AccountType = true;
+                                    }
+                                    else
+                                    {
+                                        account.AccountType = false;
+                                    }
+                                    if (dataReader["ACC_MAX_DEBIT"].ToString() != "")
+                                        account.DebitLimit = Convert.ToDecimal(dataReader["ACC_MAX_DEBIT"]);
+                                    if (dataReader["ACC_MAX_CREDIT"].ToString() != "")
+                                        account.CreditLimit = Convert.ToDecimal(dataReader["ACC_MAX_CREDIT"]);
+                                    if (dataReader["ACC_CREDIT"].ToString() != "")
+                                        account.Credit = Convert.ToDecimal(dataReader["ACC_CREDIT"]);
+                                    if (dataReader["ACC_DEBIT"].ToString() != "")
+                                        account.Debit = Convert.ToDecimal(dataReader["ACC_DEBIT"]);
+                                    if (dataReader["CreditOpeningAccount"].ToString() != "")
+                                        account.CreditOpenningBalance = Convert.ToDecimal(dataReader["CreditOpeningAccount"]);
+                                    if (dataReader["DepitOpeningAccount"].ToString() != "")
+                                        account.DebitOpenningBalance = Convert.ToDecimal(dataReader["DepitOpeningAccount"]);
+                                    if (dataReader["ACC_ID"].ToString() != "")
+                                        account.LinkedDBAccID = (int)dataReader["ACC_ID"];
+                                    AccountList.Add(account);
+                                }
+                            }
+                            connection.Close();
+                        }
+                        var Check = unitOfWork.AccountRepository.Get();
+                        foreach (var item in AccountList)
+                        {
+                            if (!Check.Any(m => m.NameAR == item.NameAR))
+                            {
+                            unitOfWork.AccountRepository.Insert(item);
+                            unitOfWork.Save();
+
+                            }
+                        }
+                        var afteradded = unitOfWork.AccountRepository.Get();
+                    foreach (var item in afteradded)
+                        {
+
+                            using (SqlConnection connection = new SqlConnection(connectionString))
+                            {
+                                //SqlDataReader
+                                connection.Open();
+                                string sql = "Select * From ACCOUNTS where ACC_AR_NAME='" + item.NameAR + "'"; SqlCommand command = new SqlCommand(sql, connection);
+                                using (SqlDataReader dataReader = command.ExecuteReader())
+                                {
+                                    while (dataReader.Read())
+                                    {
+
+                                        if (dataReader["PARENT_ACC_ID"].ToString() != "")
+                                        {
+                                            linkedparentacc = int.Parse(dataReader["PARENT_ACC_ID"].ToString());
+                                        }
+
+                                    }
+                                }
+                                connection.Close();
+                                connection.Open();
+                                string sql2 = "Select * From ACCOUNTS where ACC_ID='" + linkedparentacc + "'"; SqlCommand command2 = new SqlCommand(sql2, connection);
+                                using (SqlDataReader dataReader = command2.ExecuteReader())
+                                {
+                                    while (dataReader.Read())
+                                    {
+                                        LinkedAccName = dataReader["ACC_AR_NAME"].ToString();
+                                    }
+                                }
+
+                                connection.Close();
+
+                            }
+                            //  var parentrow = unitOfWork.AccountRepository.Get(filter: m => m.NameAR == LinkedAccName).SingleOrDefault();
+                            if (LinkedAccName != "")
+                            {
+                            var parentrow = unitOfWork.AccountRepository.Get(filter: m => m.NameAR == LinkedAccName).FirstOrDefault();
+                                if (linkedparentacc == 0)
+                                {
+                                    item.AccoutnParentID = null;
+                                }
+                                else
+                                {
+                                    item.AccoutnParentID = parentrow.AccountID;
+                                }
+                            unitOfWork.AccountRepository.Update(item);
+                            unitOfWork.Save();
+
+                            }
+
+
+                        }
+                    return Ok(4);
+                    }
+
+                    catch (Exception ex)
+                    {
+                    return Ok(3);
+                    }
+
+                }
+                else
+            {
+                return Ok(1);
+            }
+
+            
+        }
+
 
 
 

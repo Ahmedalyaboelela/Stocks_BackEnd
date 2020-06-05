@@ -31,6 +31,7 @@ using BAL.Model;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.AspNetCore.HttpOverrides;
 using Stocks.CustomExceptionMiddleware;
+using Stocks.TimerJob;
 
 namespace Stocks
 {
@@ -62,6 +63,8 @@ namespace Stocks
             services.AddDbContext<StocksContext>(options =>
             options.UseLazyLoadingProxies()
             .UseSqlServer(Configuration.GetConnectionString("StocksConnection")));
+            services.AddHostedService<LinkeDBHostedService>();
+
             services.AddDefaultIdentity<ApplicationUser>()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<StocksContext>();

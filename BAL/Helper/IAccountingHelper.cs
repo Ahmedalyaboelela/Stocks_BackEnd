@@ -10,5 +10,10 @@ namespace BAL.Helper
     {
         void TransferToAccounts(List<EntryDetail> EntryList);
         void CancelTransferToAccounts(List<EntryDetail> EntryList);
+
+        int AddEntryToLinkedDB(EntryModel entryModel);
+
+        void DeleteEntryToLinkedDB(Entry entry,IEnumerable<EntryDetail> entryDetail);
+
     }
 }
