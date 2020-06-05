@@ -223,8 +223,6 @@ namespace Stocks.Controllers
         [Route("GetDataSource")]
         public void GetDataSource()
         {
-
-
             try
             {
                 var command = (CommandJson)new DataContractJsonSerializer(typeof(CommandJson)).ReadObject(HttpContext.Request.Body);
