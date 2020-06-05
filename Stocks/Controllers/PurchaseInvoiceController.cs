@@ -642,7 +642,7 @@ namespace Stocks.Controllers
         {
             if (ModelState.IsValid)
             {
-               
+                EntryModel entryobj = new EntryModel();
                 var Check = unitOfWork.PurchaseInvoiceRepository.Get();
                 if (Check.Any(m => m.Code == purchaseInvoiceModel.Code))
                 {
@@ -719,6 +719,7 @@ namespace Stocks.Controllers
                     {
                         var lastEntry = unitOfWork.EntryRepository.Last();
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,null, purchaseInvoiceModel, null, null, lastEntry);
+                        entryobj = EntryMODEL;
                         EntryMODEL.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         var DetailEnt = EntryMODEL.EntryDetailModel;
@@ -771,6 +772,15 @@ namespace Stocks.Controllers
                     if (Result == 200)
                     {
                         var UserID = loggerHistory.getUserIdFromRequest(Request);
+                        if (purchaseInvoiceModel.SettingModel.AutoGenerateEntry == true)
+                        {
+                            int refid = accountingHelper.AddEntryToLinkedDB(entryobj);
+                            var lastentry = unitOfWork.EntryRepository.Last();
+                            lastentry.RefrenceEntryId = refid;
+                            unitOfWork.EntryRepository.Update(lastentry);
+                            unitOfWork.Save();
+
+                        }
 
                         loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "اضافه فاتوره شراء", false);
                         return Ok(4);
@@ -803,6 +813,7 @@ namespace Stocks.Controllers
         [Route("~/api/PurchaseInvoice/PutPurchaseInvoice/{id}")]
         public IActionResult PutPurchaseInvoice(int id, [FromBody]  PurchaseInvoiceModel purchaseInvoiceModel )
         {
+            EntryModel newentryobj = new EntryModel();
             if (purchaseInvoiceModel != null)
             {
                 if (id != purchaseInvoiceModel.PurchaseInvoiceID)
@@ -876,6 +887,7 @@ namespace Stocks.Controllers
                             var Res = unitOfWork.Save();
                             if (Res == 200)
                             {
+                                accountingHelper.DeleteEntryToLinkedDB(Entry, OldEntryDetails);
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                                 loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
@@ -898,6 +910,7 @@ namespace Stocks.Controllers
                             var lastEntry = unitOfWork.EntryRepository.Last();
                             var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, purchaseInvoiceModel, null, null, lastEntry,Entry);
                             EntryMODEL.PurchaseInvoiceID = purchaseInvoice.PurchaseInvoiceID;
+                            newentryobj = EntryMODEL;
                             var NewEntry = _mapper.Map<Entry>(EntryMODEL);
                             var EntryDitails = EntryMODEL.EntryDetailModel;
 
@@ -945,6 +958,12 @@ namespace Stocks.Controllers
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
+                            accountingHelper.DeleteEntryToLinkedDB(Entry, OldEntryDetails);
+                            int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                            var lastentry = unitOfWork.EntryRepository.Last();
+                            lastentry.RefrenceEntryId = refid;
+                            unitOfWork.EntryRepository.Update(lastentry);
+                            unitOfWork.Save();
                             var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                             loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
@@ -1059,6 +1078,11 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+                                int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                                var lastentry = unitOfWork.EntryRepository.Last();
+                                lastentry.RefrenceEntryId = refid;
+                                unitOfWork.EntryRepository.Update(lastentry);
+                                unitOfWork.Save();
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                                 loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
@@ -1195,6 +1219,11 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
+                            int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                            var lastentry = unitOfWork.EntryRepository.Last();
+                            lastentry.RefrenceEntryId = refid;
+                            unitOfWork.EntryRepository.Update(lastentry);
+                            unitOfWork.Save();
                             var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                             loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
@@ -1325,6 +1354,11 @@ namespace Stocks.Controllers
                             var Res = unitOfWork.Save();
                             if (Res == 200)
                             {
+                                int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                                var lastentry = unitOfWork.EntryRepository.Last();
+                                lastentry.RefrenceEntryId = refid;
+                                unitOfWork.EntryRepository.Update(lastentry);
+                                unitOfWork.Save();
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                                 loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "تعديل فاتوره شراء", false);
@@ -1414,6 +1448,8 @@ namespace Stocks.Controllers
             var Result = unitOfWork.Save();
             if (Result == 200)
             {
+                var EntryDetail = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                accountingHelper.DeleteEntryToLinkedDB(Entry, EntryDetail);
                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                 loggerHistory.InsertUserLog(UserID, " فاتوره شراء", "حذف فاتوره شراء", false);

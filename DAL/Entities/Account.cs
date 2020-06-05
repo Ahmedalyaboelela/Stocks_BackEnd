@@ -24,9 +24,9 @@ namespace DAL.Entities
 
         public bool AccountType { get; set; }
 
-        public int AccountCategory { get; set; }
+        public int? AccountCategory { get; set; }
 
-        public int AccountRefrence { get; set; }
+        public int? AccountRefrence { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? Debit { get; set; }
@@ -78,6 +78,8 @@ namespace DAL.Entities
         public float? StocksCredit { get; set; }
 
         public int? AccoutnParentID { get; set; }
+
+        public int? LinkedDBAccID { get; set; }
 
         [ForeignKey("AccoutnParentID")]
         public virtual ICollection<Account> SubAccounts { get; set; }

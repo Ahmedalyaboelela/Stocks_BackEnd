@@ -4,14 +4,16 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(StocksContext))]
-    partial class StocksContextModelSnapshot : ModelSnapshot
+    [Migration("20200522233335_ss")]
+    partial class ss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,8 +260,6 @@ namespace DAL.Migrations
                     b.Property<int?>("PurchaseInvoiceID");
 
                     b.Property<int?>("ReceiptID");
-
-                    b.Property<int?>("RefrenceEntryId");
 
                     b.Property<int?>("SellingInvoiceID");
 
@@ -972,10 +972,6 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("ServerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("TimerJobStartTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(250)");
 

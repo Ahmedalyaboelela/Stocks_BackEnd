@@ -198,6 +198,7 @@ namespace Stocks.Controllers
         //Post:/api/ApplicationUser/Login
         public async Task<IActionResult> Login(LoginModel model)
         {
+
             var user = await _userManager.FindByNameAsync(model.LoginUserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.LoginPassword))
             {
@@ -219,10 +220,10 @@ namespace Stocks.Controllers
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
-                return Ok(new { token});
+                return Ok(new { token });
             }
             else
-                return BadRequest(new {message="Username or Password is incorrect."});
+                return BadRequest(new { message = "Username or Password is incorrect." });
         }
         #endregion
 

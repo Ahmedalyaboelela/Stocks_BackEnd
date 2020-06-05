@@ -532,6 +532,28 @@ namespace Stocks.Controllers
             return report.SaveDocumentJsonToString();
         }
 
+        [HttpPost]
+        [Route("~/api/ReportViewer/TestMongo")]
+        public string TestMongo([FromBody] JObject data)
+        {
+
+
+      
+            int userid = Convert.ToInt32(data.GetValue("userid"));
+
+
+            StiReport report = new StiReport();
+            var path = StiNetCoreHelper.MapPath(this, "Reports/Reportmongo.mrt");
+            report.Load(path);
+            //  report["userid"] = userid;
+            //  report.Dictionary.Variables["userid"].ValueObject = userid;
+            report["userid"] = userid;
+            report.Render(false);
+
+            return report.SaveDocumentJsonToString();
+
+        }
+
         #endregion
 
 
