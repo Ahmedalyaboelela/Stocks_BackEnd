@@ -15,6 +15,7 @@ namespace DAL.Context
         {
 
         }
+        public DbSet<ReportFile> ReportFiles { get; set; }
         public DbSet<SellingInvoice> SellingInvoices { get; set; }
 
         public DbSet<SellingOrder> SellingOrders { get; set; }

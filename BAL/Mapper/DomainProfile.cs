@@ -234,8 +234,14 @@ namespace BAL.Mapper
 
             CreateMap<UserLog, UserLogModel>();
             CreateMap<UserLogModel, UserLog>();
-                
 
+
+
+            #endregion
+
+            #region Map ReportFile
+
+            CreateMap<ReportFile, ReportFileModel>().ReverseMap();
 
             #endregion
 

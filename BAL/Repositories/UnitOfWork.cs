@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -424,6 +425,24 @@ namespace BAL.Repositories
                 return reportSettingRepository;
             }
         }
+
+        #endregion
+
+
+        #region ReportFile Repository
+        private GenericRepository<ReportFile> reportFileRepository;
+        public GenericRepository<ReportFile> ReportFileRepository
+        {
+            get
+            {
+                if (this.reportFileRepository == null)
+                {
+                    this.reportFileRepository = new GenericRepository<ReportFile>(Context);
+                }
+                return reportFileRepository;
+            }
+        }
+
         #endregion
 
 
