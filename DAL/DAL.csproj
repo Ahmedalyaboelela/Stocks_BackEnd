@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20190808121734_upd8-8.cs" />
     <Compile Remove="Migrations\20191020103052_Updatepartner.cs" />
     <Compile Remove="Migrations\20191021112301_AddNewSellOrder.cs" />
+    <Compile Remove="Migrations\20200929104104_AddEmployeeIDTOPurchaseOrder.cs" />
+    <Compile Remove="Migrations\20200929104104_AddEmployeeIDTOPurchaseOrder.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

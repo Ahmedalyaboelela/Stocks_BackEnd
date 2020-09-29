@@ -20,6 +20,7 @@ namespace DAL.Entities
         public bool OrderType { get; set; }
 
         public int PortfolioID { get; set; }
+        public int? EmployeeID { get; set; }
 
         [ForeignKey("PortfolioID")]
         public virtual Portfolio Portfolio { get; set; }

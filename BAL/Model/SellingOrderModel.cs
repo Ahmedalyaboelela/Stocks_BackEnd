@@ -16,6 +16,7 @@ namespace BAL.Model
         public string OrderDateHigri { get; set; }
 
         public bool OrderType { get; set; }
+        public int EmployeeID { get; set; }
 
         public int PortfolioID { get; set; }
         public string PortfolioNameAR { get; set; }
