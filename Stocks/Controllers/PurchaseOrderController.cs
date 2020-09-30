@@ -479,7 +479,7 @@ namespace Stocks.Controllers
                ON PurchaseInvoiceDetails.PurchaseInvoiceID = PurchaseInvoices.PurchaseInvoiceID
                INNER JOIN dbo.Partners
                ON Partners.PartnerID = PurchaseInvoiceDetails.PartnerID
-               WHERE PurchaseInvoices.PurchaseOrderID = "+id+"";
+               WHERE PurchaseInvoices.PurchaseOrderID = " + id+"";
 
                cnn.Open();
                SqlDataReader reader = cmd.ExecuteReader();

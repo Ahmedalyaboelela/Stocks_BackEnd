@@ -663,25 +663,30 @@ namespace Stocks.Controllers
                 }
                 else
                 {
-
-                    unitOfWork.PartnerRepository.Delete(id);
-                    var Result = unitOfWork.Save();
-                    if (Result == 200)
-                    {
-                        var UserID = loggerHistory.getUserIdFromRequest(Request);
-
-                        loggerHistory.InsertUserLog(UserID, "بطاقه الشركه", "حذف الشركه", true);
-                        return Ok(4);
-                    }
-                    else if (Result == 501)
+                    if (unitOfWork.PurchaseOrderDetailRepository.Get(x => x.PartnerID == id).Count() != 0 || unitOfWork.SellingInvoiceDetailRepository.Get(x => x.PartnerID == id).Count() != 0)
                     {
                         return Ok(5);
                     }
                     else
                     {
-                        return Ok(6);
-                    }
+                        unitOfWork.PartnerRepository.Delete(id);
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
+                        {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                            loggerHistory.InsertUserLog(UserID, "بطاقه الشركه", "حذف الشركه", true);
+                            return Ok(4);
+                        }
+                        else if (Result == 501)
+                        {
+                            return Ok(5);
+                        }
+                        else
+                        {
+                            return Ok(6);
+                        }
+                    }
                 }
             }
         }
