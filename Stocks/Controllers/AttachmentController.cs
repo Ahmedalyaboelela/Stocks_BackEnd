@@ -6,12 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Stocks.Controllers
 {
     public class AttachmentController : Controller
     {
-
+        private readonly IHostingEnvironment _hostingEnvironment;
+        public AttachmentController(IHostingEnvironment hostingEnvironment)
+        {
+            _hostingEnvironment = hostingEnvironment;
+        }
         [HttpPost, DisableRequestSizeLimit]
         public IActionResult Upload()
         {
@@ -19,21 +24,26 @@ namespace Stocks.Controllers
             {
                 var file = Request.Form.Files[0];
                 var folderName = Path.Combine("Resources", "Images");
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
+                //Put userid instead of folderName
+                string webRootPath = _hostingEnvironment.WebRootPath;
+                string newPath = Path.Combine(webRootPath, folderName);
+                if (!Directory.Exists(newPath))
+                {
+                    Directory.CreateDirectory(newPath);
+                }
                 if (file.Length > 0)
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var fullPath = Path.Combine(pathToSave, fileName);
-                    var dbPath = Path.Combine(folderName, fileName);
+                    string fileName = file.FileName;
 
+                    string fullPath = Path.Combine(newPath, fileName);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
                     }
-
-                    return Ok(new { dbPath });
+                    return Ok(fullPath);
                 }
+
                 else
                 {
                     return BadRequest();
