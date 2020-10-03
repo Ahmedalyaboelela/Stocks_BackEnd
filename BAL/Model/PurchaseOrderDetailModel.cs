@@ -16,6 +16,8 @@ namespace BAL.Model
 
         public int PartnerID { get; set; }
 
+        public decimal? TradingValue { get; set; }
+
         public string PartnerNameAr { get; set; }
         public string PartnerCode { get; set; }
     }

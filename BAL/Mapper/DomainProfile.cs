@@ -187,6 +187,9 @@ namespace BAL.Mapper
             CreateMap<SettingAccount, SettingAccountModel>();
             CreateMap<SettingAccountModel, SettingAccount>();
 
+            // setting kilo
+            CreateMap<SettingKiloConnection, SettingKiloModel>();
+            CreateMap<SettingKiloModel, SettingKiloConnection>();
 
             #endregion
 
@@ -231,8 +234,14 @@ namespace BAL.Mapper
 
             CreateMap<UserLog, UserLogModel>();
             CreateMap<UserLogModel, UserLog>();
-                
 
+
+
+            #endregion
+
+            #region Map ReportFile
+
+            CreateMap<ReportFile, ReportFileModel>().ReverseMap();
 
             #endregion
 

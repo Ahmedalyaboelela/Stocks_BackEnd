@@ -20,7 +20,7 @@ using System.Data;
 
 namespace Stocks.Controllers
 {
-  //  [Authorize(Roles = "SuperAdmin,Admin,Employee")]
+   [Authorize(Roles = "SuperAdmin,Admin,Employee")]
     [Route("api/[controller]")]
     
     public class PurchaseOrderController : ControllerBase
@@ -97,6 +97,7 @@ namespace Stocks.Controllers
                         PurchaseOrderID = m.PurchaseOrderID,
                         PurchaseOrderDetailID = m.PurchaseOrderDetailID,
                         StockCount = m.StockCount,
+                        TradingValue=m.TradingValue,
                         PartnerCode = m.Partner.Code
 
 
@@ -187,6 +188,7 @@ namespace Stocks.Controllers
                             detail.PriceType = item.PriceType;
                             detail.StockCount = item.StockCount;
                             detail.PurchaseOrderDetailID = 0;
+                            detail.TradingValue = item.TradingValue;
                             var ob = _mapper.Map<PurchaseOrderDetail>(detail);
                             unitOfWork.PurchaseOrderDetailRepository.Insert(ob);
                         }
@@ -362,7 +364,12 @@ namespace Stocks.Controllers
                 {
                     return Ok(6);
                 }
-
+                var Invoices = unitOfWork.PurchaseInvoiceRepository.Get(filter: x => x.PurchaseOrderID == id).Count();
+    
+                if (Invoices!=0)
+                {
+                    return Ok(5);
+                }
                 var Details = unitOfWork.PurchaseOrderDetailRepository.Get(filter: x => x.PurchaseOrderID == purchaseorder.PurchaseOrderID);
                 if (Details != null)
                 {
@@ -372,7 +379,7 @@ namespace Stocks.Controllers
 
 
 
-                unitOfWork.SellingOrderRepository.Delete(purchaseorder);
+                unitOfWork.PurchaseOrderRepository.Delete(purchaseorder);
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
@@ -472,7 +479,7 @@ namespace Stocks.Controllers
                ON PurchaseInvoiceDetails.PurchaseInvoiceID = PurchaseInvoices.PurchaseInvoiceID
                INNER JOIN dbo.Partners
                ON Partners.PartnerID = PurchaseInvoiceDetails.PartnerID
-               WHERE PurchaseInvoices.PurchaseOrderID = "+id+"";
+               WHERE PurchaseInvoices.PurchaseOrderID = " + id+"";
 
                cnn.Open();
                SqlDataReader reader = cmd.ExecuteReader();

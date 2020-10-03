@@ -10,12 +10,14 @@ using BAL.Model;
 using BAL.Repositories;
 using DAL.Context;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace Stocks.Controllers
 {
+    [Authorize(Roles = "SuperAdmin,Admin,Employee")]
     [Route("api/[controller]")]
     [ApiController]
     public class sellingorderController : ControllerBase
@@ -92,6 +94,7 @@ namespace Stocks.Controllers
                         SellingOrderID = m.SellingOrderID,
                         SellOrderDetailID = m.SellOrderDetailID,
                         StockCount = m.StockCount,
+                        TradingValue=m.TradingValue,
                         PartnerCode=m.Partner.Code
 
 
@@ -180,6 +183,7 @@ namespace Stocks.Controllers
                             detail.PriceType = item.PriceType;
                             detail.StockCount = item.StockCount;
                             detail.SellOrderDetailID = 0;
+                            detail.TradingValue = item.TradingValue;
                             var ob = _mapper.Map<SellingOrderDetail>(detail);
                             unitOfWork.SellingOrderDetailRepository.Insert(ob);
                         }
@@ -363,7 +367,11 @@ namespace Stocks.Controllers
                 {
                     return Ok(6);
                 }
-
+                int Invoives = unitOfWork.SellingInvoiceReposetory.Get(filter: x=> x.SellingOrderID==id).Count(); 
+                if (Invoives != 0)
+                {
+                    return Ok(5);
+                }
                 var Details = unitOfWork.SellingOrderDetailRepository.Get(filter: x => x.SellingOrderID == sellingorder.SellingOrderID);
                 if (Details != null)
                 {
@@ -454,7 +462,7 @@ namespace Stocks.Controllers
                     SellingInvoiceDetailsModel item = new SellingInvoiceDetailsModel();
                     item.RowNum = reader.GetInt64(0);
                     item.Code = reader.GetString(1);
-                    item.ExeDate = reader.GetDateTime(2).ToString("d/M/yyyy");
+                    item.ExeDate = reader.GetDateTime(2).ToString();
                     item.PartnerNameAR = reader.GetString(3);
                     item.StockCount = reader.GetFloat(4);
                     item.SellingPrice = reader.GetDecimal(5);

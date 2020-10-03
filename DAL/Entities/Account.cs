@@ -79,6 +79,8 @@ namespace DAL.Entities
 
         public int? AccoutnParentID { get; set; }
 
+        public int? LinkedDBAccID { get; set; }
+
         [ForeignKey("AccoutnParentID")]
         public virtual ICollection<Account> SubAccounts { get; set; }
 

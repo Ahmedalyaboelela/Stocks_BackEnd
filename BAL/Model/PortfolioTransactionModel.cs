@@ -14,7 +14,7 @@ namespace BAL.Model
         public decimal CurrentStockValue { get; set; }
 
         public int PortfolioID { get; set; }
-        public int PartnerID { get; set; }
+        public int? PartnerID { get; set; }
         public string partenerNameAR { get; set; }
         public string partenerCode{ get; set; }
         public string partenerNameEN { get; set; }

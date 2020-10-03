@@ -53,7 +53,7 @@ namespace BAL.Helper
             return true; 
         }
 
-        //Rial Balanc of portfolio 
+        //Rial Balanc of portfolio on Insert
         public decimal? RialBalanc(int PortfolioID)
         {
             var accountid = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == PortfolioID).AccountID;
@@ -95,6 +95,54 @@ namespace BAL.Helper
 
             return RealBalance;
         }
+        //Rial Balanc of portfolio on Update
+        public decimal? RialBalancUpdate(int PortfolioID,decimal? OldNetAmount)
+        {
+            var accountid = unitOfWork.PortfolioAccountRepository.GetEntity(filter: x => x.PortfolioID == PortfolioID).AccountID;
+            var account = unitOfWork.AccountRepository.GetEntity(filter: x => x.AccountID == accountid);
+            decimal? Debit = account.Debit;
+            decimal? oldCredit = account.Credit; 
+            if (oldCredit==null)
+            {
+                oldCredit = 0.0m;
+            }
+            decimal? Credit = oldCredit - OldNetAmount;
+            decimal? DebitOpenningBalance = account.DebitOpenningBalance;
+            decimal? CreditOpenningBalance = account.CreditOpenningBalance;
+            decimal? RealBalance = 0.0m;
+            if (Debit == null)
+            {
+                Debit = 0.0m;
+            }
+            if (Credit == null)
+            {
+                Credit = 0.0m;
+            }
+            if (DebitOpenningBalance == null && CreditOpenningBalance != null)
+            {
+                RealBalance = -CreditOpenningBalance + (Debit - Credit);
+
+            }
+            else if (DebitOpenningBalance != null && CreditOpenningBalance == null)
+            {
+                RealBalance = DebitOpenningBalance + (Debit - Credit);
+
+            }
+            else if (DebitOpenningBalance == null && CreditOpenningBalance == null)
+            {
+                RealBalance = Debit - Credit;
+
+            }
+            else if (DebitOpenningBalance != null && CreditOpenningBalance != null)
+            {
+                RealBalance = DebitOpenningBalance + (Debit - Credit);
+
+            }
+
+
+            return RealBalance;
+        }
+
         //Check Stocks Count Allowed For Selling Invoice  on selling Order
         public bool CheckStockCountForSellingInvoice(SellingInvoiceModel sellingInvoiceModel)
         {
@@ -115,6 +163,41 @@ namespace BAL.Helper
             return true;
         }
 
+        //total stocks in Invoice in Insert
+        public float? sumOfstocksOnInvoice(int sellOrderID, int partenerID) {
+            float? totalstocks = 0.0f;
+
+         var list=unitOfWork.SellingInvoiceDetailRepository.Get(filter: x => x.SellingInvoice.SellingOrderID == sellOrderID && x.PartnerID==partenerID);
+            foreach (var item in list)
+            {
+                totalstocks += item.StockCount;
+            }
+            if (totalstocks==null)
+            {
+                totalstocks = 0.0f;
+            }
+            return totalstocks;
+
+        }
+
+
+        //total stocks in Invoice in Update
+        public float? sumOfstocksOnInvoiceUpdate(int sellOrderID, int partenerID,int InVoiceDetailsID)
+        {
+            float? totalstocks = 0.0f;
+
+            var list = unitOfWork.SellingInvoiceDetailRepository.Get(filter: x => x.SellingInvoice.SellingOrderID == sellOrderID && x.PartnerID == partenerID && x.SellInvoiceDetailID != InVoiceDetailsID);
+            foreach (var item in list)
+            {
+                totalstocks += item.StockCount;
+            }
+            if (totalstocks == null)
+            {
+                totalstocks = 0.0f;
+            }
+            return totalstocks;
+
+        }
 
 
         // Discount Selling Order Stocks Count From Portofolio
@@ -155,26 +238,78 @@ namespace BAL.Helper
 
         }
 
-        // Add Purchase Order Stocks Count To Portofolio
+        // Add Purchase Order Stocks Count To Portofolio  
         public void TransferPurchaseToStocks(PurchaseInvoiceModel purchaseInvoiceModel)
-        {
-            var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == purchaseInvoiceModel.PortfolioID);
-            var Details = purchaseInvoiceModel.DetailsModels;
-            foreach (var detail in Details)
+        { 
+             var Details = purchaseInvoiceModel.DetailsModels;
+            if (unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == purchaseInvoiceModel.PortfolioID).Count() != 0)
             {
-                foreach (var item in PortofolioStocks)
+                var PortofolioStocks = unitOfWork.PortfolioTransactionsRepository.Get(filter: m => m.PortfolioID == purchaseInvoiceModel.PortfolioID);
+
+                foreach (var detail in Details)
                 {
-                    if (detail.PartnerID == item.PartnerID)
+
+                    if (PortofolioStocks.Any(x => x.PartnerID == detail.PartnerID))
                     {
-                        item.CurrentStocksCount = item.CurrentStocksCount + detail.StockCount;
-                        item.CurrentStockValue = (((decimal)item.CurrentStocksCount *  item.CurrentStockValue) + 
-                        ((decimal)detail.StockCount *  detail.PurchaseValue))
-                         /(decimal) (item.CurrentStocksCount + detail.StockCount);
-                        unitOfWork.PortfolioTransactionsRepository.Update(item);
+
+                        foreach (var item in PortofolioStocks)
+                        {
+                            if (detail.PartnerID == item.PartnerID)
+                            {
+                                item.CurrentStocksCount = item.CurrentStocksCount + detail.StockCount;
+                                item.CurrentStockValue = (((decimal)item.CurrentStocksCount * item.CurrentStockValue) +
+                                ((decimal)detail.StockCount * detail.PurchaseValue))
+                                 / (decimal)(item.CurrentStocksCount + detail.StockCount);
+                                unitOfWork.PortfolioTransactionsRepository.Update(item);
+                                unitOfWork.Save();
+                            }
+
+                        }
+
+
                     }
+                    else
+                    {
+                        foreach (var item in Details)
+                        {
+                            PortfolioTransactionModel portfolioTransactionModel = new PortfolioTransactionModel();
+                            portfolioTransactionModel.PortfolioID = purchaseInvoiceModel.PortfolioID;
+                            portfolioTransactionModel.PartnerID = item.PartnerID;
+                            portfolioTransactionModel.PortTransID = 0;
+                            portfolioTransactionModel.CurrentStocksCount = item.StockCount;
+                            portfolioTransactionModel.CurrentStockValue = item.PurchaseValue;
+
+                            var trancaction = _mapper.Map<PortfolioTransaction>(portfolioTransactionModel);
+                            unitOfWork.PortfolioTransactionsRepository.Insert(trancaction);
+                            unitOfWork.Save();
+
+
+
+
+                        }
+                    }
+
 
                 }
             }
+
+            else
+            { 
+                foreach (var item in Details)
+                {
+                    PortfolioTransactionModel portfolioTransactionModel = new PortfolioTransactionModel();
+                    portfolioTransactionModel.PortfolioID = purchaseInvoiceModel.PortfolioID;
+                    portfolioTransactionModel.PartnerID = item.PartnerID;
+                    portfolioTransactionModel.PortTransID = 0;
+                    portfolioTransactionModel.CurrentStocksCount = item.StockCount;
+                    portfolioTransactionModel.CurrentStockValue = item.PurchaseValue;
+
+                    var trancaction = _mapper.Map<PortfolioTransaction>(portfolioTransactionModel);
+                     unitOfWork.PortfolioTransactionsRepository.Insert(trancaction);
+                    unitOfWork.Save();
+                }
+            }
+          
         }
 
         //Cancel Purchase Order From Portofolio Stocks
@@ -192,6 +327,7 @@ namespace BAL.Helper
                             - ((decimal)detail.StockCount * detail.PurchaseValue))
                             / (decimal)item.CurrentStocksCount;
                         unitOfWork.PortfolioTransactionsRepository.Update(item);
+                        unitOfWork.Save();
                     }
 
                 }

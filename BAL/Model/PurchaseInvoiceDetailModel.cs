@@ -23,7 +23,7 @@ namespace BAL.Model
         public decimal BankCommission { get; set; }
         public float? TaxRateOnCommission { get; set; }
 
-       
+        public decimal StocksValue { get; set; }
         public decimal TaxOnCommission { get; set; }
        
         public decimal NetAmmount { get; set; }
@@ -33,7 +33,7 @@ namespace BAL.Model
         public string PartnerNameEN { get; set; }
         public string PartnerCode { get; set; }
         public float? StocksCount { get; set; }
-        public decimal? StocksValue { get; set; }
+       
        
     }
 }

@@ -15,6 +15,7 @@ namespace DAL.Context
         {
 
         }
+        public DbSet<ReportFile> ReportFiles { get; set; }
         public DbSet<SellingInvoice> SellingInvoices { get; set; }
 
         public DbSet<SellingOrder> SellingOrders { get; set; }
@@ -55,6 +56,8 @@ namespace DAL.Context
 
         public DbSet<Setting> Settings { get; set; }
         public DbSet<SettingAccount> SettingAccounts { get; set; }
+        public DbSet<SettingKiloConnection> SettingKiloConnections { get; set; }
+        
         public DbSet<Notice> Notices { get; set; }
         public DbSet<NoticeDetail> NoticeDetails { get; set; }
         public DbSet<Employee> Employees { get; set; }
@@ -65,6 +68,8 @@ namespace DAL.Context
         public DbSet<ReportSetting> ReportSettings { get; set; }
 
         public DbSet<UserLog> UserLogs { get; set; }
+
+        public DbSet<TestTable> TestTables { get; set; }
 
     }
 }

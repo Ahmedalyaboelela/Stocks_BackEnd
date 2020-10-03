@@ -687,6 +687,7 @@ namespace Stocks.Controllers
            
             if (ModelState.IsValid)
             {
+                EntryModel entryobj = new EntryModel();
                 int portofolioaccount = unitOfWork.PortfolioAccountRepository.Get(filter: m => m.PortfolioID == noticeModel.PortfolioID && m.Type == true).Select(m => m.PortfolioAccountID).SingleOrDefault();
 
                 var Check = unitOfWork.NoticeRepository.Get();
@@ -748,7 +749,8 @@ namespace Stocks.Controllers
 
                     var lastEntry = unitOfWork.EntryRepository.Last();
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry);
-                        var Entry = _mapper.Map<Entry>(EntryMODEL);
+                        entryobj = EntryMODEL;
+                    var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.NoticeID = notice.NoticeID;
 
                         var DetailEnt = EntryMODEL.EntryDetailModel;
@@ -800,6 +802,11 @@ namespace Stocks.Controllers
                     if (Result == 200)
                     {
                         var UserID = loggerHistory.getUserIdFromRequest(Request);
+                        int refid = accountingHelper.AddEntryToLinkedDB(entryobj);
+                        var lastentry = unitOfWork.EntryRepository.Last();
+                        lastentry.RefrenceEntryId = refid;
+                        unitOfWork.EntryRepository.Update(lastentry);
+                        unitOfWork.Save();
                         if (noticeModel.Type==false)
                         {
                             loggerHistory.InsertUserLog(UserID, " اشعار دائن", "اضافه اشعار دائن", true);
@@ -837,6 +844,7 @@ namespace Stocks.Controllers
         [Route("~/api/Notice/Update/{type}/{id}")]
         public IActionResult Update(bool type, int id, [FromBody] NoticeModel noticeModel)
         {
+            EntryModel newentryobj = new EntryModel();
             if (id != noticeModel.NoticeID)
             {
 
@@ -854,6 +862,7 @@ namespace Stocks.Controllers
                 var Newdetails = _mapper.Map<IEnumerable<NoticeDetail>>(NewdDetails);
                 var OldDetails = unitOfWork.NoticeDetailRepository.Get(NoTrack: "NoTrack", filter: m => m.NoticeID == notice.NoticeID);
                 var EntryCheck = unitOfWork.EntryRepository.Get(x => x.NoticeID == notice.NoticeID, NoTrack: "NoTrack").SingleOrDefault();
+
                 #region Warehouse
                 if(noticeModel.Type==false)
                 {
@@ -924,6 +933,7 @@ namespace Stocks.Controllers
                             //var EntryDitails = EntriesHelper.UpdateCalculateEntries(portofolioaccount, EntryCheck.EntryID, null, null, null, noticeModel);
                             var lastEntry = unitOfWork.EntryRepository.Last();
                             var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount, null, null, null, noticeModel, lastEntry, EntryCheck);
+                            newentryobj = EntryMODEL;
                             var Entry = _mapper.Map<Entry>(EntryMODEL);
                             Entry.NoticeID = notice.NoticeID;
                             var EntryDitails = EntryMODEL.EntryDetailModel;
@@ -974,6 +984,12 @@ namespace Stocks.Controllers
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
+                            accountingHelper.DeleteEntryToLinkedDB(EntryCheck, OldEntryDetails);
+                            int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                            var lastentry = unitOfWork.EntryRepository.Last();
+                            lastentry.RefrenceEntryId = refid;
+                            unitOfWork.EntryRepository.Update(lastentry);
+                            unitOfWork.Save();
                             var UserID = loggerHistory.getUserIdFromRequest(Request);
                             if (noticeModel.Type == false)
                             {
@@ -1042,7 +1058,7 @@ namespace Stocks.Controllers
                                 if (noticeModel.SettingModel.TransferToAccounts == true)
                                 {
                                     Entry.TransferedToAccounts = true;
-                                    unitOfWork.EntryRepository.Update(Entry);
+                                    unitOfWork.EntryRepository.Insert(Entry);
                                     foreach (var item in EntryDitails)
                                     {
                                         item.EntryID = Entry.EntryID;
@@ -1084,6 +1100,11 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+                                int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                                var lastentry = unitOfWork.EntryRepository.Last();
+                                lastentry.RefrenceEntryId = refid;
+                                unitOfWork.EntryRepository.Update(lastentry);
+                                unitOfWork.Save();
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
                                 if (noticeModel.Type == false)
                                 {
@@ -1202,6 +1223,11 @@ namespace Stocks.Controllers
                         var Result = unitOfWork.Save();
                         if (Result == 200)
                         {
+                            int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                            var lastentry = unitOfWork.EntryRepository.Last();
+                            lastentry.RefrenceEntryId = refid;
+                            unitOfWork.EntryRepository.Update(lastentry);
+                            unitOfWork.Save();
                             var UserID = loggerHistory.getUserIdFromRequest(Request);
                             if (noticeModel.Type == false)
                             {
@@ -1315,6 +1341,11 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
+                                int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                                var lastentry = unitOfWork.EntryRepository.Last();
+                                lastentry.RefrenceEntryId = refid;
+                                unitOfWork.EntryRepository.Update(lastentry);
+                                unitOfWork.Save();
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
                                 if (noticeModel.Type == false)
                                 {
@@ -1397,6 +1428,7 @@ namespace Stocks.Controllers
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
+                    accountingHelper.DeleteEntryToLinkedDB(entry, entryDitails);
                     var UserID = loggerHistory.getUserIdFromRequest(Request);
                     if (notice.Type == false)
                     {

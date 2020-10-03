@@ -15,7 +15,7 @@ namespace DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -25,9 +25,9 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountCategory");
+                    b.Property<int?>("AccountCategory");
 
-                    b.Property<int>("AccountRefrence");
+                    b.Property<int?>("AccountRefrence");
 
                     b.Property<bool>("AccountType");
 
@@ -63,6 +63,8 @@ namespace DAL.Migrations
 
                     b.Property<string>("Fax")
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<int?>("LinkedDBAccID");
 
                     b.Property<string>("Mobile")
                         .HasColumnType("nvarchar(150)");
@@ -256,6 +258,8 @@ namespace DAL.Migrations
                     b.Property<int?>("PurchaseInvoiceID");
 
                     b.Property<int?>("ReceiptID");
+
+                    b.Property<int?>("RefrenceEntryId");
 
                     b.Property<int?>("SellingInvoiceID");
 
@@ -684,6 +688,9 @@ namespace DAL.Migrations
 
                     b.Property<float>("StockCount");
 
+                    b.Property<decimal?>("TradingValue")
+                        .HasColumnType("decimal(10,2)");
+
                     b.HasKey("PurchaseOrderDetailID");
 
                     b.HasIndex("PartnerID");
@@ -758,6 +765,27 @@ namespace DAL.Migrations
                     b.HasIndex("ReceiptID");
 
                     b.ToTable("ReceiptExchangeDetails");
+                });
+
+            modelBuilder.Entity("DAL.Entities.ReportFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool?>("IsDefault");
+
+                    b.Property<string>("ReportNameAr");
+
+                    b.Property<string>("ReportNameEn");
+
+                    b.Property<int?>("ReportType");
+
+                    b.Property<int?>("ReportTypeId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReportFiles");
                 });
 
             modelBuilder.Entity("DAL.Entities.ReportSetting", b =>
@@ -862,6 +890,8 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("EmployeeID");
+
                     b.Property<DateTime>("OrderDate");
 
                     b.Property<bool>("OrderType");
@@ -890,6 +920,9 @@ namespace DAL.Migrations
                     b.Property<int>("SellingOrderID");
 
                     b.Property<float>("StockCount");
+
+                    b.Property<decimal?>("TradingValue")
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("SellOrderDetailID");
 
@@ -946,6 +979,51 @@ namespace DAL.Migrations
                     b.HasIndex("SettingID");
 
                     b.ToTable("SettingAccounts");
+                });
+
+            modelBuilder.Entity("DAL.Entities.SettingKiloConnection", b =>
+                {
+                    b.Property<int>("SettingKiloID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DatabaseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("ServerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("TimerJobStartTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("SettingKiloID");
+
+                    b.ToTable("SettingKiloConnections");
+                });
+
+            modelBuilder.Entity("DAL.Entities.TestTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TestTables");
                 });
 
             modelBuilder.Entity("DAL.Entities.UserLog", b =>

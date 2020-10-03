@@ -434,7 +434,7 @@ namespace Stocks.Controllers
             if (pageNumber > 0)
             {
 
-                var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type&&m.ReceiptExchangeType==ReceiptExchangeType, page: pageNumber).FirstOrDefault();
+                var RecExc = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType==ReceiptExchangeType, page: pageNumber).FirstOrDefault();
                 if(RecExc != null)
                     return Ok(GetReceiptExchange(RecExc,ReceiptExchangeType, type, numSetting));
                 else
@@ -541,6 +541,7 @@ namespace Stocks.Controllers
 
             if (ModelState.IsValid)
             {
+                EntryModel entryobj = new EntryModel();
                 var Check = unitOfWork.ReceiptExchangeRepository.Get();
                 if (Check.Any(m => m.Code == recExcModel.Code && m.Type==recExcModel.Type && m.ReceiptExchangeType==recExcModel.ReceiptExchangeType))
                 {
@@ -582,6 +583,7 @@ namespace Stocks.Controllers
 
                         var lastEntry = unitOfWork.EntryRepository.Last();
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0, null, null, recExcModel, null, lastEntry);
+                        entryobj = EntryMODEL;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.ReceiptID = receipt.ReceiptID;
 
@@ -634,7 +636,13 @@ namespace Stocks.Controllers
 
                     var Res = unitOfWork.Save();
                     if (Res == 200)
-                    { 
+                    {
+                        int refid = accountingHelper.AddEntryToLinkedDB(entryobj);
+                        var lastentry = unitOfWork.EntryRepository.Last();
+                        lastentry.RefrenceEntryId = refid;
+                        unitOfWork.EntryRepository.Update(lastentry);
+                        unitOfWork.Save();
+
                         if (recExcModel.Type==true && recExcModel.ReceiptExchangeType==true)
                         {
                             var UserID = loggerHistory.getUserIdFromRequest(Request);
@@ -688,6 +696,7 @@ namespace Stocks.Controllers
         [Route("~/api/ReceiptExchange/Update/{id}")]
         public IActionResult Update(int id, [FromBody] ReceiptExchangeModel receiptExchangeModel)
         {
+            EntryModel newentryobj = new EntryModel();
             if (id != receiptExchangeModel.ReceiptID)
             {
 
@@ -746,6 +755,7 @@ namespace Stocks.Controllers
                         //var EntryDitails = EntriesHelper.UpdateCalculateEntries(0,Entry.EntryID, null, null, receiptExchangeModel, null);
                         var lastEntry = unitOfWork.EntryRepository.Last();
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(0, null, null, receiptExchangeModel, null, lastEntry, OldEntry);
+                        newentryobj = EntryMODEL;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         Entry.ReceiptID = ReceiptExchange.ReceiptID;
                         var EntryDitails = EntryMODEL.EntryDetailModel;
@@ -796,6 +806,12 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
+                            accountingHelper.DeleteEntryToLinkedDB(EntryCheck, OldEntryDetails);
+                            int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                            var lastentry = unitOfWork.EntryRepository.Last();
+                            lastentry.RefrenceEntryId = refid;
+                            unitOfWork.EntryRepository.Update(lastentry);
+                            unitOfWork.Save();
                             if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == true)
                             {
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
@@ -920,6 +936,11 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
+                            int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                            var lastentry = unitOfWork.EntryRepository.Last();
+                            lastentry.RefrenceEntryId = refid;
+                            unitOfWork.EntryRepository.Update(lastentry);
+                            unitOfWork.Save();
                             if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == true)
                             {
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
@@ -1051,6 +1072,11 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
+                            int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                            var lastentry = unitOfWork.EntryRepository.Last();
+                            lastentry.RefrenceEntryId = refid;
+                            unitOfWork.EntryRepository.Update(lastentry);
+                            unitOfWork.Save();
                             if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == true)
                             {
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
@@ -1178,6 +1204,11 @@ namespace Stocks.Controllers
                             var Res = unitOfWork.Save();
                             if (Res == 200)
                             {
+                                int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                                var lastentry = unitOfWork.EntryRepository.Last();
+                                lastentry.RefrenceEntryId = refid;
+                                unitOfWork.EntryRepository.Update(lastentry);
+                                unitOfWork.Save();
                                 if (receiptExchangeModel.Type == true && receiptExchangeModel.ReceiptExchangeType == true)
                                 {
                                     var UserID = loggerHistory.getUserIdFromRequest(Request);
@@ -1269,6 +1300,8 @@ namespace Stocks.Controllers
                 var Result = unitOfWork.Save();
                 if (Result == 200)
                 {
+                    var EntryDetail = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == entry.EntryID);
+                    accountingHelper.DeleteEntryToLinkedDB(entry, EntryDetail);
                     if (RecExc.Type == true && RecExc.ReceiptExchangeType == true)
                     {
                         var UserID = loggerHistory.getUserIdFromRequest(Request);

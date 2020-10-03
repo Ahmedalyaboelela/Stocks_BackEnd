@@ -5,7 +5,7 @@
     <Databases isList="true" count="1">
       <MS_x0020_SQL Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
         <Alias>MS SQL</Alias>
-        <ConnectionStringEncrypted>9Fzdz+9K89n5YYTEchxtf9EgaYlIXdnVRlvtvcPMJReQOrVIxnqymfNG2QhpbOFGwlq3KE1R84VqQeXc6QB3O+RUaYnFWTGtf1xl3Ol0Y17lWveJyA==</ConnectionStringEncrypted>
+        <ConnectionStringEncrypted>9FyBz00DQ835CE3U+wDhY9Fk0cJISquk4kzt/eHkol7fdLULZnx6qEVGnPTDSaJ/8lb7K0Vd8nVoQf3setjoe9Fas6FiS3tF4WE93HRMJV6NdMHJV0vz9Xp6Odx6LKQ=</ConnectionStringEncrypted>
         <Name>MS SQL</Name>
       </MS_x0020_SQL>
     </Databases>
@@ -26,8 +26,8 @@
           <value>_x0040_RecieptID1,_x0031_,8,32</value>
         </Parameters>
         <SqlCommand>SELECT    A.Code AS Code , A.NameAR AS AccountName,RE.Debit AS RiyalDebit
-	FROM dbo.ReceiptExchangeDetails AS RE
-	INNER JOIN dbo.Accounts AS A
+	FROM ReceiptExchangeDetails AS RE
+	INNER JOIN Accounts AS A
 ON A.AccountID = RE.AccountID
 WHERE RE.ReceiptID=@RecieptID1 AND RE.Credit IS NULL
 </SqlCommand>
@@ -1062,13 +1062,13 @@ WHERE RE.ReceiptID=@RecieptID3 AND RE.Debit IS NULL</SqlCommand>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>11/11/2019 5:18:08 PM</ReportChanged>
+  <ReportChanged>9/20/2020 3:48:52 PM</ReportChanged>
   <ReportCreated>10/24/2019 12:37:16 PM</ReportCreated>
-  <ReportFile>D:\Malaz Projects\Stocks_Project\Stocks_BackEnd\Stocks\Reports\Print_RiyalRecieptVoucher.mrt</ReportFile>
-  <ReportGuid>f6afd47b023c4ffdafeabb9be43bcc31</ReportGuid>
+  <ReportFile>C:\MohamedFahmy\work\Malaz\StocksLatest\BackEnd\Stocks_BackEnd\Stocks\Reports\Print_RiyalRecieptVoucher.mrt</ReportFile>
+  <ReportGuid>5beff816607343aea43d2632e8298400</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>HundredthsOfInch</ReportUnit>
-  <ReportVersion>2019.3.2.0</ReportVersion>
+  <ReportVersion>2019.3.5.0</ReportVersion>
   <Script>using System;
 using System.Drawing;
 using System.Windows.Forms;

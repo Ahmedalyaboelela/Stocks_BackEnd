@@ -9,6 +9,9 @@ namespace BAL.Helper
     public interface IStocksHelper
     {
         decimal? RialBalanc(int PortfolioID);
+        decimal? RialBalancUpdate(int PortfolioID, decimal? OldNetAmount);
+        float? sumOfstocksOnInvoice(int sellOrderID, int partenerID);
+        float? sumOfstocksOnInvoiceUpdate(int sellOrderID, int partenerID, int InVoiceDetailsID);
         bool CheckStockCountForSelling(SellingOrderModel sellingOrderModel);
          bool CheckStockCountForSellingInvoice(SellingInvoiceModel sellingInvoiceModel);
         void TransferSellingFromStocks(SellingInvoiceModel sellingInvoiceModel);

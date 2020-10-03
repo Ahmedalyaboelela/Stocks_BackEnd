@@ -20,7 +20,7 @@ namespace BAL.Model
         public string EmpNameEN { get; set; }
         public string EmpCode { get; set; }
 
-
+        
         public int PortfolioID { get; set; }
         public string PortfolioNameAR { get; set; }
         public string PortfolioNameEN { get; set; }
@@ -35,6 +35,7 @@ namespace BAL.Model
         public string LastCode { get; set; }
 
         public float TotalStockCount { get; set; }
+        public decimal? newRialBalance { get; set; }
 
         public IEnumerable<PurchaseInvoiceDetailModel> DetailsModels { get; set; }
         public SettingModel SettingModel { get; set; }

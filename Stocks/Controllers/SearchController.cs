@@ -26,17 +26,18 @@ namespace Stocks.Controllers
         #region CTOR & Definitions
         private UnitOfWork unitOfWork;
         private readonly IMapper _mapper;
-
-        public SearchController(StocksContext context, IMapper mapper)
+        private readonly IStocksHelper _stocksHelper;
+        public SearchController(StocksContext context, IMapper mapper,IStocksHelper stocksHelper)
         {
             this.unitOfWork = new UnitOfWork(context);
             this._mapper = mapper;
+            _stocksHelper = stocksHelper;
         }
         #endregion
 
         #region Get Receipt Exchange
 
-        public ReceiptExchangeModel GetReceiptExchange(ReceiptExchange RecExc, bool ReceiptExchangeType, bool type, int num)
+        public ReceiptExchangeModel GetReceiptExchange(ReceiptExchange RecExc, int num)
         {
             var model = _mapper.Map<ReceiptExchangeModel>(RecExc);
             if (model == null)
@@ -57,7 +58,7 @@ namespace Stocks.Controllers
             model.Type = RecExc.Type;
             model.RecieptValue = RecExc.RecieptValue;
             model.TaxNumber = RecExc.TaxNumber;
-            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).Count();
+            model.Count = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == model.Type && m.ReceiptExchangeType == model.ReceiptExchangeType).Count();
             model.EntryModel = ReceiptExchangeGetEntry(RecExc.ReceiptID);
             model.RecExcDetails = unitOfWork.ReceiptExchangeDetailRepository
 
@@ -76,7 +77,7 @@ namespace Stocks.Controllers
 
 
                    }) : null;
-            model.LastCode = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType) != null ? unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == type && m.ReceiptExchangeType == ReceiptExchangeType).FirstOrDefault().Code : null;
+            model.LastCode = unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == model.Type && m.ReceiptExchangeType == model.ReceiptExchangeType) != null ? unitOfWork.ReceiptExchangeRepository.Get(filter: m => m.Type == model.Type && m.ReceiptExchangeType == model.ReceiptExchangeType).FirstOrDefault().Code : null;
             model.SettingModel = GetSetting(num);
 
 
@@ -408,22 +409,28 @@ namespace Stocks.Controllers
         {
             switch (TableNum)
             {
-                #region Purchase Order
+                #region Purchase Invoice
                 case 1:
                    var PurchaseInvoiceEntitylist = unitOfWork.PurchaseInvoiceRepository.Get(filter: a => a.Code == Code).SingleOrDefault();
                     if (PurchaseInvoiceEntitylist != null)
                     {
-                        
-                    var purchaseInvoiceModel = _mapper.Map<PurchaseInvoiceModel>(PurchaseInvoiceEntitylist);
 
+                        PurchaseInvoiceModel purchaseInvoiceModel = new PurchaseInvoiceModel();
+                        purchaseInvoiceModel.Code = PurchaseInvoiceEntitylist.Code;
                         purchaseInvoiceModel.PurchaseDate = PurchaseInvoiceEntitylist.Date.Value.ToString("d/M/yyyy");
-                        purchaseInvoiceModel.PurchaseDate = DateHelper.GetHijriDate(PurchaseInvoiceEntitylist.Date);
+                  
+                        purchaseInvoiceModel.PurchaseDateHijri = DateHelper.GetHijriDate(PurchaseInvoiceEntitylist.Date);
 
-                        var EmplyeeEntity = unitOfWork.EmployeeRepository.Get(filter: e => e.EmployeeID == purchaseInvoiceModel.EmployeeID).SingleOrDefault();
-                        purchaseInvoiceModel.EmpCode = EmplyeeEntity.Code;
-                        purchaseInvoiceModel.EmpNameAR = EmplyeeEntity.NameAR;
-                        purchaseInvoiceModel.EmpNameEN = EmplyeeEntity.NameEN;
-                        var id = unitOfWork.PurchaseOrderRepository.GetEntity(filter: a => a.PurchaseOrderID == purchaseInvoiceModel.PurchaseOrderID).PortfolioID;
+                        //var EmplyeeEntity = unitOfWork.EmployeeRepository.Get(filter: e => e.EmployeeID == purchaseInvoiceModel.EmployeeID).SingleOrDefault();
+                        //purchaseInvoiceModel.EmpCode = EmplyeeEntity.Code;
+                        //purchaseInvoiceModel.EmpNameAR = EmplyeeEntity.NameAR;
+                        //purchaseInvoiceModel.EmpNameEN = EmplyeeEntity.NameEN;
+                        purchaseInvoiceModel.EmployeeID = PurchaseInvoiceEntitylist.EmployeeID;
+                        purchaseInvoiceModel.EmpNameAR = PurchaseInvoiceEntitylist.Employee.NameAR;
+                        purchaseInvoiceModel.EmpCode = PurchaseInvoiceEntitylist.Employee.Code;
+                       
+                        
+                        var id = unitOfWork.PurchaseOrderRepository.GetEntity(filter: a => a.PurchaseOrderID == PurchaseInvoiceEntitylist.PurchaseOrderID).PortfolioID;
                         var PortfolioEntity = unitOfWork.PortfolioRepository.GetEntity(filter: p => p.PortfolioID == id);
                         purchaseInvoiceModel.PortfolioCode = PortfolioEntity.Code;
                         purchaseInvoiceModel.PortfolioNameAR = PortfolioEntity.NameAR;
@@ -431,7 +438,7 @@ namespace Stocks.Controllers
 
                         purchaseInvoiceModel.PortfolioAccount = unitOfWork.PortfolioAccountRepository.GetEntity(filter: s => s.PortfolioID == id).AccountID;
 
-                         purchaseInvoiceModel.DetailsModels = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: z => z.PurchaseInvoiceID == purchaseInvoiceModel.PurchaseInvoiceID).Select(a=> new PurchaseInvoiceDetailModel {
+                         purchaseInvoiceModel.DetailsModels = unitOfWork.PurchaseInvoiceDetailRepository.Get(filter: z => z.PurchaseInvoiceID == PurchaseInvoiceEntitylist.PurchaseInvoiceID).Select(a=> new PurchaseInvoiceDetailModel {
                              BankCommission=a.BankCommission,
                              BankCommissionRate=a.BankCommissionRate,
                              NetAmmount=a.NetAmmount,
@@ -449,9 +456,17 @@ namespace Stocks.Controllers
                                
 
                          });
-                       
+                        decimal? oldNetAmmount = 0.0m;
+                        foreach (var item in purchaseInvoiceModel.DetailsModels)
+                        {
+                            oldNetAmmount += item.NetAmmount;
 
-                      
+                        }
+
+                        purchaseInvoiceModel.newRialBalance = _stocksHelper.RialBalancUpdate(PurchaseInvoiceEntitylist.PurchaseOrder.PortfolioID, oldNetAmmount);
+                        purchaseInvoiceModel.PurchaseOrderID = PurchaseInvoiceEntitylist.PurchaseOrderID;
+
+
                         purchaseInvoiceModel.SettingModel = GetSetting(2);
 
                         var EntryPurchaseInvoiceEntitylist = unitOfWork.EntryRepository.Get(filter: a => a.PurchaseInvoiceID == purchaseInvoiceModel.PurchaseInvoiceID);
@@ -468,6 +483,8 @@ namespace Stocks.Controllers
                     {
                         return Ok(0);
                     }
+
+                    
                 #endregion
 
                 #region selling Invoice
@@ -566,11 +583,11 @@ namespace Stocks.Controllers
                 #region  Receipt voucher Ryal
                 case 5:
                     {
-                        var ReceiptExchangeEntitylist = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Code == Code);
-                        if (ReceiptExchangeEntitylist.Count() > 0)
+                        var ReceiptExchangeEntitylist = unitOfWork.ReceiptExchangeRepository.GetEntity(filter: x => x.Code == Code && x.Type== false && x.ReceiptExchangeType==true);
+                        if (ReceiptExchangeEntitylist!= null)
                         {
                             ReceiptExchangeModel receiptExchangeModel = new ReceiptExchangeModel();
-                            receiptExchangeModel = GetReceiptExchange(ReceiptExchangeEntitylist.SingleOrDefault(), false, true, 5);
+                            receiptExchangeModel = GetReceiptExchange(ReceiptExchangeEntitylist,5);
                             return Ok(receiptExchangeModel);
                         }
                         else
@@ -583,11 +600,11 @@ namespace Stocks.Controllers
                 #region  Receipt voucher chique
                 case 6:
                     {
-                        var ReceiptExchangeEntitylist = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Code == Code);
-                        if (ReceiptExchangeEntitylist.Count() > 0)
+                        var ReceiptExchangeEntitylist = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Code == Code && x.Type==false && x.ReceiptExchangeType==false).FirstOrDefault();
+                        if (ReceiptExchangeEntitylist != null)
                         {
                             ReceiptExchangeModel receiptExchangeModel = new ReceiptExchangeModel();
-                            receiptExchangeModel = GetReceiptExchange(ReceiptExchangeEntitylist.SingleOrDefault(), false, false, 5);
+                            receiptExchangeModel = GetReceiptExchange(ReceiptExchangeEntitylist,5);
                             return Ok(receiptExchangeModel);
                         }
                         else
@@ -601,11 +618,11 @@ namespace Stocks.Controllers
                 #region  Exchange voucher Ryal
                 case 7:
                     {
-                        var ReceiptExchangeEntitylist = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Code == Code);
+                        var ReceiptExchangeEntitylist = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Code == Code && x.ReceiptExchangeType==true && x.Type==true);
                         if (ReceiptExchangeEntitylist.Count() > 0)
                         {
                             ReceiptExchangeModel receiptExchangeModel = new ReceiptExchangeModel();
-                            receiptExchangeModel = GetReceiptExchange(ReceiptExchangeEntitylist.SingleOrDefault(), true, true, 6);
+                            receiptExchangeModel = GetReceiptExchange(ReceiptExchangeEntitylist.SingleOrDefault(),6);
                             return Ok(receiptExchangeModel);
                         }
                         else
@@ -618,11 +635,11 @@ namespace Stocks.Controllers
                 #region  Exchange voucher chique
                 case 8:
                     {
-                        var ReceiptExchangeEntitylist = unitOfWork.ReceiptExchangeRepository.Get(filter: x => x.Code == Code);
-                        if (ReceiptExchangeEntitylist.Count() > 0)
+                        var ReceiptExchangeEntitylist = unitOfWork.ReceiptExchangeRepository.GetEntity(filter: x => x.Code == Code && x.Type==true && x.ReceiptExchangeType==false);
+                        if (ReceiptExchangeEntitylist != null)
                         {
                             ReceiptExchangeModel receiptExchangeModel = new ReceiptExchangeModel();
-                            receiptExchangeModel = GetReceiptExchange(ReceiptExchangeEntitylist.SingleOrDefault(), true, false, 6);
+                            receiptExchangeModel = GetReceiptExchange(ReceiptExchangeEntitylist, 6);
                             return Ok(receiptExchangeModel);
                         }
                         else
@@ -667,10 +684,12 @@ namespace Stocks.Controllers
                 #region Employee
                 case 11:
                     {
-                        var EmployeeEntityList = unitOfWork.EmployeeRepository.Get(filter: x => x.Code == Code || x.NameAR == Code);
-                        if (EmployeeEntityList.Count() > 0)
+                        var EmployeeEntityList = unitOfWork.EmployeeRepository.GetEntity(filter: x => x.Code == Code);
+                        if (EmployeeEntityList!= null)
                         {
-                            EmployeeModel EmployeeModel = _mapper.Map<EmployeeModel>(EmployeeEntityList.SingleOrDefault());
+                            string date = EmployeeEntityList.BirthDate.Value.ToString("d/M/yyyy");
+                            EmployeeModel EmployeeModel = _mapper.Map<EmployeeModel>(EmployeeEntityList);
+                            EmployeeModel.BirthDate = date;
                             var EmployCardsEntityList = unitOfWork.EmployeeCardRepository.Get(filter: x => x.EmployeeID == EmployeeModel.EmployeeID);
                             EmployeeModel.emplCards = _mapper.Map<IEnumerable<EmployeeCardModel>>(EmployCardsEntityList);
                             return Ok(EmployeeModel);
@@ -685,11 +704,15 @@ namespace Stocks.Controllers
                 #region Partner
                 case 12:
                     {
-                        var PartnerEntityList = unitOfWork.PartnerRepository.Get(filter: x => x.Code == Code || x.NameAR == Code);
-                        if (PartnerEntityList.Count() > 0)
+                        var PartnerEntityList = unitOfWork.PartnerRepository.Get(filter: x => x.Code == Code).SingleOrDefault();
+                        if (PartnerEntityList != null)
                         {
-                            PartenerModel partnerModel = _mapper.Map<PartenerModel>(PartnerEntityList.SingleOrDefault());
-                            var Countries = unitOfWork.CountryRepository.Get(filter: x => x.CountryID == partnerModel.CountryID);
+                            string date = PartnerEntityList.Date.ToString("d/M/yyyy");
+                            string IssueDate = PartnerEntityList.IssueDate.Value.ToString("d/M/yyyy");
+                            PartenerModel partnerModel = _mapper.Map<PartenerModel>(PartnerEntityList);
+                            partnerModel.Date = date;
+                            partnerModel.IssueDate = IssueDate;
+                           var Countries = unitOfWork.CountryRepository.Get(filter: x => x.CountryID == partnerModel.CountryID);
                             partnerModel.Countries = _mapper.Map<IEnumerable<CountryModel>>(Countries);
                             IEnumerable<PortfolioTransaction> StocksCountList = unitOfWork.PortfolioTransactionsRepository.Get(filter: x => x.PartnerID == partnerModel.PartnerID);
                             partnerModel.StocksCount = 0;
@@ -697,6 +720,7 @@ namespace Stocks.Controllers
                             {
                                 partnerModel.StocksCount += StocksCountList.ElementAt(ii).CurrentStocksCount;
                             }
+                         
                             return Ok(partnerModel);
                         }
                         else
@@ -758,6 +782,7 @@ namespace Stocks.Controllers
                                     SellingOrderID = m.SellingOrderID,
                                     SellOrderDetailID = m.SellOrderDetailID,
                                     StockCount = m.StockCount,
+                                    TradingValue=m.TradingValue,
                                     PartnerCode = m.Partner.Code
 
 
@@ -831,6 +856,7 @@ namespace Stocks.Controllers
                                 PurchaseOrderID = m.PurchaseOrderID,
                                 PurchaseOrderDetailID = m.PurchaseOrderDetailID,
                                 StockCount = m.StockCount,
+                                TradingValue=m.TradingValue,
                                 PartnerCode = m.Partner.Code
 
 
@@ -870,5 +896,5 @@ namespace Stocks.Controllers
             }
             return Ok("Error Table Number");
          }
-     }
+    }
  }

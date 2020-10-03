@@ -410,12 +410,14 @@ namespace Stocks.Controllers
 
 
             // partners in Selling
-            var transPartners = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrder.PortfolioID == id).Select(p => new PortfolioPartners
+            var transPartners = unitOfWork.SellingOrderDetailRepository.Get(filter: a => a.SellingOrder.SellingOrderID == id).Select(p => new PortfolioPartners
             {
                 PartnerID = p.PartnerID,
                 Code = p.Partner.Code,
                 NameAR = p.Partner.NameAR,
                 NameEN = p.Partner.NameEN,
+                StocksCount=unitOfWork.PortfolioTransactionsRepository.GetEntity(filter: x=> x.PartnerID==p.PartnerID && x.PortfolioID==p.SellingOrder.PortfolioID).CurrentStocksCount,
+
                 
 
 
@@ -432,7 +434,7 @@ namespace Stocks.Controllers
 
 
             // partners in Purchase
-            var transPartners = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrder.PortfolioID == id).Select(p => new PortfolioPartners
+            var transPartners = unitOfWork.PurchaseOrderDetailRepository.Get(filter: a => a.PurchaseOrder.PurchaseOrderID == id).Select(p => new PortfolioPartners
             {
                 PartnerID = p.PartnerID,
                 Code = p.Partner.Code,
@@ -661,25 +663,30 @@ namespace Stocks.Controllers
                 }
                 else
                 {
-
-                    unitOfWork.PartnerRepository.Delete(id);
-                    var Result = unitOfWork.Save();
-                    if (Result == 200)
-                    {
-                        var UserID = loggerHistory.getUserIdFromRequest(Request);
-
-                        loggerHistory.InsertUserLog(UserID, "بطاقه الشركه", "حذف الشركه", true);
-                        return Ok(4);
-                    }
-                    else if (Result == 501)
+                    if (unitOfWork.PurchaseOrderDetailRepository.Get(x => x.PartnerID == id).Count() != 0 || unitOfWork.SellingInvoiceDetailRepository.Get(x => x.PartnerID == id).Count() != 0)
                     {
                         return Ok(5);
                     }
                     else
                     {
-                        return Ok(6);
-                    }
+                        unitOfWork.PartnerRepository.Delete(id);
+                        var Result = unitOfWork.Save();
+                        if (Result == 200)
+                        {
+                            var UserID = loggerHistory.getUserIdFromRequest(Request);
 
+                            loggerHistory.InsertUserLog(UserID, "بطاقه الشركه", "حذف الشركه", true);
+                            return Ok(4);
+                        }
+                        else if (Result == 501)
+                        {
+                            return Ok(5);
+                        }
+                        else
+                        {
+                            return Ok(6);
+                        }
+                    }
                 }
             }
         }

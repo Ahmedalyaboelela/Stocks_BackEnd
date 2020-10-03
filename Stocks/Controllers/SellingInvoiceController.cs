@@ -13,6 +13,7 @@ using BAL.Helper;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Stocks.Controllers
 {
@@ -27,6 +28,7 @@ namespace Stocks.Controllers
         private readonly IAccountingHelper accountingHelper;
         private readonly IStocksHelper _stocksHelper;
         private LoggerHistory loggerHistory;
+        string connectionString = "";
         public SellingInvoiceController(StocksContext context, IMapper mapper, IStocksHelper stocksHelper)
         {
             this.unitOfWork = new UnitOfWork(context);
@@ -611,8 +613,8 @@ namespace Stocks.Controllers
         {
             if (ModelState.IsValid)
             {
-               
 
+                EntryModel entryobj = new EntryModel();
                 int portofolioaccount = 0;
                 var Check = unitOfWork.SellingInvoiceReposetory.Get();
                 if (Check.Any(m => m.Code == sellingInvoiceModel.Code))
@@ -654,12 +656,24 @@ namespace Stocks.Controllers
                     }
                     #region Warehouse
                     //Check Stocks Count Allowed For Selling 
-                    bool Chk = _stocksHelper.CheckStockCountForSellingInvoice(sellingInvoiceModel);
-                    if (!Chk)
-                        return Ok(7);
-                    // Transfer From Portofolio Stocks
-                    else
-                        _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
+                    float? totalStocksInvoices = 0.0f;
+                  
+                        foreach (var item in sellingInvoiceModel.DetailsModels)
+                        {
+                        float stocksPartener = unitOfWork.PortfolioTransactionsRepository.GetEntity(filter: a => a.PortfolioID == sellingInvoiceModel.PortfolioID && a.PartnerID == item.PartnerID).CurrentStocksCount;
+                            totalStocksInvoices = _stocksHelper.sumOfstocksOnInvoice(sellingInvoiceModel.SellingOrderID, item.PartnerID); 
+                        if (totalStocksInvoices < stocksPartener)
+                        {
+                            _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
+                        }
+                        else
+                        {
+                            return Ok(7);
+                        }
+                        }
+                    
+                     
+                      
                     #endregion
 
 
@@ -693,10 +707,10 @@ namespace Stocks.Controllers
                         var lastEntry = unitOfWork.EntryRepository.Last();
                     
                         var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingInvoiceModel, null, null, null, lastEntry);
+                        entryobj = EntryMODEL;
                         EntryMODEL.SellingInvoiceID = modelselling.SellingInvoiceID;
                         var Entry = _mapper.Map<Entry>(EntryMODEL);
                         var DetailEnt = EntryMODEL.EntryDetailModel;
-
                         if (sellingInvoiceModel.SettingModel.TransferToAccounts == true)
                         {
                             Entry.TransferedToAccounts = true;
@@ -741,7 +755,16 @@ namespace Stocks.Controllers
                     if (Result == 200)
                     {
                         var UserID = loggerHistory.getUserIdFromRequest(Request);
-
+                        if(sellingInvoiceModel.SettingModel.AutoGenerateEntry == true)
+                        {
+                           int refid= accountingHelper.AddEntryToLinkedDB(entryobj);
+                            var lastentry = unitOfWork.EntryRepository.Last();
+                            lastentry.RefrenceEntryId = refid;
+                            unitOfWork.EntryRepository.Update(lastentry);
+                            unitOfWork.Save();
+                            
+                        }
+                       
                         loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "اضافه فاتوره بيع", false);
                         return Ok(4);
                     }
@@ -773,6 +796,7 @@ namespace Stocks.Controllers
         [Route("~/api/SellingInvoice/PutSellingInvoice/{id}")]
         public IActionResult PutSellingInvoice(int id, [FromBody]  SellingInvoiceModel sellingInvoiceModel)
         {
+            EntryModel newentryobj = new EntryModel();
             int portofolioaccount = 0;
             if (sellingInvoiceModel !=null)
             {
@@ -795,14 +819,30 @@ namespace Stocks.Controllers
                 var Newdetails = _mapper.Map<IEnumerable<SellingInvoiceDetail>>(NewdDetails);
                 var OldDetails = unitOfWork.SellingInvoiceDetailRepository.Get(NoTrack: "NoTrack",filter: m => m.SellingInvoiceID == sellingInvoice.SellingInvoiceID);
                 #region Warehouse
-                //Check Stocks Count Allowed For Selling 
-                bool Chk = _stocksHelper.CheckStockCountForSellingInvoice(sellingInvoiceModel);
-                if (!Chk)
-                    return Ok(7);
-                // Transfer From Portofolio Stocks
-                else
-                    _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
-                #endregion
+                
+                float? totalStocksInvoices = 0.0f; 
+                if (OldDetails != null)
+                {
+                    _stocksHelper.CancelSellingFromStocks(sellingInvoiceModel.PortfolioID,OldDetails);
+                }
+                foreach (var item in sellingInvoiceModel.DetailsModels)
+                {
+                    float stocksPartener = unitOfWork.PortfolioTransactionsRepository.GetEntity(filter: a => a.PortfolioID == sellingInvoiceModel.PortfolioID && a.PartnerID == item.PartnerID).CurrentStocksCount;
+                    totalStocksInvoices = _stocksHelper.sumOfstocksOnInvoiceUpdate(sellingInvoiceModel.SellingOrderID, item.PartnerID,item.SellingInvoiceDetailID);
+                    if (totalStocksInvoices < stocksPartener)
+                    {
+                        _stocksHelper.TransferSellingFromStocks(sellingInvoiceModel);
+                    }
+                    else
+                    {
+                        return Ok(7);
+                    }
+                }
+
+
+
+              #endregion
+             
 
                 var EntryCheck = unitOfWork.EntryRepository.Get(x => x.SellingInvoiceID == sellingInvoice.SellingInvoiceID, NoTrack: "NoTrack").SingleOrDefault();
               if (EntryCheck != null)
@@ -850,6 +890,7 @@ namespace Stocks.Controllers
                             var reslt = unitOfWork.Save();
                             if (reslt == 200)
                             {
+                                accountingHelper.DeleteEntryToLinkedDB(Entry, OldEntryDetails);
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                                 loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
@@ -874,6 +915,7 @@ namespace Stocks.Controllers
                     
                             var EntryMODEL = EntriesHelper.InsertCalculatedEntries(portofolioaccount,sellingInvoiceModel, null, null, null, lastEntry, Entry);
                             EntryMODEL.SellingInvoiceID = sellingInvoiceModel.SellingInvoiceID;
+                            newentryobj = EntryMODEL;
                             var NewEntry = _mapper.Map<Entry>(EntryMODEL);
                             var EntryDitails = EntryMODEL.EntryDetailModel;
 
@@ -923,6 +965,13 @@ namespace Stocks.Controllers
                         var res = unitOfWork.Save();
                         if (res == 200)
                         {
+                            accountingHelper.DeleteEntryToLinkedDB(Entry, OldEntryDetails);
+                            int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                            var lastentry = unitOfWork.EntryRepository.Last();
+                            lastentry.RefrenceEntryId = refid;
+                            unitOfWork.EntryRepository.Update(lastentry);
+                            unitOfWork.Save();
+
                             var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                             loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
@@ -1067,7 +1116,11 @@ namespace Stocks.Controllers
                             var Result = unitOfWork.Save();
                             if (Result == 200)
                             {
-
+                                int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                                var lastentry = unitOfWork.EntryRepository.Last();
+                                lastentry.RefrenceEntryId = refid;
+                                unitOfWork.EntryRepository.Update(lastentry);
+                                unitOfWork.Save();
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                                 loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
@@ -1224,7 +1277,11 @@ namespace Stocks.Controllers
                         var Res = unitOfWork.Save();
                         if (Res == 200)
                         {
-
+                            int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                            var lastentry = unitOfWork.EntryRepository.Last();
+                            lastentry.RefrenceEntryId = refid;
+                            unitOfWork.EntryRepository.Update(lastentry);
+                            unitOfWork.Save();
                             var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                             loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
@@ -1374,6 +1431,11 @@ namespace Stocks.Controllers
                             var Res = unitOfWork.Save();
                             if (Res == 200)
                             {
+                                int refid = accountingHelper.AddEntryToLinkedDB(newentryobj);
+                                var lastentry = unitOfWork.EntryRepository.Last();
+                                lastentry.RefrenceEntryId = refid;
+                                unitOfWork.EntryRepository.Update(lastentry);
+                                unitOfWork.Save();
                                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                                 loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "تعديل فاتوره بيع", false);
@@ -1435,7 +1497,7 @@ namespace Stocks.Controllers
             var Details = unitOfWork.SellingInvoiceDetailRepository.Get(filter: m => m.SellingInvoiceID == id);
             #region Warehouse
             //Cancel Selling Order From Stocks 
-        //    _stocksHelper.CancelSellingFromStocks(modelSelling.PortfolioID, Details);
+           _stocksHelper.CancelSellingFromStocks(modelSelling.SellingOrder.PortfolioID, Details);
             #endregion
             unitOfWork.SellingInvoiceDetailRepository.RemovRange(Details);
 
@@ -1457,6 +1519,8 @@ namespace Stocks.Controllers
             var Result = unitOfWork.Save();
             if (Result == 200)
             {
+                var EntryDetail = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
+                accountingHelper.DeleteEntryToLinkedDB(Entry, EntryDetail);
                 var UserID = loggerHistory.getUserIdFromRequest(Request);
 
                 loggerHistory.InsertUserLog(UserID, " فاتوره بيع", "حذف فاتوره بيع", false);

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -203,6 +204,18 @@ namespace BAL.Repositories
                     this.settingRepository = new GenericRepository<Setting>(Context);
                 }
                 return settingRepository;
+            }
+        }
+        private GenericRepository<SettingKiloConnection> settingKiloRepository;
+        public GenericRepository<SettingKiloConnection> SettingKiloRepository
+        {
+            get
+            {
+                if (this.settingKiloRepository == null)
+                {
+                    this.settingKiloRepository = new GenericRepository<SettingKiloConnection>(Context);
+                }
+                return settingKiloRepository;
             }
         }
 
@@ -412,6 +425,24 @@ namespace BAL.Repositories
                 return reportSettingRepository;
             }
         }
+
+        #endregion
+
+
+        #region ReportFile Repository
+        private GenericRepository<ReportFile> reportFileRepository;
+        public GenericRepository<ReportFile> ReportFileRepository
+        {
+            get
+            {
+                if (this.reportFileRepository == null)
+                {
+                    this.reportFileRepository = new GenericRepository<ReportFile>(Context);
+                }
+                return reportFileRepository;
+            }
+        }
+
         #endregion
 
 

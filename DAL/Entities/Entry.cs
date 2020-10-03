@@ -26,6 +26,8 @@ namespace DAL.Entities
 
         public bool TransferedToAccounts { get; set; }
 
+        public int? RefrenceEntryId { get; set; }
+
         [ForeignKey("SellingInvoiceID")]
         public virtual SellingInvoice SellingInvoice { get; set; }
 

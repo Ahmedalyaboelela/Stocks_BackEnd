@@ -19,8 +19,9 @@ namespace BAL.Model
         public string PartnerCode { get; set; }
 
         public string CurrentDate { get; set; }
+        public string CurrentDate2 { get; set; }
 
-       
+
         public decimal DailyStockValue { get; set; }
 
     }
