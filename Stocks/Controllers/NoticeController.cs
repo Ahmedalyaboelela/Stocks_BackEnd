@@ -497,8 +497,8 @@ namespace Stocks.Controllers
                 var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
                 entryModel.EntryID = Entry.EntryID;
                 entryModel.Code = Entry.Code;
-                entryModel.Date = Entry.Date.Value.ToString("d/M/yyyy");
-                entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
+                entryModel.Date = Entry.ReceiptExchange.Date.Value.ToString("d/M/yyyy");
+                entryModel.DateHijri = DateHelper.GetHijriDate(Entry.ReceiptExchange.Date);
                 entryModel.NoticeID = Entry.NoticeID;
                 entryModel.PurchaseInvoiceID = Entry.PurchaseInvoiceID;
                 entryModel.ReceiptID = Entry.ReceiptID;
@@ -536,8 +536,8 @@ namespace Stocks.Controllers
             EntryModel entryModel = new EntryModel();
             entryModel.EntryID = Entry.EntryID;
             entryModel.Code = Entry.Code;
-            entryModel.Date = Entry.Date!=null? Entry.Date.Value.ToString("d/M/yyyy"):null;
-            entryModel.DateHijri = Entry.Date!=null?DateHelper.GetHijriDate(Entry.Date):null;
+            entryModel.Date = Entry.Notice.NoticeDate!=null? Entry.Notice.NoticeDate.Value.ToString("d/M/yyyy"):null;
+            entryModel.DateHijri = Entry.Notice.NoticeDate != null?DateHelper.GetHijriDate(Entry.Notice.NoticeDate) :null;
             entryModel.NoticeID = Entry.NoticeID;
             entryModel.PurchaseInvoiceID = Entry.PurchaseInvoiceID;
             entryModel.ReceiptID = Entry.ReceiptID;

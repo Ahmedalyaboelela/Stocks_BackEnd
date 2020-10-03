@@ -49,8 +49,8 @@ namespace Stocks.Controllers
                 var EntryDetails = unitOfWork.EntryDetailRepository.Get(filter: a => a.EntryID == Entry.EntryID);
                 entryModel.EntryID = Entry.EntryID;
                 entryModel.Code = Entry.Code;
-                entryModel.Date = Entry.Date.Value.ToString("d/M/yyyy");
-                entryModel.DateHijri = DateHelper.GetHijriDate(Entry.Date);
+                entryModel.Date = Entry.PurchaseInvoice.Date.Value.ToString("d/M/yyyy");
+                entryModel.DateHijri = DateHelper.GetHijriDate(Entry.PurchaseInvoice.Date);
                 entryModel.NoticeID = Entry.NoticeID;
                 entryModel.PurchaseInvoiceID = Entry.PurchaseInvoiceID;
                 entryModel.ReceiptID = Entry.ReceiptID;
