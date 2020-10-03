@@ -220,8 +220,8 @@ namespace Stocks.Controllers
             {
                 entryModel.EntryID = Entry.EntryID;
                 entryModel.Code = Entry.Code;
-                entryModel.Date = Entry.Date != null ? Entry.Date.Value.ToString("d/M/yyyy") : null;
-                entryModel.DateHijri = Entry.Date != null ? DateHelper.GetHijriDate(Entry.Date) : null;
+                entryModel.Date = Entry.ReceiptExchange.Date != null ? Entry.ReceiptExchange.Date.Value.ToString("d/M/yyyy") : null;
+                entryModel.DateHijri = Entry.ReceiptExchange.Date != null ? DateHelper.GetHijriDate(Entry.ReceiptExchange.Date) : null;
                 entryModel.NoticeID = Entry.NoticeID;
                 entryModel.PurchaseInvoiceID = Entry.PurchaseInvoiceID;
                 entryModel.ReceiptID = Entry.ReceiptID;
