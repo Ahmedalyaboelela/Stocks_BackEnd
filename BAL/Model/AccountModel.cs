@@ -19,9 +19,9 @@ namespace BAL.Model
 
         public bool AccountType { get; set; }
 
-        public int AccountCategory { get; set; }
+        public int? AccountCategory { get; set; }
 
-        public int AccountRefrence { get; set; }
+        public int? AccountRefrence { get; set; }
 
         
         public decimal? Debit { get; set; }

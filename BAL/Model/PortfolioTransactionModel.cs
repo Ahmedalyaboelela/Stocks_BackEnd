@@ -18,7 +18,9 @@ namespace BAL.Model
         public string partenerNameAR { get; set; }
         public string partenerCode{ get; set; }
         public string partenerNameEN { get; set; }
-       
+        public string partenerTaxNo { get; set; }
+        
+
 
     }
 }
