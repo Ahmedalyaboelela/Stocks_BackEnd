@@ -20,7 +20,13 @@ namespace BAL.Model
         public string EmpNameAR { get; set; }
         public string EmpNameEN { get; set; }
         public string EmpCode { get; set; }
+        public string FromDateGorg { get; set; }
+        public string ToDateGorg { get; set; }
+        public string FromDateHigri { get; set; }
+        public string ToDateHigri { get; set; }
 
+        public int? OrderPeriod { get; set; }
+        public string OrderRemarks { get; set; }
 
         public int PortfolioID { get; set; }
         public string PortfolioNameAR { get; set; }

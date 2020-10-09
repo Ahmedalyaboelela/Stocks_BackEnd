@@ -75,7 +75,12 @@ namespace Stocks.Controllers
                 if (sellingorder.OrderDate != null)
                 {
                     model.OrderDateGorg = sellingorder.OrderDate.ToString("d/M/yyyy");
+                    model.FromDateGorg = sellingorder.FromDate.ToString("d/M/yyyy");
+                    model.ToDateGorg = sellingorder.FromDate.ToString("d/M/yyyy");
+
                     model.OrderDateHigri = DateHelper.GetHijriDate(sellingorder.OrderDate);
+                    //model.FromDateHigri = DateHelper.GetHijriDate(sellingorder.FromDate);
+                    //model.ToDateHigri = DateHelper.GetHijriDate(sellingorder.ToDate);
                 }
 
 
@@ -95,11 +100,8 @@ namespace Stocks.Controllers
                         SellOrderDetailID = m.SellOrderDetailID,
                         StockCount = m.StockCount,
                         TradingValue=m.TradingValue,
-                        PartnerCode=m.Partner.Code
-
-
-
-
+                        PartnerCode=m.Partner.Code,
+                        Remarks = m.Remarks
                     });
 
 
@@ -150,6 +152,8 @@ namespace Stocks.Controllers
                     if (sellingOrderModel.OrderDateGorg == null)
                     {
                         sellingOrderModel.OrderDateGorg = DateTime.Now.ToString("d/M/yyyy");
+                        sellingOrderModel.FromDateGorg = DateTime.Now.ToString("d/M/yyyy");
+                        sellingOrderModel.ToDateGorg = DateTime.Now.ToString("d/M/yyyy");
                     }
 
 
@@ -184,6 +188,7 @@ namespace Stocks.Controllers
                             detail.StockCount = item.StockCount;
                             detail.SellOrderDetailID = 0;
                             detail.TradingValue = item.TradingValue;
+                            detail.Remarks = item.Remarks;
                             var ob = _mapper.Map<SellingOrderDetail>(detail);
                             unitOfWork.SellingOrderDetailRepository.Insert(ob);
                         }
@@ -241,6 +246,8 @@ namespace Stocks.Controllers
                 if (sellingOrderModel.OrderDateGorg == null)
                 {
                     sellingOrderModel.OrderDateGorg = DateTime.Now.ToString();
+                    sellingOrderModel.FromDateGorg = DateTime.Now.ToString();
+                    sellingOrderModel.ToDateGorg = DateTime.Now.ToString();
                 }
 
                 var model = _mapper.Map<SellingOrder>(sellingOrderModel);

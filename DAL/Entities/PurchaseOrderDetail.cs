@@ -18,6 +18,8 @@ namespace DAL.Entities
         public int PurchaseOrderID { get; set; }
 
         public int PartnerID { get; set; }
+        public string Remarks { get; set; }
+
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? TradingValue { get; set; }

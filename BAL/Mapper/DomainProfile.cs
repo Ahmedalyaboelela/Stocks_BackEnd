@@ -94,7 +94,9 @@ namespace BAL.Mapper
             CreateMap<PurchaseOrder, PurchaseOrderModel>();
             CreateMap<PurchaseOrderModel, PurchaseOrder>()
                 .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                 .ForMember(t => t.OrderDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.OrderDate, "d/M/yyyy", CultureInfo.InvariantCulture)));
+                 .ForMember(t => t.OrderDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.OrderDate, "d/M/yyyy", CultureInfo.InvariantCulture)))
+                 .ForMember(t => t.FromDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.FromDateGorg, "d/M/yyyy", CultureInfo.InvariantCulture)))
+                 .ForMember(t => t.ToDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.ToDateGorg, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
 
             CreateMap<PurchaseOrderDetail, PurchaseOrderDetailModel>();
@@ -222,7 +224,9 @@ namespace BAL.Mapper
             CreateMap<SellingOrder, SellingOrderModel>();
             CreateMap<SellingOrderModel, SellingOrder>()
                 .ForSourceMember(t => t.Count, opt => opt.DoNotValidate())
-                 .ForMember(t => t.OrderDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.OrderDateGorg, "d/M/yyyy", CultureInfo.InvariantCulture)));
+                 .ForMember(t => t.OrderDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.OrderDateGorg, "d/M/yyyy", CultureInfo.InvariantCulture)))
+                 .ForMember(t => t.FromDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.FromDateGorg, "d/M/yyyy", CultureInfo.InvariantCulture)))
+                 .ForMember(t => t.ToDate, opt => opt.MapFrom(s => DateTime.ParseExact(s.ToDateGorg, "d/M/yyyy", CultureInfo.InvariantCulture)));
 
 
             CreateMap<SellingOrderDetail, SellingOrderDetailModel>();

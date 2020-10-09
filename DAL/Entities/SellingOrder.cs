@@ -16,11 +16,19 @@ namespace DAL.Entities
         public string Code { get; set; }
 
         public DateTime OrderDate { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+
+        public int? OrderPeriod { get; set; }
+        public string OrderRemarks { get; set; }
+
 
         public bool OrderType { get; set; }
 
         public int PortfolioID { get; set; }
         public int? EmployeeID { get; set; }
+
+
 
         [ForeignKey("PortfolioID")]
         public virtual Portfolio Portfolio { get; set; }
@@ -28,6 +36,7 @@ namespace DAL.Entities
         public virtual ICollection<SellingOrderDetail> SellingOrderDetails { get; set; }
 
         public virtual ICollection<SellingInvoice> SellingInvoices { get; set; }
+
 
 
     }

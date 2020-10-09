@@ -18,6 +18,8 @@ namespace BAL.Model
 
         public decimal? TradingValue { get; set; }
 
+        public string Remarks { get; set; }
+
         public string PartnerNameAr { get; set; }
         public string PartnerCode { get; set; }
 

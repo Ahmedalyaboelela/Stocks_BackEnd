@@ -77,8 +77,14 @@ namespace Stocks.Controllers
                 #region Date part 
                 if (purchaseorder.OrderDate != null)
                 {
+                    
                     model.OrderDate = purchaseorder.OrderDate.ToString("d/M/yyyy");
+                    model.FromDateGorg = purchaseorder.FromDate.ToString("d/M/yyyy");
+                    model.ToDateGorg = purchaseorder.FromDate.ToString("d/M/yyyy");
+
                     model.OrderDateHijri = DateHelper.GetHijriDate(purchaseorder.OrderDate);
+                    //model.FromDateHigri = DateHelper.GetHijriDate(purchaseorder.FromDate);
+                    //model.ToDateHigri = DateHelper.GetHijriDate(purchaseorder.ToDate);
                 }
 
 
@@ -98,10 +104,8 @@ namespace Stocks.Controllers
                         PurchaseOrderDetailID = m.PurchaseOrderDetailID,
                         StockCount = m.StockCount,
                         TradingValue=m.TradingValue,
-                        PartnerCode = m.Partner.Code
-
-
-
+                        PartnerCode = m.Partner.Code,
+                        Remarks = m.Remarks
 
                     });
 
@@ -152,6 +156,8 @@ namespace Stocks.Controllers
                     if (purchaseOrderModel.OrderDate == null)
                     {
                         purchaseOrderModel.OrderDate = DateTime.Now.ToString("d/M/yyyy");
+                        purchaseOrderModel.FromDateGorg = DateTime.Now.ToString("d/M/yyyy");
+                        purchaseOrderModel.ToDateGorg = DateTime.Now.ToString("d/M/yyyy");
                     }
 
                  //   #region Warehouse
@@ -189,6 +195,7 @@ namespace Stocks.Controllers
                             detail.StockCount = item.StockCount;
                             detail.PurchaseOrderDetailID = 0;
                             detail.TradingValue = item.TradingValue;
+                            detail.Remarks = item.Remarks;
                             var ob = _mapper.Map<PurchaseOrderDetail>(detail);
                             unitOfWork.PurchaseOrderDetailRepository.Insert(ob);
                         }
@@ -246,6 +253,8 @@ namespace Stocks.Controllers
                 if (purchaseOrderModel.OrderDate == null)
                 {
                     purchaseOrderModel.OrderDate = DateTime.Now.ToString();
+                    purchaseOrderModel.FromDateGorg = DateTime.Now.ToString();
+                    purchaseOrderModel.ToDateGorg = DateTime.Now.ToString();
                 }
 
                 var model = _mapper.Map<PurchaseOrder>(purchaseOrderModel);

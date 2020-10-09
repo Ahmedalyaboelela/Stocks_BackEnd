@@ -15,6 +15,8 @@ namespace BAL.Model
         public int PurchaseOrderID { get; set; }
 
         public int PartnerID { get; set; }
+        public string Remarks { get; set; }
+
 
         public decimal? TradingValue { get; set; }
 

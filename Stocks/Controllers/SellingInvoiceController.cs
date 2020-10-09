@@ -56,6 +56,7 @@ namespace Stocks.Controllers
                 ParentAccCode= unitOfWork.AccountRepository.GetEntity(s=>s.AccountID==a.Account.AccoutnParentID).Code,
                 ParentAccNameAR = unitOfWork.AccountRepository.GetEntity(s => s.AccountID == a.Account.AccoutnParentID).NameAR,
                 ParentAccNameEN = unitOfWork.AccountRepository.GetEntity(s => s.AccountID == a.Account.AccoutnParentID).NameEN,
+                
 
             });
 
@@ -99,8 +100,6 @@ namespace Stocks.Controllers
                     Debit = m.Debit,
                     EntryDetailID = m.EntryDetailID,
                     EntryID = m.EntryID,
-
-
                 });
                 entryModel.TransferedToAccounts = Entry.TransferedToAccounts;
             }
@@ -459,8 +458,6 @@ namespace Stocks.Controllers
                 var Details = unitOfWork.SellingInvoiceDetailRepository.Get(filter: a => a.SellingInvoiceID == selling.SellingInvoiceID)
                                 .Select(m => new SellingInvoiceDetailsModel
                                 {
-
-
                                     SellingInvoiceID = m.SellingInvoiceID,
                                     SellingInvoiceDetailID = m.SellInvoiceDetailID,
                                     BankCommission = m.BankCommission,
