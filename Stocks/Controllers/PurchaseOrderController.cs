@@ -106,6 +106,7 @@ namespace Stocks.Controllers
                         TradingValue=m.TradingValue,
                         PartnerCode = m.Partner.Code,
                         Remarks = m.Remarks
+                        
 
                     });
 

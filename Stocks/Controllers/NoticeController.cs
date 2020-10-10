@@ -117,6 +117,7 @@ namespace Stocks.Controllers
                     partenerNameEN = q.Partner.NameEN,
                     PortfolioID = q.PortfolioID,
                     PortTransID = q.PortTransID,
+                    partenerTaxNo = q.PartenerTaxNo
                 }),
                 
 
@@ -298,6 +299,7 @@ namespace Stocks.Controllers
                     partenerNameEN = q.Partner.NameEN,
                     PortfolioID = q.PortfolioID,
                     PortTransID = q.PortTransID,
+                    partenerTaxNo = q.PartenerTaxNo
 
                 });
             }

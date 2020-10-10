@@ -25,5 +25,7 @@ namespace DAL.Entities
 
         [ForeignKey("PartnerID")]
         public virtual Partner Partner { get; set; }
+
+        public string PartenerTaxNo { get; set; }
     }
 }
